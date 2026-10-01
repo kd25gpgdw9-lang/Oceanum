@@ -1219,8 +1219,29 @@ body{background-attachment:scroll}
 .ib-st.ok{background:rgba(52,211,153,.12);color:#6EE7B7}.ib-st.bad{background:rgba(248,113,113,.12);color:#FCA5A5}
 
 </style>
+<style>
+/* OCEANUM — modo leve: sem efeitos que esgotam a memória gráfica (tablets e telemóveis Android, aparelhos com pouca RAM).
+   Sempre ativo: sem desfoque por trás, sem fundos fixos, animações infinitas limitadas. */
+#top,.toast,#dock,.drw-ov,body.nav-open::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#top{background:#04101F!important}
+body{background-attachment:scroll!important}
+.glow,.hx2.can.aff polygon,.bm2-m.sel,.ceremony .ring{animation-iteration-count:3!important}
+.wave-load i,.sp-load i{animation-iteration-count:20!important}
+
+/* aparelhos fracos ou Android: tudo plano */
+html.lite body{background:#04101F!important}
+html.lite *,html.lite *::before,html.lite *::after{box-shadow:none!important;text-shadow:none!important;filter:none!important;transition:none!important;animation-duration:.001s!important;animation-iteration-count:1!important}
+html.lite .dc.hero::after,html.lite .dom::before{display:none!important}
+html.lite .pn,html.lite .dc,html.lite .kpi,html.lite .tn-dd{background:#0B2240!important}
+html.lite .dc.hero.h-abyss{background:#0B3B6E!important}html.lite .dc.hero.h-tide{background:#0E4F68!important}html.lite .dc.hero.h-reef{background:#0F5E5A!important}html.lite .dc.hero.h-deep{background:#1E3A8A!important}
+html.lite .dom{background:#0A0907!important}
+html.lite #splash{background:#04101F!important}
+html.lite .ceremony,html.lite .upd{background:#04101F!important}
+
+</style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.2", "date": "01/10/2026", "notes": ["Ecrã de atualização e número de versão", "Login sem bordas brancas no iPhone", "Scroll e menus mais leves no telemóvel", "Atalho de gastos sem abrir a app"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.3", "date": "01/10/2026", "notes": ["Corrigido o travamento no tablet (ecrã preto a pedir senha)", "Modo leve automático em Android e aparelhos com pouca memória", "Interruptor de desempenho nas Definições"]};</script>
+<script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
 /* Oceanum — atualizações visíveis: ecrã curto "A atualizar…" quando chega uma versão nova,
@@ -4947,7 +4968,7 @@ const celebrate = c => { const el = document.createElement('div'); el.className 
   const o = c.choice && rw().pend.find(x => x.id === c.choice);
   const body = () => `<canvas></canvas><div class="in"><div class="cz ch-cel-k">${esc(c.k || '')}</div><div class="ring">${D.sigil(c.t, '#E8D3A8', 90)}</div><div class="ch-cel-p cz">Parabéns</div><h1>${esc(c.t)}</h1><p style="font-style:italic">${esc(c.s || '')}</p>${(c.rw || []).length ? `<div class="ch-cel-rw">${c.rw.map(r => `<span>${esc(r)}</span>`).join('')}</div>` : ''}
     ${o ? `<div class="ch-cel-ch"><div class="cz">Recompensa ${TIERN[o.tier].toLowerCase()} · escolhe uma</div><div class="ch-opts">${o.opts.map(pid => optCard(o, pid)).join('')}</div><button class="ch-later" data-later>Escolher depois</button></div>` : `<button class="dbtn gold" data-close>${queue.length ? 'Continuar' : 'Obrigado'}</button>`}</div>`;
-  el.innerHTML = body(); document.body.appendChild(el); try { if (!matchMedia('(prefers-reduced-motion: reduce)').matches) confetti(el.querySelector('canvas'), c.col); } catch (e) { } try { navigator.vibrate && navigator.vibrate([40, 60, 80]); } catch (e) { }
+  el.innerHTML = body(); document.body.appendChild(el); try { if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !document.documentElement.classList.contains('lite')) confetti(el.querySelector('canvas'), c.col); } catch (e) { } try { navigator.vibrate && navigator.vibrate([40, 60, 80]); } catch (e) { }
   const close = () => { el.remove(); showing = false; OS.request(); flush(); };
   el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) { if (e.target === el && !o) close(); return; } e.stopPropagation(); e.preventDefault();
     if (b.dataset.act === 'rwChoose') { choose(b.dataset.o, b.dataset.p); const it = rw().pool.find(x => x.id === b.dataset.p); UI.toast(`Boa escolha: ${it ? it.t : ''}. Está em Recompensas.`, 'pos'); close(); }
@@ -5203,7 +5224,7 @@ L.register = async () => {
 L.forget = () => { U.ls.del('os2bio'); OS.UI.toast('Face ID removido deste dispositivo'); OS.request(); };
 const bioUnlock = async () => {
   const b = L.bioId(); if (!b) return false;
-  try { await navigator.credentials.get({ publicKey: { challenge: rand(32), allowCredentials: [{ type: 'public-key', id: unb64u(b.id) }], userVerification: 'required', timeout: 60000 } }); return true; }
+  try { await navigator.credentials.get({ publicKey: { challenge: rand(32), allowCredentials: [{ type: 'public-key', id: unb64u(b.id) }], userVerification: 'preferred', timeout: 45000 } }); return true; }
   catch (e) { msg(bioErr(e)); return false; }
 };
 L.setCode = async (cur, nw) => { if (await sha(SALT + cur) !== hash()) return 'O código atual não está certo.'; if (nw.length < 6) return 'O novo código precisa de pelo menos 6 caracteres.'; OS.setOne('security', { hash: await sha(SALT + nw), changed: U.today() }); return null; };
@@ -5235,8 +5256,9 @@ async function showLock() {
       <button class="lk-go" type="submit" aria-label="Entrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </form><div class="lk-msg" id="lkMsg" role="status" aria-live="polite"></div></div><div class="sp-foot">MIND CONTROL${window.OceanumVersion && window.OceanumVersion.v ? ' · v' + window.OceanumVersion.v : ''}</div>`;
   document.getElementById('lkForm').onsubmit = e => { e.preventDefault(); tryCode(document.getElementById('lkCode').value); };
-  const bb = document.getElementById('lkBio'); if (bb) { bb.onclick = async () => { if (await bioUnlock()) open(); }; setTimeout(async () => { if (await bioUnlock()) open(); }, 350); }
-  else setTimeout(() => { const i = document.getElementById('lkCode'); i && i.focus(); }, 300);
+  // o pedido biométrico só abre quando tocas no botão: aberto sozinho ao arrancar, no Android mostrava um ecrã preto do sistema
+  const bb = document.getElementById('lkBio'); if (bb) { let going = false; bb.onclick = async () => { if (going) return; going = true; bb.disabled = true; try { if (await bioUnlock()) open(); } finally { going = false; bb.disabled = false; } }; }
+  else if (matchMedia('(pointer:fine)').matches) setTimeout(() => { const i = document.getElementById('lkCode'); i && i.focus(); }, 300);
 }
 L.gate = fn => { done = fn; if (L.unlocked()) { const s = el(); s.classList.add('out'); setTimeout(() => { s.hidden = true; s.classList.remove('out'); }, 520); done = null; fn(); } else showLock(); };
 L.lock = () => { setUnlocked(false); done = () => OS.request(); showLock(); };
@@ -5449,6 +5471,13 @@ document.addEventListener('submit', e => {
 });
 
 
+
+/* ---------- modo leve (Definições) ---------- */
+(() => { const orig = V.definicoes; if (!orig) return;
+  V.definicoes = sub => { const f = U.ls.get('os2lite', null), on = document.documentElement.classList.contains('lite');
+    return orig(sub) + `<div class="pn"><div class="pn-h"><h3>Desempenho</h3><span class="mut" style="font-size:12px">${on ? 'modo leve ligado' : 'efeitos completos'}</span></div><p class="mut" style="margin:0 0 10px">O modo leve tira sombras, desfoques e animações. Liga-o se a app estiver lenta ou travar (fica ligado sozinho em Android e aparelhos com pouca memória).</p><div class="seg" role="group">${[['auto', 'Automático'], ['1', 'Leve'], ['0', 'Completo']].map(([v, l]) => `<button class="${(f == null ? 'auto' : String(f)) === v ? 'on' : ''}" data-act="liteSet" data-v="${v}">${l}</button>`).join('')}</div></div>`; };
+  A.liteSet = b => { const v = b.dataset.v; try { if (v === 'auto') localStorage.removeItem('os2lite'); else localStorage.setItem('os2lite', v); } catch (e) { } location.reload(); };
+})();
 /* ---------- com um painel aberto, só o painel rola (no iPhone o overflow:hidden não chega) ---------- */
 (() => { let locked = false, y = 0, h0 = '';
   const want = () => document.body.classList.contains('nav-open') || document.body.classList.contains('noscroll') || !U.$('#modal').hidden || !!document.querySelector('.ceremony');
