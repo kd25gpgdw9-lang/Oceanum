@@ -1245,7 +1245,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.12", "date": "01/10/2026", "notes": ["Atalho: a app tenta de novo quando o Google falha", "Botão \"Ir buscar gastos agora\"", "\"18, uber\" separado corretamente"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.13", "date": "01/10/2026", "notes": ["Sincronização entre aparelhos (uma só conta) pelo teu Google", "Descrições do atalho sem o valor (\"18, uber\" → \"Uber\")", "Gastos do atalho nunca duplicam"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -5092,35 +5092,52 @@ const cfg = () => OS.one('inbox');
 const SEEN = 'os2inboxSeen';
 const genKey = () => Array.from(crypto.getRandomValues(new Uint8Array(18)), b => 'abcdefghijkmnpqrstuvwxyz23456789'[b % 32]).join('');
 
-IB.script = key => `// Oceanum · caixa de entrada de gastos. Não partilhes este código: a chave abaixo é a tua.
+IB.script = key => `// Oceanum · caixa de entrada de gastos + sincronização entre aparelhos. Não partilhes este código: a chave abaixo é a tua.
 const KEY = '${key}';
 function doGet(e) {
   const p = e.parameter || {};
   if (p.k !== KEY) return out({ ok: false, msg: 'Chave errada' });
+  if (p.op === 'ping') return out({ ok: true, v: 3 });
+  // ---- sincronização: os dados do Oceanum num ficheiro do teu Google Drive ----
+  if (p.op === 'list') { const all = dados_(); const m = {}; Object.keys(all).forEach(function (id) { m[id] = all[id].t || 0; }); return out({ ok: true, docs: m }); }
+  if (p.op === 'get') { const all = dados_(), ids = String(p.ids || '').split(',').filter(String); const o = {}; (ids.length ? ids : Object.keys(all)).forEach(function (id) { if (all[id]) o[id] = all[id]; }); return out({ ok: true, docs: o }); }
+  if (p.op === 'put') { const L = LockService.getScriptLock(); L.waitLock(20000);
+    try { const all = dados_(), d = JSON.parse(p.j); Object.keys(d).forEach(function (id) { all[id] = d[id]; }); guardar_(all); } finally { L.releaseLock(); }
+    return out({ ok: true }); }
+  // ---- caixa de entrada de gastos (atalho do iPhone) ----
   const sh = folha_();
-  if (sh.getLastRow() === 0) sh.appendRow(['id', 'data', 'valor', 'descricao', 'categoria', 'importado']);
-  if (p.op === 'ping') return out({ ok: true, v: 2 });
-  if (p.op === 'pull') {
-    const rows = sh.getDataRange().getValues(), items = [];
-    for (let i = 1; i < rows.length; i++) if (!rows[i][5]) items.push({ id: String(rows[i][0]), t: String(rows[i][1]), v: Number(rows[i][2]), d: String(rows[i][3]), c: String(rows[i][4]) });
-    return out({ ok: true, items: items });
-  }
+  if (sh.getLastRow() === 0) sh.appendRow(['id', 'data', 'valor', 'descricao', 'categoria', 'importado', 'reservado']);
+  if (p.op === 'pull') { const L = LockService.getScriptLock(); L.waitLock(20000);
+    try { const rows = sh.getDataRange().getValues(), items = [], now = Date.now();
+      for (let i = 1; i < rows.length; i++) { if (rows[i][5]) continue; const res = Number(rows[i][6] || 0); if (res && now - res < 10 * 60 * 1000) continue;
+        items.push({ id: String(rows[i][0]), t: String(rows[i][1]), v: Number(rows[i][2]), d: String(rows[i][3]), c: String(rows[i][4]) }); sh.getRange(i + 1, 7).setValue(now); }
+      return out({ ok: true, items: items }); } finally { L.releaseLock(); } }
   if (p.op === 'ack') {
     const ids = String(p.ids || '').split(','), rows = sh.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) if (ids.indexOf(String(rows[i][0])) >= 0) sh.getRange(i + 1, 6).setValue(new Date());
     return out({ ok: true });
   }
-  const v = Number(String(p.v || '').replace(/[^0-9,.-]/g, '').replace(',', '.'));
+  const txt = String(p.v || '') + ' ', m = txt.match(/\\d+(?:[.,]\\d+)?/), v = m ? Number(m[0].replace(',', '.')) : 0;
   if (!(v > 0)) return out({ ok: false, msg: 'Valor inválido' });
-  sh.appendRow([Utilities.getUuid(), new Date().toISOString(), v, p.d || '', p.c || '', '']);
-  return ContentService.createTextOutput('✓ ' + v.toFixed(2).replace('.', ',') + ' € · ' + (p.d || 'gasto') + ' registado no Oceanum');
+  sh.appendRow([Utilities.getUuid(), new Date().toISOString(), v, p.d || '', p.c || '', '', '']);
+  return ContentService.createTextOutput('✓ ' + v.toFixed(2).replace('.', ',') + ' € registado no Oceanum');
 }
 function doPost(e) { return doGet(e); }
-// funciona dentro de uma folha ou sozinho (script.google.com): cria a folha "Oceanum · Gastos" se for preciso
+// funciona dentro de uma folha ou sozinho (script.google.com): cria a folha de gastos se for preciso
 function folha_() { let ss = null; try { ss = SpreadsheetApp.getActiveSpreadsheet(); } catch (e) { }
   if (!ss) { const P = PropertiesService.getScriptProperties(), id = P.getProperty('SHEET'); if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
     if (!ss) { ss = SpreadsheetApp.create('Oceanum · Gastos do atalho'); P.setProperty('SHEET', ss.getId()); } }
   return ss.getSheets()[0]; }
+function ficheiro_() { const P = PropertiesService.getScriptProperties(), id = P.getProperty('DATA'); if (id) { try { return DriveApp.getFileById(id); } catch (e) { } }
+  const f = DriveApp.createFile('Oceanum · dados.json', '{}', 'application/json'); P.setProperty('DATA', f.getId()); return f; }
+function dados_() { try { return JSON.parse(ficheiro_().getBlob().getDataAsString() || '{}'); } catch (e) { return {}; } }
+function guardar_(all) { const f = ficheiro_();
+  // cópia de segurança diária ANTES de gravar (fica no teu Drive; guarda as últimas 14)
+  const P = PropertiesService.getScriptProperties(), hoje = Utilities.formatDate(new Date(), 'Europe/Lisbon', 'yyyy-MM-dd');
+  if (P.getProperty('BK') !== hoje && f.getBlob().getDataAsString() !== '{}') { P.setProperty('BK', hoje); f.makeCopy('Oceanum · cópia ' + hoje);
+    const it = DriveApp.searchFiles("title contains 'Oceanum · cópia ' and trashed = false"), lista = []; while (it.hasNext()) lista.push(it.next());
+    lista.sort(function (a, b) { return b.getName() < a.getName() ? -1 : 1; }).slice(14).forEach(function (x) { x.setTrashed(true); }); }
+  f.setContent(JSON.stringify(all)); }
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 `;
 
@@ -5149,8 +5166,10 @@ IB.pull = async (manual) => { const c = cfg(); if (!c.url || !c.key || busy) { i
       { const raw = String(it.d || ''), tok = raw.match(/(?:^|\s)([-+]?\d+(?:[.,]\d+)?)(?=\s*(?:€|eur|euros?)?\s*[,;:\-–]?(?:\s|$))/i), dz = x => String(x).replace(/\D/g, '').replace(/0+$/, '');
         if (tok && /[a-zà-ú]/i.test(raw) && dz(raw) === dz(it.v)) { const t = U.num(tok[1].replace(',', '.')); if (t > 0) v = t; } }
       it.d = String(it.d || '').replace(/(^|\s)[-+]?\d+(?:[.,]\d+)?\s*(?:€|eur|euros?)?\s*[,;:\-–]?(?=\s|$)/i, ' ').replace(/\s+/g, ' ').trim();
+      it.d = it.d ? it.d.charAt(0).toUpperCase() + it.d.slice(1) : '';
+      if (OS.get('transactions', 'ib_' + it.id)) { seen.add(it.id); got.push(it.id); return; }
       const g = guess(it.d, it.c), d = it.t ? U.iso(new Date(it.t)) : U.today();
-      const rec = OS.add('transactions', { type: 'Despesa', amount: v, date: d, desc: it.d || '', cat: g.cat, account: g.account || defAcc(), method: 'Débito', ess: 'Essencial', tags: ['atalho'] }, { silent: true });
+      const rec = OS.add('transactions', { id: 'ib_' + it.id, type: 'Despesa', amount: v, date: d, desc: it.d || '', cat: g.cat, account: g.account || defAcc(), method: 'Débito', ess: 'Essencial', tags: ['atalho'] }, { silent: true });
       try { OS.S.transactions.after && OS.S.transactions.after(rec, true); } catch (e) { }
       seen.add(it.id); got.push(it.id); c.n = (c.n || 0) + 1; UI.toast(`Gasto do atalho: ${U.eur(v)}${it.d ? ' · ' + it.d : ''}`, 'pos'); });
     U.ls.set(SEEN, [...seen].slice(-500));
@@ -5174,7 +5193,7 @@ IB.check = async () => { const u = base(), c = cfg();
     if (!j) return IB.st = { ok: false, m: 'O Google respondeu com uma página em vez dos dados. Na implementação, "Quem tem acesso" tem de ser "Qualquer pessoa".' };
     if (j.msg === 'Chave errada') return IB.st = { ok: false, m: 'Chave errada: o código no Apps Script não é o atual. Cola-o outra vez, guarda e faz Implementar → Gerir implementações → ✏️ → Nova versão.' };
     if (!j.ok) return IB.st = { ok: false, m: 'O script respondeu com erro: ' + (j.msg || '?') };
-    return IB.st = { ok: true, m: 'Ligado. A caixa de entrada está a funcionar.' };
+    cfg().ver = j.v || 2; OS.touch('inbox'); return IB.st = { ok: true, m: 'Ligado. A caixa de entrada está a funcionar.' };
   } catch (e) { return IB.st = { ok: false, m: 'Não consegui falar com o script. Confirma: (1) "Quem tem acesso: Qualquer pessoa"; (2) autorizaste a app com a tua conta Google; (3) o código tem "doGet" (cola-o outra vez se for antigo).' }; } };
 const panel = () => { const c = cfg(), st = IB.st || {}, ready = !!(c.key && base());
   return `<div class="pn" id="inboxPn"><div class="pn-h"><h3>Atalho de gastos no iPhone</h3><span class="mut" style="font-size:12px">${c.n ? c.n + ' gastos importados' : ''}</span></div>
@@ -5196,7 +5215,26 @@ const panel = () => { const c = cfg(), st = IB.st || {}, ready = !!(c.key && bas
     <div class="ib-s"><i>5</i><div><b>Pôr no Centro de Controlo</b><p>Abre o Centro de Controlo → <b>+</b> (canto superior esquerdo) → <b>Adicionar controlo</b> → pesquisa <b>Atalhos</b> → toca em <b>Atalho</b> → <b>Escolher</b> → "Gasto". Também podes pô-lo no <b>botão de Ação</b> ou no ecrã principal.</p></div></div>
   </div>
   <p class="mut" style="margin:12px 0 0;font-size:12.5px">Os gastos entram em Finanças sempre que abres o Oceanum, com a categoria adivinhada pela descrição (Uber → Transporte, café → Alimentação) e a etiqueta <i>atalho</i>.</p></div>`; };
-const orig = OS.views.definicoes; if (orig) OS.views.definicoes = sub => orig(sub) + panel();
+const syncPanel = () => { const c = cfg(), SY = window.OceanumSync || {}, on = !!SY.on, ready = !!(c.url && c.key), v3 = (c.ver || 0) >= 3;
+  const t = SY.last ? new Date(SY.last).toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }) : '';
+  return `<div class="pn" id="syncPn"><div class="pn-h"><h3>Sincronizar aparelhos</h3><span class="${on && !SY.err ? 'pos' : 'mut'}" style="font-size:12px">${on ? esc(SY.state || '') + (t ? ' · ' + t : '') : 'desligada'}</span></div>
+  <p class="mut" style="margin:0 0 12px">Uma só conta: o que fazes no telemóvel aparece no tablet e vice-versa. Os dados ficam no teu Google Drive ("Oceanum · dados.json"), com uma cópia de segurança por dia.</p>
+  ${on ? `<div class="ib-st ${SY.err ? 'bad' : 'ok'}">${SY.err ? '✗ ' + esc(SY.err) + ' — os dados ficam guardados aqui e são enviados quando a ligação voltar.' : '✓ Ligada neste aparelho.'}</div>
+    <div class="ib-s"><i>+</i><div><b>Ligar outro aparelho</b><p>Copia o código e abre-o no outro aparelho (manda para ti por WhatsApp ou email). No outro aparelho: Oceanum → Definições → Sincronizar aparelhos → cola o código → <b>Ligar</b>. É como uma palavra-passe: não o partilhes.</p><button class="btn sm pri" data-act="syCopy">${UI.ic('link')}Copiar código de ligação</button></div></div>
+    <p style="margin:10px 0 0"><button class="btn sm ghost" data-act="syOff">Desligar a sincronização neste aparelho</button></p>`
+  : `<div class="ib-w">
+    <div class="ib-s"><i>A</i><div><b>Este aparelho já tem o atalho ligado?</b><p>Se sim (passo 2 do atalho com ✓), segue para B. Se este é o <b>segundo aparelho</b>, cola aqui o código de ligação que copiaste no primeiro:</p>
+      <div class="ib-url"><input class="field" id="syCode" placeholder="Código de ligação" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Código de ligação"><button class="btn sm pri" data-act="syLink">Ligar</button></div></div></div>
+    ${ready ? `<div class="ib-s ${v3 ? 'done' : ''}"><i>B</i><div><b>Atualizar o script do Google (uma vez)</b>${v3 ? '<p class="pos">✓ O script já está atualizado.</p>' : `<p>A sincronização precisa da versão nova do script:</p><p>1. Toca em <b>Copiar código</b> (passo 1 do atalho, mais abaixo).<br>2. No Apps Script: apaga tudo → cola → <b>💾 Guardar</b>.<br>3. <b>Implantar → Gerenciar implantações</b> → ✏️ (lápis) → em <b>Versão</b> escolhe <b>Nova versão</b> → <b>Implantar</b>.<br>4. Se pedir, <b>autoriza o acesso ao Google Drive</b> (Avançado → Acessar → Permitir).<br>5. Volta aqui e toca em <b>Verificar</b>.</p><button class="btn sm" data-act="syVer">Verificar</button>`}</div></div>
+    <div class="ib-s"><i>C</i><div><b>Ligar a sincronização</b><p>Faz isto <b>primeiro no aparelho com os dados principais</b> (o tablet). Os outros aparelhos ligam-se depois com o código.</p><button class="btn sm pri" data-act="syOn" ${v3 ? '' : 'disabled'}>Ligar sincronização neste aparelho</button></div></div>` : ''}
+  </div>`}</div>`; };
+const orig = OS.views.definicoes; if (orig) OS.views.definicoes = sub => orig(sub) + syncPanel() + panel();
+A.syVer = async () => { await IB.check(); UI.toast((cfg().ver || 0) >= 3 ? 'Script atualizado ✓' : 'Ainda é a versão antiga. Confirma que escolheste "Nova versão" ao implantar.', (cfg().ver || 0) >= 3 ? 'pos' : 'warn'); OS.request(); };
+A.syOn = () => { try { localStorage.setItem('os2sync', '1'); localStorage.setItem('os2syncJoined', '0'); } catch (e) { } UI.toast('A ligar…'); setTimeout(() => location.reload(), 400); };
+A.syOff = () => UI.ask('Desligar a sincronização neste aparelho?', 'Os dados ficam neste aparelho, mas deixam de ser trocados com os outros.', 'Desligar', () => { try { localStorage.removeItem('os2sync'); } catch (e) { } location.reload(); });
+A.syLink = () => { const el = document.getElementById('syCode'); const SY = window.OceanumSync; if (!el || !SY || !SY.applyLink(el.value)) { UI.toast('Código inválido. Copia-o outra vez no outro aparelho.', 'neg'); return; } UI.toast('Ligado. A buscar os dados da conta…', 'pos'); setTimeout(() => location.reload(), 500); };
+A.syCopy = async () => { const SY = window.OceanumSync; const code = SY.linkCode(); const link = location.origin + location.pathname + '#ligar=' + encodeURIComponent(code);
+  try { await navigator.clipboard.writeText(link); UI.toast('Código copiado. Abre-o no outro aparelho.', 'pos'); } catch (e) { UI.modal(`<div style="padding:18px"><b>Copia este código</b><textarea readonly style="width:100%;height:120px;font:12px var(--mono);margin-top:8px" onfocus="this.select()">${esc(link)}</textarea><div style="text-align:right;margin-top:10px"><button class="btn" data-mclose>Fechar</button></div></div>`); } };
 const copy = t => new Promise(res => { try { navigator.clipboard.writeText(t).then(() => res(true), () => res(false)); } catch (e) { res(false); } });
 A.ibCopy = async b => { const c = cfg(); if (!c.key) { c.key = genKey(); OS.touch('inbox'); }
   const t = b.dataset.t === 'code' ? IB.script(c.key) : q('');
@@ -5208,9 +5246,100 @@ A.ibRound = async () => { IB.testMsg = 'A enviar o teste…'; IB.testDone = fals
   await new Promise(r => setTimeout(r, 1200)); await IB.pull(false);
   IB.testDone = !!IB.testOk; IB.testMsg = IB.testOk ? '✓ Funcionou: o Oceanum recebeu o teste. Já podes criar o atalho.' : '✗ O teste não chegou. Volta ao passo 2 e carrega em Verificar.'; OS.request(); };
 A.ibTest = () => IB.pull(true);
+IB.clean = d => { const t = String(d || '').replace(/(^|\s)[-+]?\d+(?:[.,]\d+)?\s*(?:€|eur|euros?|r\$|reais|usd|\$)?\s*[,;:\-–]?(?=\s|$)/i, ' ').replace(/\s+/g, ' ').trim(); return t ? t.charAt(0).toUpperCase() + t.slice(1) : t; };
+OS.on('ready', () => { try { OS.all('transactions').filter(t => (t.tags || []).includes('atalho') && /\d/.test(t.desc || '')).forEach(t => { const nd = IB.clean(t.desc); if (nd && nd !== t.desc) OS.upd('transactions', t.id, { desc: nd }, { silent: true }); }); } catch (e) { } });
 OS.on('ready', () => { setTimeout(() => { IB.pull(false); if (cfg().url && cfg().key) IB.check().then(() => OS.request()); }, 1500); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) IB.pull(false); });
 setInterval(() => { if (!document.hidden) IB.pull(false); }, 90000);
+})();
+
+</script>
+<script>
+/* OCEANUM — sincronização entre aparelhos (uma só conta) através do script Google do utilizador.
+   O motor de dados (core.js) fala com uma "base de dados" com collection().onSnapshot() e doc().set().
+   Aqui essa base é o ficheiro "Oceanum · dados.json" no Google Drive do utilizador, servido pelo seu Apps Script.
+   - Primeiro aparelho a ligar: envia tudo o que tem.
+   - Aparelhos seguintes: fica a versão com mais dados (a outra é guardada como cópia neste aparelho).
+   - Depois: cada alteração é enviada; os outros aparelhos recebem-na em segundos (ao abrir, ao voltar à app e a cada 20 s). */
+(() => {
+'use strict';
+if (window.claude) return; // dentro do claude.ai usa a base de dados do artifact
+const LS = { get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }, raw: k => { try { return localStorage.getItem(k); } catch (e) { return null; } } };
+
+// ---- link de ligação: …/#ligar=<código> configura este aparelho e liga a sincronização ----
+const applyLink = code => { try { const o = JSON.parse(decodeURIComponent(escape(atob(String(code).trim().replace(/^.*ligar=/, ''))))); if (!o.u || !o.k) return false;
+  const cur = LS.get('os2:one~inbox', { data: {} }); cur.data = Object.assign({}, cur.data, { url: o.u, key: o.k }); LS.set('os2:one~inbox', cur);
+  LS.set('os2sync', 1); LS.set('os2syncJoined', 0); return true; } catch (e) { return false; } };
+const hm = location.hash.match(/ligar=([A-Za-z0-9+/=_-]+)/);
+if (hm) { const ok = applyLink(decodeURIComponent(hm[1])); history.replaceState(null, '', location.pathname + '#visao'); if (ok) LS.set('os2syncMsg', 'Aparelho ligado. A sincronizar…'); }
+
+const cfg = () => (LS.get('os2:one~inbox', { data: {} }).data || {});
+const SY = window.OceanumSync = { on: false, state: 'desligada', last: 0, err: '', applyLink };
+SY.linkCode = () => { const c = cfg(); return btoa(unescape(encodeURIComponent(JSON.stringify({ u: c.url, k: c.key })))); };
+if (!LS.get('os2sync', 0)) return;
+const c0 = cfg(); if (!c0.url || !c0.key) { SY.state = 'falta o endereço do script'; return; }
+SY.on = true; SY.state = 'a ligar…';
+
+const url = () => cfg().url, key = () => cfg().key;
+const qs = o => Object.entries(o).map(([a, b]) => encodeURIComponent(a) + '=' + encodeURIComponent(b)).join('&');
+const call = async (op, fields = {}, post = false, tries = 3) => { let last = null;
+  for (let i = 0; i < tries; i++) {
+    try { const r = post ? await fetch(url(), { method: 'POST', body: new URLSearchParams(Object.assign({ k: key(), op }, fields)), credentials: 'omit', cache: 'no-store' })
+        : await fetch(url() + (url().includes('?') ? '&' : '?') + qs(Object.assign({ k: key(), op, _: Date.now() }, fields)), { credentials: 'omit', cache: 'no-store' });
+      const t = await r.text(); let j = null; try { j = JSON.parse(t); } catch (e) { last = new Error('o Google respondeu com uma página de erro'); }
+      if (j) { if (!j.ok) throw Object.assign(new Error(j.msg || 'erro do script'), { fatal: true }); return j; }
+    } catch (e) { if (e.fatal) throw e; last = e; }
+    await new Promise(res => setTimeout(res, 700 * (i + 1))); }
+  throw last || new Error('sem resposta'); };
+
+// pendentes: alterações gravadas aqui que ainda não chegaram ao Google (sobrevivem a fechar a app sem rede)
+const pend = new Set(LS.get('os2syncPend', [])); const savePend = () => LS.set('os2syncPend', [...pend]);
+const known = {}; // id → t no servidor
+let queue = {}, waiters = [], timer = 0;
+const flushPut = async () => { timer = 0; const batch = queue, ws = waiters; queue = {}; waiters = []; if (!Object.keys(batch).length) return;
+  try { await call('put', { j: JSON.stringify(batch) }, true); Object.entries(batch).forEach(([id, d]) => { known[id] = d.t; pend.delete(id); }); savePend(); SY.last = Date.now(); SY.err = ''; SY.state = 'sincronizada'; ws.forEach(w => w.ok()); }
+  catch (e) { SY.err = e.message; SY.state = 'sem ligação (guardado neste aparelho)'; ws.forEach(w => w.ko({ code: 'unavailable' })); setTimeout(() => repushPending(), 15000); }
+  try { OS.request(); } catch (e) { } };
+const put = (id, data) => new Promise((ok, ko) => { queue[id] = data; pend.add(id); savePend(); waiters.push({ ok, ko }); clearTimeout(timer); timer = setTimeout(flushPut, 1200); });
+const payload = id => { const [c, s] = id.split('~'); return c === 'one' ? { data: OS.one(s) } : { items: OS.all(c).filter(r => String(r._s || 0) === s) }; };
+const repushPending = () => { [...pend].forEach(id => put(id, Object.assign({ t: Date.now() }, payload(id))).catch(() => { })); };
+const count = all => Object.entries(all).reduce((n, [id, d]) => n + (id.startsWith('one~') ? 0 : ((d && d.items) || []).length), 0);
+const localDocs = () => { const o = {}; Object.keys(OS.D || {}).forEach(c => OS.all(c).forEach(r => { o[c + '~' + (r._s || 0)] = 1; })); Object.keys(OS.ONE || {}).forEach(k => { o['one~' + k] = 1; }); return o; };
+const snap = docs => ({ empty: !docs.length, docs: docs.map(([id, d]) => ({ id, data: () => d })) });
+
+let started = false;
+const start = async (cb, errCb) => {
+  if (started) return; started = true;
+  let all;
+  try { all = (await call('get')).docs || {}; }
+  catch (e) { SY.err = e.message; SY.state = e.fatal ? e.message : 'sem ligação ao Google'; errCb && errCb({ code: 'unavailable' }); setTimeout(() => { started = false; start(cb, errCb); }, 20000); return; }
+  Object.entries(all).forEach(([id, d]) => known[id] = d.t || 0);
+  const joined = LS.get('os2syncJoined', 0), localN = Object.keys(OS.D || {}).reduce((n, c) => n + OS.all(c).length, 0), remoteN = count(all);
+  if (!Object.keys(all).length) { // primeiro aparelho: envia tudo
+    LS.set('os2syncJoined', 1); cb(snap([])); setTimeout(() => { if (localN) OS.pushAll(); }, 300); SY.state = 'a enviar os dados deste aparelho…';
+  } else if (!joined) { // aparelho novo na conta: fica a versão com mais dados
+    LS.set('os2syncJoined', 1);
+    if (localN > remoteN) { LS.set('os2preSyncRemoteCount', remoteN); cb(snap([])); setTimeout(() => OS.pushAll(), 300); SY.state = 'este aparelho tinha mais dados: enviados'; }
+    else { try { localStorage.setItem('os2preSyncBackup', JSON.stringify(OS.exportAll())); } catch (e) { } cb(snap(Object.entries(all))); SY.state = 'dados da conta recebidos'; }
+  } else { // normal: recebe tudo, menos o que ainda não tinha chegado ao Google (esse volta a ser enviado)
+    cb(snap(Object.entries(all).filter(([id]) => !pend.has(id)))); if (pend.size) repushPending(); SY.state = 'sincronizada';
+  }
+  SY.last = Date.now(); SY.err = '';
+  // novidades dos outros aparelhos
+  const poll = async () => { if (document.hidden || !navigator.onLine) return;
+    try { const list = (await call('list', {}, false, 2)).docs || {}; const ch = Object.keys(list).filter(id => list[id] !== known[id] && !pend.has(id) && !queue[id]);
+      if (ch.length) { const got = (await call('get', { ids: ch.join(',') }, false, 2)).docs || {}; Object.entries(got).forEach(([id, d]) => known[id] = d.t || 0); cb(snap(Object.entries(got))); }
+      SY.last = Date.now(); SY.err = ''; SY.state = 'sincronizada'; }
+    catch (e) { SY.err = e.message; SY.state = 'sem ligação ao Google'; } };
+  setInterval(poll, 20000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { poll(); if (pend.size) repushPending(); } });
+  addEventListener('online', () => { poll(); if (pend.size) repushPending(); });
+};
+
+window.claude = { use: async cap => cap === 'db' ? {
+  collection: () => ({ onSnapshot: (cb, err) => { start(cb, err); return () => { }; } }),
+  doc: path => ({ set: data => put(path.split('/').slice(1).join('/'), data) })
+} : null };
 })();
 
 </script>
