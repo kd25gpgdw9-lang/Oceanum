@@ -1244,7 +1244,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.10", "date": "01/10/2026", "notes": ["Atalho de gastos: o script já não precisa da app do Sheets (abre em script.google.com)"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.11", "date": "01/10/2026", "notes": ["Atalho de gastos com uma só pergunta (ex.: \"12,50 uber\")"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -5139,8 +5139,12 @@ IB.pull = async (manual) => { const c = cfg(); if (!c.url || !c.key || busy) { i
   try { const r = await fetch(c.url + (c.url.includes('?') ? '&' : '?') + 'op=pull&k=' + encodeURIComponent(c.key)), j = await r.json();
     if (!j.ok) { if (manual) UI.toast(j.msg || 'O script recusou o pedido', 'neg'); return; }
     const seen = new Set(U.ls.get(SEEN, [])), got = [];
-    (j.items || []).forEach(it => { if (seen.has(it.id) || it.d === '__teste__') { got.push(it.id); if (it.d === '__teste__') IB.testOk = true; return; } const v = U.num(it.v); if (!(v > 0)) { got.push(it.id); return; }
-      const g = guess(it.d || '', it.c), d = it.t ? U.iso(new Date(it.t)) : U.today();
+    (j.items || []).forEach(it => { if (seen.has(it.id) || it.d === '__teste__') { got.push(it.id); if (it.d === '__teste__') IB.testOk = true; return; } let v = U.num(it.v); if (!(v > 0)) { got.push(it.id); return; }
+      // atalho de uma só pergunta: "12,50 uber" chega em v e d; o valor sai do texto e fica só a descrição
+      { const raw = String(it.d || ''), tok = raw.match(/(?:^|\s)([-+]?\d+(?:[.,]\d+)?)(?=\s*(?:€|eur|euros?)?(?:\s|$))/i), dz = x => String(x).replace(/\D/g, '').replace(/0+$/, '');
+        if (tok && /[a-zà-ú]/i.test(raw) && dz(raw) === dz(it.v)) { const t = U.num(tok[1].replace(',', '.')); if (t > 0) v = t; } }
+      it.d = String(it.d || '').replace(/(^|\s)[-+]?\d+(?:[.,]\d+)?\s*(?:€|eur|euros?)?(?=\s|$)/i, ' ').replace(/\s+/g, ' ').trim();
+      const g = guess(it.d, it.c), d = it.t ? U.iso(new Date(it.t)) : U.today();
       const rec = OS.add('transactions', { type: 'Despesa', amount: v, date: d, desc: it.d || '', cat: g.cat, account: g.account || defAcc(), method: 'Débito', ess: 'Essencial', tags: ['atalho'] }, { silent: true });
       try { OS.S.transactions.after && OS.S.transactions.after(rec, true); } catch (e) { }
       seen.add(it.id); got.push(it.id); c.n = (c.n || 0) + 1; UI.toast(`Gasto do atalho: ${U.eur(v)}${it.d ? ' · ' + it.d : ''}`, 'pos'); });
