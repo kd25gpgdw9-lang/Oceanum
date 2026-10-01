@@ -1,0 +1,22 @@
+{
+  "name": "Oceanum",
+  "short_name": "Oceanum",
+  "description": "O sistema operativo da tua vida.",
+  "lang": "pt",
+  "start_url": "./#visao",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#04101F",
+  "theme_color": "#04101F",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Gasto rápido", "short_name": "Gasto", "url": "./#gasto", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Registar refeição", "short_name": "Dieta", "url": "./#dieta", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Dominus", "short_name": "Jogo", "url": "./#dominus", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
+}
