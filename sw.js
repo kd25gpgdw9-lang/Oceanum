@@ -1,5 +1,5 @@
 /* Oceanum — service worker: abre instantaneamente e funciona sem internet. */
-const V = 'oceanum-1fc23aee4d';
+const V = 'oceanum-82447f51cf';
 const SHELL = ["./","index.html","manifest.webmanifest","apple-touch-icon.png","icon-192.png","icon-512.png","icon-maskable-512.png"];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

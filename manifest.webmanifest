@@ -6,7 +6,6 @@
   "start_url": "./#visao",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#04101F",
   "theme_color": "#04101F",
   "icons": [
