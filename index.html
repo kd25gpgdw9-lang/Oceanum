@@ -1217,6 +1217,10 @@ body{background-attachment:scroll}
 .ib-url{display:flex;gap:8px}.ib-url .field{flex:1;min-width:0}
 .ib-st{margin-top:8px;padding:9px 12px;border-radius:10px;font-size:13px;line-height:1.45}
 .ib-st.ok{background:rgba(52,211,153,.12);color:#6EE7B7}.ib-st.bad{background:rgba(248,113,113,.12);color:#FCA5A5}
+/* menu: Definições no topo e rodapé sempre visível */
+.side-set{display:flex;align-items:center;gap:10px;margin:0 2px 10px;padding:10px 12px;border-radius:11px;background:rgba(56,189,248,.08);color:var(--tx);font-size:14px;font-weight:500}
+.side-set.on,.side-set:hover{background:rgba(56,189,248,.16)}
+#side .side-foot{position:sticky;bottom:-28px;margin:12px -12px -28px;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));background:#06162B;border-top:1px solid var(--line);z-index:2}
 
 </style>
 <style>
@@ -1240,7 +1244,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.8", "date": "01/10/2026", "notes": ["Biometria desligada no Android (deixa de pedir a senha do tablet)", "Opção \"Entrar direto\" neste aparelho, nas Definições"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.9", "date": "01/10/2026", "notes": ["Engrenagem das Definições sempre visível no telemóvel", "Definições no início do menu", "Face ID só no iPhone, com convite para ativar"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -4024,7 +4028,7 @@ V.definicoes = () => {
   return UI.head('Definições', 'O teu perfil alimenta cálculos em todo o sistema.', '', 'Sistema') +
   `<div class="pn"><div class="pn-h"><h3>Perfil</h3></div><div class="fgrid">${F.map(([k, l, t]) => `<div class="fld"><label for="pf_${k}">${l}</label><input id="pf_${k}" type="${t || 'text'}" value="${esc(p[k] ?? '')}" data-bind="profile.${k}" data-fk="pf${k}"></div>`).join('')}</div></div>
   <div class="pn"><div class="pn-h"><h3>${UI.ic('lock')}Segurança</h3><button class="btn sm" data-act="lockNow">${UI.ic('lock')}Bloquear agora</button></div>
-    <div class="li"><div class="li-t"><b>Face ID / biometria neste dispositivo</b><small>${OS.Lock.bioId() ? 'Ativo desde ' + U.fmtD(OS.Lock.bioId().at) + '.' : 'Regista o Face ID (ou impressão digital) deste dispositivo. Nos outros, entras com o código.'} Se o claude.ai não permitir biometria dentro da página, o sistema avisa e continuas a usar o código.</small></div>${OS.Lock.bioId() ? '<button class="btn sm ghost" data-act="bioForget">Remover</button>' : '<button class="btn sm" data-act="bioRegister">Ativar</button>'}</div>
+    <div class="li"><div class="li-t"><b>Face ID</b><small>${!OS.Lock.bioAllowed ? 'Só disponível no iPhone. Neste aparelho usa "Entrar direto" (em baixo) para não teres de escrever o código.' : OS.Lock.bioId() ? 'Ativo neste iPhone desde ' + U.fmtD(OS.Lock.bioId().at) + '. Ao abrir, toca em "Desbloquear com Face ID".' : 'Ativa para entrares com a cara em vez do código.'}</small></div>${!OS.Lock.bioAllowed ? '' : OS.Lock.bioId() ? '<button class="btn sm ghost" data-act="bioForget">Remover</button>' : '<button class="btn sm pri" data-act="bioRegister">Ativar Face ID</button>'}</div>
     <form class="row gap8" data-form="codeChange" style="margin-top:12px"><input class="field" style="flex:1;min-width:160px" type="password" name="cur" placeholder="Código atual" autocomplete="current-password" aria-label="Código atual"><input class="field" style="flex:1;min-width:160px" type="password" name="nw" placeholder="Novo código (6+ caracteres)" autocomplete="new-password" aria-label="Novo código"><button class="btn sm">Mudar código</button></form>
     <div class="note" style="margin-top:10px">Só o hash do código fica guardado, nunca o código. A app bloqueia ao abrir e depois de 5 minutos em segundo plano; 5 tentativas erradas impõem 30 s de espera. É uma proteção de privacidade no dispositivo: quem garante que ninguém abre a página é a tua conta claude.ai, onde este artifact é privado.${OS.one('security').changed ? ' Código alterado a ' + U.fmtD(OS.one('security').changed) + '.' : ' Como partilhaste o código na conversa, considera mudá-lo aqui.'}</div></div>
   <div class="pn"><div class="pn-h"><h3>Contextos</h3></div><div class="row gap4">${L.CTX.map(c => UI.badge(c, 'acc')).join('')}</div><div class="note" style="margin-top:8px">Usa-os nas tarefas para filtrar em Next Action pelo sítio onde estás. Na captura rápida basta escrever @Casa, @Rua, @Mova…</div></div>
@@ -5218,21 +5222,27 @@ OS.ONE_DEF.security = { hash: '', changed: '' };
 // memória primeiro: se o navegador bloquear o sessionStorage (vista embutida), o desbloqueio continua válido nesta sessão
 let memUnlock = false;
 // Android: sem biometria (o pedido do sistema escurecia o ecrã e pedia a senha do tablet). Apaga registos antigos.
-const ANDROID = /Android/i.test(navigator.userAgent || '');
-if (ANDROID) { try { localStorage.removeItem('os2bio'); } catch (e) { } }
-L.android = ANDROID;
+const UA = navigator.userAgent || '', ANDROID = /Android/i.test(UA), IPHONE = /iPhone|iPod/.test(UA);
+// Face ID só no iPhone (pedido do utilizador). Noutros aparelhos apaga registos antigos.
+if (!IPHONE) { try { localStorage.removeItem('os2bio'); } catch (e) { } }
+L.android = ANDROID; L.bioAllowed = IPHONE;
 // aparelho de confiança: não pede código neste aparelho (opção nas Definições)
 L.trusted = () => { try { return localStorage.getItem('os2trust') === '1'; } catch (e) { return false; } };
 L.setTrusted = on => { try { on ? localStorage.setItem('os2trust', '1') : localStorage.removeItem('os2trust'); } catch (e) { } };
 L.unlocked = () => { if (memUnlock || L.trusted()) return true; try { return sessionStorage.getItem('os2unlock') === '1'; } catch (e) { return false; } };
 const setUnlocked = v => { memUnlock = !!v; try { v ? sessionStorage.setItem('os2unlock', '1') : sessionStorage.removeItem('os2unlock'); } catch (e) { } };
-L.bioId = () => ANDROID ? null : U.ls.get('os2bio', null);
-L.bioAvailable = async () => { if (ANDROID) return false; try { return !!(window.PublicKeyCredential && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()); } catch (e) { return false; } };
-const bioErr = e => e && (e.name === 'NotAllowedError' ? 'Cancelado, ou o claude.ai não permite Face ID dentro desta vista.' : e.name === 'SecurityError' ? 'Esta vista não permite Face ID (restrição do navegador dentro do claude.ai). Usa o código.' : e.name === 'InvalidStateError' ? 'Este dispositivo já está registado.' : 'Face ID indisponível aqui: ' + (e.message || e.name));
+L.bioId = () => IPHONE ? U.ls.get('os2bio', null) : null;
+L.bioAvailable = async () => { if (!IPHONE) return false; try { return !!(window.PublicKeyCredential && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()); } catch (e) { return false; } };
+const bioErr = e => { const n = e && e.name;
+  if (n === 'NotAllowedError') return 'O Face ID foi cancelado ou bloqueado. Tenta outra vez; confirma em Ajustes → Face ID e código que o Safari pode usar o Face ID e que o Porta-chaves do iCloud está ligado (Ajustes → o teu nome → iCloud → Palavras-passe e porta-chaves).';
+  if (n === 'InvalidStateError') return 'Este iPhone já tem o Face ID registado no Oceanum.';
+  if (n === 'SecurityError') return 'O endereço da app não permite Face ID. Abre pelo link https://kd25gpgdw9-lang.github.io/Oceanum/.';
+  if (n === 'NotSupportedError') return 'O iPhone não suporta este tipo de chave. Atualiza o iOS.';
+  return 'Face ID indisponível: ' + ((e && (e.message || e.name)) || 'erro desconhecido'); };
 L.register = async () => { if (ANDROID) { OS.UI.toast('No Android a biometria está desligada. Usa "Entrar direto" em Definições.', 'warn'); return false; }
   try {
     const cred = await navigator.credentials.create({ publicKey: { challenge: rand(32), rp: { name: 'Oceanum' }, user: { id: rand(16), name: 'ryan', displayName: OS.one('profile').short || 'Ryan' }, pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' }, timeout: 60000 } });
-    U.ls.set('os2bio', { id: b64u(cred.rawId), at: U.today() }); OS.UI.toast('Face ID ativado neste dispositivo', 'pos'); OS.request(); return true;
+    U.ls.set('os2bio', { id: b64u(cred.rawId), at: U.today() }); U.ls.set('os2bioAsk', true); try { OS.UI.closeModal(); } catch (e) { } OS.UI.toast('Face ID ativado. Da próxima vez entras com a cara.', 'pos'); OS.request(); return true;
   } catch (e) { OS.UI.toast(bioErr(e), 'warn'); return false; }
 };
 L.forget = () => { U.ls.del('os2bio'); OS.UI.toast('Face ID removido deste dispositivo'); OS.request(); };
@@ -5256,7 +5266,11 @@ async function tryCode(v) {
   if (f >= 5) { U.ls.set('os2lkwait', Date.now() + 30000); U.ls.set('os2lkfails', 0); msg('Código errado 5 vezes. Espera 30 s.'); } else msg('Código incorreto.');
   const i = document.getElementById('lkCode'); if (i) { i.value = ''; i.classList.remove('shake'); void i.offsetWidth; i.classList.add('shake'); i.focus(); }
 }
-function open() { setUnlocked(true); const s = el(); s.classList.add('out'); setTimeout(() => { s.hidden = true; s.classList.remove('out'); }, 520); const d = done; done = null; d && d(); }
+const offerBio = async () => { if (!IPHONE || L.bioId() || U.ls.get('os2bioAsk', false) || !(await L.bioAvailable())) return;
+  setTimeout(() => { OS.UI.modal(`<div style="padding:20px;text-align:center"><div style="font-size:34px">🔐</div><h3 style="margin:8px 0 6px">Ativar o Face ID?</h3><p class="mut" style="margin:0 0 16px">Da próxima vez entras só com a cara, sem escrever o código.</p><div class="col gap8"><button class="btn pri" data-act="bioRegister">Ativar Face ID</button><button class="btn ghost" data-act="bioLater">Agora não</button></div></div>`); }, 700); };
+OS.act = OS.act || {};
+OS.act.bioLater = () => { U.ls.set('os2bioAsk', true); OS.UI.closeModal(); };
+function open() { const viaCode = !L.unlocked(); setUnlocked(true); if (viaCode) offerBio(); const s = el(); s.classList.add('out'); setTimeout(() => { s.hidden = true; s.classList.remove('out'); }, 520); const d = done; done = null; d && d(); }
 // campo do código: sem o gestor de palavras-passe do iOS (que desenhava bordas brancas e o ícone escuro ao lado)
 const codeInput = () => { const sec = (() => { try { return CSS.supports('-webkit-text-security', 'disc'); } catch (e) { return false; } })();
   return `<input id="lkCode" class="${sec ? 'lk-sec' : ''}" type="${sec ? 'text' : 'password'}" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore placeholder="Código de acesso" aria-label="Código de acesso">`; };
@@ -5354,6 +5368,7 @@ const unlocked = () => new Set(CORE.concat(Object.keys((OS.ui.nav) || {})));
 const unlock = k => { if (!k || CORE.includes(k) || !DESC[k]) return; const n = Object.assign({}, OS.ui.nav || {}); if (!n[k]) { n[k] = 1; OS.ui.nav = n; try { OS.setUI('nav', n); } catch (e) { } } };
 function renderSide(cur) {
   U.$('#side').innerHTML = `<a class="brand" href="#visao"><span class="brand-mark oc">${OS.Lock.logo(20, '#EDE6DA', 4)}</span><span><b>OCEANUM</b></span></a>
+  <a class="side-set ${cur === 'definicoes' ? 'on' : ''}" href="#definicoes">${UI.ic('settings')}<span>Definições</span></a>
   ${NAV.map(([g, items]) => `<div class="nav-g"><h6>${g}</h6>${items.map(([k, l, ic, cnt]) => { let c = null; if (cnt) { try { c = cnt(); } catch (e) { } } return `<a href="#${k}" class="${cur === k ? 'on' : ''}">${UI.ic(ic)}<span>${k === 'mova' ? esc(OS.one('mova').name || 'Mova') : l}</span>${c && c[1] === 'neg' ? `<span class="cnt neg">${c[0]}</span>` : ''}</a>`; }).join('')}</div>`).join('')}
   <div class="side-foot"><i class="sync-dot ${OS.sync.status}" id="syncDot"></i><span id="syncMsg">${esc(OS.sync.msg)}</span><button class="icon-btn" style="margin-left:auto" data-act="lockNow" aria-label="Bloquear" title="Bloquear">${UI.ic('lock')}</button><a class="icon-btn" href="#definicoes" aria-label="Definições">${UI.ic('settings')}</a></div>`;
 }
@@ -5371,7 +5386,7 @@ function renderTop(cur) {
   <div class="tn-r"><i class="sync-dot ${OS.sync.status}" id="syncDot2" title="${esc(OS.sync.msg)}"></i>
   <button class="icon-btn" data-act="cmdOpen" aria-label="Procurar (Ctrl K)" title="Procurar (Ctrl K)">${UI.ic('search')}</button>
   <button class="icon-btn tn-hide-s" data-act="focusStart" aria-label="Modo foco" title="Modo foco">${UI.ic('focus')}</button>
-  <a class="icon-btn tn-hide-s" href="#definicoes" aria-label="Definições" title="Definições">${UI.ic('settings')}</a>
+  <a class="icon-btn" href="#definicoes" aria-label="Definições" title="Definições">${UI.ic('settings')}</a>
   <button class="btn pri sm tn-add" data-act="quickAdd" aria-label="Registar">${UI.ic('plus')}<span>Registar</span></button></div>`;
 }
 function renderTab(cur) {
