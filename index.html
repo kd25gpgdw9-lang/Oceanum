@@ -1240,7 +1240,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.7", "date": "01/10/2026", "notes": ["Corrigido o ecrã preto no tablet (orientação forçada na vertical)", "Modo de segurança: abre o link com ?seguro"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.8", "date": "01/10/2026", "notes": ["Biometria desligada no Android (deixa de pedir a senha do tablet)", "Opção \"Entrar direto\" neste aparelho, nas Definições"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -5217,12 +5217,19 @@ OS.ONE_DEF.security = { hash: '', changed: '' };
 
 // memória primeiro: se o navegador bloquear o sessionStorage (vista embutida), o desbloqueio continua válido nesta sessão
 let memUnlock = false;
-L.unlocked = () => { if (memUnlock) return true; try { return sessionStorage.getItem('os2unlock') === '1'; } catch (e) { return false; } };
+// Android: sem biometria (o pedido do sistema escurecia o ecrã e pedia a senha do tablet). Apaga registos antigos.
+const ANDROID = /Android/i.test(navigator.userAgent || '');
+if (ANDROID) { try { localStorage.removeItem('os2bio'); } catch (e) { } }
+L.android = ANDROID;
+// aparelho de confiança: não pede código neste aparelho (opção nas Definições)
+L.trusted = () => { try { return localStorage.getItem('os2trust') === '1'; } catch (e) { return false; } };
+L.setTrusted = on => { try { on ? localStorage.setItem('os2trust', '1') : localStorage.removeItem('os2trust'); } catch (e) { } };
+L.unlocked = () => { if (memUnlock || L.trusted()) return true; try { return sessionStorage.getItem('os2unlock') === '1'; } catch (e) { return false; } };
 const setUnlocked = v => { memUnlock = !!v; try { v ? sessionStorage.setItem('os2unlock', '1') : sessionStorage.removeItem('os2unlock'); } catch (e) { } };
-L.bioId = () => U.ls.get('os2bio', null);
-L.bioAvailable = async () => { try { return !!(window.PublicKeyCredential && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()); } catch (e) { return false; } };
+L.bioId = () => ANDROID ? null : U.ls.get('os2bio', null);
+L.bioAvailable = async () => { if (ANDROID) return false; try { return !!(window.PublicKeyCredential && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()); } catch (e) { return false; } };
 const bioErr = e => e && (e.name === 'NotAllowedError' ? 'Cancelado, ou o claude.ai não permite Face ID dentro desta vista.' : e.name === 'SecurityError' ? 'Esta vista não permite Face ID (restrição do navegador dentro do claude.ai). Usa o código.' : e.name === 'InvalidStateError' ? 'Este dispositivo já está registado.' : 'Face ID indisponível aqui: ' + (e.message || e.name));
-L.register = async () => {
+L.register = async () => { if (ANDROID) { OS.UI.toast('No Android a biometria está desligada. Usa "Entrar direto" em Definições.', 'warn'); return false; }
   try {
     const cred = await navigator.credentials.create({ publicKey: { challenge: rand(32), rp: { name: 'Oceanum' }, user: { id: rand(16), name: 'ryan', displayName: OS.one('profile').short || 'Ryan' }, pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' }, timeout: 60000 } });
     U.ls.set('os2bio', { id: b64u(cred.rawId), at: U.today() }); OS.UI.toast('Face ID ativado neste dispositivo', 'pos'); OS.request(); return true;
@@ -5268,7 +5275,7 @@ async function showLock() {
   else if (matchMedia('(pointer:fine)').matches) setTimeout(() => { const i = document.getElementById('lkCode'); i && i.focus(); }, 300);
 }
 L.gate = fn => { done = fn; if (L.unlocked()) { const s = el(); s.classList.add('out'); setTimeout(() => { s.hidden = true; s.classList.remove('out'); }, 520); done = null; fn(); } else showLock(); };
-L.lock = () => { setUnlocked(false); done = () => OS.request(); showLock(); };
+L.lock = () => { L.setTrusted(false); setUnlocked(false); done = () => OS.request(); showLock(); };
 let hiddenAt = 0;
 document.addEventListener('visibilitychange', () => { if (document.hidden) hiddenAt = Date.now(); else if (hiddenAt && Date.now() - hiddenAt > 5 * 60 * 1000 && L.unlocked()) L.lock(); });
 OS.act = OS.act || {};
@@ -5483,6 +5490,9 @@ document.addEventListener('submit', e => {
 (() => { const orig = V.definicoes; if (!orig) return;
   V.definicoes = sub => { const f = U.ls.get('os2lite', null), on = document.documentElement.classList.contains('lite');
     return orig(sub) + `<div class="pn"><div class="pn-h"><h3>Desempenho</h3><span class="mut" style="font-size:12px">${on ? 'modo leve ligado' : 'efeitos completos'}</span></div><p class="mut" style="margin:0 0 10px">O modo leve tira sombras, desfoques e animações. Liga-o se a app estiver lenta ou travar (fica ligado sozinho em Android e aparelhos com pouca memória).</p><div class="seg" role="group">${[['auto', 'Automático'], ['1', 'Leve'], ['0', 'Completo']].map(([v, l]) => `<button class="${(f == null ? 'auto' : String(f)) === v ? 'on' : ''}" data-act="liteSet" data-v="${v}">${l}</button>`).join('')}</div></div>`; };
+  const orig2 = V.definicoes; V.definicoes = sub => { const t = OS.Lock.trusted();
+    return orig2(sub) + `<div class="pn"><div class="pn-h"><h3>Código neste aparelho</h3><span class="mut" style="font-size:12px">${t ? 'não pede código' : 'pede código ao abrir'}</span></div><p class="mut" style="margin:0 0 10px">Num aparelho só teu (como o teu tablet), podes entrar direto sem escrever o código. Os outros aparelhos continuam a pedir. O botão do cadeado volta a ligar o código.${OS.Lock.android ? ' Neste aparelho Android a biometria está desligada para não abrir o ecrã de senha do sistema.' : ''}</p><div class="seg" role="group"><button class="${t ? '' : 'on'}" data-act="trustSet" data-v="0">Pedir código</button><button class="${t ? 'on' : ''}" data-act="trustSet" data-v="1">Entrar direto</button></div></div>`; };
+  A.trustSet = b => { OS.Lock.setTrusted(b.dataset.v === '1'); UI.toast(b.dataset.v === '1' ? 'Este aparelho entra direto' : 'O código volta a ser pedido', 'pos'); OS.request(); };
   A.liteSet = b => { const v = b.dataset.v; try { if (v === 'auto') localStorage.removeItem('os2lite'); else localStorage.setItem('os2lite', v); } catch (e) { } location.reload(); };
 })();
 /* ---------- com um painel aberto, só o painel rola (no iPhone o overflow:hidden não chega) ---------- */
