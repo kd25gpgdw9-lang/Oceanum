@@ -1209,10 +1209,52 @@ body{background-attachment:scroll}
 }
 @media (max-width:860px){input,select,textarea,.field{font-size:16px!important}.qg-amt input{font-size:44px!important}}
 .ib-code textarea{font-size:12px!important}
+.ib-w{display:flex;flex-direction:column;gap:4px}
+.ib-s{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.ib-s>i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:600 12px var(--mono);font-style:normal;border:1.5px solid var(--line3);color:var(--tx2)}
+.ib-s.done>i{background:linear-gradient(135deg,#22D3EE,#3B82F6);border-color:transparent;color:#fff}
+.ib-s b{font-weight:600}.ib-s p{margin:6px 0;font-size:13.5px;line-height:1.55}
+.ib-url{display:flex;gap:8px}.ib-url .field{flex:1;min-width:0}
+.ib-st{margin-top:8px;padding:9px 12px;border-radius:10px;font-size:13px;line-height:1.45}
+.ib-st.ok{background:rgba(52,211,153,.12);color:#6EE7B7}.ib-st.bad{background:rgba(248,113,113,.12);color:#FCA5A5}
 
 </style>
 <style>[hidden]{display:none!important}</style>
+<script>window.OCEANUM_VERSION={"v": "1.2", "date": "01/10/2026", "notes": ["Ecrã de atualização e número de versão", "Login sem bordas brancas no iPhone", "Scroll e menus mais leves no telemóvel", "Atalho de gastos sem abrir a app"]};</script>
 <script src="config.js"></script>
+<script>
+/* Oceanum — atualizações visíveis: ecrã curto "A atualizar…" quando chega uma versão nova,
+   e aviso "Atualizado · versão X" na primeira abertura dessa versão. */
+(() => {
+'use strict';
+const VER = window.OCEANUM_VERSION || {}, KEY = 'os2ver';
+const ls = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } } };
+const css = `.upd{position:fixed;inset:0;z-index:300;display:grid;place-items:center;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(14,165,233,.18),transparent 60%),#04101F;color:#EAF6FF;font:500 15px 'Geist',system-ui,sans-serif;animation:updIn .25s ease-out}
+.upd .in{display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px;text-align:center;max-width:340px}
+.upd .ring{width:54px;height:54px;border-radius:50%;border:3px solid rgba(125,211,252,.2);border-top-color:#38BDF8;animation:updSpin .8s linear infinite}
+.upd .ok{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#22D3EE,#3B82F6);box-shadow:0 0 40px rgba(56,189,248,.45);animation:updPop .4s cubic-bezier(.2,1.5,.4,1)}
+.upd .ok svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.upd b{font-size:18px;font-weight:600}.upd small{color:#7DD3FC;font:500 12px 'Geist Mono',monospace;letter-spacing:.06em}
+.upd ul{margin:4px 0 0;padding:0;list-style:none;color:#A6C3DA;font-size:13.5px;line-height:1.5}.upd li::before{content:"· "}
+.upd .bar{width:180px;height:3px;border-radius:3px;background:rgba(125,211,252,.15);overflow:hidden}.upd .bar i{display:block;height:100%;background:#38BDF8;animation:updBar 2.6s linear forwards}
+.upd.out{opacity:0;transition:opacity .3s}
+@keyframes updSpin{to{transform:rotate(360deg)}}@keyframes updIn{from{opacity:0}}@keyframes updPop{from{transform:scale(.5);opacity:0}}@keyframes updBar{from{width:0}to{width:100%}}`;
+const style = () => { if (!document.getElementById('updCss')) { const s = document.createElement('style'); s.id = 'updCss'; s.textContent = css; document.head.appendChild(s); } };
+const show = html => { style(); const el = document.createElement('div'); el.className = 'upd'; el.setAttribute('role', 'status'); el.innerHTML = `<div class="in">${html}</div>`; document.body.appendChild(el); return el; };
+// 1) chegou uma versão nova enquanto a app estava aberta: ecrã curto e recarrega
+window.OceanumUpdating = () => { show('<div class="ring"></div><b>A atualizar o Oceanum…</b><small>versão nova encontrada</small>'); setTimeout(() => location.reload(), 900); };
+// 2) primeira abertura de uma versão nova: confirmação
+const prev = ls.get(KEY);
+if (VER.v && prev !== VER.v) { ls.set(KEY, VER.v);
+  if (prev) { const go = () => { const el = show(`<div class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><b>Atualizado</b><small>versão ${VER.v} · ${VER.date || ''}</small>${(VER.notes || []).length ? `<ul>${VER.notes.slice(0, 4).map(n => `<li>${String(n).replace(/[<&]/g, c => c === '<' ? '&lt;' : '&amp;')}</li>`).join('')}</ul>` : ''}<div class="bar"><i></i></div>`);
+      const close = () => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }; el.addEventListener('click', close); setTimeout(close, 2600); };
+    if (document.readyState === 'loading') addEventListener('DOMContentLoaded', go); else go(); } }
+// versão visível no ecrã de abertura
+addEventListener('DOMContentLoaded', () => { const f = document.querySelector('.sp-foot'); if (f && VER.v) f.textContent = 'MIND CONTROL · v' + VER.v; });
+window.OceanumVersion = VER;
+})();
+
+</script>
 </head>
 <body>
 <div id="app">
@@ -5024,6 +5066,7 @@ function doGet(e) {
   if (p.k !== KEY) return out({ ok: false, msg: 'Chave errada' });
   const sh = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
   if (sh.getLastRow() === 0) sh.appendRow(['id', 'data', 'valor', 'descricao', 'categoria', 'importado']);
+  if (p.op === 'ping') return out({ ok: true, v: 2 });
   if (p.op === 'pull') {
     const rows = sh.getDataRange().getValues(), items = [];
     for (let i = 1; i < rows.length; i++) if (!rows[i][5]) items.push({ id: String(rows[i][0]), t: String(rows[i][1]), v: Number(rows[i][2]), d: String(rows[i][3]), c: String(rows[i][4]) });
@@ -5039,6 +5082,7 @@ function doGet(e) {
   sh.appendRow([Utilities.getUuid(), new Date().toISOString(), v, p.d || '', p.c || '', '']);
   return ContentService.createTextOutput('✓ ' + v.toFixed(2).replace('.', ',') + ' € · ' + (p.d || 'gasto') + ' registado no Oceanum');
 }
+function doPost(e) { return doGet(e); }
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 `;
 
@@ -5058,7 +5102,7 @@ IB.pull = async (manual) => { const c = cfg(); if (!c.url || !c.key || busy) { i
   try { const r = await fetch(c.url + (c.url.includes('?') ? '&' : '?') + 'op=pull&k=' + encodeURIComponent(c.key)), j = await r.json();
     if (!j.ok) { if (manual) UI.toast(j.msg || 'O script recusou o pedido', 'neg'); return; }
     const seen = new Set(U.ls.get(SEEN, [])), got = [];
-    (j.items || []).forEach(it => { if (seen.has(it.id)) { got.push(it.id); return; } const v = U.num(it.v); if (!(v > 0)) { got.push(it.id); return; }
+    (j.items || []).forEach(it => { if (seen.has(it.id) || it.d === '__teste__') { got.push(it.id); if (it.d === '__teste__') IB.testOk = true; return; } const v = U.num(it.v); if (!(v > 0)) { got.push(it.id); return; }
       const g = guess(it.d || '', it.c), d = it.t ? U.iso(new Date(it.t)) : U.today();
       const rec = OS.add('transactions', { type: 'Despesa', amount: v, date: d, desc: it.d || '', cat: g.cat, account: g.account || defAcc(), method: 'Débito', ess: 'Essencial', tags: ['atalho'] }, { silent: true });
       try { OS.S.transactions.after && OS.S.transactions.after(rec, true); } catch (e) { }
@@ -5070,28 +5114,53 @@ IB.pull = async (manual) => { const c = cfg(); if (!c.url || !c.key || busy) { i
   } catch (e) { if (manual) UI.toast('Não consegui ligar ao script. Confirma o endereço e se está publicado para "Qualquer pessoa".', 'neg'); }
   finally { busy = false; } };
 
-/* ---- painel nas Definições ---- */
-const panel = () => { const c = cfg(), link = c.url && c.key ? `${c.url}${c.url.includes('?') ? '&' : '?'}k=${c.key}` : '';
-  return `<div class="pn" id="inboxPn"><div class="pn-h"><h3>Atalho de gastos no iPhone</h3><span class="mut" style="font-size:12px">${c.last ? 'última verificação ' + U.fmtDS(U.iso(new Date(c.last))) + ' · ' + (c.n || 0) + ' importados' : 'por configurar'}</span></div>
-  <p class="mut" style="margin:0 0 12px">Igual ao Notion: um toque no Centro de Controlo, escreves o valor e a descrição, e fica registado sem abrires o Oceanum. O gasto entra nas Finanças da próxima vez que abrires a app.</p>
-  <ol class="ib-steps">
-    <li><b>Cria a caixa de entrada.</b> Abre <a class="acc" href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> (folha Google nova) → menu <b>Extensões → Apps Script</b>. Apaga o que lá estiver e cola este código:
-      <div class="ib-code"><textarea readonly rows="5" id="ibCode" aria-label="Código do script">${esc(IB.script(c.key || '— carrega em Gerar chave —'))}</textarea><div class="row gap8">${c.key ? `<button class="btn sm pri" data-act="ibCopy" data-t="code">Copiar código</button>` : `<button class="btn sm pri" data-act="ibKey">Gerar chave</button>`}</div></div></li>
-    <li><b>Publica.</b> No Apps Script: <b>Implementar → Nova implementação</b> → tipo <b>Aplicação Web</b> → Executar como: <b>Eu</b> · Quem tem acesso: <b>Qualquer pessoa</b> → <b>Implementar</b> → autoriza com a tua conta Google (em "Avançadas" → "Aceder"). Copia o <b>URL da aplicação Web</b> e cola aqui:
-      <input class="field" style="margin-top:8px" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(c.url || '')}" data-bind="inbox.url" aria-label="URL do script"></li>
-    <li><b>Testa.</b> <button class="btn sm" data-act="ibTest" ${link ? '' : 'disabled'}>Testar ligação</button></li>
-    <li><b>Cria o atalho</b> na app <b>Atalhos</b> (+), com estas ações por ordem:
-      <div class="ib-sc"><div>1 · <b>Pedir entrada</b> → tipo <i>Número</i> → pergunta "Quanto gastaste?"</div><div>2 · <b>Pedir entrada</b> → tipo <i>Texto</i> → pergunta "Em quê?"</div><div>3 · <b>Codificar URL</b> → a <i>Entrada fornecida</i> do passo 2</div><div>4 · <b>Obter conteúdo do URL</b> → cola o link abaixo e acrescenta no fim <code>&amp;v=</code>[Entrada do passo 1]<code>&amp;d=</code>[URL codificado]</div><div>5 · <b>Mostrar notificação</b> → [Conteúdo do URL]</div></div>
-      ${link ? `<div class="ib-link"><code>${esc(link)}</code><button class="btn sm" data-act="ibCopy" data-t="link">Copiar link</button></div>` : '<p class="mut">O link aparece aqui depois do passo 2.</p>'}</li>
-    <li><b>Põe no Centro de Controlo.</b> Abre o Centro de Controlo → <b>+</b> (canto superior esquerdo) → <b>Adicionar controlo</b> → <b>Atalhos</b> → escolhe o teu atalho. Também podes pô-lo no botão de Ação ou no ecrã principal.</li>
-  </ol>
-  <p class="mut" style="margin:10px 0 0;font-size:12.5px">A categoria é adivinhada pela descrição (ex.: "Uber" → Transporte, "café" → Alimentação) e pelo que já registaste antes. Podes corrigir depois em Finanças; os gastos do atalho ficam com a etiqueta <i>atalho</i>.</p></div>`; };
+/* ---- painel nas Definições: assistente com verificação em cada passo ---- */
+const base = () => { const c = cfg(); return c.url ? c.url.trim() : ''; };
+const q = (extra) => base() + (base().includes('?') ? '&' : '?') + 'k=' + encodeURIComponent(cfg().key) + (extra || '');
+IB.st = IB.st || {};
+const urlOk = u => /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u) || /^https:\/\/script\.google\.com\/a\/[^/]+\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u) || /^http:\/\/127\.0\.0\.1/.test(u);
+IB.check = async () => { const u = base(), c = cfg();
+  if (!c.key) return IB.st = { ok: false, m: 'Falta o passo 1: carrega em "Copiar código".' };
+  if (!u) return IB.st = { ok: false, m: 'Cola o URL da aplicação Web no passo 2.' };
+  if (/\/dev$/.test(u)) return IB.st = { ok: false, m: 'Esse é o URL de teste (termina em /dev). Usa o "URL da aplicação Web", que termina em /exec.' };
+  if (!urlOk(u)) return IB.st = { ok: false, m: 'O endereço tem de começar por https://script.google.com/macros/s/ e terminar em /exec.' };
+  try { const r = await fetch(q('&op=ping')), t = await r.text(); let j = null; try { j = JSON.parse(t); } catch (e) { }
+    if (!j) return IB.st = { ok: false, m: 'O Google respondeu com uma página em vez dos dados. Na implementação, "Quem tem acesso" tem de ser "Qualquer pessoa".' };
+    if (j.msg === 'Chave errada') return IB.st = { ok: false, m: 'Chave errada: o código no Apps Script não é o atual. Cola-o outra vez, guarda e faz Implementar → Gerir implementações → ✏️ → Nova versão.' };
+    if (!j.ok) return IB.st = { ok: false, m: 'O script respondeu com erro: ' + (j.msg || '?') };
+    return IB.st = { ok: true, m: 'Ligado. A caixa de entrada está a funcionar.' };
+  } catch (e) { return IB.st = { ok: false, m: 'Não consegui falar com o script. Confirma: (1) "Quem tem acesso: Qualquer pessoa"; (2) autorizaste a app com a tua conta Google; (3) o código tem "doGet" (cola-o outra vez se for antigo).' }; } };
+const panel = () => { const c = cfg(), st = IB.st || {}, ready = !!(c.key && base());
+  return `<div class="pn" id="inboxPn"><div class="pn-h"><h3>Atalho de gastos no iPhone</h3><span class="mut" style="font-size:12px">${c.n ? c.n + ' gastos importados' : ''}</span></div>
+  <p class="mut" style="margin:0 0 14px">Um toque no Centro de Controlo → valor → descrição → fica registado, sem abrir o Oceanum. Precisa de uma folha Google tua como caixa de entrada (grátis, uma vez só).</p>
+  <div class="ib-w">
+    <div class="ib-s ${c.key ? 'done' : ''}"><i>1</i><div><b>Copiar o código</b><p>Toca no botão: o código fica copiado.</p><button class="btn sm pri" data-act="ibCopy" data-t="code">${UI.ic('link')}Copiar código</button>
+      <p>Depois abre <a class="acc" href="https://sheets.new" target="_blank" rel="noopener"><b>sheets.new</b></a> (folha Google nova) → menu <b>Extensões → Apps Script</b> → apaga tudo o que lá está → cola → <b>💾 Guardar</b>.</p>
+      <p class="mut">No telemóvel, o Apps Script funciona melhor no Chrome/Safari em <b>modo computador</b> (menu aA → Pedir site para computador). Se tiveres várias contas Google, usa uma janela anónima com só uma conta.</p></div></div>
+    <div class="ib-s ${st.ok ? 'done' : ''}"><i>2</i><div><b>Publicar e colar o endereço</b><p>No Apps Script: <b>Implementar → Nova implementação</b> → ⚙ tipo <b>Aplicação Web</b> → Executar como: <b>Eu</b> → Quem tem acesso: <b>Qualquer pessoa</b> → <b>Implementar</b> → <b>Autorizar acesso</b> → escolhe a tua conta → "Avançadas" → "Aceder a (não seguro)" → <b>Permitir</b>. Copia o <b>URL da aplicação Web</b> (termina em <code>/exec</code>):</p>
+      <div class="ib-url"><input class="field" id="ibUrl" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(c.url || '')}" aria-label="URL da aplicação Web" autocomplete="off" autocapitalize="none" spellcheck="false"><button class="btn sm pri" data-act="ibSave">Verificar</button></div>
+      ${st.m ? `<div class="ib-st ${st.ok ? 'ok' : 'bad'}">${st.ok ? '✓' : '✗'} ${esc(st.m)}</div>` : ''}</div></div>
+    <div class="ib-s ${IB.testDone ? 'done' : ''}"><i>3</i><div><b>Testar como o atalho</b><p>Envia um gasto de teste e confirma que o Oceanum o recebe (não fica nas tuas finanças).</p><button class="btn sm" data-act="ibRound" ${st.ok ? '' : 'disabled'}>Testar agora</button>${IB.testMsg ? `<div class="ib-st ${IB.testDone ? 'ok' : 'bad'}">${esc(IB.testMsg)}</div>` : ''}</div></div>
+    <div class="ib-s"><i>4</i><div><b>Criar o atalho (3 ações)</b><p>App <b>Atalhos</b> → <b>+</b> → nome "Gasto". Adiciona:</p>
+      <div class="ib-sc"><div><b>1 · Pedir entrada</b> → toca em "Texto" e muda para <b>Número</b> → pergunta: <i>Quanto gastaste?</i></div><div><b>2 · Pedir entrada</b> → Texto → pergunta: <i>Em quê?</i></div><div><b>3 · Obter conteúdo do URL</b> → no URL cola o <b>link abaixo</b> → toca em ▸ (mostrar mais) → Método: <b>POST</b> → Corpo do pedido: <b>Formulário</b> → <b>Adicionar campo → Texto</b>:<br>&nbsp;&nbsp;chave <code>v</code> · valor: toca e escolhe <b>Entrada fornecida</b> (a 1.ª)<br>&nbsp;&nbsp;chave <code>d</code> · valor: <b>Entrada fornecida</b> (a 2.ª)</div><div><b>4 · Mostrar resultado</b> (opcional) → <b>Conteúdo do URL</b></div></div>
+      ${ready ? `<div class="ib-link"><code>${esc(q(''))}</code><button class="btn sm pri" data-act="ibCopy" data-t="link">Copiar link</button></div>` : '<p class="mut">O link aparece depois do passo 2.</p>'}
+      <p>Toca em ▶️ para experimentar: deve aparecer "✓ … registado no Oceanum".</p></div></div>
+    <div class="ib-s"><i>5</i><div><b>Pôr no Centro de Controlo</b><p>Abre o Centro de Controlo → <b>+</b> (canto superior esquerdo) → <b>Adicionar controlo</b> → pesquisa <b>Atalhos</b> → toca em <b>Atalho</b> → <b>Escolher</b> → "Gasto". Também podes pô-lo no <b>botão de Ação</b> ou no ecrã principal.</p></div></div>
+  </div>
+  <p class="mut" style="margin:12px 0 0;font-size:12.5px">Os gastos entram em Finanças sempre que abres o Oceanum, com a categoria adivinhada pela descrição (Uber → Transporte, café → Alimentação) e a etiqueta <i>atalho</i>.</p></div>`; };
 const orig = OS.views.definicoes; if (orig) OS.views.definicoes = sub => orig(sub) + panel();
-A.ibKey = () => { const c = cfg(); if (!c.key) c.key = genKey(); OS.touch('inbox'); };
-A.ibCopy = b => { const c = cfg(), t = b.dataset.t === 'code' ? IB.script(c.key) : `${c.url}${c.url.includes('?') ? '&' : '?'}k=${c.key}`; const done = () => UI.toast('Copiado', 'pos');
-  try { navigator.clipboard.writeText(t).then(done, () => { const el = document.getElementById('ibCode'); el && el.select(); UI.toast('Seleciona e copia manualmente', 'warn'); }); } catch (e) { UI.toast('Seleciona e copia manualmente', 'warn'); } };
+const copy = t => new Promise(res => { try { navigator.clipboard.writeText(t).then(() => res(true), () => res(false)); } catch (e) { res(false); } });
+A.ibCopy = async b => { const c = cfg(); if (!c.key) { c.key = genKey(); OS.touch('inbox'); }
+  const t = b.dataset.t === 'code' ? IB.script(c.key) : q('');
+  if (await copy(t)) UI.toast(b.dataset.t === 'code' ? 'Código copiado. Agora abre o sheets.new.' : 'Link copiado', 'pos');
+  else UI.modal(`<div style="padding:18px"><b>Copia manualmente</b><p class="mut">Toca no texto, seleciona tudo e copia.</p><textarea readonly style="width:100%;height:240px;font:12px var(--mono)" onfocus="this.select()">${esc(t)}</textarea><div style="text-align:right;margin-top:10px"><button class="btn" data-mclose>Fechar</button></div></div>`); };
+A.ibSave = async () => { const el = document.getElementById('ibUrl'), c = cfg(); c.url = (el ? el.value : '').trim(); OS.touch('inbox'); IB.st = { ok: false, m: 'A verificar…' }; OS.request(); await IB.check(); OS.request(); };
+A.ibRound = async () => { IB.testMsg = 'A enviar o teste…'; IB.testDone = false; IB.testOk = false; OS.request();
+  try { await fetch(q('&v=0.01&d=__teste__')); } catch (e) { }
+  await new Promise(r => setTimeout(r, 1200)); await IB.pull(false);
+  IB.testDone = !!IB.testOk; IB.testMsg = IB.testOk ? '✓ Funcionou: o Oceanum recebeu o teste. Já podes criar o atalho.' : '✗ O teste não chegou. Volta ao passo 2 e carrega em Verificar.'; OS.request(); };
 A.ibTest = () => IB.pull(true);
-OS.on('ready', () => { setTimeout(() => IB.pull(false), 1500); });
+OS.on('ready', () => { setTimeout(() => { IB.pull(false); if (cfg().url && cfg().key) IB.check().then(() => OS.request()); }, 1500); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) IB.pull(false); });
 setInterval(() => { if (!document.hidden) IB.pull(false); }, 90000);
 })();
@@ -5164,7 +5233,7 @@ async function showLock() {
       ${can ? `<button type="button" class="lk-bio" id="lkBio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 1 2 2v2M7 21H5a2 2 0 0 1-2-2v-2M17 21h2a2 2 0 0 0 2-2v-2M9 9v1M15 9v1M12 9v4h-1M9 16c1.5 1 4.5 1 6 0"/></svg>Desbloquear com Face ID</button><div class="lk-or">ou código</div>` : ''}
       ${codeInput()}
       <button class="lk-go" type="submit" aria-label="Entrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </form><div class="lk-msg" id="lkMsg" role="status" aria-live="polite"></div></div><div class="sp-foot">MIND CONTROL</div>`;
+    </form><div class="lk-msg" id="lkMsg" role="status" aria-live="polite"></div></div><div class="sp-foot">MIND CONTROL${window.OceanumVersion && window.OceanumVersion.v ? ' · v' + window.OceanumVersion.v : ''}</div>`;
   document.getElementById('lkForm').onsubmit = e => { e.preventDefault(); tryCode(document.getElementById('lkCode').value); };
   const bb = document.getElementById('lkBio'); if (bb) { bb.onclick = async () => { if (await bioUnlock()) open(); }; setTimeout(async () => { if (await bioUnlock()) open(); }, 350); }
   else setTimeout(() => { const i = document.getElementById('lkCode'); i && i.focus(); }, 300);
@@ -5397,6 +5466,6 @@ OS.boot(() => { OS.Lock.gate(() => { if (U.ls.get('os2startGasto', false) && !lo
 })();
 
 </script>
-<script>if ('serviceWorker' in navigator && location.protocol === 'https:') { const had = !!navigator.serviceWorker.controller; let r = false; navigator.serviceWorker.addEventListener('controllerchange', () => { if (had && !r) { r = true; location.reload(); } }); addEventListener('load', () => navigator.serviceWorker.register('sw.js').then(reg => reg.update()).catch(() => { })); }</script>
+<script>if ('serviceWorker' in navigator && location.protocol === 'https:') { const had = !!navigator.serviceWorker.controller; let r = false; navigator.serviceWorker.addEventListener('controllerchange', () => { if (had && !r) { r = true; window.OceanumUpdating ? OceanumUpdating() : location.reload(); } }); addEventListener('load', () => navigator.serviceWorker.register('sw.js').then(reg => { reg.update(); document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update(); }); setInterval(() => reg.update(), 30 * 60 * 1000); }).catch(() => { })); }</script>
 </body>
 </html>
