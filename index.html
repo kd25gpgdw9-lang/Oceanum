@@ -1165,6 +1165,51 @@ body.dom-mode #top{background:rgba(10,9,7,.86);border-bottom-color:rgba(201,162,
 .qg-amt input{-moz-appearance:textfield;appearance:textfield}
 @media (max-width:700px){#gameFab{width:46px;height:46px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px))}}
 
+/* ===== login: sem estilos nativos do iOS ===== */
+#splash{background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(14,165,233,.16),transparent 60%),#04101F}
+.lk input{-webkit-appearance:none;appearance:none;border-radius:0;box-shadow:none;background:transparent!important;color:#EAF6FF;-webkit-text-fill-color:#EAF6FF;caret-color:#7DD3FC;border-bottom-color:rgba(165,243,252,.3)}
+.lk input:focus{border-bottom-color:#7DD3FC;outline:none;box-shadow:none}
+.lk input.lk-sec{-webkit-text-security:disc}
+.lk input:-webkit-autofill,.lk input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 40px #04101F inset;-webkit-text-fill-color:#EAF6FF;transition:background-color 9999s}
+.lk input::-webkit-contacts-auto-fill-button,.lk input::-webkit-credentials-auto-fill-button,.lk input::-webkit-strong-password-auto-fill-button{visibility:hidden;display:none!important;pointer-events:none}
+.lk-go,.lk-bio{-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
+.lk-go{border-color:rgba(165,243,252,.35)}
+.lk-bio{border-color:rgba(165,243,252,.3);background:rgba(56,189,248,.06)}
+
+/* ===== telemóvel: scroll só no painel aberto, e mais leve ===== */
+#side,#drawer,.drw,#modal,.tn-dd{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#side{overflow-y:auto}
+html.scroll-lock,html.scroll-lock body{overflow:hidden}
+body{background-attachment:scroll}
+*{-webkit-tap-highlight-color:transparent}
+@media (max-width:860px){
+  #top{backdrop-filter:none;-webkit-backdrop-filter:none;background:#04101F}
+  .pn,.dc,.kpi{box-shadow:none}
+  .dc.hero{box-shadow:none}
+  .dc.hero::after{display:none}
+  body{background:#04101F}
+}
+.ib-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:14px;line-height:1.55}
+.ib-code{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.ib-code textarea{width:100%;font:11.5px/1.45 var(--mono);background:#041022;border:1px solid var(--line2);border-radius:10px;color:#A5F3FC;padding:10px;resize:vertical}
+.ib-sc{display:flex;flex-direction:column;gap:4px;margin:8px 0;padding:10px 12px;border-radius:12px;background:rgba(56,189,248,.06);font-size:13px}
+.ib-sc code,.ib-link code{font:12px var(--mono);color:#7DD3FC}
+.ib-link{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ib-link code{word-break:break-all;flex:1;min-width:0;padding:8px 10px;border-radius:9px;background:#041022}
+/* nada transborda para o lado no telemóvel */
+.g>*,.col,.row>.grow,.li-t,.pn{min-width:0}
+.li-t b,.li-t small{overflow-wrap:anywhere}
+.na{grid-template-columns:44px minmax(0,1fr) auto}
+.na>div{min-width:0}
+.bdg{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.na-why .bdg{white-space:normal}
+@media (max-width:600px){
+  .na{grid-template-columns:36px minmax(0,1fr)}.na>:last-child{grid-column:2}
+  .bar-row[style*="160px 110px"]{grid-template-columns:minmax(0,1fr) 70px!important;row-gap:4px}
+  .bar-row[style*="160px 110px"]>.pbar{grid-column:1/-1;grid-row:2}
+}
+@media (max-width:860px){input,select,textarea,.field{font-size:16px!important}.qg-amt input{font-size:44px!important}}
+.ib-code textarea{font-size:12px!important}
+
 </style>
 <style>[hidden]{display:none!important}</style>
 <script src="config.js"></script>
@@ -4080,7 +4125,7 @@ V.gasto = sub => { const pre = U.num(String(sub || '').replace(',', '.')) || '',
     <button class="btn pri qg-go" ${accs.length ? '' : 'disabled'}>${UI.ic('plus')}Registar gasto</button></form>
   ${last.length ? `<div class="qg-last"><div class="qg-l">Últimos</div>${last.map(t => `<div class="li" data-edit="transactions:${t.id}" style="cursor:pointer"><div class="li-t"><b>${esc(t.desc || t.cat || 'Despesa')}</b><small>${U.fmtDS(t.date)} · ${esc(t.cat || '')}</small></div><span class="mono">${U.eur(t.amount)}</span></div>`).join('')}</div>` : ''}
   <div class="qg-home"><label class="qg-tg"><input type="checkbox" data-act="qgStart" ${start ? 'checked' : ''}> Abrir o Oceanum sempre aqui neste telemóvel</label>
-    <details open><summary>Pôr no Centro de Controlo do iPhone</summary><ol class="qg-steps"><li>Liga a opção acima <b>neste iPhone</b>.</li><li>Abre a app <b>Atalhos</b> → <b>+</b> → <i>Adicionar ação</i> → <b>Abrir URL</b>, e cola o link do Oceanum.</li><li>Dá-lhe o nome <b>Gasto rápido</b> e um ícone de carteira.</li><li>Abre o Centro de Controlo, toca em <b>+</b> (canto superior esquerdo) → <i>Adicionar controlo</i> → <b>Atalhos</b> → escolhe <b>Gasto rápido</b>.</li></ol><p class="mut">Um toque no Centro de Controlo abre o Oceanum já neste ecrã: escreves o valor, escolhes a categoria e registas. Também podes pôr o atalho no ecrã principal ou no botão de Ação.</p><button class="btn sm" type="button" data-act="qgCopy">${UI.ic('link')}Copiar link do Oceanum</button></details>
+    <details open><summary>Registar sem abrir a app (Centro de Controlo)</summary><p>Cria um atalho do iPhone que pede o valor e a descrição e grava direto, como no Notion. Os gastos entram aqui sozinhos.</p><a class="btn sm pri" href="#definicoes" data-act="ibGo">${UI.ic('bolt')}Configurar o atalho</a></details>
     <details><summary>Android</summary><p>No Chrome: menu ⋮ → <i>Adicionar ao ecrã principal</i>. Com a opção acima ligada, o ícone abre logo no Gasto rápido.</p></details></div></div>`; };
 OS.forms = OS.forms || {};
 OS.forms.qgSave = (f, v) => { const amount = U.num(v('amount')); if (!(amount > 0)) { UI.toast('Escreve o valor', 'warn'); return; }
@@ -4091,6 +4136,7 @@ OS.forms.qgSave = (f, v) => { const amount = U.num(v('amount')); if (!(amount > 
   OS.ui.qg = { cat, acc: account }; U.ls.set('os2ui', OS.ui);
   UI.toast(`Registado: ${U.eur(amount)}${cat ? ' · ' + cat : ''}`, 'pos'); try { navigator.vibrate && navigator.vibrate(30); } catch (e) { } };
 A.qgCopy = () => { const url = (() => { try { return window.top.location.href.split('#')[0]; } catch (e) { return ''; } })() || document.referrer || 'https://claude.ai/artifact/AUtUtqFR4x46BWPVcR3kLZ'; const ok = () => UI.toast('Link copiado', 'pos'); try { navigator.clipboard.writeText(url).then(ok, () => UI.toast(url)); } catch (e) { UI.toast(url); } };
+A.ibGo = (b, e) => { e && e.preventDefault(); OS.go('definicoes'); setTimeout(() => { const el = document.getElementById('inboxPn'); el && el.scrollIntoView({ behavior: 'smooth' }); }, 250); };
 A.qgStart = b => { U.ls.set('os2startGasto', !!b.checked); UI.toast(b.checked ? 'O Oceanum vai abrir no Gasto rápido' : 'Abre normalmente na Visão Geral'); };
 A.dashPer = b => OS.setUI('dashPer', b.dataset.p);
 A.dashYM = b => { const cur = OS.ui.dashYM || U.ym(U.today()), n = U.addMonths(cur, +b.dataset.d); OS.setUI('dashYM', n > U.ym(U.today()) ? U.ym(U.today()) : n); };
@@ -4959,6 +5005,99 @@ D.klass = klass; D.stats = stats; D.favN = favN;
 
 </script>
 <script>
+/* OCEANUM — Caixa de entrada de gastos (atalho do iPhone).
+   O atalho pede valor e descrição e envia para um script Google (Apps Script) na conta do utilizador, que guarda numa folha.
+   O Oceanum, quando está aberto, puxa o que chegou, cria a despesa e marca como importado. Sem abrir a app para registar. */
+(() => {
+'use strict';
+const U = OS.U, UI = OS.UI, A = OS.act, esc = U.esc;
+OS.ONE_DEF.inbox = { url: '', key: '', last: '', n: 0 };
+const IB = OS.Inbox = {};
+const cfg = () => OS.one('inbox');
+const SEEN = 'os2inboxSeen';
+const genKey = () => Array.from(crypto.getRandomValues(new Uint8Array(18)), b => 'abcdefghijkmnpqrstuvwxyz23456789'[b % 32]).join('');
+
+IB.script = key => `// Oceanum · caixa de entrada de gastos. Não partilhes este código: a chave abaixo é a tua.
+const KEY = '${key}';
+function doGet(e) {
+  const p = e.parameter || {};
+  if (p.k !== KEY) return out({ ok: false, msg: 'Chave errada' });
+  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  if (sh.getLastRow() === 0) sh.appendRow(['id', 'data', 'valor', 'descricao', 'categoria', 'importado']);
+  if (p.op === 'pull') {
+    const rows = sh.getDataRange().getValues(), items = [];
+    for (let i = 1; i < rows.length; i++) if (!rows[i][5]) items.push({ id: String(rows[i][0]), t: String(rows[i][1]), v: Number(rows[i][2]), d: String(rows[i][3]), c: String(rows[i][4]) });
+    return out({ ok: true, items: items });
+  }
+  if (p.op === 'ack') {
+    const ids = String(p.ids || '').split(','), rows = sh.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) if (ids.indexOf(String(rows[i][0])) >= 0) sh.getRange(i + 1, 6).setValue(new Date());
+    return out({ ok: true });
+  }
+  const v = Number(String(p.v || '').replace(/[^0-9,.-]/g, '').replace(',', '.'));
+  if (!(v > 0)) return out({ ok: false, msg: 'Valor inválido' });
+  sh.appendRow([Utilities.getUuid(), new Date().toISOString(), v, p.d || '', p.c || '', '']);
+  return ContentService.createTextOutput('✓ ' + v.toFixed(2).replace('.', ',') + ' € · ' + (p.d || 'gasto') + ' registado no Oceanum');
+}
+function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+`;
+
+/* ---- adivinhar categoria e conta ---- */
+const KW = [[/uber|bolt|taxi|táxi|metro|comboio|autocarro|gasolina|combust|portagem|estaciona|cp |carris/i, ['Transporte', 'Carro']], [/caf[eé]|restaurante|almo[cç]o|jantar|lanche|mercado|continente|pingo|lidl|aldi|mercadona|supermercado|padaria|pizza|burger|mcdonald|kfc|glovo|uber ?eats|bolt ?food|a[cç]a[ií]/i, ['Alimentação', 'Restauração', 'Supermercado']],
+  [/netflix|spotify|youtube|apple|icloud|disney|hbo|prime|chatgpt|claude|subscri/i, ['Subscrições']], [/farm[aá]cia|m[eé]dico|consulta|hospital|dentista|gin[aá]sio|whey|creatina|suplement/i, ['Saúde']], [/renda|luz|[aá]gua|internet|vodafone|meo|nos |edp|casa|ikea/i, ['Casa']], [/roupa|zara|primark|sapat|t[eé]nis|nike|adidas|corte|barbe/i, ['Pessoal']], [/cinema|bar|festa|jogo|steam|playstation|concerto|bilhete/i, ['Lazer']], [/livro|curso|propina|faculdade|universidade/i, ['Educação', 'Pessoal']]];
+const guess = (d, c) => { const cats = Object.keys(OS.one('fin').cats.Despesa || {}), has = x => cats.find(k => k.toLowerCase() === String(x || '').trim().toLowerCase());
+  if (has(c)) return { cat: has(c) };
+  const prev = OS.all('transactions').filter(t => t.type === 'Despesa' && t.desc && d && t.desc.trim().toLowerCase() === d.trim().toLowerCase()).slice(-1)[0];
+  if (prev) return { cat: prev.cat, account: prev.account };
+  for (const [re, opts] of KW) if (re.test(' ' + d + ' ')) { const k = opts.map(has).find(Boolean); if (k) return { cat: k }; }
+  return { cat: has('Outros') || cats[0] || '' }; };
+const defAcc = () => { const q = OS.ui.qg || {}, accs = OS.Fin.accounts(); return (q.acc && accs.some(a => a.id === q.acc) && q.acc) || (accs.find(a => a.type === 'Conta à ordem') || accs[0] || {}).id; };
+
+let busy = false;
+IB.pull = async (manual) => { const c = cfg(); if (!c.url || !c.key || busy) { if (manual) UI.toast('Configura primeiro o endereço do script', 'warn'); return; } busy = true;
+  try { const r = await fetch(c.url + (c.url.includes('?') ? '&' : '?') + 'op=pull&k=' + encodeURIComponent(c.key)), j = await r.json();
+    if (!j.ok) { if (manual) UI.toast(j.msg || 'O script recusou o pedido', 'neg'); return; }
+    const seen = new Set(U.ls.get(SEEN, [])), got = [];
+    (j.items || []).forEach(it => { if (seen.has(it.id)) { got.push(it.id); return; } const v = U.num(it.v); if (!(v > 0)) { got.push(it.id); return; }
+      const g = guess(it.d || '', it.c), d = it.t ? U.iso(new Date(it.t)) : U.today();
+      const rec = OS.add('transactions', { type: 'Despesa', amount: v, date: d, desc: it.d || '', cat: g.cat, account: g.account || defAcc(), method: 'Débito', ess: 'Essencial', tags: ['atalho'] }, { silent: true });
+      try { OS.S.transactions.after && OS.S.transactions.after(rec, true); } catch (e) { }
+      seen.add(it.id); got.push(it.id); c.n = (c.n || 0) + 1; UI.toast(`Gasto do atalho: ${U.eur(v)}${it.d ? ' · ' + it.d : ''}`, 'pos'); });
+    U.ls.set(SEEN, [...seen].slice(-500));
+    if (got.length) fetch(c.url + (c.url.includes('?') ? '&' : '?') + 'op=ack&k=' + encodeURIComponent(c.key) + '&ids=' + encodeURIComponent(got.join(','))).catch(() => { });
+    c.last = new Date().toISOString(); OS.touch('inbox');
+    if (manual) UI.toast(got.length ? `${got.length} gasto(s) importado(s)` : 'Ligação OK. Nada novo.', 'pos');
+  } catch (e) { if (manual) UI.toast('Não consegui ligar ao script. Confirma o endereço e se está publicado para "Qualquer pessoa".', 'neg'); }
+  finally { busy = false; } };
+
+/* ---- painel nas Definições ---- */
+const panel = () => { const c = cfg(), link = c.url && c.key ? `${c.url}${c.url.includes('?') ? '&' : '?'}k=${c.key}` : '';
+  return `<div class="pn" id="inboxPn"><div class="pn-h"><h3>Atalho de gastos no iPhone</h3><span class="mut" style="font-size:12px">${c.last ? 'última verificação ' + U.fmtDS(U.iso(new Date(c.last))) + ' · ' + (c.n || 0) + ' importados' : 'por configurar'}</span></div>
+  <p class="mut" style="margin:0 0 12px">Igual ao Notion: um toque no Centro de Controlo, escreves o valor e a descrição, e fica registado sem abrires o Oceanum. O gasto entra nas Finanças da próxima vez que abrires a app.</p>
+  <ol class="ib-steps">
+    <li><b>Cria a caixa de entrada.</b> Abre <a class="acc" href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> (folha Google nova) → menu <b>Extensões → Apps Script</b>. Apaga o que lá estiver e cola este código:
+      <div class="ib-code"><textarea readonly rows="5" id="ibCode" aria-label="Código do script">${esc(IB.script(c.key || '— carrega em Gerar chave —'))}</textarea><div class="row gap8">${c.key ? `<button class="btn sm pri" data-act="ibCopy" data-t="code">Copiar código</button>` : `<button class="btn sm pri" data-act="ibKey">Gerar chave</button>`}</div></div></li>
+    <li><b>Publica.</b> No Apps Script: <b>Implementar → Nova implementação</b> → tipo <b>Aplicação Web</b> → Executar como: <b>Eu</b> · Quem tem acesso: <b>Qualquer pessoa</b> → <b>Implementar</b> → autoriza com a tua conta Google (em "Avançadas" → "Aceder"). Copia o <b>URL da aplicação Web</b> e cola aqui:
+      <input class="field" style="margin-top:8px" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(c.url || '')}" data-bind="inbox.url" aria-label="URL do script"></li>
+    <li><b>Testa.</b> <button class="btn sm" data-act="ibTest" ${link ? '' : 'disabled'}>Testar ligação</button></li>
+    <li><b>Cria o atalho</b> na app <b>Atalhos</b> (+), com estas ações por ordem:
+      <div class="ib-sc"><div>1 · <b>Pedir entrada</b> → tipo <i>Número</i> → pergunta "Quanto gastaste?"</div><div>2 · <b>Pedir entrada</b> → tipo <i>Texto</i> → pergunta "Em quê?"</div><div>3 · <b>Codificar URL</b> → a <i>Entrada fornecida</i> do passo 2</div><div>4 · <b>Obter conteúdo do URL</b> → cola o link abaixo e acrescenta no fim <code>&amp;v=</code>[Entrada do passo 1]<code>&amp;d=</code>[URL codificado]</div><div>5 · <b>Mostrar notificação</b> → [Conteúdo do URL]</div></div>
+      ${link ? `<div class="ib-link"><code>${esc(link)}</code><button class="btn sm" data-act="ibCopy" data-t="link">Copiar link</button></div>` : '<p class="mut">O link aparece aqui depois do passo 2.</p>'}</li>
+    <li><b>Põe no Centro de Controlo.</b> Abre o Centro de Controlo → <b>+</b> (canto superior esquerdo) → <b>Adicionar controlo</b> → <b>Atalhos</b> → escolhe o teu atalho. Também podes pô-lo no botão de Ação ou no ecrã principal.</li>
+  </ol>
+  <p class="mut" style="margin:10px 0 0;font-size:12.5px">A categoria é adivinhada pela descrição (ex.: "Uber" → Transporte, "café" → Alimentação) e pelo que já registaste antes. Podes corrigir depois em Finanças; os gastos do atalho ficam com a etiqueta <i>atalho</i>.</p></div>`; };
+const orig = OS.views.definicoes; if (orig) OS.views.definicoes = sub => orig(sub) + panel();
+A.ibKey = () => { const c = cfg(); if (!c.key) c.key = genKey(); OS.touch('inbox'); };
+A.ibCopy = b => { const c = cfg(), t = b.dataset.t === 'code' ? IB.script(c.key) : `${c.url}${c.url.includes('?') ? '&' : '?'}k=${c.key}`; const done = () => UI.toast('Copiado', 'pos');
+  try { navigator.clipboard.writeText(t).then(done, () => { const el = document.getElementById('ibCode'); el && el.select(); UI.toast('Seleciona e copia manualmente', 'warn'); }); } catch (e) { UI.toast('Seleciona e copia manualmente', 'warn'); } };
+A.ibTest = () => IB.pull(true);
+OS.on('ready', () => { setTimeout(() => IB.pull(false), 1500); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) IB.pull(false); });
+setInterval(() => { if (!document.hidden) IB.pull(false); }, 90000);
+})();
+
+</script>
+<script>
 /* OCEANUM — ecrã de abertura e bloqueio.
    Face ID / impressão digital: WebAuthn com autenticador da plataforma, registado por dispositivo.
    Código: só o hash SHA-256 fica no código ou na base de dados; o código nunca é guardado em texto.
@@ -5014,13 +5153,16 @@ async function tryCode(v) {
   const i = document.getElementById('lkCode'); if (i) { i.value = ''; i.classList.remove('shake'); void i.offsetWidth; i.classList.add('shake'); i.focus(); }
 }
 function open() { setUnlocked(true); const s = el(); s.classList.add('out'); setTimeout(() => { s.hidden = true; s.classList.remove('out'); }, 520); const d = done; done = null; d && d(); }
+// campo do código: sem o gestor de palavras-passe do iOS (que desenhava bordas brancas e o ícone escuro ao lado)
+const codeInput = () => { const sec = (() => { try { return CSS.supports('-webkit-text-security', 'disc'); } catch (e) { return false; } })();
+  return `<input id="lkCode" class="${sec ? 'lk-sec' : ''}" type="${sec ? 'text' : 'password'}" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore placeholder="Código de acesso" aria-label="Código de acesso">`; };
 async function showLock() {
   const s = el(), bio = L.bioId(), can = bio && await L.bioAvailable();
   s.hidden = false;
   s.innerHTML = `<div class="sp-in">${L.logo(92)}<div class="sp-name">OCEANUM</div>
     <form class="lk" id="lkForm" autocomplete="off">
       ${can ? `<button type="button" class="lk-bio" id="lkBio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 1 2 2v2M7 21H5a2 2 0 0 1-2-2v-2M17 21h2a2 2 0 0 0 2-2v-2M9 9v1M15 9v1M12 9v4h-1M9 16c1.5 1 4.5 1 6 0"/></svg>Desbloquear com Face ID</button><div class="lk-or">ou código</div>` : ''}
-      <input id="lkCode" type="password" inputmode="text" autocomplete="current-password" placeholder="Código de acesso" aria-label="Código de acesso">
+      ${codeInput()}
       <button class="lk-go" type="submit" aria-label="Entrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </form><div class="lk-msg" id="lkMsg" role="status" aria-live="polite"></div></div><div class="sp-foot">MIND CONTROL</div>`;
   document.getElementById('lkForm').onsubmit = e => { e.preventDefault(); tryCode(document.getElementById('lkCode').value); };
@@ -5237,6 +5379,16 @@ document.addEventListener('submit', e => {
   OS.request(); setTimeout(() => { const n = U.$(`form[data-form="${name}"] input:not([type=hidden])`); n && n.focus(); }, 30);
 });
 
+
+/* ---------- com um painel aberto, só o painel rola (no iPhone o overflow:hidden não chega) ---------- */
+(() => { let locked = false, y = 0, h0 = '';
+  const want = () => document.body.classList.contains('nav-open') || document.body.classList.contains('noscroll') || !U.$('#modal').hidden || !!document.querySelector('.ceremony');
+  const sync = () => { const w = want(); if (w === locked) return; locked = w; const b = document.body;
+    if (w) { y = scrollY; h0 = location.hash; document.documentElement.classList.add('scroll-lock'); Object.assign(b.style, { position: 'fixed', top: -y + 'px', left: '0', right: '0', width: '100%' }); }
+    else { document.documentElement.classList.remove('scroll-lock'); Object.assign(b.style, { position: '', top: '', left: '', right: '', width: '' }); scrollTo(0, location.hash === h0 ? y : 0); } };
+  new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ['class'], childList: true });
+  new MutationObserver(sync).observe(U.$('#modal'), { attributes: true, attributeFilter: ['hidden'] });
+})();
 /* ---------- arranque ---------- */
 OS.on('ready', () => { try { OS.Fin.snapshot(); } catch (e) { console.error(e); } });
 setInterval(() => { if (OS._day !== U.today()) { OS._day = U.today(); try { OS.Fin.snapshot(); } catch (e) { } OS.request(); } }, 60000);
@@ -5245,6 +5397,6 @@ OS.boot(() => { OS.Lock.gate(() => { if (U.ls.get('os2startGasto', false) && !lo
 })();
 
 </script>
-<script>if ('serviceWorker' in navigator && location.protocol === 'https:') addEventListener('load', () => navigator.serviceWorker.register('sw.js'));</script>
+<script>if ('serviceWorker' in navigator && location.protocol === 'https:') { const had = !!navigator.serviceWorker.controller; let r = false; navigator.serviceWorker.addEventListener('controllerchange', () => { if (had && !r) { r = true; location.reload(); } }); addEventListener('load', () => navigator.serviceWorker.register('sw.js').then(reg => reg.update()).catch(() => { })); }</script>
 </body>
 </html>
