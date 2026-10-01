@@ -1244,7 +1244,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.9", "date": "01/10/2026", "notes": ["Engrenagem das Definições sempre visível no telemóvel", "Definições no início do menu", "Face ID só no iPhone, com convite para ativar"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.10", "date": "01/10/2026", "notes": ["Atalho de gastos: o script já não precisa da app do Sheets (abre em script.google.com)"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -5096,7 +5096,7 @@ const KEY = '${key}';
 function doGet(e) {
   const p = e.parameter || {};
   if (p.k !== KEY) return out({ ok: false, msg: 'Chave errada' });
-  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  const sh = folha_();
   if (sh.getLastRow() === 0) sh.appendRow(['id', 'data', 'valor', 'descricao', 'categoria', 'importado']);
   if (p.op === 'ping') return out({ ok: true, v: 2 });
   if (p.op === 'pull') {
@@ -5115,6 +5115,11 @@ function doGet(e) {
   return ContentService.createTextOutput('✓ ' + v.toFixed(2).replace('.', ',') + ' € · ' + (p.d || 'gasto') + ' registado no Oceanum');
 }
 function doPost(e) { return doGet(e); }
+// funciona dentro de uma folha ou sozinho (script.google.com): cria a folha "Oceanum · Gastos" se for preciso
+function folha_() { let ss = null; try { ss = SpreadsheetApp.getActiveSpreadsheet(); } catch (e) { }
+  if (!ss) { const P = PropertiesService.getScriptProperties(), id = P.getProperty('SHEET'); if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
+    if (!ss) { ss = SpreadsheetApp.create('Oceanum · Gastos do atalho'); P.setProperty('SHEET', ss.getId()); } }
+  return ss.getSheets()[0]; }
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 `;
 
@@ -5167,8 +5172,9 @@ const panel = () => { const c = cfg(), st = IB.st || {}, ready = !!(c.key && bas
   <p class="mut" style="margin:0 0 14px">Um toque no Centro de Controlo → valor → descrição → fica registado, sem abrir o Oceanum. Precisa de uma folha Google tua como caixa de entrada (grátis, uma vez só).</p>
   <div class="ib-w">
     <div class="ib-s ${c.key ? 'done' : ''}"><i>1</i><div><b>Copiar o código</b><p>Toca no botão: o código fica copiado.</p><button class="btn sm pri" data-act="ibCopy" data-t="code">${UI.ic('link')}Copiar código</button>
-      <p>Depois abre <a class="acc" href="https://sheets.new" target="_blank" rel="noopener"><b>sheets.new</b></a> (folha Google nova) → menu <b>Extensões → Apps Script</b> → apaga tudo o que lá está → cola → <b>💾 Guardar</b>.</p>
-      <p class="mut">No telemóvel, o Apps Script funciona melhor no Chrome/Safari em <b>modo computador</b> (menu aA → Pedir site para computador). Se tiveres várias contas Google, usa uma janela anónima com só uma conta.</p></div></div>
+      <p>Depois, no <b>Chrome</b> (não na app do Sheets), abre <a class="acc" href="https://script.google.com/create" target="_blank" rel="noopener"><b>script.google.com/create</b></a>. Se aparecer em versão de telemóvel ou abrir uma app: menu <b>⋮ → Site para computador</b> (no iPhone: <b>aA → Pedir site para computador</b>).</p>
+      <p>Apaga o texto que lá está (<code>function myFunction…</code>) → cola o código → <b>💾 Guardar</b>. Não precisas de criar folha nenhuma: o script cria a "Oceanum · Gastos" sozinho.</p>
+      <p class="mut">Se tiveres várias contas Google, usa uma janela anónima e entra só com uma.</p></div></div>
     <div class="ib-s ${st.ok ? 'done' : ''}"><i>2</i><div><b>Publicar e colar o endereço</b><p>No Apps Script: <b>Implementar → Nova implementação</b> → ⚙ tipo <b>Aplicação Web</b> → Executar como: <b>Eu</b> → Quem tem acesso: <b>Qualquer pessoa</b> → <b>Implementar</b> → <b>Autorizar acesso</b> → escolhe a tua conta → "Avançadas" → "Aceder a (não seguro)" → <b>Permitir</b>. Copia o <b>URL da aplicação Web</b> (termina em <code>/exec</code>):</p>
       <div class="ib-url"><input class="field" id="ibUrl" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(c.url || '')}" aria-label="URL da aplicação Web" autocomplete="off" autocapitalize="none" spellcheck="false"><button class="btn sm pri" data-act="ibSave">Verificar</button></div>
       ${st.m ? `<div class="ib-st ${st.ok ? 'ok' : 'bad'}">${st.ok ? '✓' : '✗'} ${esc(st.m)}</div>` : ''}</div></div>
