@@ -1245,7 +1245,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.13", "date": "01/10/2026", "notes": ["Sincronização entre aparelhos (uma só conta) pelo teu Google", "Descrições do atalho sem o valor (\"18, uber\" → \"Uber\")", "Gastos do atalho nunca duplicam"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.14", "date": "02/10/2026", "notes": ["Código de ligação aceite em qualquer formato (link ou código)", "Verificar testa a gravação no Google Drive e avisa se falta autorizar", "Sincronização entre aparelhos (uma só conta) pelo teu Google"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -5193,7 +5193,14 @@ IB.check = async () => { const u = base(), c = cfg();
     if (!j) return IB.st = { ok: false, m: 'O Google respondeu com uma página em vez dos dados. Na implementação, "Quem tem acesso" tem de ser "Qualquer pessoa".' };
     if (j.msg === 'Chave errada') return IB.st = { ok: false, m: 'Chave errada: o código no Apps Script não é o atual. Cola-o outra vez, guarda e faz Implementar → Gerir implementações → ✏️ → Nova versão.' };
     if (!j.ok) return IB.st = { ok: false, m: 'O script respondeu com erro: ' + (j.msg || '?') };
-    cfg().ver = j.v || 2; OS.touch('inbox'); return IB.st = { ok: true, m: 'Ligado. A caixa de entrada está a funcionar.' };
+    cfg().ver = j.v || 2; OS.touch('inbox');
+    if ((j.v || 2) >= 3) { // testa também a gravação no Google Drive (precisa de autorização dada no editor)
+      try { const r = await fetch(base(), { method: 'POST', body: new URLSearchParams({ k: cfg().key, op: 'put', j: JSON.stringify({ 'one~__ping': { t: Date.now(), data: {} } }) }), credentials: 'omit', cache: 'no-store' }), t = await r.text();
+        let ok = false; try { ok = JSON.parse(t).ok; } catch (e) { }
+        if (!ok) { cfg().drive = 0; OS.touch('inbox'); return IB.st = { ok: false, m: /DriveApp|permission|autoriza/i.test(t) ? 'Falta autorizar o Google Drive. No Apps Script: escolhe a função "doGet" na lista ao lado de ▶ Executar → ▶ Executar → Rever permissões → a tua conta → Avançado → Acessar → Permitir. (O erro "TypeError" que aparece a seguir é normal.) Depois toca outra vez em Verificar.' : 'O Google não conseguiu gravar os dados. Tenta Verificar outra vez daqui a pouco.' }; }
+        cfg().drive = 1; OS.touch('inbox');
+      } catch (e) { return IB.st = { ok: false, m: 'Não consegui testar a gravação no Google Drive. Tenta outra vez.' }; } }
+    return IB.st = { ok: true, m: 'Ligado. A caixa de entrada está a funcionar' + ((j.v || 2) >= 3 ? ' e a gravação no Google Drive também.' : '.') };
   } catch (e) { return IB.st = { ok: false, m: 'Não consegui falar com o script. Confirma: (1) "Quem tem acesso: Qualquer pessoa"; (2) autorizaste a app com a tua conta Google; (3) o código tem "doGet" (cola-o outra vez se for antigo).' }; } };
 const panel = () => { const c = cfg(), st = IB.st || {}, ready = !!(c.key && base());
   return `<div class="pn" id="inboxPn"><div class="pn-h"><h3>Atalho de gastos no iPhone</h3><span class="mut" style="font-size:12px">${c.n ? c.n + ' gastos importados' : ''}</span></div>
@@ -5215,7 +5222,7 @@ const panel = () => { const c = cfg(), st = IB.st || {}, ready = !!(c.key && bas
     <div class="ib-s"><i>5</i><div><b>Pôr no Centro de Controlo</b><p>Abre o Centro de Controlo → <b>+</b> (canto superior esquerdo) → <b>Adicionar controlo</b> → pesquisa <b>Atalhos</b> → toca em <b>Atalho</b> → <b>Escolher</b> → "Gasto". Também podes pô-lo no <b>botão de Ação</b> ou no ecrã principal.</p></div></div>
   </div>
   <p class="mut" style="margin:12px 0 0;font-size:12.5px">Os gastos entram em Finanças sempre que abres o Oceanum, com a categoria adivinhada pela descrição (Uber → Transporte, café → Alimentação) e a etiqueta <i>atalho</i>.</p></div>`; };
-const syncPanel = () => { const c = cfg(), SY = window.OceanumSync || {}, on = !!SY.on, ready = !!(c.url && c.key), v3 = (c.ver || 0) >= 3;
+const syncPanel = () => { const c = cfg(), SY = window.OceanumSync || {}, on = !!SY.on, ready = !!(c.url && c.key), v3 = (c.ver || 0) >= 3 && c.drive !== 0, st = IB.st || {};
   const t = SY.last ? new Date(SY.last).toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }) : '';
   return `<div class="pn" id="syncPn"><div class="pn-h"><h3>Sincronizar aparelhos</h3><span class="${on && !SY.err ? 'pos' : 'mut'}" style="font-size:12px">${on ? esc(SY.state || '') + (t ? ' · ' + t : '') : 'desligada'}</span></div>
   <p class="mut" style="margin:0 0 12px">Uma só conta: o que fazes no telemóvel aparece no tablet e vice-versa. Os dados ficam no teu Google Drive ("Oceanum · dados.json"), com uma cópia de segurança por dia.</p>
@@ -5225,11 +5232,11 @@ const syncPanel = () => { const c = cfg(), SY = window.OceanumSync || {}, on = !
   : `<div class="ib-w">
     <div class="ib-s"><i>A</i><div><b>Este aparelho já tem o atalho ligado?</b><p>Se sim (passo 2 do atalho com ✓), segue para B. Se este é o <b>segundo aparelho</b>, cola aqui o código de ligação que copiaste no primeiro:</p>
       <div class="ib-url"><input class="field" id="syCode" placeholder="Código de ligação" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Código de ligação"><button class="btn sm pri" data-act="syLink">Ligar</button></div></div></div>
-    ${ready ? `<div class="ib-s ${v3 ? 'done' : ''}"><i>B</i><div><b>Atualizar o script do Google (uma vez)</b>${v3 ? '<p class="pos">✓ O script já está atualizado.</p>' : `<p>A sincronização precisa da versão nova do script:</p><p>1. Toca em <b>Copiar código</b> (passo 1 do atalho, mais abaixo).<br>2. No Apps Script: apaga tudo → cola → <b>💾 Guardar</b>.<br>3. <b>Implantar → Gerenciar implantações</b> → ✏️ (lápis) → em <b>Versão</b> escolhe <b>Nova versão</b> → <b>Implantar</b>.<br>4. Se pedir, <b>autoriza o acesso ao Google Drive</b> (Avançado → Acessar → Permitir).<br>5. Volta aqui e toca em <b>Verificar</b>.</p><button class="btn sm" data-act="syVer">Verificar</button>`}</div></div>
+    ${ready ? `<div class="ib-s ${v3 ? 'done' : ''}"><i>B</i><div><b>Atualizar o script do Google (uma vez)</b>${v3 ? '<p class="pos">✓ O script já está atualizado e pode gravar no teu Google Drive.</p>' : `${(c.ver || 0) >= 3 && st.m && !st.ok ? `<div class="ib-st bad">✗ ${esc(st.m)}</div>` : ''}<p>A sincronização precisa da versão nova do script:</p><p>1. Toca em <b>Copiar código</b> (passo 1 do atalho, mais abaixo).<br>2. No Apps Script: apaga tudo → cola → <b>💾 Guardar</b>.<br>3. <b>Implantar → Gerenciar implantações</b> → ✏️ (lápis) → em <b>Versão</b> escolhe <b>Nova versão</b> → <b>Implantar</b>.<br>4. Se pedir, <b>autoriza o acesso ao Google Drive</b> (Avançado → Acessar → Permitir).<br>5. Volta aqui e toca em <b>Verificar</b>.</p><button class="btn sm" data-act="syVer">Verificar</button>`}</div></div>
     <div class="ib-s"><i>C</i><div><b>Ligar a sincronização</b><p>Faz isto <b>primeiro no aparelho com os dados principais</b> (o tablet). Os outros aparelhos ligam-se depois com o código.</p><button class="btn sm pri" data-act="syOn" ${v3 ? '' : 'disabled'}>Ligar sincronização neste aparelho</button></div></div>` : ''}
   </div>`}</div>`; };
 const orig = OS.views.definicoes; if (orig) OS.views.definicoes = sub => orig(sub) + syncPanel() + panel();
-A.syVer = async () => { await IB.check(); UI.toast((cfg().ver || 0) >= 3 ? 'Script atualizado ✓' : 'Ainda é a versão antiga. Confirma que escolheste "Nova versão" ao implantar.', (cfg().ver || 0) >= 3 ? 'pos' : 'warn'); OS.request(); };
+A.syVer = async () => { UI.toast('A verificar…'); await IB.check(); const c = cfg(); UI.toast((c.ver || 0) < 3 ? 'Ainda é a versão antiga. Confirma que escolheste "Nova versão" ao implantar.' : c.drive === 0 ? 'Falta autorizar o Google Drive (vê as instruções).' : 'Script atualizado ✓', (c.ver || 0) >= 3 && c.drive !== 0 ? 'pos' : 'warn'); OS.request(); };
 A.syOn = () => { try { localStorage.setItem('os2sync', '1'); localStorage.setItem('os2syncJoined', '0'); } catch (e) { } UI.toast('A ligar…'); setTimeout(() => location.reload(), 400); };
 A.syOff = () => UI.ask('Desligar a sincronização neste aparelho?', 'Os dados ficam neste aparelho, mas deixam de ser trocados com os outros.', 'Desligar', () => { try { localStorage.removeItem('os2sync'); } catch (e) { } location.reload(); });
 A.syLink = () => { const el = document.getElementById('syCode'); const SY = window.OceanumSync; if (!el || !SY || !SY.applyLink(el.value)) { UI.toast('Código inválido. Copia-o outra vez no outro aparelho.', 'neg'); return; } UI.toast('Ligado. A buscar os dados da conta…', 'pos'); setTimeout(() => location.reload(), 500); };
@@ -5267,11 +5274,16 @@ if (window.claude) return; // dentro do claude.ai usa a base de dados do artifac
 const LS = { get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }, raw: k => { try { return localStorage.getItem(k); } catch (e) { return null; } } };
 
 // ---- link de ligação: …/#ligar=<código> configura este aparelho e liga a sincronização ----
-const applyLink = code => { try { const o = JSON.parse(decodeURIComponent(escape(atob(String(code).trim().replace(/^.*ligar=/, ''))))); if (!o.u || !o.k) return false;
+// aceita o link inteiro, só o código, ou o código codificado (%3D…) tal como chega por WhatsApp/email
+const decodeCode = code => { let c = String(code || '').trim(); const m = c.match(/ligar=([^\s#&]+)/); if (m) c = m[1]; c = c.replace(/\s+/g, '');
+  for (let i = 0; i < 3 && /%[0-9A-Fa-f]{2}/.test(c); i++) { try { c = decodeURIComponent(c); } catch (e) { break; } }
+  c = c.replace(/-/g, '+').replace(/_/g, '/'); while (c.length % 4) c += '=';
+  return JSON.parse(decodeURIComponent(escape(atob(c)))); };
+const applyLink = code => { try { const o = decodeCode(code); if (!o.u || !o.k) return false;
   const cur = LS.get('os2:one~inbox', { data: {} }); cur.data = Object.assign({}, cur.data, { url: o.u, key: o.k }); LS.set('os2:one~inbox', cur);
   LS.set('os2sync', 1); LS.set('os2syncJoined', 0); return true; } catch (e) { return false; } };
-const hm = location.hash.match(/ligar=([A-Za-z0-9+/=_-]+)/);
-if (hm) { const ok = applyLink(decodeURIComponent(hm[1])); history.replaceState(null, '', location.pathname + '#visao'); if (ok) LS.set('os2syncMsg', 'Aparelho ligado. A sincronizar…'); }
+const hm = location.hash.match(/ligar=([^&#\s]+)/);
+if (hm) { const ok = applyLink(hm[1]); history.replaceState(null, '', location.pathname + '#visao'); if (ok) LS.set('os2syncMsg', 'Aparelho ligado. A sincronizar…'); }
 
 const cfg = () => (LS.get('os2:one~inbox', { data: {} }).data || {});
 const SY = window.OceanumSync = { on: false, state: 'desligada', last: 0, err: '', applyLink };
@@ -5286,7 +5298,7 @@ const call = async (op, fields = {}, post = false, tries = 3) => { let last = nu
   for (let i = 0; i < tries; i++) {
     try { const r = post ? await fetch(url(), { method: 'POST', body: new URLSearchParams(Object.assign({ k: key(), op }, fields)), credentials: 'omit', cache: 'no-store' })
         : await fetch(url() + (url().includes('?') ? '&' : '?') + qs(Object.assign({ k: key(), op, _: Date.now() }, fields)), { credentials: 'omit', cache: 'no-store' });
-      const t = await r.text(); let j = null; try { j = JSON.parse(t); } catch (e) { last = new Error('o Google respondeu com uma página de erro'); }
+      const t = await r.text(); let j = null; try { j = JSON.parse(t); } catch (e) { if (/DriveApp|permission/i.test(t)) throw Object.assign(new Error('Falta autorizar o Google Drive no Apps Script (Definições → Sincronizar → passo B)'), { fatal: true }); last = new Error('o Google respondeu com uma página de erro'); }
       if (j) { if (!j.ok) throw Object.assign(new Error(j.msg || 'erro do script'), { fatal: true }); return j; }
     } catch (e) { if (e.fatal) throw e; last = e; }
     await new Promise(res => setTimeout(res, 700 * (i + 1))); }
