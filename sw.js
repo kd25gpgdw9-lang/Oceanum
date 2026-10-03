@@ -1,5 +1,5 @@
 /* Oceanum — service worker: abre instantaneamente e funciona sem internet. */
-const V = 'oceanum-166434d4a8';
+const V = 'oceanum-5d7b92ab34';
 const SHELL = ["./","index.html","manifest.webmanifest","apple-touch-icon.png","icon-192.png","icon-512.png","icon-maskable-512.png"];
 const IMG = 'oceanum-img'; // fotos dos exercícios e dos alimentos: guardadas para funcionarem sem internet
 const IMGHOST = /(^|\.)(jsdelivr\.net|themealdb\.com|openfoodfacts\.org|wikimedia\.org)$/;
