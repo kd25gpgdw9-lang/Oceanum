@@ -1882,7 +1882,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.40", "date": "04/10/2026", "notes": ["Corpo 3D no estilo das apps de treino: corpo sólido com a musculatura definida, músculos a vermelho com fibras e fundo azul", "Muito mais marcas por país em cada alimento (produtos reais com rótulo + todas as marcas habituais do país)", "Segunda revisão das fotos dos 410 alimentos"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.41", "date": "04/10/2026", "notes": ["Movimento do boneco mais humano e suave: sobe em ~1 s, pausa no topo, desce controlado em ~1,5 s", "Revi os 507 exercícios um a um em 3D e corrigi mais 60 (movimento, banco ou equipamento errados)"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -4780,7 +4780,7 @@ const P = {
   rower: ['s', 'hip', { hip: [80, 112], tor: 150, th: 135, sn: 40, ua: 92, fa: 92 }, { hip: [112, 112], tor: 200, th: 88, sn: 88, ua: -30, fa: 80 }, 'rail'],
   climber: ['s', 'hand', { tor: 115, th: -65, sn: -65, th2: 10, sn2: -95, ua: 0, fa: 0 }, { tor: 115, th: 10, sn: -95, th2: -65, sn2: -65, ua: 0, fa: 0 }, 'floor', { ah: [150, G - 3] }],
   kbsquat: ['s', 'ankle', { tor: 180, th: 0, sn: 0, ua: 15, fa: 170 }, { tor: 150, th: 100, sn: -30, ua: 30, fa: 175 }, 'chest1'],
-  rollout: ['s', 'hip', { hip: [100, 106], tor: 165, th: 0, sn: -90, ua: 95, fa: 95 }, { hip: [100, 112], tor: 105, th: -35, sn: -90, ua: 172, fa: 175 }, 'floor'],
+  rollout: ['s', 'hip', { hip: [100, 108], tor: 150, th: 0, sn: -90, ua: 25, fa: 25 }, { hip: [123, 120], tor: 100, th: -45, sn: -90, ua: 92, fa: 92 }, 'floor'],
   kneelcrunch: ['s', 'hip', { hip: [100, 106], tor: 172, th: 0, sn: -90, ua: 165, fa: -15 }, { hip: [100, 106], tor: 110, th: 0, sn: -90, ua: 125, fa: -45 }, 'floor'],
   kick4: ['s', 'hand', { tor: 92, th: 0, sn: -90, th2: 5, sn2: -85, ua: 0, fa: 0 }, { tor: 92, th: 0, sn: -90, th2: -95, sn2: -100, ua: 0, fa: 0 }, 'floor', { ah: [132, G - 3] }],
   stkick: ['s', 'ankle', { tor: 172, th: 0, sn: 0, th2: 2, sn2: -5, ua: 35, fa: 40 }, { tor: 166, th: 0, sn: 0, th2: -48, sn2: -60, ua: 35, fa: 40 }, ''],
@@ -4791,6 +4791,22 @@ const P = {
   invrow: ['s', 'hand', { tor: -112, th: 70, sn: 70, ua: 180, fa: 180 }, { tor: -100, th: 82, sn: 82, ua: 135, fa: -135 }, 'bar', { ah: [92, 62] }],
   hipabd: ['f', 'hip', { hip: [100, 82], arm: 10, el: 5, leg: 5 }, { hip: [100, 82], arm: 10, el: 5, leg: 28 }, ''],
   hipadd: ['f', 'hip', { hip: [100, 82], arm: 10, el: 5, leg: 28 }, { hip: [100, 82], arm: 10, el: 5, leg: 4 }, ''],
+  floorpress: ['s', 'hip', { hip: [112, 134], tor: -90, th: 135, sn: -20, ua: 30, fa: 178 }, { hip: [112, 134], tor: -90, th: 135, sn: -20, ua: 178, fa: 180 }, 'floor'],
+  kbsquat2: ['s', 'ankle', { tor: 180, th: 0, sn: 0, ua: 15, fa: 170 }, { tor: 150, th: 100, sn: -30, ua: 30, fa: 175 }, 'chest1'],
+  halo: ['f', 'hip', { hip: [100, 82], arm: 160, el: -100, leg: 6 }, { hip: [100, 82], arm: 175, el: -150, leg: 6 }, ''],
+  getup: ['s', 'hip', { hip: [100, 130], tor: -95, th: 140, sn: 20, ua: 175, fa: 180 }, { hip: [100, 108], tor: 150, th: 100, sn: 0, ua: 175, fa: 180 }, 'floor'],
+  windmill: ['f', 'hip', { hip: [100, 82], arm: 175, el: 0, leg: 10, lean: 0 }, { hip: [100, 82], arm: 175, el: 0, leg: 10, lean: 35 }, ''],
+  sitrow: ['s', 'hip', { hip: [80, 112], tor: 150, th: 100, sn: 90, ua: 92, fa: 92 }, { hip: [80, 112], tor: 172, th: 100, sn: 90, ua: -35, fa: 80 }, 'floor'],
+  inclcurl: ['s', 'hip', { hip: [95, 92], tor: 200, th: 90, sn: 5, ua: -15, fa: -10 }, { hip: [95, 92], tor: 200, th: 90, sn: 5, ua: -10, fa: 140 }, 'seat'],
+  seatcurl2: ['s', 'hip', { hip: [95, 92], tor: 180, th: 90, sn: 5, ua: 2, fa: 4 }, { hip: [95, 92], tor: 180, th: 90, sn: 5, ua: 12, fa: 160 }, 'seat'],
+  prone: ['s', 'hip', { hip: [92, 74], tor: 128, th: -12, sn: -12, ua: 0, fa: 0 }, { hip: [92, 74], tor: 128, th: -12, sn: -12, ua: -75, fa: -5 }, 'pronebench'],
+  ezskull: ['s', 'hip', { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 160, fa: -145 }, { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 165, fa: 172 }, 'flatbench,handsbar'],
+  dumbrow1: ['s', 'ankle', { tor: 112, th: 30, sn: -10, ua: 0, fa: 0, th2: -10, sn2: -10 }, { tor: 112, th: 30, sn: -10, ua: -75, fa: -5, th2: -10, sn2: -10 }, 'flatbench'],
+  hipthrustfloor: ['s', 'ankle', { tor: -95, th: 60, sn: -8, ua: -100, fa: -100 }, { tor: -70, th: 98, sn: -8, ua: -100, fa: -100 }, 'floor'],
+  oneleg: ['s', 'ankle', { tor: 175, th: 85, sn: -5, th2: -5, sn2: -5, ua: 70, fa: 75 }, { tor: 150, th: 100, sn: -30, th2: 75, sn2: 75, ua: 85, fa: 90 }, ''],
+  deadbug: ['s', 'hip', { hip: [98, 128], tor: -90, th: 95, sn: 5, ua: 180, fa: 180 }, { hip: [98, 128], tor: -90, th: 150, sn: 90, ua: 120, fa: 120 }, 'floor'],
+  sideplank: ['f', 'hip', { hip: [100, 118], arm: 90, el: 0, leg: 2, lean: 70 }, { hip: [100, 112], arm: 95, el: 0, leg: 2, lean: 72 }, ''],
+  stepside: ['f', 'hip', { hip: [100, 82], arm: 8, el: 0, leg: 5 }, { hip: [100, 82], arm: 8, el: 0, leg: 22 }, ''],
   generic: ['s', 'ankle', { tor: 180, th: 0, sn: 0, ua: 0, fa: 0 }, { tor: 180, th: 0, sn: 0, ua: 20, fa: 120 }, 'hands']
 };
 // ---------- escolher o padrão a partir do nome / equipamento / músculo ----------
@@ -4814,6 +4830,34 @@ const RULES = [[/peso morto romeno|stiff|bom dia|good morning/, 'rdl'], [/peso m
 const BYM = { 'Peito': 'bench', 'Dorsais': 'row', 'Trapézio': 'shrug', 'Lombar': 'backext', 'Ombros': 'ohp', 'Bíceps': 'curl', 'Tríceps': 'pushdown', 'Antebraços': 'curl', 'Abdómen': 'crunch', 'Oblíquos': 'twist', 'Glúteos': 'hipthrust', 'Quadríceps': 'squat', 'Isquiotibiais': 'rdl', 'Gémeos': 'calf' };
 // cada exercício da biblioteca com o movimento e o equipamento certos (revisto um a um)
 const FIX = {
+  'elevacao de deltoide alternada': 'frontraise', 'supino no chao alternado': 'floorpress:kb', 'remada renegada': 'pushup:kb', 'volta ao mundo com halteres': 'fly',
+  'crucifixo invertido com elastico': 'rfly:band', 'abertura com elastico (pull apart)': 'rfly:band', 'triceps testa com elastico': 'ohtri:band', 'elevacoes assistidas com elastico': 'pullup',
+  'agachamento hack com barra (atras)': 'deadlift:barbell', 'remada para deltoide posterior com barra': 'row:barbell', 'gemeos sentado com barra': 'seatcalf:barbell', 'encolhimento com barra atras do corpo': 'shrug:barbell',
+  'inclinacao lateral com barra': 'sidebend:barbell', 'agachamento lateral com barra': 'squat:barbell', 'salto sobre o banco': 'jump', 'pullover com barra': 'pullover:barbell',
+  'elevacao posterior com cabeca apoiada': 'rfly:db', 'elevacao posterior no cabo baixo': 'rfly:cable:handles', 'ciclismo': 'bike', 'bicicleta estatica': 'bike', 'bicicleta reclinada': 'bike', 'air bike': 'bike',
+  'crucifixo com peso corporal': 'rollout', 'agachamento livre (peso corporal)': 'squat:none', 'afundo a andar (peso corporal)': 'lunge:none', 'agachamento com salto': 'jump',
+  'peck deck (voador)': 'fly:machine', 'peso morto no cabo': 'deadlift:cable:bar', 'curl martelo na corda': 'curl:cable:rope', 'extensao de triceps inclinado no cabo': 'ohtri:cable:rope',
+  'rotacao interna no cabo': 'extrot:cable', 'cruz de ferro no cabo': 'fly:cable:handles', 'rotacao de tronco judo no cabo': 'woodchop:cable', 'curl scott no cabo': 'preacher:cable:bar',
+  'crucifixo invertido no cabo': 'rfly:cable:handles', 'abdominal invertido no cabo': 'legraise', 'remada para deltoide posterior na corda': 'facepull:cable:rope', 'elevacao lateral sentado no cabo': 'latraise:cable',
+  'desenvolvimento no cabo': 'ohp:cable:handles', 'encolhimento no cabo': 'shrug:cable:bar', 'flexao de punho no cabo': 'wristcurl:cable:bar', 'encolhimento na maquina de gemeos': 'shrug:machine',
+  'gemeos no leg press': 'legpress:machine', 'agachamento na cadeira': 'squat:none', 'mergulho na maquina': 'dips:none', 'flexao de pernas na bola suica': 'bridge',
+  'abdominal no banco declinado': 'situp', 'abdominal obliquo declinado': 'situp', 'abdominal invertido declinado': 'legraise', 'triceps testa declinado com halteres': 'skull:db', 'triceps testa declinado com barra w': 'ezskull:ez',
+  'dead bug': 'deadbug', 'press cubano': 'ohp:db', 'pullover com halter': 'pullover:db', 'pullover com bracos estendidos': 'pullover:db',
+  'kettlebell em oito': 'swing:kb', 'halo com kettlebell': 'halo:kb', 'turkish get-up': 'getup:kb', 'moinho com kettlebell': 'windmill:kb', 'agachamento pistol com kettlebell': 'oneleg:kb', 'agachamento pistol no smith': 'oneleg:smith',
+  'agachamento unilateral com barra': 'oneleg:barbell', 'agachamento unilateral na caixa': 'oneleg', 'remada no cabo elevada': 'sitrow:cable', 'remada sentada no cabo': 'sitrow:cable', 'remada unilateral sentada no cabo': 'sitrow:cable', 'remada no cabo baixo ao pescoco': 'sitrow:cable',
+  'remada no cabo alto ajoelhado': 'pulldown:cable:bar', 'remada unilateral no cabo alto ajoelhado': 'pulldown:cable:handle', 'curl no banco inclinado': 'inclcurl:db', 'curl no banco inclinado (flexor)': 'inclcurl:db', 'curl alternado no banco inclinado': 'inclcurl:db', 'curl martelo no banco inclinado': 'inclcurl:db', 'curl inclinado (biceps interno)': 'inclcurl:db',
+  'curl unilateral apoiado no banco inclinado': 'preacher:db', 'curl deitado de brucos no banco inclinado': 'prone:db', 'remada com halteres no banco inclinado': 'prone:db', 'remada deitado no banco inclinado': 'prone:barbell', 'elevacao posterior deitado no banco': 'prone:db', 'elevacao posterior unilateral deitado': 'prone:db', 'elevacao posterior deitado': 'prone:db',
+  'curl com barra deitado no banco inclinado': 'prone:barbell', 'curl com barra deitado no banco alto': 'prone:barbell', 'curl no cabo deitado': 'prone:cable:bar', 'elevacao lateral unilateral deitado': 'latraise:db', 'curl deitado com halteres': 'prone:db',
+  'curl sentado com halteres': 'seatcurl2:db', 'curl sentado (biceps interno)': 'seatcurl2:db', 'curl concentrado': 'seatcurl2:db', 'curl concentrado com barra': 'seatcurl2:barbell', 'triceps coice sentado': 'kickback:db', 'elevacao posterior sentado': 'rfly:db', 'elevacao lateral sentado': 'latraise:db',
+  'triceps testa no banco inclinado': 'skull:barbell', 'triceps testa atras da cabeca': 'skull:barbell', 'triceps testa ao queixo': 'ezskull:ez', 'triceps testa com barra': 'ezskull:ez', 'triceps testa com barra w': 'ezskull:ez',
+  'remada unilateral com halter': 'dumbrow1:db', 'remada com kettlebell': 'row:kb', 'remada alternada com kettlebell': 'row:kb', 'passagem entre as pernas com kettlebell': 'swing:kb', 'elevacao de quadril com elastico': 'hipthrustfloor:band',
+  'extensao de triceps ajoelhado no cabo': 'ohtri:cable:rope', 'extensao de triceps no cabo baixo': 'ohtri:cable:rope', 'extensao de triceps unilateral no cabo': 'ohtri:cable:handle', 'triceps frances unilateral no cabo': 'ohtri:cable:handle',
+  'monster walk (passada lateral com elastico)': 'stepside:band', 'prancha lateral': 'plank', 'flexao com prancha lateral': 'pushup', 'canivete lateral': 'situp', 'pinca de discos (pegada)': 'walk',
+  'rotacao com disco': 'twist', 'rotacao sentado com barra': 'twist:barbell', 'elevacao escapular': 'pullup', 'isometria do pescoco (frente e tras)': 'shrug', 'isometria do pescoco (lados)': 'shrug',
+  'curl inverso com disco': 'curl:none', 'mergulho nas argolas': 'dips', 'subida a corda': 'pullup', 'saltar a corda': 'jump', 'empurrar treno': 'run', 'yoke walk': 'walk', 'farmer walk (caminhada do agricultor)': 'walk:db',
+  'svend press': 'mpress:none', 'pallof press (antirrotacao)': 'mpress:cable:handle', 'pallof press com rotacao': 'mpress:cable:handle', 'supino no cabo': 'mpress:cable:handles', 'supino em pe no cabo': 'mpress:cable:handles',
+  'flexao com um braco': 'pushup', 'escadas (stairmaster)': 'stepup', 'escada rolante (step mill)': 'stepup', 'eliptica': 'walk', 'virar pneu': 'deadlift', 'marreta no pneu': 'woodchop',
+  'supino no chao alternado': 'floorpress:kb', 'supino no chao com halteres': 'floorpress:db', 'supino no chao com barra': 'floorpress:barbell',
   'roda abdominal': 'rollout', 'rollout com barra': 'rollout:barbell', 'rollout com barra (de joelhos)': 'rollout:barbell', 'rollout com barra a partir do banco': 'rollout:barbell', 'rollout em fitas (trx)': 'rollout', 'crucifixo com peso corporal': 'rollout:ez',
   'elevacao de deltoide alternada': 'latraise', 'volta ao mundo com halteres': 'pullover', 'flexao de pernas na bola suica': 'bridge', 'abertura com elastico (pull apart)': 'rfly:band', 'triceps testa com elastico': 'ohtri:band',
   'ponte de gluteos com barra': 'bridge:barbell', 'agachamento hack com barra (atras)': 'deadlift:barbell', 'remada para deltoide posterior com barra': 'row', 'inclinacao lateral com barra': 'sidebend:barbell',
@@ -5022,11 +5066,11 @@ const setup = (key, name, equip) => { const n = N(name), e = equip || '', fx = (
   let pat = key; if (!fx[0]) for (const [rx, k] of CUSTOM) if (rx.test(n)) { pat = k; break; }
   let tool = /smith/.test(n) ? 'smith' : /\bcabo\b|polia|\bcorda\b(?!.*saltar)|cross|face pull|puxada|pulldown|pallof|lenhador/.test(n) && !/subida a corda|saltar/.test(n) ? 'cable'
     : e === 'Máquina' || /maquina|peck deck|voador|cadeira|mesa flexora|leg press|hack/.test(n) ? 'machine' : e === 'Barra' ? 'barbell' : e === 'Barra W' ? 'ez' : e === 'Halteres' ? 'db' : e === 'Kettlebell' ? 'kb' : e === 'Elástico' ? 'band' : e === 'Bola medicinal' ? 'ball' : 'none';
-  if (['pullup', 'hangraise', 'dips', 'benchdip', 'pushup', 'plank', 'climber', 'bridge', 'crunch', 'situp', 'legraise', 'backext', 'run', 'walk', 'bike', 'rower', 'jump', 'kick4', 'nordic', 'invrow', 'ropes', 'stkick', 'hipabd', 'hipadd'].includes(pat) && tool !== 'cable' && tool !== 'machine') tool = pat === 'backext' && /barra|anilha|halter/.test(n) ? tool : pat === 'walk' && tool === 'db' ? 'db' : 'none';
+  if (['pullup', 'hangraise', 'dips', 'benchdip', 'pushup', 'plank', 'climber', 'bridge', 'crunch', 'situp', 'legraise', 'backext', 'run', 'walk', 'bike', 'rower', 'jump', 'kick4', 'nordic', 'invrow', 'ropes', 'stkick', 'hipabd', 'hipadd', 'deadbug', 'sideplank', 'stepside'].includes(pat) && tool !== 'cable' && tool !== 'machine') tool = pat === 'backext' && /barra|anilha|halter/.test(n) ? tool : pat === 'walk' && tool === 'db' ? 'db' : 'none';
   if (fx[1]) tool = fx[1];
   if (['legpress', 'legext', 'legcurl', 'seatcurl', 'seatcalf', 'abduct', 'adduct'].includes(pat) && tool !== 'cable') tool = 'machine';
   if (pat === 'pulldown' && tool !== 'machine') tool = 'cable';
-  const one = /unilateral|um braco|concentrad|serrote|goblet|pullover|alternad/.test(n) || pat === 'goblet' || pat === 'kbsquat' || pat === 'pullover' || pat === 'swing' && tool === 'kb';
+  const one = /unilateral|um braco|concentrad|serrote|goblet|pullover|alternad|halo|get-up|moinho|em oito|pistol com kettlebell/.test(n) || pat === 'goblet' || pat === 'kbsquat' || pat === 'pullover' || pat === 'swing' && tool === 'kb';
   let att = tool !== 'cable' ? '' : /corda|face pull/.test(n) ? 'rope' : /triangulo|barra v|pegada neutra/.test(n) ? 'vbar' : pat === 'pulldown' && !/unilateral/.test(n) ? 'latbar' : /barra|\(barra\)/.test(n) || pat === 'curl' && !one ? 'bar' : 'handle';
   if (pat === 'fly' || pat === 'rfly') att = tool === 'cable' ? 'handles' : att;
   if (fx[2]) att = fx[2]; if (tool === 'cable' && !att) att = 'handle';
@@ -5180,6 +5224,12 @@ const buildEq = J => { const g = R.eq, M = mats(), st = R.st, pat = st.pat; whil
     if (pat === 'cablerow') { add(boxM(1.3, .08, .3, M.pad), hx + .25, hipY - .1); add(boxM(1.3, hipY - .14, .2, M.frame), hx + .25, (hipY - .14) / 2); add(boxM(.06, .3, .4, M.frame), J.anR[0] + .1, .15, 0, -.3); } }
   if (pat === 'stepup') add(boxM(.5, .4, .55, M.pad), .32, .2); if (pat === 'calf' && st.tool !== 'machine') add(boxM(.32, .08, .55, M.pad), J.anR[0] + .08, .04);
   if (pat === 'backext') { add(boxM(.32, .07, .4, M.pad), hx + .05, hipY - .07, 0, .55); add(boxM(.05, hipY - .1, .05, M.frame), hx + .05, (hipY - .1) / 2); add(boxM(.12, .1, .3, M.pad), J.anR[0], J.anR[1] + .05); add(boxM(1.1, .04, .45, M.frame), hx - .1, .02, 0, .0); }
+  if (pat === 'rollout' && st.tool === 'none') { R.w = { kind: 'ball', o: add(alongZ(cyl(.09, .06, M.plate, 24)), 0, 0) }; }
+  if (pat === 'prone') { const dx = J.sh[0] - J.hip[0], dy = J.sh[1] - J.hip[1], a = Math.atan2(dy, dx), L = Math.hypot(dx, dy) + .25, nx = Math.sin(a) * .13, ny = -Math.cos(a) * .13; add(boxM(L, .07, .34, M.pad), (J.hip[0] + J.sh[0]) / 2 + nx - .05, (J.hip[1] + J.sh[1]) / 2 + ny - .02, 0, a); add(boxM(.06, J.hip[1] - .1, .06, M.frame), J.hip[0] + .05, (J.hip[1] - .1) / 2); add(boxM(.8, .04, .4, M.frame), J.hip[0] + .15, .02); }
+  if (pat === 'inclcurl') { add(boxM(.4, .08, .4, M.pad), hx + .05, hipY - .04); add(boxM(.08, .75, .38, M.pad), hx - .27, hipY + .3, 0, -.45); add(boxM(.06, hipY - .08, .06, M.frame), hx, (hipY - .08) / 2); }
+  if (pat === 'seatcurl2') { add(boxM(.42, .08, .4, M.pad), hx + .05, hipY - .04); add(boxM(.06, hipY - .08, .06, M.frame), hx + .05, (hipY - .08) / 2); }
+  if (pat === 'dumbrow1') { const y = .48; add(boxM(1.0, .07, .3, M.pad), J.hip[0] + .25, y); [-.15, .6].forEach(x => add(boxM(.05, y - .04, .24, M.frame), J.hip[0] + x, (y - .04) / 2)); }
+  if (pat === 'sitrow' && st.tool === 'cable') { add(boxM(.06, .3, .4, M.frame), J.anR[0] + .1, .15, 0, -.3); }
   if (pat === 'nordic') add(boxM(.14, .1, .4, M.pad), J.anR[0] - .02, J.anR[1] + .09);
   if (pat === 'wristcurl') seat(hx, hipY, false);
   if (pat === 'pullup' || pat === 'hangraise' || pat === 'invrow') { const y = J.haR[1] + .03; add(alongZ(cyl(.016, 1.3, M.steel)), J.haR[0], y); [-.62, .62].forEach(z => add(boxM(.06, y + .05, .06, M.frame), J.haR[0], (y + .05) / 2, z)); }
@@ -5187,7 +5237,7 @@ const buildEq = J => { const g = R.eq, M = mats(), st = R.st, pat = st.pat; whil
   if (pat === 'run' || pat === 'walk' && /passadeira/.test(st.n)) { add(boxM(1.5, .1, .6, M.dark), 0, .05); add(boxM(.05, 1.1, .05, M.frame), .7, .55, .3); add(boxM(.05, 1.1, .05, M.frame), .7, .55, -.3); add(boxM(.2, .08, .65, M.dark), .72, 1.1); }
   if (pat === 'bike') { add(boxM(.08, .66, .08, M.frame), hx + .45, .33); add(boxM(.3, .06, .2, M.pad), hx, hipY - .07); add(boxM(.06, hipY - .1, .06, M.frame), hx, (hipY - .1) / 2); add(boxM(.9, .05, .3, M.frame), hx + .2, .025); }
   if (pat === 'rower') { add(boxM(2.1, .06, .2, M.frame), .35, .14); add(boxM(.3, .06, .3, M.pad), hx, hipY - .06); add(boxM(.25, .45, .45, M.dark), 1.25, .25); }
-  if (['crunch', 'situp', 'legraise', 'bridge', 'pushup', 'plank', 'climber', 'twist', 'rollout', 'kneelcrunch', 'kick4', 'nordic'].includes(pat)) add(boxM(1.9, .015, .7, new T.MeshStandardMaterial({ color: 0x4f6475, roughness: .9 })), J.hip[0] - .1, .0075);
+  if (['crunch', 'situp', 'legraise', 'bridge', 'pushup', 'plank', 'climber', 'twist', 'rollout', 'kneelcrunch', 'kick4', 'nordic', 'floorpress', 'getup', 'sitrow', 'deadbug', 'hipthrustfloor', 'sideplank'].includes(pat)) add(boxM(1.9, .015, .7, new T.MeshStandardMaterial({ color: 0x4f6475, roughness: .9 })), J.hip[0] - .1, .0075);
   // máquinas
   if (st.tool === 'machine') {
     if (pat === 'legpress') { add(boxM(.6, .08, .45, M.pad), hx - .22, hipY - .08, 0, -.62); add(boxM(.42, .08, .45, M.pad), hx + .1, hipY - .1, 0, .15); add(boxM(.05, hipY - .12, .05, M.frame), hx, (hipY - .12) / 2); [-.27, .27].forEach(z => add(boxM(1.7, .05, .05, M.frame), hx + .75, hipY + .25, z, .78)); R.sled = add(boxM(.08, .55, .55, M.frame), 0, 0, 0, -.79); }
@@ -5216,7 +5266,7 @@ const buildEq = J => { const g = R.eq, M = mats(), st = R.st, pat = st.pat; whil
   else if (st.tool === 'cable' || st.tool === 'band') {
     const hands2 = st.att === 'handles' || st.one === false && st.att === 'handle' && /cross|lateral/.test(st.n);
     const high = ['pushdown', 'pulldown', 'facepull', 'woodchop', 'fly', 'crunch', 'ohtri', 'situp', 'kneelcrunch', 'sapd'].includes(pat) && !/baixo|de baixo/.test(st.n), front = !['pulldown', 'crunch', 'ohtri'].includes(pat);
-    const top = pat === 'kneelcrunch' ? [J.sh[0] - .1, 2.0] : pat === 'sapd' ? [.75, 2.0] : pat === 'extrot' ? [.15, 1.12] : pat === 'hipadd' || pat === 'hipabd' ? [0, .12] : pat === 'stkick' ? [.75, .15] : pat === 'wristcurl' ? [J.haR[0] + .3, .12] : pat === 'pulldown' ? [J.hip[0] + .05, 2.25] : pat === 'pushdown' ? [J.haR[0] + .42, 2.05] : pat === 'facepull' ? [1.05, 1.6] : pat === 'crunch' ? [J.sh[0] - .15, 2.0] : pat === 'ohtri' ? [-.45, .2] : high ? [1.0, 1.95] : [.9, .12];
+    const top = pat === 'sitrow' ? [J.anR[0] + .45, .35] : pat === 'kneelcrunch' ? [J.sh[0] - .1, 2.0] : pat === 'sapd' ? [.75, 2.0] : pat === 'extrot' ? [.15, 1.12] : pat === 'hipadd' || pat === 'hipabd' ? [0, .12] : pat === 'stkick' ? [.75, .15] : pat === 'wristcurl' ? [J.haR[0] + .3, .12] : pat === 'pulldown' ? [J.hip[0] + .05, 2.25] : pat === 'pushdown' ? [J.haR[0] + .42, 2.05] : pat === 'facepull' ? [1.05, 1.6] : pat === 'crunch' ? [J.sh[0] - .15, 2.0] : pat === 'ohtri' ? [-.45, .2] : high ? [1.0, 1.95] : [.9, .12];
     if (st.tool === 'cable') { const tx = pat === 'kneelcrunch' ? J.hip[0] - .55 : top[0] + (pat === 'pulldown' ? -.25 : .12); if (pat === 'kneelcrunch') add(boxM(.55, .06, .1, M.frame), tx + .25, 2.0); [-1, 1].forEach(s => add(boxM(.07, 2.25, .07, M.frame), tx, 1.125, s * (hands2 ? .95 : .3))); add(boxM(.07, .07, hands2 ? 1.97 : .67, M.frame), tx, 2.25); if (!hands2) add(boxM(.2, .5, .25, M.dark), tx, .5); }
     R.cab = { hands2, tops: hands2 ? [[top[0] - .2, pat === 'rfly' || pat === 'latraise' ? .2 : 1.85, .9], [top[0] - .2, pat === 'rfly' || pat === 'latraise' ? .2 : 1.85, -.9]] : [[top[0], top[1], 0]], lines: [] };
     if (st.tool === 'band') R.cab.tops = [[J.anR[0] + .05, .04, 0]];
@@ -5243,15 +5293,19 @@ const ease = x => x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
 const jAt = u => A3.joints(R.st.pat, u, R.st);
 const frame = now => { if (!R || !R.box || !R.box.isConnected) { if (R) R.raf = 0; return; } R.raf = requestAnimationFrame(frame);
   if (document.hidden) return;
-  const per = 2800, ph = ((now - R.t0) % per) / per, u = A3.forceU != null ? A3.forceU : ph < .1 ? 0 : ph < .5 ? ease((ph - .1) / .4) : ph < .6 ? 1 : 1 - ease((ph - .6) / .4); R.u = u; const J = jAt(u); if (!J) return;
+  // ritmo humano: pausa, fase concêntrica (~1,1 s), contração no topo, fase excêntrica controlada (~1,6 s); acelerações suaves
+  const per = 3500, t = (now - R.t0) % per, ss = x => x * x * x * (x * (x * 6 - 15) + 10);
+  let u = t < 350 ? 0 : t < 1450 ? ss((t - 350) / 1100) : t < 1800 ? 1 : t < 3400 ? 1 - ss((t - 1800) / 1600) : 0;
+  if (A3.forceU != null) u = A3.forceU;
+  R.us = R.us == null ? u : R.us + (u - R.us) * .35; u = A3.forceU != null ? u : R.us; R.u = u; const J = jAt(u); if (!J) return;
   if (!R.eqOk) { buildEq(J); R.eqOk = 1; }
   pose(J); moveEq(J); R.glow.value = u;
-  if (A3.forceYaw != null) R.yaw = A3.forceYaw; else if (!R.drag) R.yaw = R.base + Math.sin((now - R.t0) / 4200) * .4 + R.user; const c = R.center;
+  if (A3.forceYaw != null) R.yaw = A3.forceYaw; else if (!R.drag) R.yaw = R.base + Math.sin((now - R.t0) / 7000) * .3 + R.user; const c = R.center;
   if (A3.forceCam) { const f = A3.forceCam(R); R.camera.position.set(...f[0]); R.camera.lookAt(...f[1]); } else { R.camera.position.set(c[0] + Math.sin(R.yaw) * R.dist, c[1] + .3, Math.cos(R.yaw) * R.dist); R.camera.lookAt(c[0], c[1], 0); }
   const w = R.box.clientWidth, h = R.box.clientHeight; if (w && (R._w !== w || R._h !== h)) { R.renderer.setSize(w, h, false); R.camera.aspect = w / h; R.camera.updateProjectionMatrix(); R._w = w; R._h = h; }
   R.renderer.render(R.scene, R.camera); };
 A3.mount = async el => { try { await A3.load(); } catch (e) { el.classList.add('fail'); el.innerHTML = OS.Anim.svg({ name: '', muscle: el.dataset.am, equip: el.dataset.ae }).replace(/data-ak="[^"]*"/, `data-ak="${el.dataset.ak}"`); return; }
-  if (!R) R = build(); if (R.raf) cancelAnimationFrame(R.raf); R.box = el; R.st = setup(el.dataset.ak, el.dataset.an || '', el.dataset.ae); R.eqOk = 0; R.t0 = performance.now(); R._w = 0; R.user = 0; R.u = 0; R.pads = 0; R.kpad = null; R.hackpad = null; R.pivot = null;
+  if (!R) R = build(); if (R.raf) cancelAnimationFrame(R.raf); R.box = el; R.st = setup(el.dataset.ak, el.dataset.an || '', el.dataset.ae); R.eqOk = 0; R.t0 = performance.now(); R._w = 0; R.user = 0; R.u = 0; R.us = null; R.pads = 0; R.kpad = null; R.hackpad = null; R.pivot = null;
   paint(el.dataset.am, (el.dataset.as || '').split('|').filter(Boolean));
   const pts = []; [0, .5, 1].forEach(u => { const J = jAt(u); if (J) ['sh', 'haR', 'haL', 'anR', 'anL', 'knR', 'hip', 'elR'].forEach(k => J[k] && pts.push(J[k])); });
   const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]).concat(0), x0 = Math.min(...xs) - .25, x1 = Math.max(...xs) + .25, y0 = Math.min(...ys), y1 = Math.max(...ys) + .3;
