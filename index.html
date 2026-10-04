@@ -1612,7 +1612,7 @@ button.wk-vb{border:0;cursor:pointer}
 .wk-modes{display:flex;gap:4px;padding:4px;border-radius:12px;background:var(--pn);border:1px solid var(--line)}
 .wk-modes button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 6px;border-radius:9px;border:0;background:none;color:var(--tx2);font-size:13px;font-weight:600;cursor:pointer}
 .wk-modes button .ic{width:15px;height:15px}.wk-modes button.on{background:var(--accent);color:var(--ink)}
-.a3d{position:relative;width:100%;aspect-ratio:1/1;max-height:52vh;border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at 50% 35%,#f7f9fc,#dfe5ee 75%);touch-action:none}
+.a3d{position:relative;width:100%;aspect-ratio:1/1;max-height:52vh;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#8cc3ec 0%,#b9dcf5 55%,#d8ecfa 100%);touch-action:none}
 .a3d canvas{display:block;width:100%!important;height:100%!important;cursor:grab}
 .a3d-w,.a3d.fail p{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#4a5a70;text-align:center;padding:16px;margin:0}
 .a3d::after{content:"Arrasta para rodar · vermelho = músculo a trabalhar";position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:11px;color:rgba(30,45,65,.55);pointer-events:none}
@@ -1882,7 +1882,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.39", "date": "04/10/2026", "notes": ["Corpo 3D mais limpo (sem rasgos ao mexer) e cada exercício revisto com o movimento e o equipamento certos", "Marcas reais de cada alimento por país (base Open Food Facts): só produtos desse alimento, com a tabela do rótulo", "Fast food das cadeias do teu país dentro de batata frita, hambúrguer, nuggets e pizza", "Mais de 50 cadeias de fast food (McDonald's, Burger King, KFC, Subway, Telepizza, Starbucks, Nando's, Habib's…) dentro de cada alimento"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.40", "date": "04/10/2026", "notes": ["Corpo 3D no estilo das apps de treino: corpo sólido com a musculatura definida, músculos a vermelho com fibras e fundo azul", "Muito mais marcas por país em cada alimento (produtos reais com rótulo + todas as marcas habituais do país)", "Segunda revisão das fotos dos 410 alimentos"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -4734,10 +4734,10 @@ const P = {
   seatcalf: ['s', 'hip', { hip: [92, 98], tor: 182, th: 90, sn: 0, ua: 10, fa: 80, rise: 0 }, { hip: [92, 98], tor: 182, th: 90, sn: 0, ua: 10, fa: 80, rise: 7 }, 'seat'],
   abduct: ['f', 'hip', { hip: [100, 95], arm: 10, el: 0, leg: 6, seat: 1 }, { hip: [100, 95], arm: 10, el: 0, leg: 32, seat: 1 }, ''],
   adduct: ['f', 'hip', { hip: [100, 95], arm: 10, el: 0, leg: 32, seat: 1 }, { hip: [100, 95], arm: 10, el: 0, leg: 6, seat: 1 }, ''],
-  bench: ['s', 'hip', { hip: [118, 92], tor: -90, th: 60, sn: -5, ua: 35, fa: 178 }, { hip: [118, 92], tor: -90, th: 60, sn: -5, ua: 178, fa: 180 }, 'flatbench,handsbar'],
+  bench: ['s', 'hip', { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 35, fa: 178 }, { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 178, fa: 180 }, 'flatbench,handsbar'],
   incline: ['s', 'hip', { hip: [112, 96], tor: -128, th: 70, sn: -5, ua: 60, fa: 200 }, { hip: [112, 96], tor: -128, th: 70, sn: -5, ua: 168, fa: 170 }, 'inclinebench,handsbar'],
   decline: ['s', 'hip', { hip: [112, 80], tor: -70, th: 120, sn: 30, ua: 20, fa: 160 }, { hip: [112, 80], tor: -70, th: 120, sn: 30, ua: 165, fa: 170 }, 'declinebench,handsbar'],
-  fly: ['s', 'hip', { hip: [118, 92], tor: -90, th: 60, sn: -5, ua: 178, fa: 175 }, { hip: [118, 92], tor: -90, th: 60, sn: -5, ua: 70, fa: 95 }, 'flatbench,hands'],
+  fly: ['s', 'hip', { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 178, fa: 175 }, { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 70, fa: 95 }, 'flatbench,hands'],
   pushup: ['s', 'hand', { tor: 115, th: -65, sn: -65, ua: 0, fa: 0 }, { tor: 104, th: -76, sn: -76, ua: -75, fa: 15 }, 'floor', { ah: [150, G - 3] }],
   plank: ['s', 'hand', { tor: 103, th: -77, sn: -77, ua: 0, fa: 90 }, { tor: 104, th: -76, sn: -76, ua: 0, fa: 90 }, 'floor', { ah: [158, G - 3] }],
   dips: ['s', 'hand', { tor: 178, th: 10, sn: -40, ua: 2, fa: 2 }, { tor: 160, th: 25, sn: -60, ua: -65, fa: 8 }, 'parallel', { ah: [100, 66] }],
@@ -4758,7 +4758,7 @@ const P = {
   curl: ['s', 'ankle', { tor: 180, th: 0, sn: 0, ua: 2, fa: 4 }, { tor: 180, th: 0, sn: 0, ua: 12, fa: 160 }, 'hands'],
   preacher: ['s', 'hip', { hip: [80, 92], tor: 170, th: 90, sn: 5, ua: 45, fa: 60 }, { hip: [80, 92], tor: 170, th: 90, sn: 5, ua: 45, fa: 165 }, 'seat,preacherpad,hands'],
   pushdown: ['s', 'ankle', { tor: 172, th: 3, sn: 0, ua: 4, fa: 140 }, { tor: 172, th: 3, sn: 0, ua: 4, fa: 6 }, 'cabletop,hands'],
-  skull: ['s', 'hip', { hip: [118, 92], tor: -90, th: 60, sn: -5, ua: 160, fa: -145 }, { hip: [118, 92], tor: -90, th: 60, sn: -5, ua: 165, fa: 172 }, 'flatbench,handsbar'],
+  skull: ['s', 'hip', { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 160, fa: -145 }, { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 165, fa: 172 }, 'flatbench,handsbar'],
   ohtri: ['s', 'ankle', { tor: 180, th: 0, sn: 0, ua: 172, fa: -20 }, { tor: 180, th: 0, sn: 0, ua: 175, fa: 178 }, 'hands'],
   kickback: ['s', 'ankle', { tor: 112, th: 25, sn: -10, ua: -85, fa: 0 }, { tor: 112, th: 25, sn: -10, ua: -88, fa: -88 }, 'hands'],
   crunch: ['s', 'hip', { hip: [98, 124], tor: -92, th: 140, sn: 15, ua: -140, fa: 60 }, { hip: [98, 124], tor: -128, th: 140, sn: 15, ua: -175, fa: 25 }, 'floor'],
@@ -4769,7 +4769,7 @@ const P = {
   sidebend: ['f', 'hip', { hip: [100, 82], arm: 4, el: 0, leg: 8, lean: 0 }, { hip: [100, 82], arm: 4, el: 0, leg: 8, lean: 14 }, ''],
   woodchop: ['s', 'ankle', { tor: 168, th: 10, sn: 0, ua: 160, fa: 165 }, { tor: 140, th: 30, sn: -15, ua: 30, fa: 40 }, 'cablefronthigh,hands'],
   backext: ['s', 'hip', { hip: [95, 70], tor: 35, th: -55, sn: -55, ua: 20, fa: 30 }, { hip: [95, 70], tor: 125, th: -55, sn: -55, ua: 100, fa: 140 }, 'hyperpad'],
-  pullover: ['s', 'hip', { hip: [118, 92], tor: -90, th: 60, sn: -5, ua: -110, fa: -100 }, { hip: [118, 92], tor: -90, th: 60, sn: -5, ua: 178, fa: 180 }, 'flatbench,chest1'],
+  pullover: ['s', 'hip', { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: -110, fa: -100 }, { hip: [118, 100], tor: -90, th: 70, sn: -3, ua: 178, fa: 180 }, 'flatbench,chest1'],
   swing: ['s', 'ankle', { tor: 115, th: 35, sn: -12, ua: -15, fa: -15 }, { tor: 180, th: 0, sn: 0, ua: 92, fa: 92 }, 'kb'],
   clean: ['s', 'ankle', { tor: 112, th: 60, sn: -18, ua: 0, fa: 0 }, { tor: 180, th: 10, sn: -5, ua: 70, fa: 200 }, 'handsbar'],
   snatch: ['s', 'ankle', { tor: 112, th: 60, sn: -18, ua: 0, fa: 0 }, { tor: 178, th: 5, sn: 0, ua: 172, fa: 175 }, 'handsbar'],
@@ -4962,19 +4962,24 @@ A3.load = () => loading || (loading = (async () => { const base = new URL('vendo
 const parse = buf => { const dv = new DataView(buf), hl = dv.getUint32(4, true), H = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, hl))); let o = 8 + hl;
   const nv = H.nv, nf = H.nf, q = new Uint16Array(buf, o, nv * 3); o += nv * 6;
   const idx = nv > 65535 ? new Uint32Array(buf, o, nf * 3) : new Uint16Array(buf, o, nf * 3); o += nf * 3 * (nv > 65535 ? 4 : 2); if (nv <= 65535 && (nf * 3) % 2) o += 2;
-  const si = new Uint8Array(buf, o, nv * 4); o += nv * 4; const sw = new Uint8Array(buf, o, nv * 4); o += nv * 4; const rg = new Uint8Array(buf, o, nv);
-  return { H, nv, nf, q, idx, si, sw, rg }; };
+  const si = new Uint8Array(buf, o, nv * 4); o += nv * 4; const sw = new Uint8Array(buf, o, nv * 4); o += nv * 4; const rg = new Uint8Array(buf, o, nv); o += nv; o += (4 - nv % 4) % 4;
+  const ax = H.axis ? new Int8Array(buf, o, nv * 3) : null;
+  return { H, nv, nf, q, idx, si, sw, rg, ax }; };
 const NB = 17, MIR = i => i >= 5 ? i + 12 : i; // ossos 5..16 = lado direito; 17..28 = esquerdo
 const REGN = { 'Peito': ['pec'], 'Dorsais': ['lat'], 'Trapézio': ['trap'], 'Lombar': ['low'], 'Ombros': ['delt'], 'Bíceps': ['bi'], 'Tríceps': ['tri'], 'Antebraços': ['fa'], 'Abdómen': ['abs'], 'Oblíquos': ['obl'], 'Glúteos': ['glute'], 'Quadríceps': ['quad'], 'Isquiotibiais': ['ham'], 'Gémeos': ['calf'], 'Adutores': ['add'], 'Abdutores': ['glute'], 'Pescoço': ['neck'], 'Tibial': ['shin'] };
-const geometry = () => { const { H, nv, nf, q, idx, si, sw, rg } = BODY, lo = H.lo, hi = H.hi, N2 = nv * 2;
+const geometry = () => { const { H, nv, nf, q, idx, si, sw, rg, ax } = BODY, lo = H.lo, hi = H.hi, N2 = nv * 2, axA = new Float32Array(N2 * 3);
   const pos = new Float32Array(N2 * 3), sI = new Uint16Array(N2 * 4), sW = new Float32Array(N2 * 4), reg = new Uint8Array(N2), ind = new Uint32Array(nf * 6);
   for (let i = 0; i < nv; i++) { for (let k = 0; k < 3; k++) pos[i * 3 + k] = lo[k] + q[i * 3 + k] / 65535 * (hi[k] - lo[k]);
     const j = i + nv; pos[j * 3] = pos[i * 3]; pos[j * 3 + 1] = pos[i * 3 + 1]; pos[j * 3 + 2] = -pos[i * 3 + 2];
     for (let k = 0; k < 4; k++) { const b = si[i * 4 + k], w = sw[i * 4 + k] / 255; sI[i * 4 + k] = b; sW[i * 4 + k] = w; sI[j * 4 + k] = MIR(b); sW[j * 4 + k] = w; }
-    reg[i] = reg[j] = rg[i]; }
+    reg[i] = reg[j] = rg[i]; if (ax) { const a = ax[i * 3] / 127, b = ax[i * 3 + 1] / 127, c = ax[i * 3 + 2] / 127; axA.set([a, b, c], i * 3); axA.set([a, b, -c], j * 3); } }
   for (let f = 0; f < nf; f++) { const a = idx[f * 3], b = idx[f * 3 + 1], c = idx[f * 3 + 2]; ind.set([a, b, c], f * 3); ind.set([a + nv, c + nv, b + nv], (nf + f) * 3); }
   const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(pos, 3)); g.setAttribute('skinIndex', new T.Uint16BufferAttribute(sI, 4)); g.setAttribute('skinWeight', new T.BufferAttribute(sW, 4));
-  g.setIndex(new T.BufferAttribute(ind, 1)); g.computeVertexNormals(); g.setAttribute('color', new T.BufferAttribute(new Float32Array(N2 * 3), 3)); return { g, reg }; };
+  g.setIndex(new T.BufferAttribute(ind, 1)); g.computeVertexNormals();
+  // sombra nas reentrâncias entre músculos (cavidade), como nas ilustrações anatómicas
+  { const nr = g.attributes.normal.array, acc = new Float32Array(N2 * 3), cnt = new Float32Array(N2); for (let f = 0; f < ind.length; f += 3) for (let k = 0; k < 3; k++) { const a = ind[f + k]; for (let m = 1; m < 3; m++) { const b = ind[f + (k + m) % 3]; acc[a * 3] += pos[b * 3]; acc[a * 3 + 1] += pos[b * 3 + 1]; acc[a * 3 + 2] += pos[b * 3 + 2]; cnt[a]++; } }
+    const cav = new Float32Array(N2); for (let i = 0; i < N2; i++) { if (!cnt[i]) continue; const dx = acc[i * 3] / cnt[i] - pos[i * 3], dy = acc[i * 3 + 1] / cnt[i] - pos[i * 3 + 1], dz = acc[i * 3 + 2] / cnt[i] - pos[i * 3 + 2]; cav[i] = dx * nr[i * 3] + dy * nr[i * 3 + 1] + dz * nr[i * 3 + 2]; }
+    const ao = new Float32Array(N2); for (let i = 0; i < N2; i++) ao[i] = Math.max(.55, Math.min(1.08, 1 - cav[i] * 260)); reg.ao = ao; } g.setAttribute('aAxis', new T.BufferAttribute(axA, 3)); g.setAttribute('color', new T.BufferAttribute(new Float32Array(N2 * 3), 3)); return { g, reg }; };
 const skeleton = () => { const H = BODY.H, bones = [], info = [];
   const mk = (b, i, mir) => { const s = b[2].slice(), e = b[3].slice(); if (mir) { s[2] = -s[2]; e[2] = -e[2]; } const bone = new T.Bone(); bone.name = (mir ? 'L' : i >= 5 ? 'R' : '') + b[0]; return { bone, s: new T.Vector3(...s), e: new T.Vector3(...e), p: b[1] < 0 ? -1 : mir ? MIR(b[1]) : b[1] }; };
   H.bones.forEach((b, i) => info[i] = mk(b, i, false)); H.bones.forEach((b, i) => { if (i >= 5) info[MIR(i)] = mk(b, i, true); });
@@ -4985,18 +4990,28 @@ let R = null, tv = null;
 const build = () => { tv = [0, 1, 2, 3, 4, 5].map(() => new T.Vector3());
   const renderer = new T.WebGLRenderer({ antialias: true, alpha: true }); renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1)); renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap; renderer.outputColorSpace = T.SRGBColorSpace;
   const scene = new T.Scene(), camera = new T.PerspectiveCamera(30, 1, .05, 40);
-  scene.add(new T.HemisphereLight(0xffffff, 0x7d8896, 1.05)); const key = new T.DirectionalLight(0xffffff, 2.3); key.position.set(2.5, 4, 3); key.castShadow = true; key.shadow.mapSize.set(1024, 1024); Object.assign(key.shadow.camera, { left: -2, right: 2, top: 2.6, bottom: -1 }); key.shadow.bias = -.0004; scene.add(key);
+  scene.add(new T.HemisphereLight(0xeaf4ff, 0x6f7884, 1.15)); const key = new T.DirectionalLight(0xffffff, 2.3); key.position.set(2.5, 4, 3); key.castShadow = true; key.shadow.mapSize.set(1024, 1024); Object.assign(key.shadow.camera, { left: -2, right: 2, top: 2.6, bottom: -1 }); key.shadow.bias = -.0004; scene.add(key);
   const fill = new T.DirectionalLight(0xe6eef6, .9); fill.position.set(-3, 2.2, -2.5); scene.add(fill); const rim = new T.DirectionalLight(0xffffff, .55); rim.position.set(-1, 3, 4); scene.add(rim);
   const floor = new T.Mesh(new T.CircleGeometry(2.6, 64), new T.ShadowMaterial({ opacity: .16 })); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
   const { g, reg } = geometry(), { bones, info, sk } = skeleton();
-  const glow = { value: 0 }, mat = new T.MeshStandardMaterial({ vertexColors: true, roughness: .62, metalness: .02 });
-  mat.onBeforeCompile = sh => { sh.uniforms.uGlow = glow; sh.fragmentShader = 'uniform float uGlow;\n' + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>\n float hot = step(0.3, vColor.r - vColor.b); diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (1.0 + 0.35 * uGlow) + vec3(0.12 * uGlow, 0.0, 0.0), hot);'); };
+  const glow = { value: 0 }, mat = new T.MeshStandardMaterial({ vertexColors: true, roughness: .58, metalness: 0 });
+  mat.onBeforeCompile = sh => { sh.uniforms.uGlow = glow;
+    sh.vertexShader = 'attribute vec3 aAxis;\nvarying vec3 vAx;\nvarying vec3 vBP;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n vAx = aAxis; vBP = position;');
+    sh.fragmentShader = 'uniform float uGlow;\nvarying vec3 vAx;\nvarying vec3 vBP;\n' + sh.fragmentShader.replace('#include <color_fragment>', `#include <color_fragment>
+      float hot = step(0.3, vColor.r - vColor.b);
+      vec3 ax = normalize(vAx + vec3(1e-4));
+      vec3 pr = vBP - ax * dot(vBP, ax);
+      float f = sin(dot(pr, normalize(cross(ax, vec3(0.31, 0.52, 0.79)))) * 900.0) * 0.5 + 0.5;
+      float f2 = sin(dot(pr, normalize(cross(ax, vec3(0.8, 0.1, 0.59)))) * 1500.0) * 0.5 + 0.5;
+      float fib = mix(1.0, 0.8 + 0.2 * (f * 0.7 + f2 * 0.3), hot * step(0.01, length(vAx)));
+      diffuseColor.rgb *= fib;
+      diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (1.0 + 0.3 * uGlow) + vec3(0.1 * uGlow, 0.0, 0.0), hot);`); };
   const mesh = new T.SkinnedMesh(g, mat); mesh.castShadow = mesh.receiveShadow = true; mesh.frustumCulled = false; mesh.add(bones[0]); mesh.bind(sk);
   const body = new T.Group(); body.add(mesh); scene.add(body);
   const eq = new T.Group(); scene.add(eq);
   return { renderer, scene, camera, body, mesh, bones, info, reg, glow, eq, yaw: 0, user: 0 }; };
 const paint = (main, sec) => { const RN = BODY.H.reg, m = new Set((REGN[main] || []).map(x => RN.indexOf(x))), s = new Set(sec.flatMap(x => REGN[x] || []).map(x => RN.indexOf(x))), c = R.mesh.geometry.attributes.color.array;
-  for (let i = 0; i < R.reg.length; i++) { const g = R.reg[i]; let r = g ? .79 : .74, gg = g ? .805 : .755, b = g ? .825 : .78; if (g && m.has(g)) { r = .9; gg = .2; b = .19; } else if (g && s.has(g)) { r = .97; gg = .6; b = .42; } c[i * 3] = r; c[i * 3 + 1] = gg; c[i * 3 + 2] = b; }
+  for (let i = 0; i < R.reg.length; i++) { const g = R.reg[i]; let r = g ? .86 : .78, gg = g ? .865 : .785, b = g ? .87 : .79; if (g && m.has(g)) { r = .93; gg = .28; b = .16; } else if (g && s.has(g)) { r = .98; gg = .62; b = .45; } const k = R.reg.ao ? R.reg.ao[i] : 1; c[i * 3] = r * k; c[i * 3 + 1] = gg * k; c[i * 3 + 2] = b * k; }
   if (A3.debugBones) { const si = R.mesh.geometry.attributes.skinIndex, sw = R.mesh.geometry.attributes.skinWeight; for (let i = 0; i < R.reg.length; i++) { let b = 0, w = -1; for (let k = 0; k < 4; k++) if (sw.getComponent(i, k) > w) { w = sw.getComponent(i, k); b = si.getComponent(i, k); } const h = (b * 0.618) % 1; const col = new T.Color().setHSL(h, .8, .55); c[i * 3] = col.r; c[i * 3 + 1] = col.g; c[i * 3 + 2] = col.b; } }
   R.mesh.geometry.attributes.color.needsUpdate = true; };
 // ---------- exercício → equipamento, pega e padrão ----------
@@ -5241,7 +5256,7 @@ A3.mount = async el => { try { await A3.load(); } catch (e) { el.classList.add('
   const pts = []; [0, .5, 1].forEach(u => { const J = jAt(u); if (J) ['sh', 'haR', 'haL', 'anR', 'anL', 'knR', 'hip', 'elR'].forEach(k => J[k] && pts.push(J[k])); });
   const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]).concat(0), x0 = Math.min(...xs) - .25, x1 = Math.max(...xs) + .25, y0 = Math.min(...ys), y1 = Math.max(...ys) + .3;
   const front = (OS.Anim.patterns[R.st.pat] || [])[0] === 'f' || ['fly', 'rfly', 'mpress', 'extrot'].includes(R.st.pat) && !(R.st.pat === 'fly' && R.st.tool === 'db');
-  R.center = [(x0 + x1) / 2, (y0 + y1) / 2, 0]; R.dist = Math.max(x1 - x0, (y1 - y0) * 1.05, 1.1) * 1.95 + .5; R.base = front ? 1.2 : .62;
+  R.center = [(x0 + x1) / 2, (y0 + y1) / 2, 0]; R.dist = Math.max(x1 - x0, (y1 - y0) * 1.05, 1.0) * 1.62 + .35; R.base = front ? 1.2 : .62;
   el.innerHTML = ''; el.appendChild(R.renderer.domElement); const cv = R.renderer.domElement; cv.style.touchAction = 'none';
   cv.onpointerdown = e => { R.drag = { x: e.clientX, yaw: R.yaw, user: R.user }; try { cv.setPointerCapture(e.pointerId); } catch (er) { } }; cv.onpointermove = e => { if (R.drag) { R.yaw = R.drag.yaw - (e.clientX - R.drag.x) * .012; R.user = R.drag.user - (e.clientX - R.drag.x) * .012; } }; cv.onpointerup = cv.onpointercancel = () => { R.drag = null; };
   R.raf = requestAnimationFrame(frame); };
@@ -5426,6 +5441,8 @@ OS.BrandLists = {
   tofu: { PT: ['Alpro', 'Nutre', 'Taifun', 'Continente'], BR: ['Sora', 'Taifun'], '*': ['Taifun'] },
   snacks: { PT: ['Lay\'s', 'Pringles', 'Ruffles', 'Matutano', 'Continente'], BR: ['Ruffles', 'Lay\'s', 'Elma Chips', 'Pringles', 'Yoki (pipoca)'], ES: ['Lay\'s', 'Pringles', 'Ruffles', 'Hacendado'], '*': ['Lay\'s', 'Pringles'] }
 };
+// listas alargadas (junta-se às de cima sem repetir)
+(() => { const X = {"arroz": {"PT": ["Sabroz", "Tio Lucas", "Ribeiro", "Novarroz", "Orivárzea", "Caçarola Gold", "Golden Sun (Lidl)", "Auchan", "Continente", "Pingo Doce", "Intermarché", "Hacendado"], "BR": ["Camil", "Tio Urbano", "Cristal", "Fazenda", "Rei do Sul", "Pilecco", "Sabor Sul", "Broto Legal", "Qualitá", "Carrefour"], "ES": ["Brillante", "SOS", "La Fallera", "Nomen", "Hacendado", "Dacsa", "Bayo"]}, "massa": {"PT": ["Milaneza", "Nacional", "Barilla", "Cigala", "Panzani", "De Cecco", "Garofalo", "Rummo", "Combino (Lidl)", "Auchan", "Continente", "Pingo Doce", "Amanhecer", "La Molisana", "Divella"], "BR": ["Renata", "Adria", "Barilla", "Divella", "Petybon", "Galo", "Santa Amália", "Dona Benta", "Nissin (Miojo)", "Basilar", "Fortaleza", "Isabela", "Vitarella", "Paganini", "Urbano", "Qualitá"]}, "leite": {"PT": ["Mimosa", "Agros", "Gresso", "Matinal", "Parmalat", "Vigor", "Ucal", "Terra Nostra", "Nova Açores", "Lactogal", "Milbona (Lidl)", "Milsani (Aldi)", "Continente", "Pingo Doce", "Auchan", "Leite de Montes", "Serra da Estrela"], "BR": ["Italac", "Piracanjuba", "Parmalat", "Ninho", "Elegê", "Tirol", "Shefa", "Itambé", "Betânia", "Aurora", "Jussara", "Batavo", "Molico", "Qualitá", "Líder"]}, "iogurte": {"PT": ["Danone", "Activia", "Oikos", "Mimosa", "Longa Vida", "Yoplait", "Lindahls", "Arla", "Fage", "Skyr Pingo Doce", "Milbona (Lidl)", "Continente", "Pingo Doce", "Auchan", "Nestlé (Ninho/Yaos)", "Mythos", "Gresso", "Agros", "Vigor", "Alpro (vegetal)", "Siggi's", "Ehrmann", "Müller", "PorSi"], "BR": ["Danone", "Nestlé", "Vigor", "Batavo", "Itambé", "YoPRO", "Verde Campo", "Piracanjuba", "Yakult", "Grego Vigor", "Corpus", "Activia", "Molico", "Paulista", "Elegê", "Frimesa", "Tirol"]}, "queijo": {"PT": ["Limiano", "Terra Nostra", "Castelões", "Paiva", "Vaquinha", "Président", "Philadelphia", "Tirolês", "Serra da Estrela", "São Jorge", "Flor da Beira", "Queijo Saloio", "Seia", "Milbona", "Galbani", "Saloio", "Gresso", "Agros", "Continente", "Pingo Doce", "Auchan", "Campainha", "Dia"], "BR": ["Tirolez", "Polenghi", "Président", "Quatá", "Scala", "Vigor", "Catupiry", "Philadelphia", "Itambé", "Faixa Azul", "Sadia", "Danúbio", "Vale do Ouro", "Davaca", "Teixeira"]}, "frango": {"PT": ["Lusiaves", "Avibom", "Valouro", "Primor", "Fumadinho", "Campofrío", "Prozis", "Continente", "Pingo Doce", "Auchan", "Lidl", "Intermarché", "Talho do supermercado"], "BR": ["Sadia", "Seara", "Perdigão", "Aurora", "Swift", "Korin", "Copacol", "Diplomata", "Rivelli", "Frimesa", "Lar"]}, "carne": {"PT": ["Talho do supermercado", "Continente", "Pingo Doce", "Auchan", "Lidl", "Intermarché", "Raça Barrosã", "Carnes Landeiro", "Mirandesa (DOP)", "Maronesa", "Aberdeen Angus Continente", "Novilho dos Açores"], "BR": ["Friboi", "Swift", "Minerva", "Maturatta", "Seara", "Bassi", "Montana", "JBS", "Marfrig", "VPJ", "Estância 92"]}, "feijao": {"PT": ["Compal", "Bonduelle", "Cigala", "Ceifeira", "Caçarola", "Sapropor", "Continente", "Pingo Doce", "Auchan", "Dia", "Sol & Mar"], "BR": ["Camil", "Kicaldo", "Tio João", "Broto Legal", "Urbano", "Combrasil", "Caldo Nobre", "Máximo", "Korin", "Qualitá", "Fritz & Frida", "Itasa"]}, "atum": {"PT": ["Bom Petisco", "Tenório", "Ramirez", "Cofisa", "Pitéu", "Santa Catarina", "Minerva", "Nixe (Lidl)", "Galeão", "Bolina", "Calvo", "Ati Manel", "Comur", "Continente", "Pingo Doce", "Auchan"]}, "azeite": {"PT": ["Gallo", "Oliveira da Serra", "Andorinha", "Esporão", "Cinco Soldos", "Chaparro", "Herdade do Esporão", "Saloio", "Monte Velho", "Acushla", "Casa Anadia", "Continente", "Pingo Doce", "Auchan"]}, "ovos": {"PT": ["Matinados", "Polegar", "Saborosos", "Campestre", "Superovo", "Ovos da Quinta", "Derovo", "Valouro", "Continente", "Pingo Doce", "Auchan", "Lidl", "Intermarché"], "BR": ["Mantiqueira", "Granja Faria", "Korin", "Yabuta", "Happy Eggs", "Qualitá", "Carrefour"]}, "whey": {"PT": ["Prozis", "MyProtein", "Gold Standard (Optimum Nutrition)", "Scitec", "BioTechUSA", "HSN", "Zumub", "Gold Nutrition", "Way Up", "Go Active (Pingo Doce)", "Sporty Feel (Lidl)", "Domyos (Decathlon)", "Weider", "Applied Nutrition", "Dymatize", "Mulebar"]}, "cereais": {"PT": ["Kellogg's", "Nestlé", "Cerealis", "Quaker", "Special K", "Fitness", "Chocapic", "Estrelitas", "Cheerios", "Golden Grahams", "Crunch", "Corn Flakes", "Continente", "Pingo Doce", "Crownfield (Lidl)"]}, "bolacha": {"PT": ["Cuétara", "Triunfo", "Nacional", "Paupério", "Vieira", "Gullón", "Oreo", "Milka", "Belvita", "Príncipe", "Filipinos", "Tostas Vieira", "Continente", "Pingo Doce", "Auchan", "Dia"]}, "refrigerante": {"PT": ["Coca-Cola", "Pepsi", "Sumol", "Fanta", "Sprite", "7Up", "Schweppes", "Compal", "Frisumo", "Seven Up", "Lipton Ice Tea", "Nestea", "Continente", "Pingo Doce"]}, "cerveja": {"PT": ["Super Bock", "Sagres", "Heineken", "Estrella Damm", "Coral", "Cristal", "Mini Sagres", "Super Bock Stout", "Bohemia", "Corona", "Carlsberg", "Desperados", "Budweiser", "Leffe"]}, "cafe": {"PT": ["Delta", "Nescafé", "Buondi", "Nicola", "Sical", "Nespresso", "Starbucks", "Bogani", "Chave d'Ouro", "Tofa", "Camelo", "Continente", "Pingo Doce", "Dolce Gusto", "L'OR"]}, "pao": {"PT": ["Padaria do supermercado", "Panike", "Bimbo", "Panrico", "Pão de Gimonde", "Padaria Portuguesa", "Paulo Duarte", "Continente", "Pingo Doce"]}, "chocolate": {"PT": ["Regina", "Milka", "Lindt", "Nestlé", "Kinder", "Toblerone", "Côte d'Or", "Ritter Sport", "Kit Kat", "Twix", "Mars", "Snickers", "Fin Carré (Lidl)", "Continente", "Pingo Doce"]}, "manteiga": {"PT": ["Mimosa", "Primor", "Président", "Planta", "Becel", "Vaqueiro", "Flora", "Milhafre", "Terra Nostra", "Agros", "Continente", "Pingo Doce"]}}; Object.entries(X).forEach(([k, byC]) => { const L = OS.BrandLists[k] = OS.BrandLists[k] || {}; Object.entries(byC).forEach(([c, arr]) => { const cur = L[c] || [], seen = new Set(cur.map(x => x.toLowerCase())); L[c] = cur.concat(arr.filter(x => !seen.has(x.toLowerCase()))); }); }); })();
 
 </script>
 <script>
