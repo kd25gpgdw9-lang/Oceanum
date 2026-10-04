@@ -1882,7 +1882,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.35", "date": "03/10/2026", "notes": ["Abre mais depressa: usa logo os dados do aparelho e sincroniza por trás; tipos de letra e app guardados no telemóvel", "Animação 3D com corpo anatómico real (todos os músculos), mãos a agarrar e o equipamento certo de cada exercício", "Alimentos reorganizados: cada um uma vez, com as opções (cru, cozido, grelhado…) e as marcas do teu país lá dentro", "Foto real e própria para cada um dos 410 alimentos, com descrição", "Corpo: separadores com Desafios e metas, Mapa corporal e Peso e medidas; calendário de disciplina \"fui hoje\""]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.39", "date": "04/10/2026", "notes": ["Corpo 3D mais limpo (sem rasgos ao mexer) e cada exercício revisto com o movimento e o equipamento certos", "Marcas reais de cada alimento por país (base Open Food Facts): só produtos desse alimento, com a tabela do rótulo", "Fast food das cadeias do teu país dentro de batata frita, hambúrguer, nuggets e pizza", "Mais de 50 cadeias de fast food (McDonald's, Burger King, KFC, Subway, Telepizza, Starbucks, Nando's, Habib's…) dentro de cada alimento"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -4780,14 +4780,25 @@ const P = {
   rower: ['s', 'hip', { hip: [80, 112], tor: 150, th: 135, sn: 40, ua: 92, fa: 92 }, { hip: [112, 112], tor: 200, th: 88, sn: 88, ua: -30, fa: 80 }, 'rail'],
   climber: ['s', 'hand', { tor: 115, th: -65, sn: -65, th2: 10, sn2: -95, ua: 0, fa: 0 }, { tor: 115, th: 10, sn: -95, th2: -65, sn2: -65, ua: 0, fa: 0 }, 'floor', { ah: [150, G - 3] }],
   kbsquat: ['s', 'ankle', { tor: 180, th: 0, sn: 0, ua: 15, fa: 170 }, { tor: 150, th: 100, sn: -30, ua: 30, fa: 175 }, 'chest1'],
+  rollout: ['s', 'hip', { hip: [100, 106], tor: 165, th: 0, sn: -90, ua: 95, fa: 95 }, { hip: [100, 112], tor: 105, th: -35, sn: -90, ua: 172, fa: 175 }, 'floor'],
+  kneelcrunch: ['s', 'hip', { hip: [100, 106], tor: 172, th: 0, sn: -90, ua: 165, fa: -15 }, { hip: [100, 106], tor: 110, th: 0, sn: -90, ua: 125, fa: -45 }, 'floor'],
+  kick4: ['s', 'hand', { tor: 92, th: 0, sn: -90, th2: 5, sn2: -85, ua: 0, fa: 0 }, { tor: 92, th: 0, sn: -90, th2: -95, sn2: -100, ua: 0, fa: 0 }, 'floor', { ah: [132, G - 3] }],
+  stkick: ['s', 'ankle', { tor: 172, th: 0, sn: 0, th2: 2, sn2: -5, ua: 35, fa: 40 }, { tor: 166, th: 0, sn: 0, th2: -48, sn2: -60, ua: 35, fa: 40 }, ''],
+  nordic: ['s', 'ankle', { tor: 180, th: 0, sn: -90, ua: 20, fa: 80 }, { tor: 128, th: -52, sn: -90, ua: 100, fa: 110 }, 'floor', { ax: 70 }],
+  ropes: ['s', 'ankle', { tor: 165, th: 35, sn: -25, ua: 35, fa: 70 }, { tor: 165, th: 35, sn: -25, ua: 80, fa: 110 }, 'hands'],
+  wristcurl: ['s', 'hip', { hip: [92, 92], tor: 160, th: 90, sn: 5, ua: 40, fa: 92 }, { hip: [92, 92], tor: 160, th: 90, sn: 5, ua: 42, fa: 105 }, 'seat,hands'],
+  sapd: ['s', 'ankle', { tor: 160, th: 8, sn: -5, ua: 150, fa: 150 }, { tor: 160, th: 8, sn: -5, ua: 8, fa: 8 }, 'cabletop,hands'],
+  invrow: ['s', 'hand', { tor: -112, th: 70, sn: 70, ua: 180, fa: 180 }, { tor: -100, th: 82, sn: 82, ua: 135, fa: -135 }, 'bar', { ah: [92, 62] }],
+  hipabd: ['f', 'hip', { hip: [100, 82], arm: 10, el: 5, leg: 5 }, { hip: [100, 82], arm: 10, el: 5, leg: 28 }, ''],
+  hipadd: ['f', 'hip', { hip: [100, 82], arm: 10, el: 5, leg: 28 }, { hip: [100, 82], arm: 10, el: 5, leg: 4 }, ''],
   generic: ['s', 'ankle', { tor: 180, th: 0, sn: 0, ua: 0, fa: 0 }, { tor: 180, th: 0, sn: 0, ua: 20, fa: 120 }, 'hands']
 };
 // ---------- escolher o padrão a partir do nome / equipamento / músculo ----------
 const N = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const RULES = [[/peso morto romeno|stiff|bom dia|good morning/, 'rdl'], [/peso morto|rack pull|deadlift/, 'deadlift'], [/agachamento frontal|zercher/, 'frontsquat'], [/goblet|sumo com halter/, 'goblet'], [/agachamento|squat|pistol|sissy/, 'squat'],
   [/afundo|bulgaro|passada|lunge|split/, 'lunge'], [/subida ao banco|step/, 'stepup'], [/hip thrust|elevacao de quadril|elevacao pelvica/, 'hipthrust'], [/ponte de gluteos|ponte/, 'bridge'], [/leg press|gemeos no leg press/, 'legpress'],
-  [/cadeira extensora|extensora/, 'legext'], [/mesa flexora|flexora em pe|nordic|glute-ham/, 'legcurl'], [/cadeira flexora|flexora/, 'seatcurl'], [/gemeos sentado|panturrilha sentad/, 'seatcalf'], [/gemeos|panturrilha|tibial/, 'calf'],
-  [/abdutora|monster walk|abducao/, 'abduct'], [/adutora|aducao/, 'adduct'], [/coice de gluteo|kickback de gluteo/, 'hipthrust'],
+  [/cadeira extensora|extensora|extensao de pernas|extensao de perna|extensao de joelho|leg extension/, 'legext'], [/nordic|glute-ham/, 'nordic'], [/mesa flexora|flexora em pe|flexao de pernas deitado|leg curl/, 'legcurl'], [/cadeira flexora|flexora/, 'seatcurl'], [/gemeos sentado|panturrilha sentad/, 'seatcalf'], [/gemeos|panturrilha|tibial/, 'calf'],
+  [/abdutora|abducao.*maquina|cadeira abdu/, 'abduct'], [/adutora|aducao.*maquina|cadeira adu/, 'adduct'], [/abducao|monster walk/, 'hipabd'], [/aducao/, 'hipadd'], [/bulgaro/, 'lunge'], [/rollout|roda abdominal/, 'rollout'], [/punho/, 'wristcurl'], [/remada invertida|australian/, 'invrow'], [/rotacao (externa|interna)/, 'extrot'], [/coice de gluteo|kickback de gluteo/, 'stkick'], [/coice de gluteo|kickback de gluteo/, 'hipthrust'],
   [/supino inclinado|inclinado com halteres|supino.*inclinad/, 'incline'], [/supino declinado|declinad/, 'decline'], [/crucifixo invertido|peck deck invertido|elevacao posterior|deltoide posterior/, 'revfly'],
   [/crucifixo|peck deck|cross-over|crossover|cruz de ferro|svend/, 'fly'], [/supino|floor press|jm press/, 'bench'], [/flexao|flexoes|push-up/, 'pushup'], [/prancha|isometria|dead bug|pallof/, 'plank'],
   [/mergulho no banco/, 'benchdip'], [/paralelas|mergulho|dips/, 'dips'], [/elevac(ao|oes) supinada|chin-up|elevacoes|barra fixa|muscle-up|pull-up|subida a corda/, 'pullup'], [/puxada|pulldown|pullover no cabo/, 'pulldown'],
@@ -4801,7 +4812,29 @@ const RULES = [[/peso morto romeno|stiff|bom dia|good morning/, 'rdl'], [/peso m
   [/passadeira|corrida|sprints|trilho/, 'run'], [/caminhada|farmer|yoke|empurrar treno|trenó/, 'walk'], [/bicicleta|ciclismo|air bike|eliptica|escada/, 'bike'], [/remo \(maquina\)|remo/, 'rower'], [/mountain climbers|escaladores|corda naval|saltar a corda/, 'climber'],
   [/turkish|halo|moinho|kettlebell em oito/, 'kbsquat']];
 const BYM = { 'Peito': 'bench', 'Dorsais': 'row', 'Trapézio': 'shrug', 'Lombar': 'backext', 'Ombros': 'ohp', 'Bíceps': 'curl', 'Tríceps': 'pushdown', 'Antebraços': 'curl', 'Abdómen': 'crunch', 'Oblíquos': 'twist', 'Glúteos': 'hipthrust', 'Quadríceps': 'squat', 'Isquiotibiais': 'rdl', 'Gémeos': 'calf' };
-AN.pattern = info => { const n = N(info.name); for (const [rx, k] of RULES) if (rx.test(n)) return k; return BYM[info.muscle] || 'generic'; };
+// cada exercício da biblioteca com o movimento e o equipamento certos (revisto um a um)
+const FIX = {
+  'roda abdominal': 'rollout', 'rollout com barra': 'rollout:barbell', 'rollout com barra (de joelhos)': 'rollout:barbell', 'rollout com barra a partir do banco': 'rollout:barbell', 'rollout em fitas (trx)': 'rollout', 'crucifixo com peso corporal': 'rollout:ez',
+  'elevacao de deltoide alternada': 'latraise', 'volta ao mundo com halteres': 'pullover', 'flexao de pernas na bola suica': 'bridge', 'abertura com elastico (pull apart)': 'rfly:band', 'triceps testa com elastico': 'ohtri:band',
+  'ponte de gluteos com barra': 'bridge:barbell', 'agachamento hack com barra (atras)': 'deadlift:barbell', 'remada para deltoide posterior com barra': 'row', 'inclinacao lateral com barra': 'sidebend:barbell',
+  'cordas navais (battle ropes)': 'ropes', 'elevacao de quadril (joelhos fletidos)': 'legraise', 'extensao de triceps com o corpo': 'pushup', 'remada com peso corporal': 'invrow', 'remada invertida': 'invrow', 'remada invertida em fitas (trx)': 'invrow', 'remada em fitas (trx)': 'invrow',
+  'abdominal no cabo (ajoelhado)': 'kneelcrunch:cable:rope', 'abdominal na corda': 'kneelcrunch:cable:rope', 'abdominal sentado no cabo': 'kneelcrunch:cable:rope', 'abdominal no cabo com rotacao': 'kneelcrunch:cable:rope', 'abdominal no cabo em bosu com inclinacao': 'kneelcrunch:cable:rope', 'abdominal em pe na corda': 'kneelcrunch:cable:rope',
+  'aducao de anca no cabo': 'hipadd:cable', 'monster walk (passada lateral com elastico)': 'hipabd:band',
+  'rotacao interna no cabo': 'extrot:cable', 'rotacao externa no cabo': 'extrot:cable', 'rotacao externa com halter': 'extrot:db', 'rotacao externa com elastico': 'extrot:band',
+  'rotacao de tronco judo no cabo': 'woodchop', 'rotacao russa no cabo': 'woodchop', 'landmine 180': 'woodchop:barbell', 'rotacao completa com bola medicinal': 'woodchop:ball',
+  'abdominal invertido no cabo': 'legraise', 'remada para deltoide posterior na corda': 'facepull', 'flexao de punho no cabo': 'wristcurl:cable', 'encolhimento na maquina de gemeos': 'shrug:machine',
+  'abdominal no banco declinado': 'situp', 'abdominal obliquo declinado': 'situp', 'flexao declinada (pes elevados)': 'pushup', 'abdominal invertido declinado': 'legraise', 'triceps testa declinado com halteres': 'skull', 'triceps testa declinado com barra w': 'skull:ez',
+  'eliptica': 'walk', 'escadas (stairmaster)': 'stepup', 'escada rolante (step mill)': 'stepup', 'farmer walk (caminhada do agricultor)': 'walk:db', 'flexao de dedos com barra': 'wristcurl:barbell',
+  'nordic curl no chao': 'nordic', 'nordic curl': 'nordic', 'glute-ham raise (nordico)': 'nordic', 'coice de gluteo (4 apoios)': 'kick4', 'extensao de anca com elastico': 'stkick:band', 'elevacao de perna': 'stkick', 'coice de gluteo no cabo': 'stkick:cable',
+  'cruz de ferro com halteres': 'latraise', 'isometria do pescoco (frente e tras)': 'shrug', 'isometria do pescoco (lados)': 'shrug', 'peso morto unilateral com kettlebell': 'rdl', 'elevacao de joelhos nas paralelas': 'hangraise', 'peso morto na maquina': 'deadlift:barbell',
+  'agachamento deitado na maquina': 'legpress', 'curl na maquina': 'preacher:machine', 'extensao de triceps na maquina': 'pushdown:machine', 'passe de peito com bola medicinal': 'mpress:ball', 'supino no cabo': 'mpress:cable', 'supino em pe no cabo': 'mpress:cable', 'svend press': 'mpress',
+  'pallof press (antirrotacao)': 'mpress:cable', 'pallof press com rotacao': 'mpress:cable', 'elevacao com um braco': 'pullup', 'slam com bola medicinal': 'swing:ball',
+  'extensao de punho com halteres': 'wristcurl:db', 'extensao de punho com barra': 'wristcurl:barbell', 'flexao de punho com barra': 'wristcurl:barbell', 'flexao de punho com halteres': 'wristcurl:db', 'rolo de punho': 'wristcurl', 'pinca de discos (pegada)': 'shrug',
+  'pull-through no cabo': 'rdl:cable', 'saltar a corda': 'jump', 'pullover na corda (bracos estendidos)': 'sapd:cable:rope', 'pullover no cabo (bracos estendidos)': 'sapd:cable:bar', 'recolha de joelhos sentado': 'legraise',
+  'agachamento bulgaro no smith': 'lunge:smith', 'agachamento bulgaro com halteres': 'lunge:db', 'agachamento bulgaro em fitas (trx)': 'lunge', 'virar pneu': 'deadlift', 'peso morto com barra hexagonal': 'deadlift:barbell', 'marreta no pneu': 'swing',
+  'passagem entre as pernas com kettlebell': 'swing:kb', 'elevacao com halter': 'frontraise', 'empurrar treno': 'walk', 'remada renegada': 'row', 'elevacao frontal com disco': 'frontraise' };
+AN.fix = info => FIX[N(info.name)] || '';
+AN.pattern = info => { const n = N(info.name); const f = FIX[n]; if (f) return f.split(':')[0]; for (const [rx, k] of RULES) if (rx.test(n)) return k; return BYM[info.muscle] || 'generic'; };
 // ---------- cinemática ----------
 const lerp = (a, b, t) => a + (b - a) * t;
 const mix = (A, B, t) => { const o = {}; Object.keys(A).forEach(k => { o[k] = Array.isArray(A[k]) ? [lerp(A[k][0], B[k][0], t), lerp(A[k][1], B[k][1], t)] : lerp(A[k], B[k] ?? A[k], t); }); return o; };
@@ -4970,16 +5003,18 @@ const paint = (main, sec) => { const RN = BODY.H.reg, m = new Set((REGN[main] ||
 const N = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const CUSTOM = [[/peck deck invertido|crucifixo invertido|elevacao posterior|deltoide posterior|reverse fly/, 'rfly'], [/peck deck|voador|crucifixo|cross-?over|cruz de ferro|fly/, 'fly'],
   [/supino.*maquina|chest press|supino em pe no cabo|supino no cabo/, 'mpress'], [/agachamento hack|hack squat/, 'hack']];
-const setup = (key, name, equip) => { const n = N(name), e = equip || '';
-  let pat = key; for (const [rx, k] of CUSTOM) if (rx.test(n)) { pat = k; break; }
+const setup = (key, name, equip) => { const n = N(name), e = equip || '', fx = (OS.Anim.fix ? OS.Anim.fix({ name }) : '').split(':');
+  let pat = key; if (!fx[0]) for (const [rx, k] of CUSTOM) if (rx.test(n)) { pat = k; break; }
   let tool = /smith/.test(n) ? 'smith' : /\bcabo\b|polia|\bcorda\b(?!.*saltar)|cross|face pull|puxada|pulldown|pallof|lenhador/.test(n) && !/subida a corda|saltar/.test(n) ? 'cable'
     : e === 'Máquina' || /maquina|peck deck|voador|cadeira|mesa flexora|leg press|hack/.test(n) ? 'machine' : e === 'Barra' ? 'barbell' : e === 'Barra W' ? 'ez' : e === 'Halteres' ? 'db' : e === 'Kettlebell' ? 'kb' : e === 'Elástico' ? 'band' : e === 'Bola medicinal' ? 'ball' : 'none';
-  if (['pullup', 'hangraise', 'dips', 'benchdip', 'pushup', 'plank', 'climber', 'bridge', 'crunch', 'situp', 'legraise', 'backext', 'run', 'walk', 'bike', 'rower', 'jump'].includes(pat) && tool !== 'cable' && tool !== 'machine') tool = pat === 'backext' && /barra|anilha|halter/.test(n) ? tool : pat === 'walk' && tool === 'db' ? 'db' : 'none';
+  if (['pullup', 'hangraise', 'dips', 'benchdip', 'pushup', 'plank', 'climber', 'bridge', 'crunch', 'situp', 'legraise', 'backext', 'run', 'walk', 'bike', 'rower', 'jump', 'kick4', 'nordic', 'invrow', 'ropes', 'stkick', 'hipabd', 'hipadd'].includes(pat) && tool !== 'cable' && tool !== 'machine') tool = pat === 'backext' && /barra|anilha|halter/.test(n) ? tool : pat === 'walk' && tool === 'db' ? 'db' : 'none';
+  if (fx[1]) tool = fx[1];
   if (['legpress', 'legext', 'legcurl', 'seatcurl', 'seatcalf', 'abduct', 'adduct'].includes(pat) && tool !== 'cable') tool = 'machine';
   if (pat === 'pulldown' && tool !== 'machine') tool = 'cable';
   const one = /unilateral|um braco|concentrad|serrote|goblet|pullover|alternad/.test(n) || pat === 'goblet' || pat === 'kbsquat' || pat === 'pullover' || pat === 'swing' && tool === 'kb';
   let att = tool !== 'cable' ? '' : /corda|face pull/.test(n) ? 'rope' : /triangulo|barra v|pegada neutra/.test(n) ? 'vbar' : pat === 'pulldown' && !/unilateral/.test(n) ? 'latbar' : /barra|\(barra\)/.test(n) || pat === 'curl' && !one ? 'bar' : 'handle';
   if (pat === 'fly' || pat === 'rfly') att = tool === 'cable' ? 'handles' : att;
+  if (fx[2]) att = fx[2]; if (tool === 'cable' && !att) att = 'handle';
   let grip = /martelo|hammer|neutra|triangulo|barra v|corda|face pull/.test(n) ? 'flex' : /supinad|chin|curl|rosca|scott/.test(n) && !/inverso|invertid|punho|martelo/.test(n) ? 'out' : 'in';
   if (pat === 'latraise' || pat === 'frontraise' && tool === 'db') grip = pat === 'latraise' ? 'fwd' : 'in';
   if (['pushup', 'plank', 'climber'].includes(pat)) grip = 'flat';
@@ -4989,8 +5024,10 @@ const setup = (key, name, equip) => { const n = N(name), e = equip || '';
   const gw = att === 'rope' ? .05 : att === 'vbar' ? .045 : att === 'latbar' ? (/fechad|supinad/.test(n) ? .2 : .36) : /fechad|diamante|close/.test(n) ? .12 : pat === 'skull' ? .13 : tool === 'ez' ? .15 : pat === 'curl' && tool !== 'db' ? .18
     : pat === 'pullup' ? (/supinad|chin|fechad/.test(n) ? .17 : .34) : pat === 'bench' || pat === 'incline' || pat === 'decline' ? .27 : pat === 'squat' ? .3 : pat === 'deadlift' || pat === 'rdl' || pat === 'row' ? (/sumo/.test(n) ? .15 : .24)
     : pat === 'shrug' ? .25 : pat === 'uprow' ? .12 : tool === 'db' ? (pat === 'curl' ? .2 : pat === 'ohp' || pat === 'seatohp' ? .27 : .22) : pat === 'dips' ? .25 : pat === 'pushup' || pat === 'plank' || pat === 'climber' ? .22 : .22;
-  const props = ((OS.Anim.patterns[pat] || [])[4] || ''), fix = (tool === 'barbell' || tool === 'smith' || tool === 'ez') && /backbar/.test(props) ? 'back' : (tool === 'barbell' || tool === 'smith') && /chestbar/.test(props) ? 'chest' : /hipbar/.test(props) && tool !== 'none' ? 'hip' : '';
-  return { pat, tool, att, grip, gw, one, n, fix }; };
+  if (pat === 'wristcurl' || pat === 'kneelcrunch' && att === 'rope' || pat === 'sapd') grip = pat === 'wristcurl' ? 'out' : pat === 'sapd' && att === 'rope' ? 'flex' : 'in';
+  const props = ((OS.Anim.patterns[pat] || [])[4] || ''), fix = (tool === 'barbell' || tool === 'smith' || tool === 'ez') && /backbar/.test(props) ? 'back' : (tool === 'barbell' || tool === 'smith') && /chestbar/.test(props) ? 'chest' : (/hipbar/.test(props) || pat === 'bridge') && /barbell|smith/.test(tool) ? 'hip' : pat === 'sidebend' && tool === 'barbell' ? 'back' : '';
+  const stand = (pat === 'mpress' || pat === 'rfly' || pat === 'fly') && tool !== 'machine' && (tool === 'band' || tool === 'ball' || tool === 'none' || tool === 'cable' && !/banco|deitad|sentad/.test(n)) && !(pat === 'rfly' && /curvad|deitad|cabeca apoiada|sentad|baixo/.test(n));
+  return { pat, tool, att, grip, gw, one, n, fix, stand }; };
 // ---------- articulações-alvo em 3D (metros; chão em y = 0; frente = +X; lado direito = +Z) ----------
 const to3 = (p, z = 0) => [(p[0] - 100) * S, (G - p[1]) * S, z];
 const fwdOf = (hip, sh) => { const dx = sh[0] - hip[0], dy = sh[1] - hip[1], l = Math.hypot(dx, dy) || 1; return [dy / l, -dx / l, 0]; };
@@ -5017,16 +5054,20 @@ const customJ = (key, u, st) => { const seat = st.tool === 'machine', lying = st
     const ha = s => [sh[0] + .08 + Math.sin(a) * .5, y - .02, s * (.17 + Math.cos(a) * .48)], el = s => [sh[0] + .02 + Math.sin(a) * .28, y - .03, s * (.17 + Math.cos(a) * .3) + s * .03];
     const legs = seat ? { knR: [.42, .6, .12], anR: [.45, .1, .12], knL: [.42, .6, -.12], anL: [.45, .1, -.12] } : { knR: [.03, .52, .1], anR: [0, .06, .1], knL: [.03, .52, -.1], anL: [-.02, .06, -.11] };
     return Object.assign({ hip, sh: [sh[0] + lean, sh[1], 0], fwd: [1, 0, 0], shR: [sh[0], sh[1], .17], elR: el(1), haR: ha(1), shL: [sh[0], sh[1], -.17], elL: el(-1), haL: ha(-1), seat }, legs); }
-  if (key === 'rfly') { const a = lerp(80, 0, u) * D; const bent = !seat; const hip = bent ? [0, .9, 0] : [0, .62, 0], sh = bent ? [.4, 1.1, 0] : [.04, 1.12, 0];
+  if (key === 'rfly') { const a = lerp(80, 0, u) * D; const bent = !seat && !st.stand; const hip = bent ? [0, .9, 0] : [0, .62, 0], sh = bent ? [.4, 1.1, 0] : [.04, 1.12, 0];
     const yb = bent ? sh[1] - .02 : sh[1] - .02, ha = s => bent ? [sh[0] + .02, yb - Math.sin(a) * .52, s * (.17 + Math.cos(a) * .5)] : [sh[0] + .08 + Math.sin(a) * .5, yb, s * (.17 + Math.cos(a) * .48)], el = s => bent ? [sh[0], yb - Math.sin(a) * .3, s * (.17 + Math.cos(a) * .3) + s * .03] : [sh[0] + .02 + Math.sin(a) * .28, yb, s * (.17 + Math.cos(a) * .3) + s * .03];
-    const legs = bent ? { knR: [.08, .5, .12], anR: [0, .06, .12], knL: [.08, .5, -.12], anL: [0, .06, -.12] } : { knR: [.42, .6, .12], anR: [.45, .1, .12], knL: [.42, .6, -.12], anL: [.45, .1, -.12] };
-    return Object.assign({ hip, sh, fwd: fwdOf(hip, sh), shR: [sh[0], sh[1], .17], elR: el(1), haR: ha(1), shL: [sh[0], sh[1], -.17], elL: el(-1), haL: ha(-1), seat: !bent }, legs); }
-  if (key === 'mpress') { const hip = [0, .62, 0], sh = [-.04, 1.13, 0], r = lerp(.06, .5, u), y = sh[1] - .08;
+    const sd = st.stand && !seat, legs = bent ? { knR: [.08, .5, .12], anR: [0, .06, .12], knL: [.08, .5, -.12], anL: [0, .06, -.12] } : sd ? { knR: [.03, .52, .1], anR: [0, .06, .1], knL: [.03, .52, -.1], anL: [-.02, .06, -.11] } : { knR: [.42, .6, .12], anR: [.45, .1, .12], knL: [.42, .6, -.12], anL: [.45, .1, -.12] };
+    if (sd) { hip[1] = .95; sh[1] = 1.45; }
+    return Object.assign({ hip, sh, fwd: fwdOf(hip, sh), shR: [sh[0], sh[1], .17], elR: el(1), haR: ha(1), shL: [sh[0], sh[1], -.17], elL: el(-1), haL: ha(-1), seat: !bent && !sd }, legs); }
+  if (key === 'mpress') { const sd = st.stand, hip = sd ? [0, .95, 0] : [0, .62, 0], sh = sd ? [.03, 1.45, 0] : [-.04, 1.13, 0], r = lerp(.06, .5, u), y = sh[1] - .08;
     const ha = s => [sh[0] + .06 + r, y, s * .24], el = s => [sh[0] + Math.max(.02, r * .55) - .08 * (1 - u), y - .06 * (1 - u), s * (.27 + .08 * (1 - u))];
-    return { hip, sh, fwd: [1, 0, 0], shR: [sh[0], sh[1], .17], elR: el(1), haR: ha(1), shL: [sh[0], sh[1], -.17], elL: el(-1), haL: ha(-1), knR: [.42, .6, .12], anR: [.45, .1, .12], knL: [.42, .6, -.12], anL: [.45, .1, -.12], seat: 1 }; }
+    const lg = sd ? { knR: [.03, .52, .1], anR: [0, .06, .1], knL: [.03, .52, -.1], anL: [-.02, .06, -.11] } : { knR: [.42, .6, .12], anR: [.45, .1, .12], knL: [.42, .6, -.12], anL: [.45, .1, -.12], seat: 1 };
+    return Object.assign({ hip, sh, fwd: [1, 0, 0], shR: [sh[0], sh[1], .17], elR: el(1), haR: ha(1), shL: [sh[0], sh[1], -.17], elL: el(-1), haL: ha(-1) }, lg); }
+  if (key === 'extrot') { const hip = [0, .95, 0], sh = [.03, 1.45, 0], a = lerp(0, 80, u) * D, el = s => [sh[0] + .02, sh[1] - .28, s * .2], ha = s => [sh[0] + .02 + Math.cos(a) * .26, sh[1] - .3, s * (.2 + Math.sin(a) * .26)];
+    return { hip, sh, fwd: [1, 0, 0], shR: [sh[0], sh[1], .17], elR: el(1), haR: ha(1), shL: [sh[0], sh[1], -.17], elL: el(-1), haL: [sh[0] + .05, sh[1] - .55, -.2], knR: [.03, .52, .1], anR: [0, .06, .1], knL: [.03, .52, -.1], anL: [-.02, .06, -.11] }; }
   if (key === 'hack') { const J = sideJ('squat', u, st); J.hack = 1; return J; }
   return null; };
-A3.joints = (key, u, st) => { if (['fly', 'rfly', 'mpress', 'hack'].includes(key)) return customJ(key, u, st); const pat = OS.Anim.patterns[key]; return pat && pat[0] === 'f' ? frontJ(key, u, st) : sideJ(key, u, st); };
+A3.joints = (key, u, st) => { if (['fly', 'rfly', 'mpress', 'hack', 'extrot'].includes(key)) return customJ(key, u, st); const pat = OS.Anim.patterns[key]; return pat && pat[0] === 'f' ? frontJ(key, u, st) : sideJ(key, u, st); };
 // ---------- posar o esqueleto (cada osso: direção + orientação) ----------
 const V3 = a => new T.Vector3(a[0], a[1], a[2]);
 const perp = (v, d) => v.clone().sub(d.clone().multiplyScalar(v.dot(d)));
@@ -5080,7 +5121,7 @@ const pose = J0 => { let J = J0; const B = R.bones, I = R.info, W = []; // W[i] 
   // aplicar: local = inverso(pai) × mundo
   for (let i = 0; i < I.length; i++) { const p = I[i].p; B[i].quaternion.copy(p < 0 ? W[i] : W[p].clone().invert().multiply(W[i])); }
   R.body.position.set(0, 0, 0); R.body.updateMatrixWorld(true);
-  const anc = J.front || J.seat || J.lie || ['fly', 'rfly', 'mpress'].includes(R.st.pat) ? 'hip' : ((OS.Anim.patterns[R.st.pat === 'hack' ? 'squat' : R.st.pat] || [])[1] || 'ankle'), P = new T.Vector3();
+  const anc = J.front || J.seat || J.lie || ['fly', 'rfly', 'mpress', 'extrot'].includes(R.st.pat) ? 'hip' : ((OS.Anim.patterns[R.st.pat === 'hack' ? 'squat' : R.st.pat] || [])[1] || 'ankle'), P = new T.Vector3();
   if (anc === 'hip') { B[0].getWorldPosition(P); R.body.position.add(V3(J.hip).sub(P)); }
   else if (anc === 'hand') { grip('R', P); R.body.position.add(V3(J.haR).sub(P).setZ(0)); }
   else { B[bi('foot', 'R')].getWorldPosition(P); R.body.position.add(V3(J.anR).add(new T.Vector3(0, .012, 0)).sub(P).setZ(0)); }
@@ -5124,12 +5165,14 @@ const buildEq = J => { const g = R.eq, M = mats(), st = R.st, pat = st.pat; whil
     if (pat === 'cablerow') { add(boxM(1.3, .08, .3, M.pad), hx + .25, hipY - .1); add(boxM(1.3, hipY - .14, .2, M.frame), hx + .25, (hipY - .14) / 2); add(boxM(.06, .3, .4, M.frame), J.anR[0] + .1, .15, 0, -.3); } }
   if (pat === 'stepup') add(boxM(.5, .4, .55, M.pad), .32, .2); if (pat === 'calf' && st.tool !== 'machine') add(boxM(.32, .08, .55, M.pad), J.anR[0] + .08, .04);
   if (pat === 'backext') { add(boxM(.32, .07, .4, M.pad), hx + .05, hipY - .07, 0, .55); add(boxM(.05, hipY - .1, .05, M.frame), hx + .05, (hipY - .1) / 2); add(boxM(.12, .1, .3, M.pad), J.anR[0], J.anR[1] + .05); add(boxM(1.1, .04, .45, M.frame), hx - .1, .02, 0, .0); }
-  if (pat === 'pullup' || pat === 'hangraise') { const y = J.haR[1] + .03; add(alongZ(cyl(.016, 1.3, M.steel)), J.haR[0], y); [-.62, .62].forEach(z => add(boxM(.06, y + .05, .06, M.frame), J.haR[0], (y + .05) / 2, z)); }
+  if (pat === 'nordic') add(boxM(.14, .1, .4, M.pad), J.anR[0] - .02, J.anR[1] + .09);
+  if (pat === 'wristcurl') seat(hx, hipY, false);
+  if (pat === 'pullup' || pat === 'hangraise' || pat === 'invrow') { const y = J.haR[1] + .03; add(alongZ(cyl(.016, 1.3, M.steel)), J.haR[0], y); [-.62, .62].forEach(z => add(boxM(.06, y + .05, .06, M.frame), J.haR[0], (y + .05) / 2, z)); }
   if (pat === 'dips') [-1, 1].forEach(s => { const y = J.haR[1] - .02; const b = cyl(.02, .7, M.steel); b.rotation.z = Math.PI / 2; add(b, J.haR[0] - .12, y, s * .27); add(boxM(.05, y, .05, M.frame), J.haR[0] + .2, y / 2, s * .27); add(boxM(.05, y, .05, M.frame), J.haR[0] - .45, y / 2, s * .27); });
   if (pat === 'run' || pat === 'walk' && /passadeira/.test(st.n)) { add(boxM(1.5, .1, .6, M.dark), 0, .05); add(boxM(.05, 1.1, .05, M.frame), .7, .55, .3); add(boxM(.05, 1.1, .05, M.frame), .7, .55, -.3); add(boxM(.2, .08, .65, M.dark), .72, 1.1); }
   if (pat === 'bike') { add(boxM(.08, .66, .08, M.frame), hx + .45, .33); add(boxM(.3, .06, .2, M.pad), hx, hipY - .07); add(boxM(.06, hipY - .1, .06, M.frame), hx, (hipY - .1) / 2); add(boxM(.9, .05, .3, M.frame), hx + .2, .025); }
   if (pat === 'rower') { add(boxM(2.1, .06, .2, M.frame), .35, .14); add(boxM(.3, .06, .3, M.pad), hx, hipY - .06); add(boxM(.25, .45, .45, M.dark), 1.25, .25); }
-  if (pat === 'crunch' || pat === 'situp' || pat === 'legraise' || pat === 'bridge' || pat === 'pushup' || pat === 'plank' || pat === 'climber' || pat === 'twist') add(boxM(1.9, .015, .7, new T.MeshStandardMaterial({ color: 0x4f6475, roughness: .9 })), J.hip[0] - .1, .0075);
+  if (['crunch', 'situp', 'legraise', 'bridge', 'pushup', 'plank', 'climber', 'twist', 'rollout', 'kneelcrunch', 'kick4', 'nordic'].includes(pat)) add(boxM(1.9, .015, .7, new T.MeshStandardMaterial({ color: 0x4f6475, roughness: .9 })), J.hip[0] - .1, .0075);
   // máquinas
   if (st.tool === 'machine') {
     if (pat === 'legpress') { add(boxM(.6, .08, .45, M.pad), hx - .22, hipY - .08, 0, -.62); add(boxM(.42, .08, .45, M.pad), hx + .1, hipY - .1, 0, .15); add(boxM(.05, hipY - .12, .05, M.frame), hx, (hipY - .12) / 2); [-.27, .27].forEach(z => add(boxM(1.7, .05, .05, M.frame), hx + .75, hipY + .25, z, .78)); R.sled = add(boxM(.08, .55, .55, M.frame), 0, 0, 0, -.79); }
@@ -5153,12 +5196,13 @@ const buildEq = J => { const g = R.eq, M = mats(), st = R.st, pat = st.pat; whil
     if (st.tool === 'smith') { [-1, 1].forEach(s => add(boxM(.05, 2.2, .05, M.frame), 0, 1.1, s * .82)); R.smith = 1; } }
   else if (st.tool === 'db') R.w = { kind: 'db', a: add(dumbbell(), 0, 0), b: two ? add(dumbbell(), 0, 0) : null };
   else if (st.tool === 'kb') R.w = { kind: 'kb', a: add(kettlebell(), 0, 0), b: two && !st.one ? add(kettlebell(), 0, 0) : null };
+  else if (pat === 'ropes') { R.cab = { hands2: true, tops: [[1.4, .3, .25], [1.4, .3, -.25]], lines: [], att: [] }; [0, 1].forEach(() => { const l = new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(), new T.Vector3()]), new T.LineBasicMaterial({ color: 0x1d2329, linewidth: 3 })); g.add(l); R.cab.lines.push(l); }); }
   else if (st.tool === 'ball') { const b = new T.Mesh(new T.SphereGeometry(.12, 24, 18), M.ball); b.castShadow = true; R.w = { kind: 'ball', o: add(b, 0, 0) }; }
   else if (st.tool === 'cable' || st.tool === 'band') {
     const hands2 = st.att === 'handles' || st.one === false && st.att === 'handle' && /cross|lateral/.test(st.n);
-    const high = ['pushdown', 'pulldown', 'facepull', 'woodchop', 'fly', 'crunch', 'ohtri', 'situp'].includes(pat) && !/baixo|de baixo/.test(st.n), front = !['pulldown', 'crunch', 'ohtri'].includes(pat);
-    const top = pat === 'pulldown' ? [J.hip[0] + .05, 2.25] : pat === 'pushdown' ? [J.haR[0] + .42, 2.05] : pat === 'facepull' ? [1.05, 1.6] : pat === 'crunch' ? [J.sh[0] - .15, 2.0] : pat === 'ohtri' ? [-.45, .2] : high ? [1.0, 1.95] : [.9, .12];
-    if (st.tool === 'cable') { const tx = top[0] + (pat === 'pulldown' ? -.25 : .12); [-1, 1].forEach(s => add(boxM(.07, 2.25, .07, M.frame), tx, 1.125, s * (hands2 ? .95 : .3))); add(boxM(.07, .07, hands2 ? 1.97 : .67, M.frame), tx, 2.25); if (!hands2) add(boxM(.2, .5, .25, M.dark), tx, .5); }
+    const high = ['pushdown', 'pulldown', 'facepull', 'woodchop', 'fly', 'crunch', 'ohtri', 'situp', 'kneelcrunch', 'sapd'].includes(pat) && !/baixo|de baixo/.test(st.n), front = !['pulldown', 'crunch', 'ohtri'].includes(pat);
+    const top = pat === 'kneelcrunch' ? [J.sh[0] - .1, 2.0] : pat === 'sapd' ? [.75, 2.0] : pat === 'extrot' ? [.15, 1.12] : pat === 'hipadd' || pat === 'hipabd' ? [0, .12] : pat === 'stkick' ? [.75, .15] : pat === 'wristcurl' ? [J.haR[0] + .3, .12] : pat === 'pulldown' ? [J.hip[0] + .05, 2.25] : pat === 'pushdown' ? [J.haR[0] + .42, 2.05] : pat === 'facepull' ? [1.05, 1.6] : pat === 'crunch' ? [J.sh[0] - .15, 2.0] : pat === 'ohtri' ? [-.45, .2] : high ? [1.0, 1.95] : [.9, .12];
+    if (st.tool === 'cable') { const tx = pat === 'kneelcrunch' ? J.hip[0] - .55 : top[0] + (pat === 'pulldown' ? -.25 : .12); if (pat === 'kneelcrunch') add(boxM(.55, .06, .1, M.frame), tx + .25, 2.0); [-1, 1].forEach(s => add(boxM(.07, 2.25, .07, M.frame), tx, 1.125, s * (hands2 ? .95 : .3))); add(boxM(.07, .07, hands2 ? 1.97 : .67, M.frame), tx, 2.25); if (!hands2) add(boxM(.2, .5, .25, M.dark), tx, .5); }
     R.cab = { hands2, tops: hands2 ? [[top[0] - .2, pat === 'rfly' || pat === 'latraise' ? .2 : 1.85, .9], [top[0] - .2, pat === 'rfly' || pat === 'latraise' ? .2 : 1.85, -.9]] : [[top[0], top[1], 0]], lines: [] };
     if (st.tool === 'band') R.cab.tops = [[J.anR[0] + .05, .04, 0]];
     R.cab.att = hands2 || st.one ? [add(attachment('handle'), 0, 0)].concat(hands2 ? [add(attachment('handle'), 0, 0)] : []) : [add(attachment(st.att || 'bar'), 0, 0)];
@@ -5196,7 +5240,7 @@ A3.mount = async el => { try { await A3.load(); } catch (e) { el.classList.add('
   paint(el.dataset.am, (el.dataset.as || '').split('|').filter(Boolean));
   const pts = []; [0, .5, 1].forEach(u => { const J = jAt(u); if (J) ['sh', 'haR', 'haL', 'anR', 'anL', 'knR', 'hip', 'elR'].forEach(k => J[k] && pts.push(J[k])); });
   const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]).concat(0), x0 = Math.min(...xs) - .25, x1 = Math.max(...xs) + .25, y0 = Math.min(...ys), y1 = Math.max(...ys) + .3;
-  const front = (OS.Anim.patterns[R.st.pat] || [])[0] === 'f' || ['fly', 'rfly', 'mpress'].includes(R.st.pat) && !(R.st.pat === 'fly' && R.st.tool === 'db');
+  const front = (OS.Anim.patterns[R.st.pat] || [])[0] === 'f' || ['fly', 'rfly', 'mpress', 'extrot'].includes(R.st.pat) && !(R.st.pat === 'fly' && R.st.tool === 'db');
   R.center = [(x0 + x1) / 2, (y0 + y1) / 2, 0]; R.dist = Math.max(x1 - x0, (y1 - y0) * 1.05, 1.1) * 1.95 + .5; R.base = front ? 1.2 : .62;
   el.innerHTML = ''; el.appendChild(R.renderer.domElement); const cv = R.renderer.domElement; cv.style.touchAction = 'none';
   cv.onpointerdown = e => { R.drag = { x: e.clientX, yaw: R.yaw, user: R.user }; try { cv.setPointerCapture(e.pointerId); } catch (er) { } }; cv.onpointermove = e => { if (R.drag) { R.yaw = R.drag.yaw - (e.clientX - R.drag.x) * .012; R.user = R.drag.user - (e.clientX - R.drag.x) * .012; } }; cv.onpointerup = cv.onpointercancel = () => { R.drag = null; };
@@ -5248,7 +5292,51 @@ OS.FastFood = [
   ['Outback', 'Bloomin\' Onion (dose para partilhar)', 1950, 22, 160, 134, 600, 'BR,US'], ['China in Box', 'Yakisoba de frango (médio)', 690, 34, 90, 20, 500, 'BR'],
   ['Padaria', 'Pão de queijo', 90, 2, 10, 5, 25, 'BR'], ['Padaria', 'Coxinha de frango', 290, 9, 30, 15, 100, 'BR'], ['Padaria', 'Pão na chapa', 280, 7, 40, 10, 80, 'BR'],
   ['Wendy\'s', 'Dave\'s Single', 590, 29, 39, 34, 245, 'US,GB'], ['Chick-fil-A', 'Sanduíche de frango', 420, 29, 41, 18, 183, 'US'], ['Chipotle', 'Burrito bowl de frango', 650, 51, 60, 21, 520, 'US,GB,FR,DE'],
-  ['Dunkin\'', 'Donut glaceado', 240, 3, 33, 11, 70, '*'], ['Ikea', 'Almôndegas (15 un.) com puré', 650, 30, 50, 37, 380, '*'], ['Ikea', 'Cachorro-quente', 270, 9, 31, 12, 110, '*']
+  ['Dunkin\'', 'Donut glaceado', 240, 3, 33, 11, 70, '*'], ['Ikea', 'Almôndegas (15 un.) com puré', 650, 30, 50, 37, 380, '*'], ['Ikea', 'Cachorro-quente', 270, 9, 31, 12, 110, '*'],
+  // mais itens e cadeias (valores por unidade/dose; médias das tabelas oficiais)
+  ['McDonald\'s', 'Batatas fritas pequenas', 230, 3, 29, 11, 80, '*'], ['McDonald\'s', 'Royal Cheese / Quarteirão com queijo', 520, 30, 41, 26, 200, '*'], ['McDonald\'s', 'McCrispy', 470, 26, 46, 20, 200, 'PT,ES,FR,GB,DE,IT,BE,NL,IE,CH'],
+  ['McDonald\'s', 'Filet-O-Fish', 330, 15, 38, 13, 140, '*'], ['McDonald\'s', 'McFlurry M&M\'s', 400, 9, 59, 14, 190, '*'], ['McDonald\'s', 'Sundae chocolate', 330, 7, 53, 10, 175, '*'], ['McDonald\'s', 'Torta de maçã', 230, 2, 29, 11, 80, '*'],
+  ['McDonald\'s', 'Salada Caesar com frango grelhado', 210, 26, 8, 8, 300, 'PT,ES,FR,BR,IT'], ['McDonald\'s', 'Wrap de frango grelhado', 380, 26, 40, 12, 200, '*'], ['McDonald\'s', 'McCafé galão / latte', 150, 8, 13, 6, 300, '*'], ['McDonald\'s', 'Cappuccino McCafé', 110, 6, 9, 5, 250, '*'],
+  ['McDonald\'s', 'Muffin de chocolate', 470, 6, 55, 25, 120, '*'], ['McDonald\'s', 'Donut', 250, 4, 30, 13, 70, 'PT,ES,BR'], ['McDonald\'s', 'Sobremesa Casquinha', 160, 4, 25, 5, 90, '*'], ['McDonald\'s', 'Chicken McNuggets (20 un.)', 870, 51, 54, 50, 350, '*'],
+  ['McDonald\'s', 'Cheddar McMelt', 490, 26, 38, 26, 180, 'BR'], ['McDonald\'s', 'McOferta Big Mac (só sanduíche)', 504, 25, 42, 26, 215, 'BR'], ['McDonald\'s', 'Quarter Pounder with Cheese', 520, 30, 42, 26, 200, 'US,CA,GB,IE'], ['McDonald\'s', 'Hash Brown', 140, 1, 15, 8, 55, '*'],
+  ['Burger King', 'Double Whopper', 900, 48, 49, 57, 370, '*'], ['Burger King', 'Whopper com queijo', 740, 32, 50, 46, 315, '*'], ['Burger King', 'Crispy Chicken', 560, 23, 51, 29, 220, '*'], ['Burger King', 'Onion rings (médio)', 320, 4, 39, 16, 100, '*'],
+  ['Burger King', 'Big King', 520, 27, 39, 28, 210, '*'], ['Burger King', 'Batatas fritas grandes', 480, 5, 67, 21, 150, '*'], ['Burger King', 'King Fusion / Sundae', 350, 7, 52, 12, 180, '*'], ['Burger King', 'Plant-Based Whopper', 600, 18, 54, 34, 280, 'PT,ES,FR,DE,GB,IT,NL,BE,CH,IE'],
+  ['Burger King', 'Chicken Fries (9 un.)', 280, 13, 20, 16, 95, '*'], ['Burger King', 'Stacker Duplo', 690, 38, 37, 43, 250, 'BR'],
+  ['KFC', 'Balde 8 peças (por peça)', 250, 22, 8, 15, 115, '*'], ['KFC', 'Tenders / Strips (3 un.)', 330, 27, 18, 16, 140, '*'], ['KFC', 'Twister', 520, 24, 52, 24, 230, '*'], ['KFC', 'Boxmaster', 780, 34, 70, 40, 330, 'PT,ES,GB,DE,IE,CH,NL'],
+  ['KFC', 'Puré com molho', 110, 2, 16, 4, 140, '*'], ['KFC', 'Coleslaw', 150, 1, 13, 10, 100, '*'], ['KFC', 'Fillet Burger', 450, 29, 44, 17, 200, '*'],
+  ['Subway', 'Frango Teriyaki 30 cm', 660, 50, 92, 10, 480, '*'], ['Subway', 'Peito de frango 15 cm', 300, 23, 44, 4, 230, '*'], ['Subway', 'Vegetariano (Veggie Delite) 15 cm', 210, 8, 40, 2, 170, '*'], ['Subway', 'Atum 30 cm', 900, 38, 82, 48, 480, '*'],
+  ['Subway', 'Steak & Cheese 15 cm', 380, 26, 45, 10, 240, '*'], ['Subway', 'Wrap de frango', 400, 30, 45, 11, 250, '*'], ['Subway', 'Cookie de chocolate', 220, 2, 30, 10, 45, '*'], ['Subway', 'Salada de frango', 140, 19, 10, 3, 300, '*'],
+  ['Pizza Hut', 'Fatia Pepperoni Lovers (grande)', 370, 16, 30, 21, 145, '*'], ['Pizza Hut', 'Fatia Supreme (média)', 270, 12, 28, 12, 120, '*'], ['Pizza Hut', 'Pão de alho', 150, 4, 18, 7, 50, '*'], ['Pizza Hut', 'Asas de frango (4 un.)', 330, 26, 4, 23, 140, '*'],
+  ['Domino\'s', 'Fatia Barbecue (média)', 260, 12, 31, 10, 110, '*'], ['Domino\'s', 'Fatia 4 Queijos (média)', 260, 12, 26, 12, 105, '*'], ['Domino\'s', 'Fatia Carbonara (média)', 270, 11, 27, 13, 110, '*'], ['Domino\'s', 'Pão de alho (dose)', 330, 9, 38, 16, 110, '*'], ['Domino\'s', 'Asas picantes (6 un.)', 450, 37, 6, 31, 210, '*'],
+  ['Telepizza', 'Fatia 4 Queijos (média)', 260, 12, 26, 12, 105, 'PT,ES'], ['Telepizza', 'Fatia Pepperoni (média)', 260, 11, 26, 12, 105, 'PT,ES'], ['Telepizza', 'Asas de frango (dose)', 420, 34, 6, 29, 200, 'PT,ES'], ['Telepizza', 'Telechicken (dose)', 450, 30, 30, 22, 200, 'PT,ES'],
+  ['Starbucks', 'Cappuccino (tall)', 120, 7, 11, 5, 355, '*'], ['Starbucks', 'Americano (tall)', 15, 1, 2, 0, 355, '*'], ['Starbucks', 'Mocha (tall, com natas)', 290, 10, 35, 13, 355, '*'], ['Starbucks', 'Chai Tea Latte (tall)', 190, 6, 33, 4, 355, '*'],
+  ['Starbucks', 'Frappuccino de café (tall)', 180, 3, 36, 2, 355, '*'], ['Starbucks', 'Cookie de chocolate', 360, 4, 48, 17, 85, '*'], ['Starbucks', 'Croissant', 260, 5, 28, 14, 70, '*'], ['Starbucks', 'Cheesecake', 400, 6, 32, 28, 115, '*'],
+  ['Five Guys', 'Cheeseburger', 980, 47, 40, 55, 300, 'PT,ES,FR,GB,DE,IT,US,BE,NL,CH,IE,CA'], ['Five Guys', 'Little Hamburger', 540, 23, 39, 26, 180, 'PT,ES,FR,GB,DE,IT,US,BE,NL,CH,IE,CA'], ['Five Guys', 'Batatas fritas regulares', 950, 15, 131, 41, 411, 'PT,ES,FR,GB,DE,IT,US,BE,NL,CH,IE,CA'], ['Five Guys', 'Milkshake', 840, 13, 83, 50, 450, 'PT,ES,FR,GB,DE,IT,US,BE,NL,CH,IE,CA'],
+  ['Taco Bell', 'Crunchwrap Supreme', 530, 16, 71, 21, 254, 'US,ES,PT,GB,NL,CA'], ['Taco Bell', 'Quesadilla de frango', 510, 27, 37, 27, 180, 'US,ES,PT,GB,NL,CA'], ['Taco Bell', 'Nachos BellGrande', 740, 16, 82, 38, 300, 'US,ES,PT,GB,NL,CA'],
+  ['Popeyes', 'Peça de frango picante', 280, 21, 9, 18, 120, 'US,ES,FR,GB,BR,CA'], ['Popeyes', 'Tenders (3 un.)', 340, 26, 16, 19, 140, 'US,ES,FR,GB,BR,CA'],
+  ['Wendy\'s', 'Baconator', 950, 59, 38, 63, 300, 'US,CA,GB'], ['Wendy\'s', 'Frosty (pequeno)', 340, 9, 55, 9, 300, 'US,CA,GB'],
+  ['Chick-fil-A', 'Nuggets (8 un.)', 250, 27, 11, 11, 113, 'US,CA'], ['Chipotle', 'Burrito de frango', 1050, 58, 115, 38, 680, 'US,GB,FR,DE,CA'], ['Chipotle', 'Tacos de carne (3 un.)', 600, 33, 53, 27, 330, 'US,GB,FR,DE,CA'],
+  ['Dunkin\'', 'Donut de chocolate', 270, 3, 33, 15, 72, '*'], ['Dunkin\'', 'Boston Kreme', 300, 4, 40, 14, 85, '*'], ['Dunkin\'', 'Café com leite (médio)', 120, 6, 12, 5, 400, '*'],
+  ['Vitaminas', 'Sopa do dia', 120, 4, 15, 4, 300, 'PT'], ['Vitaminas', 'Prato de frango grelhado com arroz', 560, 42, 60, 15, 400, 'PT'], ['Vitaminas', 'Sumo natural (copo)', 140, 1, 32, 0, 330, 'PT'],
+  ['H3', 'Hambúrguer H3 com ovo, arroz e batatas', 880, 49, 81, 38, 480, 'PT'], ['H3', 'Hambúrguer de frango H3 com arroz e batatas', 690, 42, 82, 20, 450, 'PT'],
+  ['Pans & Company', 'Bocadillo de presunto e queijo', 560, 27, 58, 24, 230, 'PT,ES'], ['Pans & Company', 'Bocadillo de atum', 520, 24, 60, 20, 240, 'PT,ES'],
+  ['Prego / Bifanas', 'Bifana no pão', 420, 25, 40, 18, 180, 'PT'], ['Prego / Bifanas', 'Prego no pão', 480, 32, 40, 21, 200, 'PT'],
+  ['Nando\'s', '1/4 de frango peri-peri', 300, 38, 1, 16, 180, 'PT,GB,IE,CA,US'], ['Nando\'s', 'Wrap de frango peri-peri', 560, 38, 55, 20, 280, 'PT,GB,IE,CA,US'],
+  ['Ola / Kebab', 'Kebab no pão (dose)', 650, 35, 60, 28, 350, '*'], ['Ola / Kebab', 'Durum de frango', 620, 38, 62, 22, 350, '*'],
+  ['Sushi (restaurante)', 'Peça de nigiri', 45, 2, 7, 1, 30, '*'], ['Sushi (restaurante)', 'Peça de uramaki', 50, 2, 7, 2, 30, '*'], ['Sushi (restaurante)', 'Hot roll (peça)', 70, 2, 8, 3, 30, 'BR,PT'],
+  ['Pastelaria', 'Pão com chouriço', 330, 11, 38, 15, 110, 'PT'], ['Pastelaria', 'Queijada', 200, 5, 30, 7, 60, 'PT'], ['Pastelaria', 'Sandes mista', 330, 16, 36, 13, 140, 'PT'], ['Pastelaria', 'Croquete', 100, 4, 7, 6, 35, 'PT'],
+  ['Habib\'s', 'Beirute', 690, 36, 70, 30, 330, 'BR'], ['Habib\'s', 'Kibe frito', 190, 8, 18, 10, 70, 'BR'],
+  ['Bob\'s', 'Cheeseburger', 330, 17, 34, 14, 130, 'BR'], ['Bob\'s', 'Batata frita média', 340, 4, 44, 16, 110, 'BR'],
+  ['Giraffas', 'Brutus (sanduíche)', 760, 40, 54, 42, 300, 'BR'], ['Spoleto', 'Lasanha (porção)', 720, 33, 62, 37, 400, 'BR'], ['Madero', 'Cheeseburger Madero', 780, 42, 46, 46, 300, 'BR'],
+  ['Outback', 'Ribs (meia dose)', 900, 60, 20, 63, 400, 'BR,US'], ['Coco Bambu', 'Camarão (prato individual)', 900, 45, 70, 48, 500, 'BR'], ['Ragazzo', 'Coxinha', 180, 6, 20, 8, 70, 'BR'], ['Ragazzo', 'Esfiha', 150, 6, 20, 5, 65, 'BR'],
+  ['China in Box', 'Frango xadrez (médio)', 620, 38, 70, 20, 500, 'BR'], ['Padaria', 'Misto quente', 330, 16, 32, 15, 130, 'BR'], ['Padaria', 'Pão francês com manteiga', 220, 5, 29, 9, 60, 'BR'], ['Padaria', 'Esfiha de carne', 170, 7, 22, 6, 70, 'BR'],
+  ['100 Montaditos', 'Montadito de presunto', 160, 8, 18, 6, 60, 'ES,PT'], ['Rodilla', 'Sándwich mixto', 290, 13, 30, 13, 120, 'ES'], ['Goiko', 'Kevin Bacon burger', 950, 50, 45, 63, 380, 'ES'],
+  ['Quick', 'Giant', 560, 27, 41, 32, 230, 'FR,BE,LU'], ['Paul', 'Sandwich jambon-beurre', 480, 22, 55, 18, 220, 'FR,BE,GB,LU'], ['Pret A Manger', 'Sandes de frango e abacate', 470, 26, 41, 21, 230, 'GB,FR,US,IE'],
+  ['Greggs', 'Sausage roll', 330, 9, 25, 22, 100, 'GB,IE'], ['Leon', 'Chicken box', 600, 40, 60, 20, 420, 'GB,IE'], ['Tim Hortons', 'Donut Boston Cream', 250, 4, 36, 10, 80, 'CA,US,GB,ES,PT'],
+  ['Tim Hortons', 'Double-Double (médio)', 220, 4, 26, 11, 400, 'CA,US'], ['Shake Shack', 'ShackBurger', 500, 29, 26, 30, 220, 'US,GB,MX'], ['In-N-Out', 'Double-Double', 670, 37, 39, 41, 330, 'US'],
+  ['Panda Express', 'Orange Chicken (dose)', 490, 25, 51, 23, 160, 'US,MX,CA'], ['Arby\'s', 'Roast beef clássico', 360, 23, 37, 14, 160, 'US,CA'], ['Sbarro', 'Fatia de pizza de queijo', 450, 20, 54, 18, 190, 'US,MX,BR'],
+  ['Vapiano', 'Massa carbonara', 850, 32, 90, 38, 450, 'DE,AT,FR,NL,CH,LU,GB'], ['Nordsee', 'Sandes de peixe panado', 450, 18, 45, 21, 180, 'DE,CH'], ['Autogrill', 'Panino Camogli', 540, 24, 55, 24, 230, 'IT,CH'],
+  ['El Pollo Loco', '1/4 de frango', 300, 37, 1, 16, 170, 'US,MX'], ['Carl\'s Jr.', 'Famous Star', 670, 28, 53, 39, 255, 'US,MX'], ['Little Caesars', 'Fatia de pizza de pepperoni', 280, 13, 32, 11, 110, 'US,MX,CA']
 ];
 
 </script>
@@ -6241,7 +6329,7 @@ const fh = () => { let h = document.getElementById('fdAdd'); if (!h) { h = docum
 Diet.add = (opt = {}) => { FS = { meal: opt.meal || nowMeal(), date: opt.date || Diet.dayNow(), tab: opt.tab || 'procurar', q: '', sel: null, unit: 'g', amt: 100, tpl: opt.tpl || null, tplName: opt.tplName || '', tplId: opt.tplId || '', added: 0 }; fh().hidden = false; document.body.classList.add('noscroll'); fDraw(); if (FS.tab === 'procurar') setTimeout(() => { const i = fh().querySelector('[data-fq]'); i && matchMedia('(min-width:700px)').matches && i.focus(); }, 60); if (FS.tab === 'foto') setTimeout(() => { const i = fh().querySelector('#fdCam'); i && i.click(); }, 80); };
 const fClose = () => { FS = null; fh().hidden = true; fh().innerHTML = ''; document.body.classList.remove('noscroll'); OS.request(); };
 const fRow = (x, extra = '') => x.vars ? `<button class="fd-r" data-fa="pick" data-id="${x.id}">${Diet.img(x.name, x.cat, '', x.pic)}<span><b>${esc(x.name)}</b><small>${U.nf(x.kcal)} kcal <em>/100 g ${x.vars.length > 1 ? esc(x.def.vl.toLowerCase()) : ''}</em>${x.vars.length > 1 ? ` · ${x.vars.length} opções` : ''} · <em class="fd-dsc">${esc(x.desc)}</em></small></span>${UI.ic('right')}</button>` : `<button class="fd-r" data-fa="pick" data-id="${x.id}">${Diet.img(x.name, x.cat, '', x.pic)}<span><b>${esc(x.name)}${x.brand ? ` <em class="fd-br">${esc(x.brand)}</em>` : ''}</b><small>${x.per === 'portion' ? `${esc(x.por[0])} · ${U.nf(x.kcal)} kcal` : `${U.nf(x.kcal)} kcal · P ${U.nf(x.p, 1)} · H ${U.nf(x.c, 1)} · G ${U.nf(x.f, 1)} <em>/100 g</em>`}${extra}</small></span>${UI.ic('plus')}</button>`;
-const findX = id => id.startsWith('ff') ? FF.find(x => x.id === id) : id.startsWith('br') ? BR.find(x => x.id === id) : id.startsWith('off:') ? OFFC[id] : id.startsWith('u') ? userFoods().find(x => x.id === id) : id.startsWith('r:') ? (() => { const m = OS.get('meals', id.slice(2)); if (!m) return null; const g = n(m.g), q = n(m.qty) || 1; return g ? { id, pic: m.pic || '', name: m.food, kcal: n(m.kcal) / g * 100, p: n(m.p) / g * 100, c: n(m.c) / g * 100, f: n(m.f) / g * 100, fib: n(m.fib) / g * 100, nn: norm(m.food), lastG: g } : { id, name: m.food, kcal: n(m.kcal) / q, p: n(m.p) / q, c: n(m.c) / q, f: n(m.f) / q, fib: n(m.fib) / q, per: 'portion', por: ['porção', 0], pic: m.pic || '', nn: norm(m.food) }; })() : id.startsWith('g') ? GR.find(x => x.id === id) : DB.find(x => x.id === id);
+const findX = id => id.startsWith('ff') ? FF.find(x => x.id === id) : id.startsWith('br') ? BR.find(x => x.id === id) : id.startsWith('off:') || id.startsWith('bp:') ? OFFC[id] : id.startsWith('u') ? userFoods().find(x => x.id === id) : id.startsWith('r:') ? (() => { const m = OS.get('meals', id.slice(2)); if (!m) return null; const g = n(m.g), q = n(m.qty) || 1; return g ? { id, pic: m.pic || '', name: m.food, kcal: n(m.kcal) / g * 100, p: n(m.p) / g * 100, c: n(m.c) / g * 100, f: n(m.f) / g * 100, fib: n(m.fib) / g * 100, nn: norm(m.food), lastG: g } : { id, name: m.food, kcal: n(m.kcal) / q, p: n(m.p) / q, c: n(m.c) / q, f: n(m.f) / q, fib: n(m.fib) / q, per: 'portion', por: ['porção', 0], pic: m.pic || '', nn: norm(m.food) }; })() : id.startsWith('g') ? GR.find(x => x.id === id) : DB.find(x => x.id === id);
 const selMac = () => { const x = FS.sel; return x.per === 'portion' ? macrosFor(x, 0, n(FS.amt) || 0) : FS.unit === 'u' ? macrosFor(x, n(FS.amt) * x.por[1]) : macrosFor(x, n(FS.amt)); };
 const macHTML = () => { const mm = selMac(); return `<div class="fd-mac"><div><b class="mono">${U.nf(mm.kcal)}</b><small>kcal</small></div><div><b class="mono">${U.nf(mm.p, 1)}</b><small>proteína</small></div><div><b class="mono">${U.nf(mm.c, 1)}</b><small>hidratos</small></div><div><b class="mono">${U.nf(mm.f, 1)}</b><small>gordura</small></div><div><b class="mono">${U.nf(mm.fib, 1)}</b><small>fibra</small></div></div>`; };
 const COUNT = /^(ovo|clara|unidade|fatia|pao|wrap|scoop|barra|bolacha|quadrado|copo|lata|imperial|iogurte|chavena|6 unidades|meio|colher de sopa|medida|porcao)$/;
@@ -6284,14 +6372,14 @@ function fInput(e) { const t = e.target; if (!FS) return;
 function fClick(e) { const b = e.target.closest('[data-fa]'); if (!b || !FS) return; e.preventDefault(); const a = b.dataset.fa;
   if (a === 'x') return fClose();
   if (a === 'tab') { FS.tab = b.dataset.v; fDraw(); if (FS.tab === 'foto') setTimeout(() => { const i = fh().querySelector('#fdCam'); if (i && !PH.items) i.click(); }, 50); return; }
-  if (a === 'pick') { let x = findX(b.dataset.id); if (!x) return; FS.brand = ''; FS.grp = x.vars ? x : x.g || null; if (x.vars) x = x.def; FS.sel = x; FS.base = /^db/.test(x.id) ? x : null; if (FS.base) offSearch(brandQ(x), brandsRefresh); FS.unit = x.per === 'portion' ? 'p' : x.por && !x.lastG && COUNT.test(norm(x.por[0])) ? 'u' : 'g'; FS.amt = x.per === 'portion' ? 1 : FS.unit === 'u' ? 1 : (x.lastG || 100); fDraw(); return; }
+  if (a === 'pick') { let x = findX(b.dataset.id); if (!x) return; FS.brand = ''; FS.grp = x.vars ? x : x.g || null; if (x.vars) x = x.def; FS.sel = x; FS.base = /^db/.test(x.id) ? x : null; if (FS.base) brandData(brandsRefresh); FS.unit = x.per === 'portion' ? 'p' : x.por && !x.lastG && COUNT.test(norm(x.por[0])) ? 'u' : 'g'; FS.amt = x.per === 'portion' ? 1 : FS.unit === 'u' ? 1 : (x.lastG || 100); fDraw(); return; }
   if (a === 'back') { FS.sel = null; FS.base = null; FS.grp = null; FS.brand = ''; fDraw(); return; }
   if (a === 'var') { const v = FS.grp && FS.grp.vars[+b.dataset.k]; if (!v) return; const keepU = FS.unit === 'u' && v.x.por; FS.sel = FS.base = v.x; if (!keepU && FS.unit === 'u') { FS.unit = 'g'; FS.amt = 100; } fDraw(); return; }
   if (a === 'bname') { FS.brand = FS.brand === b.dataset.v ? '' : b.dataset.v; FS.sel = FS.base; fDraw(); return; }
   if (a === 'brand') { const id = b.dataset.id, x = id === 'gen' ? FS.base : findX(id) || OFFC[id]; if (!x) return; FS.brand = ''; const wasU = FS.unit === 'u'; FS.sel = x; if (wasU && !x.por) { FS.unit = 'g'; FS.amt = 100; } if (FS.unit === 'u' && x.por) FS.amt = FS.amt || 1; fDraw(); return; }
   if (a === 'amt') { FS.amt = +b.dataset.v; fDraw(); return; }
   if (a === 'add') { const x = FS.sel, g = x.per === 'portion' ? 0 : FS.unit === 'u' ? n(FS.amt) * x.por[1] : n(FS.amt); if (x.per !== 'portion' && !g) { UI.toast('Indica a quantidade', 'warn'); return; }
-    const m = x.per === 'portion' ? macrosFor(x, 0, n(FS.amt) || 1) : macrosFor(x, g), rec = { food: x.brand ? `${x.name} (${x.brand})` : gName(x, FS.brand), pic: x.pic || (x.g && x.g.pic) || '', g: g || '', qty: x.per === 'portion' ? n(FS.amt) || 1 : 1, kcal: m.kcal, p: m.p, c: m.c, f: m.f, fib: m.fib };
+    const m = x.per === 'portion' ? macrosFor(x, 0, n(FS.amt) || 1) : macrosFor(x, g), rec = { food: x.brand ? `${FS.grp && x.gg && !norm(x.name).includes(norm(FS.grp.name).split(/[ (]/)[0]) ? FS.grp.name + ' — ' : ''}${x.name} (${x.brand})` : gName(x, FS.brand), pic: x.pic || (x.g && x.g.pic) || '', g: g || '', qty: x.per === 'portion' ? n(FS.amt) || 1 : 1, kcal: m.kcal, p: m.p, c: m.c, f: m.f, fib: m.fib };
     if (FS.tpl) { FS.tpl.push(rec); FS.sel = null; UI.toast('Junto: ' + rec.food, 'pos'); fDraw(); return; }
     OS.add('meals', Object.assign({ date: FS.date, meal: FS.meal }, rec)); FS.added++; FS.sel = null; UI.toast(`${rec.food} · ${U.nf(rec.kcal)} kcal`, 'pos'); fDraw(); return; }
   if (a === 'tpl') { const t = OS.get('mealtpl', b.dataset.id); if (!t) return; Diet.applyTpl(t, FS.date, FS.meal); FS.added += t.items.length; fDraw(); return; }
@@ -6328,12 +6416,27 @@ Diet.offSearch = offSearch;
 const brandQ = x => { const g = x.g; return g ? norm(g.name).replace(/\(.*?\)|\/.*$/g, ' ').split(/\s+/).filter(Boolean).slice(0, 2).join(' ') : Diet.picQuery(x.name).split(' ').slice(0, 2).join(' '); };
 const brandNames = g => { const L = OS.BrandLists || {}, c = CTY.code(), k = g && g.bk, own = k && L[k] ? (L[k][c] || L[k]['*'] || []) : g ? ['Caseiro', 'Restaurante / take-away'] : []; return [...new Set([...own, ...((L.STORE || {})[c] || [])])]; };
 Diet.brandNames = brandNames;
-const brandCards = () => { const base = FS.base; if (!base) return ''; const q = brandQ(base), w = norm(q).split(' ').filter(Boolean), loc = brHere().filter(b => w.every(t => b.nn.includes(t))).slice(0, 12), on = OFFQ[offKey(q)] || {}, ids = new Set(loc.map(x => x.name + x.brand));
-  const card = x => `<button class="fd-bc ${FS.sel === x ? 'on' : ''}" data-fa="brand" data-id="${x.id}">${Diet.img(x.name, x.cat, '', x.pic)}<b>${esc(x.brand || x.name)}</b><small>${esc(x.name)}</small><em class="mono">${U.nf(x.kcal)} kcal/100 g</em></button>`;
-  const more = (on.items || []).filter(x => !ids.has(x.name + x.brand)), prods = loc.concat(more);
-  return `<div class="fd-bns"><button class="chip ${!FS.brand && FS.sel === base ? 'on' : ''}" data-fa="brand" data-id="gen">Sem marca</button>${brandNames(FS.grp).map(nm => `<button class="chip ${FS.brand === nm && FS.sel === base ? 'on' : ''}" data-fa="bname" data-v="${esc(nm)}">${esc(nm)}</button>`).join('')}</div>`
-    + (prods.length ? `<div class="fd-lab sm">Produtos com o rótulo exato (${esc(CTY.get()[1])})</div><div class="fd-bp">${prods.map(card).join('')}</div>` : '')
-    + (on.busy ? `<div class="fd-bwait"><div class="fd-spin"></div><small>A procurar produtos com rótulo em ${esc(CTY.get()[1])}…</small></div>` : ''); };
+// marcas e produtos reais de cada alimento, por país (Open Food Facts, filtrados por categoria, nome e calorias): vendor/brands/XX.json
+const BD = {}, BDW = {}, IMGP = 'https://images.openfoodfacts.org/images/products/';
+const brandData = (cb) => { const c = CTY.code(); if (BD[c]) return BD[c]; if (!BDW[c]) { BDW[c] = fetch(new URL('vendor/brands/' + c + '.json', document.baseURI)).then(r => r.ok ? r.json() : {}).catch(() => ({})).then(j => { BD[c] = j; BDW[c] = null; cb && cb(); }); } else if (cb) BDW[c].then(() => cb()); return null; };
+Diet.brandData = brandData;
+const prodOf = (r, g) => { const id = 'bp:' + r[8]; if (OFFC[id]) return OFFC[id]; const x = { id, name: r[1], brand: r[0], kcal: r[2], p: r[3], c: r[4], f: r[5], fib: r[6], cat: 'Marcas', pic: r[7] ? (/^https?:/.test(r[7]) ? r[7] : IMGP + r[7]) : '', por: r[9] > 0 ? ['porção', r[9]] : null, nn: norm(r[1] + ' ' + r[0]), cc: CTY.code(), gg: g }; OFFC[id] = x; return x; };
+// fast food das cadeias do país dentro de cada alimento
+const FFM = { 'Batata frita (fast food)': /batatas? fritas|fries|onion rings/, 'Hambúrguer no pão': /mac|whopper|burger|hamburguer|cheeseburger|quarteirao|quarter pounder|big tasty|cbo|dave|big bob|big king|stacker|royal cheese|mcmelt|giant|baconator|famous star|double-double|shackburger|mccrispy|crispy chicken|chicken royale|long chicken|zinger|fillet burger|mcchicken|sanduiche de frango|brutus|filet-o-fish/,
+  'Nuggets de frango': /nugget|popcorn chicken|tenders|strips|chicken fries/, 'Pizza': /pizza|fatia/, 'Sandes de fiambre e queijo': /sandes|sandwich|sanduiche|bocadillo|15 cm|30 cm|montadito|panino|misto|beirute|bifana|prego|bmt|steak & cheese/, 'Tosta mista': /tosta|misto quente|mixto|croque-/,
+  'Kebab': /kebab|durum/, 'Burrito': /burrito|taco|crunchwrap|quesadilla|nachos/, 'Salada César com frango': /salada|salad/, 'Salada mista': /salada/, 'Gelado': /mcflurry|sundae|casquinha|frosty|milkshake|king fusion|shake/, 'Donut': /donut|kreme/, 'Bola de Berlim': /berlim/,
+  'Café': /americano|expresso|cafe com leite|double-double \(medio\)/, 'Cappuccino': /cappuccino/, 'Galão / café com leite': /galao|latte|macchiato|mocha|cafe com leite/, 'Chá': /chai/, 'Sushi': /nigiri|uramaki|hot roll|sushi/, 'Coxinha': /coxinha/, 'Pastel de nata': /pastel de nata/, 'Croissant': /croissant/,
+  'Bolacha de chocolate (cookie)': /cookie/, 'Bolo de chocolate': /muffin de chocolate|brownie|cheesecake/, 'Refrigerante de cola': /coca-cola/, 'Frango inteiro': /1\/4 de frango|peca de frango|balde|frango original/, 'Asa de frango': /asas|wings|hot wings/, 'Esparguete à bolonhesa': /massa/, 'Lasanha à bolonhesa': /lasanha/,
+  'Quibe': /kibe|quibe/, 'Croquete de carne': /croquete/, 'Pão de queijo': /pao de queijo/, 'Arroz de frango': /prato de frango|frango.*arroz/, 'Frango com arroz e legumes': /prato de frango|chicken box/, 'Sopa de legumes': /sopa/, 'Sumo de laranja': /sumo natural/, 'Bitoque': /h3|prato/, 'Yakisoba': /yakisoba|xadrez|orange chicken/ };
+const brandCards = () => { const base = FS.base, g = FS.grp; if (!base) return ''; const d = brandData(brandsRefresh);
+  if (!d) return `<div class="fd-bwait"><div class="fd-spin"></div><small>A carregar as marcas de ${esc(CTY.get()[1])}…</small></div>`;
+  const fr = g && FFM[g.name];
+  const rows = g ? (d[g.id.slice(1)] || []) : [], prods = (fr ? ffHere().filter(x => fr.test(norm(x.name + ' ' + x.brand))) : []).concat(rows.map(r => prodOf(r, g))), have = new Set(prods.map(x => norm(x.brand)));
+  const others = brandNames(g).filter(nm => !have.has(norm(nm)));
+  const card = x => `<button class="fd-bc ${FS.sel === x ? 'on' : ''}" data-fa="brand" data-id="${x.id}">${Diet.img(x.name, x.cat, '', x.pic || (g && g.pic))}<b>${esc(x.brand)}</b><small>${esc(x.name)}</small><em class="mono">${U.nf(x.kcal)} kcal/100 g</em></button>`;
+  return `<div class="fd-bns"><button class="chip ${!FS.brand && FS.sel === base ? 'on' : ''}" data-fa="brand" data-id="gen">Sem marca (valores médios)</button></div>`
+    + (prods.length ? `<div class="fd-lab sm">${prods.length} marcas, cadeias e produtos com os valores reais (${esc(CTY.get()[1])})</div><div class="fd-bp">${prods.map(card).join('')}</div>` : '')
+    + (others.length ? `<div class="fd-lab sm">${prods.length ? 'Outras marcas' : 'Marcas'} à venda em ${esc(CTY.get()[1])} (valores médios)</div><div class="fd-bns">${others.map(nm => `<button class="chip ${FS.brand === nm && FS.sel === base ? 'on' : ''}" data-fa="bname" data-v="${esc(nm)}">${esc(nm)}</button>`).join('')}</div>` : ''); };
 const brandsRefresh = () => { const el = fh().querySelector('.fd-bl'); if (el && FS && FS.base) el.innerHTML = brandCards(); };
 document.addEventListener('submit', e => { if (!e.target.matches('[data-fbq-form]')) return; e.preventDefault(); e.stopPropagation(); if (!FS) return; const v = e.target.querySelector('[data-fbq]').value.trim(); FS.bq = v; fDraw(); offSearch(v); }, true);
 
