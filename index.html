@@ -1883,7 +1883,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.42", "date": "04/10/2026", "notes": ["Corridas do relógio Aurea Fit: o atalho do iPhone lê a corrida no Saúde e abre-a na Oceanum já preenchida (km, tempo, ritmo, FC)"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.43", "date": "04/10/2026", "notes": ["Retirada a secção Empresa (Mova) do menu e dos resumos"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -3112,7 +3112,7 @@ Cal.items = (from, to) => {
   OS.all('goals').forEach(g => { if (g.due && g.due >= from && g.due <= to && g.status === 'Ativa') push({ date: g.due, title: 'Meta: ' + g.title, src: 'goal', edit: 'goals:' + g.id }); });
   OS.all('projects').forEach(g => { if (g.due && g.due >= from && g.due <= to && !['Concluído', 'Cancelado'].includes(g.status)) push({ date: g.due, title: 'Projeto: ' + g.name, src: 'goal', edit: 'projects:' + g.id }); });
   OS.all('routine').forEach(r => days.forEach(d => { if ((r.days || []).includes(String(U.parse(d).getDay()))) push({ date: d, start: r.start, end: r.end, title: r.title, src: 'routine', edit: 'routine:' + r.id }); }));
-  OS.all('mvclients').forEach(c => { if (c.next && c.next >= from && c.next <= to && !['Perdido', 'Inativo'].includes(c.status)) push({ date: c.next, title: 'Mova · contactar ' + c.name, src: 'mova', edit: 'mvclients:' + c.id }); });
+  if (0) OS.all('mvclients').forEach(c => { if (c.next && c.next >= from && c.next <= to && !['Perdido', 'Inativo'].includes(c.status)) push({ date: c.next, title: 'Mova · contactar ' + c.name, src: 'mova', edit: 'mvclients:' + c.id }); });
   OS.all('contacts').forEach(c => { if (c.next && c.next >= from && c.next <= to) push({ date: c.next, title: 'Follow-up: ' + c.name, src: 'opp', edit: 'contacts:' + c.id }); });
   Cal.gcal.forEach(g => { if (g.date >= from && g.date <= to) push(Object.assign({ src: 'gcal' }, g)); });
   return out.sort((a, b) => (a.date + (a.start || '99')).localeCompare(b.date + (b.start || '99')));
@@ -3246,9 +3246,9 @@ I.alerts = () => {
   OS.all('applications').filter(a => a.interview && a.interview >= t && U.diff(a.interview, t) <= 3).forEach(a => A('urgent', 'Carreira', `Entrevista: ${a.company}`, U.rel(a.interview), '#carreira'));
   const fu = OS.all('contacts').filter(c => c.next && c.next <= t); if (fu.length) A('attention', 'Carreira', `${fu.length} follow-up(s) de networking`, fu.slice(0, 3).map(c => c.name).join(' · '), '#carreira.rede');
   // Mova
-  OS.all('mvsales').filter(s => s.status === 'Pendente' && s.dueDate && s.dueDate < t).forEach(s => A('urgent', 'Mova', 'Pagamento de cliente em atraso', `${(OS.get('mvclients', s.client) || {}).name || 'Cliente'} · ${U.eur(Mv.rev(s))}`, '#mova.vendas'));
-  const mv = OS.one('mova'); if (U.num(mv.revenueTarget)) { const m = Mv.month(ym), day = +t.slice(8), exp = U.num(mv.revenueTarget) * day / U.dim(ym); if (day >= 10 && m.rev < exp * .7) A('attention', 'Mova', 'Receita do mês abaixo do ritmo da meta', `${U.eur(m.rev)} · esperado ${U.eur(exp)} até hoje`, '#mova'); }
-  OS.all('mvclients').filter(c => c.next && c.next <= t && !['Perdido', 'Inativo'].includes(c.status)).forEach(c => A('attention', 'Mova', `Contactar ${c.name}`, c.status, '#mova.clientes'));
+  // (Mova removida da app)
+  // (Mova removida da app)
+  // (Mova removida da app)
   // Agenda
   OS.Cal.items(t, U.addDays(t, 1)).filter(x => x.imp && !x.done && x.src !== 'exam').forEach(x => A('attention', 'Agenda', x.title, (x.date === t ? 'Hoje' : 'Amanhã') + (x.start ? ' às ' + x.start : ''), '#calendario'));
   // Revisões
@@ -3393,7 +3393,7 @@ I.metrics = [
   { k: 'hab', l: 'Consistência de hábitos (30 dias)', up: true, ratio: true, f: d => { const ds = U.range(U.addDays(d, -29), d).map(Hab.dayScore).filter(v => v != null); return ds.length ? U.avg(ds) : null; }, has: () => OS.all('habits').some(h => Object.keys(h.log || {}).length), fmt: v => U.pct(v) },
   { k: 'tasks', l: 'Tarefas concluídas (30 dias)', up: true, f: d => { const [a, b] = win(d, 30); return OS.all('tasks').filter(x => U.inRange(x.doneAt, a, b)).length; }, has: () => OS.all('tasks').some(x => x.doneAt), fmt: v => U.nf(v) },
   { k: 'cap', l: 'Capital profissional', stock: true, up: true, f: d => OS.Car.capital(d).score, has: () => true, fmt: v => U.nf(v) + ' pts' },
-  { k: 'mova', l: 'Receita Mova (30 dias)', up: true, f: d => { const [a, b] = win(d, 30); return U.sum(OS.all('mvsales').filter(s => U.inRange(s.date, a, b) && s.status !== 'Cancelado'), Mv.rev); }, has: () => OS.all('mvsales').length, fmt: v => U.eur(v, { dec: 0 }) }
+  { k: 'mova', off: 1, l: 'Receita Mova (30 dias)', up: true, f: d => 0, has: () => 0, fmt: v => U.eur(v, { dec: 0 }) }
 ];
 I.firstDate = () => { const ds = []; ['transactions', 'sessions', 'workouts', 'runs', 'tasks', 'mvsales'].forEach(c => OS.all(c).forEach(r => { const d = r.date || r.doneAt; if (d) ds.push(d); })); return ds.sort()[0] || U.today(); };
 I.compare = m => { const t = U.today(); return [0, 30, 90, 365].map(n => { const d = U.addDays(t, -n); if (d < I.firstDate() && n) return null; const v = m.f(d); return v == null ? null : v; }); };
@@ -3520,7 +3520,6 @@ V.painel = () => {
     ['universidade', 'Estudos', 'Universidade', U.nf(studyWk, 1) + (studyTgt ? '/' + studyTgt : '') + ' h', 'esta semana' + (St.gpa() ? ' · média ' + St.gpa() : '')],
     ['treino', 'Corpo', 'Treino', wkW + '/' + (p.trainTarget || 4) + ' treinos', U.nf(kmW, 1) + ' km corridos esta semana'],
     ['capital', 'Carreira', 'Carreira', U.nf(cap.score) + ' pts', 'capital profissional ' + (cap.score >= capPrev.score ? '+' : '') + (cap.score - capPrev.score) + ' em 30d'],
-    ['mova', 'Mova', 'Mova', U.eur(mv.rev, { dec: 0 }), 'receita do mês · lucro ' + U.eur(mv.profit, { dec: 0 })],
     ['metas', 'Metas', 'Metas', onPace + '/' + goals.length, 'metas no ritmo']
   ];
   const lifeTone = k => k === 'Finanças' ? areaTone('Finanças') : k === 'Universidade' ? areaTone('Universidade') : k === 'Treino' ? (areaTone('Treino') === 'pos' && areaTone('Corrida') === 'pos' ? 'pos' : 'warn') : k === 'Carreira' ? (areaTone('Oportunidades') === 'neg' || areaTone('Carreira') === 'neg' ? 'neg' : areaTone('Oportunidades') === 'warn' ? 'warn' : 'pos') : k === 'Mova' ? areaTone('Mova') : areaTone('Metas');
@@ -3568,7 +3567,7 @@ V.painel = () => {
       ${goals.slice(0, 5).map(x => `<div style="margin-bottom:12px" data-edit="goals:${x.g.id}" class="click"><div class="row between gap8" style="font-size:13px;margin-bottom:5px"><span>${esc(x.g.title)}</span>${UI.badge(x.st[0], x.st[1])}</div>${UI.bar(x.p, x.p >= 1 ? 'pos' : x.late ? 'neg' : x.behind ? 'warn' : '', x.exp)}</div>`).join('') || UI.empty('Sem metas ativas.', UI.addBtn('goals', 'Nova meta', null, ''))}
       ${projs.length ? `<div class="divider"></div>${projs.map(x => `<div class="li"><div class="li-t click" data-edit="projects:${x.p.id}"><b>${esc(x.p.name)}</b><small>${x.done.length}/${x.tasks.length} tarefas${x.stalled ? ' · <span class="warn">parado há ' + x.idle + ' dias</span>' : ''}</small></div><span class="mono" style="font-size:12px">${Math.round(x.prog * 100)}%</span></div>`).join('')}` : ''}</div>
     <div class="pn"><div class="pn-h"><h3>${UI.ic('briefcase')}Carreira e Mova</h3><a class="more" href="#capital">${UI.ic('right')}</a></div>
-      <div class="kpis" style="margin-bottom:14px">${UI.kpi('Capital profissional', U.nf(cap.score), UI.trend(cap.score, capPrev.score) + ' em 30 dias', { href: 'capital' })}${UI.kpi('Mova · lucro do mês', U.eur(mv.profit, { dec: 0 }), mv.rev ? 'margem ' + U.pct(mv.margin) + ' · ' + UI.trend(mv.rev, mvPrev.rev).replace(/<[^>]+>/g, '') : 'sem vendas este mês', { href: 'mova', tone: mv.profit < 0 ? 'neg' : '' })}</div>
+      <div class="kpis" style="margin-bottom:14px">${UI.kpi('Capital profissional', U.nf(cap.score), UI.trend(cap.score, capPrev.score) + ' em 30 dias', { href: 'capital' })}</div>
       ${opps.length ? opps.map(o => `<div class="li"><span class="when">${U.fmtDS(o.deadline)}</span><div class="li-t click" data-edit="opps:${o.id}"><b>${esc(o.name)}</b><small>${esc([o.kind, o.next].filter(Boolean).join(' · '))}</small></div>${UI.badge(U.rel(o.deadline), U.diff(o.deadline, t) <= 7 ? 'neg' : '')}</div>`).join('') : UI.empty('Sem oportunidades com prazo. Regista-as no Opportunity Center.')}</div>
   </div>
   ${ins.length ? `<div class="pn"><div class="pn-h"><h3>${UI.ic('chart')}Tendências</h3><a class="more" href="#evolucao">Minha evolução ${UI.ic('right')}</a></div>${ins.map(x => `<div class="ins">${UI.ic(x.tone === 'pos' ? 'arrowUp' : 'arrowDown', x.tone)}<div><span class="eyebrow">${esc(x.area)}</span><div>${esc(x.text)}</div></div></div>`).join('')}</div>` : ''}`;
@@ -8020,7 +8019,6 @@ const NAV = [
   ['Estudos', [['universidade', 'Universidade', 'school'], ['aprendizagem', 'Aprendizagem', 'brain'], ['conhecimento', 'Knowledge Base', 'note']]],
   ['Corpo', [['corpo', 'Visão do corpo', 'heart'], ['treino', 'Treino', 'dumbbell'], ['dieta', 'Dieta', 'apple'], ['corrida', 'Corrida', 'run']]],
   ['Carreira', [['trabalho', 'Trabalho', 'briefcase'], ['carreira', 'Carreira & Networking', 'users'], ['capital', 'Capital Profissional', 'star'], ['oportunidades', 'Oportunidades', 'door']]],
-  ['Empresa', [['mova', 'Mova', 'rocket']]],
   ['Direção', [['northstar', 'North Star', 'compass'], ['roadmap', 'Roadmap', 'map'], ['longterm', 'Long Term', 'mountain'], ['decisoes', 'Decision Center', 'scale'], ['revisao', 'Revisões', 'rewind'], ['evolucao', 'Minha Evolução', 'chart']]]];
 const TITLES = { dominus: ['Dominus', 'Jogo'], definicoes: ['Definições', 'Sistema'] };
 NAV.forEach(([g, items]) => items.forEach(([k, l]) => TITLES[k] = [l, g]));
