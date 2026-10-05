@@ -1654,6 +1654,9 @@ svg.anim{width:100%;height:auto;display:block;border-radius:12px}
 .rl-ol{margin:6px 0 0;padding-left:18px;display:grid;gap:6px;font-size:13px;line-height:1.45}.rl-ol code{font-size:11.5px;word-break:break-all;background:var(--pn2);padding:1px 4px;border-radius:4px}
 .sim-note{margin:0;max-width:860px}.sim-top .ctry-bar{margin:0 0 10px}
 .sim .sim-out .kpi-s{display:flex;font-size:11.5px;color:var(--mut)}
+.lv-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 10px;font-size:12px;color:var(--tx2)}.lv-h{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--tx)}.lv-i b{font-weight:600;color:var(--tx)}.lv-i small{color:var(--mut);font-size:11px}
+.lv-dot{width:8px;height:8px;border-radius:50%;background:var(--pos);box-shadow:0 0 0 3px color-mix(in srgb,var(--pos) 25%,transparent);animation:lvp 2s infinite}.lv-dot.busy{background:var(--warn);animation:lvp .8s infinite}.lv-dot.off{background:var(--mut);animation:none;box-shadow:none}@keyframes lvp{50%{opacity:.45}}
+.lv-tag{font-size:10px;font-weight:600;color:var(--pos);border:1px solid color-mix(in srgb,var(--pos) 45%,transparent);border-radius:99px;padding:0 6px;margin-left:4px;vertical-align:1px}
 
 </style>
 <style>
@@ -1885,7 +1888,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.46", "date": "04/10/2026", "notes": ["Simuladores seguem o país escolhido na Visão: moeda, inflação, taxas de referência e produtos locais", "Impostos de cada país (ex.: 28% em Portugal, IR regressivo no Brasil) e valor líquido no juros compostos", "Empréstimos cotados à maneira de cada país (TAN/TAEG com Imposto do Selo, juros ao mês e CET com IOF no Brasil, APR…)"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.49", "date": "04/10/2026", "notes": ["Simuladores seguem o país escolhido na Visão: moeda, inflação, taxas de referência e produtos locais", "Impostos de cada país (ex.: 28% em Portugal, IR regressivo no Brasil) e valor líquido no juros compostos", "Empréstimos cotados à maneira de cada país (TAN/TAEG com Imposto do Selo, juros ao mês e CET com IOF no Brasil, APR…)"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -4103,7 +4106,14 @@ const FP = {
     prod: [['Depósito a prazo', 2], ['Títulos do Tesouro', 3.5], ['Bolsa (BVC)', 6]],
     note: 'O escudo está ligado ao euro (110,265 CVE = 1 €). Juros pagam imposto retido na fonte (aqui ~20%).' })
 };
-const cc = () => (OS.Country ? OS.Country.code() : 'PT'), F = () => FP[cc()] || FP.PT;
+const cc = () => (OS.Country ? OS.Country.code() : 'PT');
+/* perfil do país com os valores AO VIVO por cima (inflação, depósitos, crédito, produtos) quando já foram obtidos */
+let FC = null;
+const F = () => { const c = cc(), b = FP[c] || FP.PT, L = OS.LiveRates && OS.LiveRates.vals(c); if (!L) return b; if (FC && FC.c === c && FC.L === L) return FC.o;
+  const o = Object.assign({}, b, { live: L }), r = (x, d = 2) => Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
+  if (L.inf) o.inf = r(L.inf.v, 1); if (L.dep) o.dep = r(L.dep.v); if (L.loan) o.loan = r(L.loan.v);
+  o.prod = b.prod.map((p, i) => L.prod && L.prod[i] ? [p[0], r(L.prod[i].v), p[2]] : p);
+  FC = { c, L, o }; return o; };
 OS.FinCountry = { FP, get: F };
 const nice = v => { if (!v) return 0; const p = Math.pow(10, Math.max(0, Math.floor(Math.log10(Math.abs(v))) - 1)); return Math.round(v / p) * p; };
 const M = (v, o = {}) => { const f = F(), n = Number(v) || 0, d = o.dec ?? 2; return (o.sign && n > 0 ? '+' : '') + (n < 0 ? '−' : '') + f.sym + ' ' + Math.abs(n).toLocaleString(f.loc, { minimumFractionDigits: d, maximumFractionDigits: d }); };
@@ -4112,10 +4122,16 @@ const pp = v => (+v).toLocaleString('pt-PT', { maximumFractionDigits: 2 }) + '%'
 const SIMS = [['juros', 'Juros compostos'], ['emprestimo', 'Empréstimo'], ['parcelado', 'Parcelado vs à vista'], ['compra', 'Impacto de uma compra'], ['meta', 'Meta financeira'], ['independencia', 'Independência financeira'], ['taxas', 'Comparar taxas'], ['inflacao', 'Inflação']];
 const skey = k => cc() === 'PT' ? k : k + '_' + cc(); // cada país guarda os seus valores
 const sv = (k, d) => Object.assign({}, d, OS.ui['sim_' + skey(k)] || {});
-const inp = (k, f, l, v, unit = '', step = 'any') => { const cur = unit === '€', sym = F().sym; return `<div class="fld"><label for="s_${k}_${f}">${l}</label><div class="inp-wrap">${cur ? `<span>${sym}</span>` : ''}<input id="s_${k}_${f}" type="number" step="${step}" inputmode="decimal" value="${v}" data-sim="${skey(k)}.${f}" data-fk="sim${k}${f}">${unit && !cur ? `<span>${unit}</span>` : ''}</div></div>`; };
+const LIVE = { juros: { inf: 'inf' }, emprestimo: { r: 'loan' }, parcelado: { r: 'dep' }, meta: { r: 'dep' }, inflacao: { inf: 'inf' }, taxas: { r1: 'p0', r2: 'p1', r3: 'p2' } };
+const isLive = (k, fld) => { const L = F().live, src = (LIVE[k] || {})[fld]; if (!L || !src) return false; const st = OS.ui['sim_' + skey(k)]; if (st && st[fld] != null) return false; return src[0] === 'p' && src.length === 2 ? !!(L.prod && L.prod[src[1]]) : !!L[src]; };
+const inp = (k, f, l, v, unit = '', step = 'any') => { const cur = unit === '€', sym = F().sym; if (isLive(k, f)) l += ' <span class="lv-tag">ao vivo</span>'; return `<div class="fld"><label for="s_${k}_${f}">${l}</label><div class="inp-wrap">${cur ? `<span>${sym}</span>` : ''}<input id="s_${k}_${f}" type="number" step="${step}" inputmode="decimal" value="${v}" data-sim="${skey(k)}.${f}" data-fk="sim${k}${f}">${unit && !cur ? `<span>${unit}</span>` : ''}</div></div>`; };
 /* custo efetivo de um crédito (TAEG / CET / APR…): taxa que iguala o dinheiro recebido ao que se paga */
 const effRate = (got, flows) => { let lo = 0, hi = 1; for (let it = 0; it < 80; it++) { const x = (lo + hi) / 2, v = flows.reduce((s, c, m) => s + c / Math.pow(1 + x, m + 1), 0); if (v > got) lo = x; else hi = x; } return Math.pow(1 + (lo + hi) / 2, 12) - 1; };
 const SC = OS.SimCalc = { effRate, FP };
+const liveBar = f => { const LR = OS.LiveRates, c = cc(); if (!LR) return ''; LR.fetch(c); const st = LR.state(c), L = f.live, it = (l, x, unit = '%') => x ? `<span class="lv-i"><b>${l} ${pp(x.v)}${unit === '%' ? '' : ' ' + unit}</b> <small>${esc(LR.when2(x.d))} · ${esc(x.s)}</small></span>` : '';
+  const items = L ? [it('Inflação', L.inf), it(L.depL || 'Depósitos', L.dep), L.raw && L.raw.selic ? it('Selic', L.raw.selic) : '', L.raw && L.raw.dfr ? it('Taxa do BCE', L.raw.dfr) : '', it(c === 'BR' ? 'Crédito pessoal' : 'Crédito ao consumo', L.loan, f.mo ? 'a.m.' : ''), L.raw && L.raw.cons ? it('Consignado INSS', L.raw.cons, 'a.m.') : ''].join('') : '';
+  const head = st === 'busy' ? `<span class="lv-dot busy"></span>A atualizar as taxas ao vivo…` : st === 'live' ? `<span class="lv-dot"></span>Ao vivo` : st === 'stale' ? `<span class="lv-dot off"></span>Sem ligação · últimos valores obtidos ${LR.when(c) ? U.fmtD(U.iso(new Date(LR.when(c)))) : ''}` : st === 'fail' ? `<span class="lv-dot off"></span>Sem ligação · a usar valores de referência` : `<span class="lv-dot busy"></span>A obter as taxas ao vivo…`;
+  return `<div class="lv-bar"><span class="lv-h">${head}</span>${items}<button class="btn xs ghost" data-act="ratesRefresh" ${st === 'busy' ? 'disabled' : ''}>Atualizar</button></div>`; };
 V.simuladores = sub => {
   const k = sub || 'juros'; const p = OS.one('profile'); const pr = I.finProjection(); const f = F(), $ = v => nice(v * f.k);
   let inH = '', out = '';
@@ -4150,18 +4166,95 @@ V.simuladores = sub => {
     const contrib = +s.p0 + s.pmt * 12 * s.y, netOf = (fv, j) => { const ex = pd[j][2], g = fv - contrib; return fv - (ex === 1 ? 0 : ex ? Math.max(0, g) * ex : f.tax(g, +s.y)); };
     inH = inp(k, 'p0', 'Valor inicial', s.p0, '€') + inp(k, 'pmt', 'Aporte mensal', s.pmt, '€') + inp(k, 'y', 'Anos', s.y, 'anos', 1) + inp(k, 'r1', pd[0][0], s.r1, '%/ano') + inp(k, 'r2', pd[1][0], s.r2, '%/ano') + inp(k, 'r3', pd[2][0], s.r3, '%/ano');
     const sr = [ser(s.r1), ser(s.r2), ser(s.r3)], rs = [s.r1, s.r2, s.r3];
-    out = `<div class="kpis">${sr.map((a, j) => UI.kpi(`${esc(pd[j][0])} · ${pp(rs[j])}`, M(a[a.length - 1], { dec: 0 }), 'líquido: ' + M(netOf(a[a.length - 1], j), { dec: 0 }) + (pd[j][2] === 1 ? ' (isento)' : ''))).join('')}</div>${C.mount({ type: 'line', labels: sr[0].map((_, y) => 'a' + y), series: sr.map((a, j) => ({ name: pd[j][0], data: a, color: ['var(--mut)', 'var(--accent)', 'var(--c2)'][j] })), fmt: MK, area: false }, 280)}<div class="note">Taxas de referência aproximadas para ${esc(OS.Country ? OS.Country.get()[1] : 'Portugal')} — confirma as do teu banco/corretora e muda à vontade. Impostos: ${f.taxL}.</div>`; }
+    out = `<div class="kpis">${sr.map((a, j) => UI.kpi(`${esc(pd[j][0])} · ${pp(rs[j])}`, M(a[a.length - 1], { dec: 0 }), 'líquido: ' + M(netOf(a[a.length - 1], j), { dec: 0 }) + (pd[j][2] === 1 ? ' (isento)' : ''))).join('')}</div>${C.mount({ type: 'line', labels: sr[0].map((_, y) => 'a' + y), series: sr.map((a, j) => ({ name: pd[j][0], data: a, color: ['var(--mut)', 'var(--accent)', 'var(--c2)'][j] })), fmt: MK, area: false }, 280)}<div class="note">${f.live && Object.keys(f.live.prod || {}).length ? 'Taxas ao vivo onde há fonte oficial (' + Object.keys(f.live.prod).map(i => esc(f.prod[i][0])).join(', ') + '); as outras são referências aproximadas' : 'Taxas de referência aproximadas'} para ${esc(OS.Country ? OS.Country.get()[1] : 'Portugal')} — confirma as do teu banco/corretora e muda à vontade. Impostos: ${f.taxL}.</div>`; }
   if (k === 'inflacao') { const s = sv(k, { amt: $(1000), inf: f.inf, y: 20 }); const ys = Array.from({ length: +s.y + 1 }, (_, y) => y);
     inH = inp(k, 'amt', 'Valor', s.amt, '€') + inp(k, 'inf', 'Inflação anual', s.inf, '%') + inp(k, 'y', 'Anos', s.y, 'anos', 1);
     out = `<div class="kpis">${UI.kpi('Poder de compra daqui a ' + s.y + ' anos', M(s.amt / Math.pow(1 + s.inf / 100, s.y), { dec: 0 }), 'o que ' + M(s.amt, { dec: 0 }) + ' compram')}${UI.kpi('Preço equivalente no futuro', M(s.amt * Math.pow(1 + s.inf / 100, s.y), { dec: 0 }), 'o que hoje custa ' + M(s.amt, { dec: 0 }))}${UI.kpi('Perda', U.pct(1 - 1 / Math.pow(1 + s.inf / 100, s.y)), '', { tone: 'neg' })}${UI.kpi('Para não perder', pp(s.inf) + ' ao ano', 'líquido de impostos; referência local: ' + esc(f.prod[1][0]) + ' ' + pp(f.prod[1][1]))}</div>${C.mount({ type: 'line', labels: ys.map(y => 'a' + y), series: [{ name: 'Poder de compra', data: ys.map(y => s.amt / Math.pow(1 + s.inf / 100, y)), color: 'var(--neg)' }, { name: 'Preço equivalente', data: ys.map(y => s.amt * Math.pow(1 + s.inf / 100, y)), color: 'var(--c8)' }], fmt: MK }, 260)}`; }
   const cn = OS.Country ? OS.Country.get()[1] : 'Portugal', other = f.cur !== 'EUR' && (OS.Inv.value() || Fin.reserve());
   return UI.head('Simuladores', 'Muda as variáveis e vê o resultado. Moeda, taxas, impostos e regras seguem o país escolhido.', '', 'Dinheiro') +
-  `<div class="sim-top"><div class="ctry-bar sim-cty">${OS.Country ? OS.Country.btn() : ''}<small class="mut">${esc(cn)} · ${f.cur} · inflação ~${pp(f.inf)} · ${esc(f.taxL)}</small></div>
+  `<div class="sim-top"><div class="ctry-bar sim-cty">${OS.Country ? OS.Country.btn() : ''}<small class="mut">${esc(cn)} · ${f.cur} · ${esc(f.taxL)}</small></div>${liveBar(f)}
   <div class="note sim-note">${f.note}${other ? ' <br><small class="mut">Os valores que vêm dos teus dados (investimentos, reserva) aparecem como os registaste, sem conversão de moeda.</small>' : ''}</div></div>` +
   UI.tabs('simuladores', SIMS.map(([a, b]) => [a === 'juros' ? '' : a, b]), sub) +
   `<div class="sim"><div class="pn sim-in">${inH}<button class="btn ghost sm" data-act="simReset" data-k="${skey(k)}">Repor valores</button></div><div class="pn sim-out">${out}</div></div>`;
 };
 A.simReset = b => { delete OS.ui['sim_' + b.dataset.k]; OS.setUI('sim_' + b.dataset.k, undefined); };
+})();
+
+</script>
+<script>
+/* OCEANUM — taxas e inflação AO VIVO para os simuladores.
+   Vai buscar os últimos valores publicados às fontes oficiais (sem chave, direto do navegador) e guarda-os 6 h:
+   zona euro → Eurostat (inflação HICP) + BCE (taxas dos bancos: depósitos, poupança, crédito ao consumo);
+   Brasil → Banco Central do Brasil (IPCA 12 m, CDI, Selic, poupança, crédito pessoal);
+   EUA → BLS (CPI) + Tesouro (T-Bills); Reino Unido, Suíça, México → OCDE; Canadá → Banco do Canadá;
+   Argentina → BCRA; Angola, Moçambique, Cabo Verde → Banco Mundial (anual).
+   Sem ligação ficam os últimos valores obtidos ou, na falta deles, os valores de referência. */
+(() => {
+'use strict';
+const U = OS.U, A = OS.act;
+const KEY = 'oc_rates1', TTL = 6 * 36e5, RETRY = 10 * 6e4;
+const LR = OS.LiveRates = { busy: {} };
+let mem = {}; try { mem = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { mem = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(mem)); } catch (e) { } };
+const to = (p, ms = 25000) => Promise.race([p, new Promise((_, r) => setTimeout(() => r(new Error('tempo esgotado')), ms))]);
+const get = (u, kind = 'json') => to(fetch(u, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return kind === 'json' ? r.json() : r.text(); }));
+const csv = t => { const rows = []; let row = [], f = '', q = false; for (let i = 0; i < t.length; i++) { const ch = t[i]; if (q) { if (ch === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; } else if (ch === '"') q = true; else if (ch === ',') { row.push(f); f = ''; } else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; } else f += ch; } if (f || row.length) { row.push(f); rows.push(row); } const H = rows.shift() || []; return rows.filter(r => r.length > 1).map(r => Object.fromEntries(H.map((k, i) => [k, r[i]]))); };
+const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : null; };
+const pt = (v, d, s) => { if (v == null) return null; d = String(d || ''); const t = U.today(); if (d.length >= 10 && d > t) d = t; return { v: Math.round(v * 100) / 100, d, s }; };
+const fresh = (x, months = 18) => { if (!x || !x.d) return x; const m = x.d.match(/^(\d{4})(?:-(\d{2}))?/); if (!m) return x; const age = (new Date().getFullYear() - +m[1]) * 12 + (new Date().getMonth() + 1 - (+m[2] || 12)); return age <= (m[2] ? months : 30) ? x : null; };
+const yr = r => (Math.pow(1 + r / 100, 12) - 1) * 100, mo = r => (Math.pow(1 + r / 100, 1 / 12) - 1) * 100;
+
+/* ---------- fontes ---------- */
+const ECB = 'https://data-api.ecb.europa.eu/service/data/', ESTAT = 'https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/';
+const mir = async cc => { const r = csv(await get(`${ECB}MIR/M.${cc}.B.L22%2BL23%2BA2B.A%2BD%2BF.R.A.2250.EUR.N?lastNObservations=1&format=csvdata`, 'text')), o = {};
+  const pick = (k, name) => { const x = r.find(y => y.KEY === `MIR.M.${cc}.B.${k}.R.A.2250.EUR.N` && y.OBS_VALUE !== ''); if (x) o[name] = pt(num(x.OBS_VALUE), x.TIME_PERIOD, 'BCE'); };
+  pick('L22.F', 'dep'); pick('L23.D', 'sav'); pick('A2B.A', 'loan'); return o; };
+const ecb = async key => { const r = csv(await get(ECB + key + '?lastNObservations=1&format=csvdata', 'text')).filter(x => x.OBS_VALUE !== '' && x.OBS_VALUE != null); const x = r[r.length - 1]; return x ? pt(num(x.OBS_VALUE), x.TIME_PERIOD, 'BCE') : null; };
+const hicp = async cc => { const d = await get(`${ESTAT}prc_hicp_minr?geo=${cc}&unit=RCH_A&coicop18=TOTAL&lastTimePeriod=1`); const t = Object.keys(d.dimension.time.category.index)[0], v = d.value && d.value['0']; return v == null ? null : pt(v, t, 'Eurostat'); };
+const bcb = async (s, f = v => v) => { const r = await get(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${s}/dados/ultimos/1?formato=json`); const x = r && r[0]; if (!x) return null; const [d, m, y] = x.data.split('/'); return pt(f(num(x.valor)), `${y}-${m}-${d}`, 'Banco Central do Brasil'); };
+const OECD = 'https://sdmx.oecd.org/public/rest/data/';
+const oecd = async (flow, key, src = 'OCDE') => { const r = csv(await get(`${OECD}${flow}/${key}?lastNObservations=1&format=csv`, 'text')); const x = r[0]; return x ? pt(num(x.OBS_VALUE), x.TIME_PERIOD, src) : null; };
+const ISO3 = { GB: 'GBR', CH: 'CHE', MX: 'MEX', US: 'USA', CA: 'CAN' };
+const cpiO = cc => oecd('OECD.SDD.TPS,DSD_PRICES@DF_PRICES_ALL,1.0', `${ISO3[cc]}.M.N.CPI.PA._T.N.GY`), r3m = cc => oecd('OECD.SDD.STES,DSD_STES@DF_FINMARK,4.0', `${ISO3[cc]}.M.IR3TIB.PA.....`);
+const wb = async (cc, ind) => { const r = await get(`https://api.worldbank.org/v2/country/${cc}/indicator/${ind}?format=json&mrnev=1`); const x = r && r[1] && r[1][0]; return x && x.value != null ? pt(x.value, x.date, 'Banco Mundial') : null; };
+const bcra = async id => { const r = await get(`https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/${id}?limit=1`); const x = r && r.results && r.results[0] && r.results[0].detalle && r.results[0].detalle[0]; return x ? pt(x.valor, x.fecha, 'BCRA') : null; };
+const bls = async () => { const r = await get('https://api.bls.gov/publicAPI/v1/timeseries/data/CUUR0000SA0'); const d = r.Results.series[0].data, a = d[0], b = d.find(x => x.period === a.period && +x.year === +a.year - 1); return b ? pt((a.value / b.value - 1) * 100, `${a.year}-${a.period.slice(1)}`, 'BLS (EUA)') : null; };
+const tbill = async () => { const r = await get('https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/avg_interest_rates?filter=security_desc:eq:Treasury%20Bills&sort=-record_date&page%5Bsize%5D=1'); const x = r.data && r.data[0]; return x ? pt(num(x.avg_interest_rate_amt), x.record_date, 'Tesouro dos EUA') : null; };
+const boc = async () => { const r = await get('https://www.bankofcanada.ca/valet/observations/STATIC_TOTALCPICHANGE,V39079/json?recent=1'), o = {}; (r.observations || []).forEach(x => { if (x.STATIC_TOTALCPICHANGE) o.inf = pt(num(x.STATIC_TOTALCPICHANGE.v), x.d, 'Banco do Canadá'); if (x.V39079) o.on = pt(num(x.V39079.v), x.d, 'Banco do Canadá'); }); return o; };
+
+/* o que alimenta cada produto da aba "Comparar taxas" (índice do produto no perfil do país) */
+const PMAP = { PT: { 0: 'dep' }, ES: { 0: 'dep' }, FR: { 0: 'sav' }, IT: { 0: 'dep' }, DE: { 0: 'sav', 1: 'dep' }, IE: { 0: 'dep' }, BE: { 0: 'sav' }, NL: { 0: 'sav', 1: 'dep' }, LU: { 0: 'sav', 1: 'dep' },
+  BR: { 0: 'poup', 1: 'cdi', 2: 'lci' }, US: { 1: 'tbill' }, MX: { 1: 'r3m' }, AR: { 1: 'pf', 2: 'uva' }, AO: { 0: 'dep' }, MZ: { 0: 'dep' }, CV: { 0: 'dep' } };
+const EURO = ['PT', 'ES', 'FR', 'IT', 'DE', 'IE', 'BE', 'NL', 'LU'];
+const settle = async o => { const k = Object.keys(o), r = await Promise.allSettled(k.map(x => o[x])), out = {}; r.forEach((x, i) => { if (x.status === 'fulfilled' && x.value) out[k[i]] = x.value; }); return out; };
+const FETCH = cc => {
+  if (EURO.includes(cc)) return settle({ inf: hicp(cc), mir: mir(cc), dfr: ecb('FM/D.U2.EUR.4F.KR.DFR.LEV') }).then(o => { const m = o.mir || {}; delete o.mir; return Object.assign(o, m); });
+  if (cc === 'BR') return settle({ inf: bcb(13522), cdi: bcb(4389), selic: bcb(432), poup: bcb(195, yr), loan: bcb(20742, mo), cons: bcb(20746, mo) }).then(o => { if (!o.cdi && o.selic) o.cdi = Object.assign({}, o.selic, { v: Math.round((o.selic.v - .1) * 100) / 100 }); if (o.cdi) o.lci = Object.assign({}, o.cdi, { v: Math.round(o.cdi.v * 90) / 100 }); return o; });
+  if (cc === 'US') return settle({ inf: bls(), tbill: tbill(), r3m: r3m('US') });
+  if (cc === 'CA') return boc();
+  if (cc === 'GB' || cc === 'CH' || cc === 'MX') return settle({ inf: cpiO(cc), r3m: r3m(cc), wbinf: wb(cc, 'FP.CPI.TOTL.ZG') });
+  if (cc === 'AR') return settle({ inf: bcra(28), pf: bcra(1190), loan: bcra(14), badlar: bcra(7) }).then(o => { if (o.inf) o.uva = Object.assign({}, o.inf, { v: Math.round((o.inf.v + 1) * 100) / 100 }); return o; });
+  return settle({ inf: wb(cc, 'FP.CPI.TOTL.ZG'), dep: wb(cc, 'FR.INR.DPST'), loan: wb(cc, 'FR.INR.LEND') });
+};
+/* junta as séries no formato que os simuladores usam */
+const shape = (cc, o) => { Object.keys(o).forEach(k => { o[k] = fresh(o[k]); if (!o[k]) delete o[k]; });
+  if (!o.inf && o.wbinf) o.inf = o.wbinf;
+  const dk = ['dep', 'sav', 'cdi', 'tbill', 'pf', 'r3m', 'on'].find(k => o[k]), v = { inf: o.inf, loan: o.loan, dep: dk ? o[dk] : null, depL: { dep: 'Depósitos a prazo', sav: 'Poupança', cdi: 'CDI', tbill: 'T-Bills', pf: 'Plazo fijo', r3m: 'Juro a 3 meses', on: 'Taxa do banco central' }[dk], prod: {}, raw: o };
+  Object.entries(PMAP[cc] || {}).forEach(([i, k]) => { if (o[k]) v.prod[i] = o[k]; });
+  return v; };
+
+LR.vals = cc => (mem[cc] && mem[cc].v) || null;
+LR.state = cc => LR.busy[cc] ? 'busy' : mem[cc] && mem[cc].v ? (mem[cc].fail ? 'stale' : 'live') : mem[cc] && mem[cc].fail ? 'fail' : 'none';
+LR.when = cc => mem[cc] && mem[cc].ok;
+LR.fetch = (cc, force) => { const m = mem[cc]; if (LR.busy[cc]) return LR.busy[cc];
+  if (!force && m && Date.now() - m.at < (m.fail ? RETRY : TTL)) return Promise.resolve(m.v);
+  const job = FETCH(cc).then(o => { const prev = m && m.v && m.v.raw || {}, v = shape(cc, Object.assign({}, prev, o || {})), any = Object.keys(o || {}).length; mem[cc] = any ? { at: Date.now(), ok: Date.now(), v } : Object.assign({}, m, { at: Date.now(), fail: 1 }); save(); return mem[cc].v; })
+    .catch(() => { mem[cc] = Object.assign({}, m, { at: Date.now(), fail: 1 }); save(); return m && m.v; })
+    .finally(() => { delete LR.busy[cc]; if (/^#?simuladores/.test(location.hash.replace('#', ''))) OS.request(); });
+  LR.busy[cc] = job; return job; };
+A.ratesRefresh = () => { const cc = OS.Country ? OS.Country.code() : 'PT'; LR.fetch(cc, true); OS.request(); };
+/* texto curto: "inflação 3,6% (set 2026 · Eurostat)" */
+LR.when2 = d => { d = String(d || ''); return /^\d{4}-\d{2}/.test(d) ? U.fmtYM(d.slice(0, 7)) : d; };
 })();
 
 </script>
