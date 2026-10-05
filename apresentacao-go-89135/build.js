@@ -127,7 +127,7 @@ cur.addNotes("ABERTURA (≈30 s)\nApresentar a organização: Nata Lisboa — [s
 // ───────────────────────── 2. GRUPO
 slide("CONTEUDO");
 header("0", "// QUEM SOMOS", ["O GRUPO"]);
-const membros = [["Ryan Magalhães", "137142", "ryan.png"], ["Guilherme Barreiro", "", "guilherme.png"]];
+const membros = [["Ryan Magalhães", "137142", "ryan.png"], ["Guilherme Barreiro", "140385", "guilherme.png"]];
 membros.forEach(([nm, mec, foto], i) => {
   const x = 128 + i * 844, y = 236, n = `A${i + 1}|rise|membro${i + 1}`;
   card(x, y, 820, 260, n);
@@ -148,29 +148,82 @@ T("Um dos membros do grupo trabalha na Nata Lisboa, o que nos deu contacto diret
   { x: 156, y: 604, w: 1600, h: 90, size: 32, color: C.text, name: "A3|rise|escolha" });
 cur.addNotes("O GRUPO (≈20 s)\nCada membro apresenta-se rapidamente. Explicar porque escolhemos a Nata Lisboa e como chegámos à entrevistada. Para as fotos: clicar no círculo e usar Inserir > Imagem, ou apagar o texto FOTO.");
 
+// ───────────────────────── Modelo de 3 camadas: ① Em geral · ② Na Nata Lisboa · ③ Na prática
+const CONTENT = require("./content.json");
+const L1 = "① EM GERAL", L2 = "② NA NATA LISBOA", L3 = "③ NA PRÁTICA · CITAÇÃO DA MÔNICA CARDOSO", L3b = "③ NA PRÁTICA · EXEMPLO DO DIA A DIA";
+const estLines = (txt, w, px) => Math.max(1, Math.ceil((txt.length * px * 0.5) / w));
+
+function t3(id) {
+  const c = CONTENT.t3[id];
+  slide("CONTEUDO");
+  header(c.num, c.eyebrow, c.title);
+  // ① EM GERAL
+  mono(L1, { x: 128, y: 210, w: 1040, h: 30, color: C.or, name: "A1|fade|geral" });
+  const leadH = estLines(c.lead, 1040, 25) * 33 + 6;
+  T(c.lead, { x: 128, y: 246, w: 1040, h: leadH, size: 25, color: C.text, name: "A1|fade|geral" });
+  const top = 246 + leadH + 18, bottom = 748, cols = c.cols, n = c.items.length;
+  const rows = Math.ceil(n / cols), gap = c.layout === "flow" ? 44 : 16;
+  const w = (1040 - (cols - 1) * gap) / cols, h = (bottom - top - (rows - 1) * 16) / rows;
+  c.items.forEach((it, i) => {
+    const x = 128 + (i % cols) * (w + gap), y = top + Math.floor(i / cols) * (h + 16), nm = `A${2 + i}|rise|item${i}`;
+    card(x, y, w, h, nm, c.layout === "flow" && i === 1 ? C.card2 : C.card);
+    let yy = y + 16;
+    if (c.numbered) { T(String(i + 1), { x: x + 20, y: yy - 4, w: 80, h: 64, size: 56, bold: true, color: C.or, name: nm }); yy += 64; }
+    if (it.k) { mono(it.k, { x: x + 20, y: yy, w: w - 40, h: 26, size: 18, cs: 1, color: c.layout === "timeline" ? C.or : C.muted, name: nm }); yy += 26; }
+    const tSize = cols >= 4 ? 26 : 28;
+    const tH = estLines(it.t, w - 40, tSize * 1.1) * (tSize * 1.25);
+    T(it.t, { x: x + 20, y: yy, w: w - 40, h: tH, size: tSize, bold: true, name: nm }); yy += tH + 6;
+    if (it.l) {
+      T(it.l.flatMap(([b, d], k) => [{ text: b, options: { bold: true, color: C.text } }, { text: " — " + d, options: { color: C.muted, breakLine: k < it.l.length - 1 } }]),
+        { x: x + 20, y: yy, w: w - 40, h: y + h - yy - 12, size: 22, psa: 6, name: nm });
+    } else {
+      const avail = y + h - yy - 12;
+      let ds = cols >= 4 ? 21 : 23;
+      while (ds > 19 && estLines(it.d, w - 40, ds * 1.05) * ds * 1.22 > avail) ds -= 1;
+      T(it.d, { x: x + 20, y: yy, w: w - 40, h: avail, size: ds, color: C.muted, name: nm });
+    }
+    if (c.layout === "flow" && i < n - 1) R({ x: x + w + 8, y: y + h / 2 - 14, w: 28, h: 28, shape: pres.shapes.RIGHT_ARROW, fill: C.or, name: nm });
+  });
+  // ② NA NATA LISBOA
+  const nb = `A${2 + n}|rise|nata`;
+  R({ x: 1192, y: 210, w: 600, h: 538, fill: C.or, ft: 93, line: C.or, lw: 1.25, dash: "dash", name: nb });
+  mono(L2, { x: 1214, y: 226, w: 560, h: 30, color: C.phLabel, name: nb });
+  T(c.nata.flatMap((it, k) => [
+    { text: it.f ? "■  " : "+  ", options: { color: C.or, bold: true } },
+    { text: it.f || it.p, options: { color: it.f ? C.text : C.ph, italic: !it.f, breakLine: k < c.nata.length - 1 } },
+  ]), { x: 1214, y: 266, w: 556, h: 420, size: 22, psa: 9, name: nb });
+  if (c.nata.some((it) => it.f)) mono("■ " + CONTENT.fonte, { x: 1214, y: 700, w: 560, h: 40, size: 16, cs: 0, color: C.dim, name: nb });
+  // ③ NA PRÁTICA
+  quote(128, 772, 1040, 146, "“" + c.quote + "”", "K1|rise|citacao", L3);
+  R({ x: 1192, y: 772, w: 600, h: 146, line: C.dim, lw: 1.25, dash: "dash", name: `A${3 + n}|fade|exemplo` });
+  mono(L3b, { x: 1214, y: 786, w: 560, h: 28, size: 18, cs: 1, name: `A${3 + n}|fade|exemplo` });
+  T(c.example, { x: 1214, y: 820, w: 556, h: 88, size: 22, italic: true, color: C.ph, name: `A${3 + n}|fade|exemplo` });
+  cur.addNotes(c.notes);
+}
+
 // ───────────────────────── 3. ROTEIRO
 slide("CONTEUDO");
-header("0.5", "// ROTEIRO · CLIQUE NUM TEMA PARA SALTAR", ["O QUE VAMOS ", ["APRESENTAR"]]);
+header("0.5", "// ROTEIRO · EM CADA TEMA: ① EM GERAL  ② NA NATA LISBOA  ③ NA PRÁTICA", ["O QUE VAMOS ", ["APRESENTAR"]]);
 const roteiro = [
-  ["1", "A entrevista", "Quem é Mônica Cardoso, como decorreu a conversa e como tratámos as respostas"],
-  ["2", "3 características comuns", "Objetivo, pessoas e estrutura: o que todas as organizações têm em comum"],
-  ["3", "Sistema aberto", "Inputs, processo e outputs: como a Nata Lisboa transforma recursos"],
-  ["4", "Forças do ambiente externo", "Forças gerais e de tarefa: clientes, concorrentes, economia e mais"],
-  ["5", "Complexidade do ambiente", "Quantos fatores afetam a empresa e com que rapidez mudam"],
-  ["6", "Cultura organizacional", "As 6 dimensões da cultura e como os colaboradores a aprendem"],
-  ["7", "Os gestores", "Níveis de gestão, funções, papéis e competências da gerente"],
-  ["8", "Desafios da gestão", "Diversidade, globalização e evolução tecnológica na Nata Lisboa"],
+  ["1", "A entrevista", "Quem é Mônica Cardoso, como decorreu a conversa e como tratámos as respostas", 4],
+  ["2", "Caracterização", "Identidade, atividade, dimensão e modelo de negócio da Nata Lisboa", 5],
+  ["3", "Gestores e organizações", "O que é gerir, eficiência e eficácia, e as 3 características comuns", 6],
+  ["4", "História da gestão", "Das abordagens clássica e comportamental às contemporâneas", 8],
+  ["5", "Abordagem sistémica", "A Nata Lisboa como sistema aberto: inputs, processo, outputs e feedback", 9],
+  ["6", "Ambiente externo", "Forças gerais e de tarefa e o grau de complexidade do ambiente", 10],
+  ["7", "Cultura organizacional", "As 6 dimensões da cultura e como os colaboradores a aprendem", 13],
+  ["8", "Os gestores", "Níveis de gestão, funções, papéis e competências da gerente", 15],
+  ["9", "Desafios da gestão", "Diversidade, globalização e evolução tecnológica na Nata Lisboa", 17],
 ];
-const alvo = [4, 5, 6, 7, 9, 10, 12, 14];
-roteiro.forEach(([l, t, d], i) => {
-  const x = 128 + (i % 4) * 422, y = i < 4 ? 228 : 584, n = `A${i + 1}|rise|item${i}`, link = alvo[i];
-  card(x, y, 398, 340, n);
-  T(l, { x: x + 28, y: y + 18, w: 120, h: 96, font: F.serif, italic: true, size: 80, color: C.or, name: n });
-  T(t, { x: x + 28, y: y + 128, w: 342, h: 84, size: 32, bold: true, name: n });
-  T(d + "  →", { x: x + 28, y: y + 214, w: 342, h: 92, size: 24, color: C.muted, name: n });
-  R({ x, y, w: 398, h: 340, fill: "FFFFFF", ft: 100, name: n, link });
+roteiro.forEach(([l, t, d, link], i) => {
+  const x = 128 + (i % 3) * 560, y = 222 + Math.floor(i / 3) * 236, n = `A${i + 1}|rise|item${i}`;
+  card(x, y, 544, 220, n);
+  T(l, { x: x + 24, y: y + 14, w: 90, h: 100, font: F.serif, italic: true, size: 84, color: C.or, name: n });
+  T(t, { x: x + 120, y: y + 26, w: 400, h: 44, size: 30, bold: true, name: n });
+  T(d + "  →", { x: x + 120, y: y + 80, w: 400, h: 120, size: 23, color: C.muted, name: n });
+  R({ x, y, w: 544, h: 220, fill: "FFFFFF", ft: 100, name: n, link });
 });
-cur.addNotes("ROTEIRO (≈15 s)\nA apresentação segue as alíneas a) a g) do enunciado. Em cada tema: primeiro a teoria em geral, depois como se verifica na Nata Lisboa e, por fim, um exemplo ou citação da entrevista (caixas creme, que aparecem ao clique).");
+cur.addNotes("ROTEIRO (≈20 s)\nNove temas, que cobrem as alíneas a) a g) do enunciado e os conteúdos dos Tópicos 1 e 2. Em cada tema seguimos sempre a mesma ordem: ① em geral (a teoria), ② na Nata Lisboa (a organização) e ③ na prática (citações e exemplos da Mônica, ao clique).\nNo modo de apresentação, clicar num cartão salta para o tema.");
 
 // ───────────────────────── 4. ENTREVISTA
 slide("CONTEUDO");
@@ -193,7 +246,7 @@ mono("BLOCOS DO GUIÃO", { x: 128, y: 646, w: 900, h: 30, name: "A4|fade|blocos"
   const x = 128 + (i % 3) * 306, y = 688 + Math.floor(i / 3) * 72, n = `A${5 + i}|rise|bloco${i}`;
   T(b, { x, y, w: 290, h: 56, size: 24, color: C.text, valign: "middle", margin: 6, fill: C.card, line: C.line, name: n });
 });
-quote(1072, 236, 720, 200, "“[Frase marcante da Mônica Cardoso, tal como foi dita.]”", "K1|rise|citacao", "EXCERTO DA ENTREVISTA");
+quote(1072, 236, 720, 200, "“[Frase marcante da Mônica Cardoso, tal como foi dita.]”", "K1|rise|citacao", "FRASE MARCANTE DA ENTREVISTA");
 card(1072, 480, 720, 330, "A11|rise|tratamento");
 mono("TRATAMENTO DA INFORMAÇÃO", { x: 1100, y: 504, w: 660, h: 30, name: "A11|rise|tratamento" });
 T([
@@ -204,104 +257,47 @@ T([
 ], { x: 1100, y: 550, w: 670, h: 240, size: 26, psa: 8, name: "A11|rise|tratamento" });
 cur.addNotes("A ENTREVISTA (≈45 s)\nQuem foi entrevistada: Mônica Cardoso, gerente operacional da Nata Lisboa. Indicar data, duração e modalidade. Explicar que o guião foi organizado em blocos que correspondem aos temas da apresentação.\nClique: aparece a frase marcante da entrevista.");
 
-// ───────────────────────── 5. a) 3 CARACTERÍSTICAS
-section("a) Três características");
+section("Caracterização e Tópico 1");
+t3("caracterizacao");
+t3("gestao");
+t3("caracteristicas");
+section("Tópico 2 · História e abordagem sistémica");
+t3("historia");
+t3("sistema");
+section("Ambiente externo");
+t3("ambiente");
+// ───────────────────────── 8. FORÇAS NA NATA LISBOA
 slide("CONTEUDO");
-header("2", "// IDENTIFICAÇÃO", ["AS ", ["3 CARACTERÍSTICAS"], " COMUNS"]);
-T("Segundo Robbins & Coulter, todas as organizações — qualquer que seja o setor ou a dimensão — partilham três características.",
-  { x: 128, y: 206, w: 1664, h: 40, size: 26, color: C.muted, name: "A1|fade|intro" });
-[
-  ["1", "Objetivo distinto", "Toda a organização existe para alcançar algo: a sua razão de ser, expressa na missão e em metas concretas.", "[Missão / objetivo principal da Nata Lisboa]"],
-  ["2", "Pessoas", "Os objetivos não se cumprem sozinhos: são as pessoas que tomam decisões e realizam o trabalho.", "[N.º aproximado de colaboradores e principais funções]"],
-  ["3", "Estrutura deliberada", "Regras, funções e relações de autoridade definem quem faz o quê e como o trabalho se coordena.", "[Como está organizada: lojas, equipas, hierarquia]"],
-].forEach(([num, t, g, p], i) => {
-  const x = 128 + i * 554, y = 270, n = `A${i + 2}|rise|car${num}`;
-  card(x, y, 538, 480, n);
-  T(num, { x: x + 28, y: y + 18, w: 120, h: 96, size: 88, bold: true, color: C.or, name: n });
-  T(t, { x: x + 28, y: y + 118, w: 482, h: 48, size: 36, bold: true, name: n });
-  T(g, { x: x + 28, y: y + 176, w: 482, h: 120, size: 26, color: C.text, name: n });
-  phBox(x + 20, y + 310, 498, 150, p, n);
-});
-quote(128, 784, 1664, 120, "“[Excerto da entrevista que mostra uma destas características na Nata Lisboa.]”");
-cur.addNotes("a) 3 CARACTERÍSTICAS COMUNS (≈1 min)\nEM GERAL: qualquer organização é uma entidade com (1) um objetivo distinto, (2) pessoas e (3) uma estrutura deliberada (Robbins & Coulter, Tópico 1).\nNA NATA LISBOA: preencher cada caixa tracejada.\nClique: citação da entrevista.");
-
-// ───────────────────────── 6. b) SISTEMA ABERTO
-section("b) Sistema aberto");
-slide("CONTEUDO");
-header("3", "// ABORDAGEM SISTÉMICA", ["UM ", ["SISTEMA ABERTO"]]);
-T("A organização troca continuamente recursos e informação com o ambiente: recebe entradas, transforma-as e devolve saídas — e ajusta-se com base no feedback.",
-  { x: 128, y: 206, w: 1664, h: 72, size: 26, color: C.muted, name: "A1|fade|intro" });
-[
-  ["ENTRADAS", "INPUTS", "Recursos obtidos do ambiente: pessoas, matérias-primas, capital, informação e tecnologia.", "[Ex.: farinha, ovos, leite, açúcar, colaboradores, fornos]", C.card],
-  ["TRANSFORMAÇÃO", "PROCESSO", "Atividades que transformam as entradas: produção, operações, trabalho das equipas e gestão.", "[Ex.: produção dos pastéis, atendimento, gestão da loja]", C.card2],
-  ["SAÍDAS", "OUTPUTS", "O que devolve ao ambiente: produtos e serviços, resultados financeiros, emprego e impacto social.", "[Ex.: pastéis de nata, cafés, experiência do cliente, lucro]", C.card],
-].forEach(([l, t, g, p, fill], i) => {
-  const x = 128 + i * 576, y = 296, n = `A${2 + i * 2}|rise|bloco${i}`;
-  card(x, y, 512, 410, n, fill);
-  mono(l, { x: x + 28, y: y + 22, w: 456, h: 30, name: n });
-  T(t, { x: x + 28, y: y + 56, w: 456, h: 50, size: 40, bold: true, name: n });
-  T(g, { x: x + 28, y: y + 116, w: 456, h: 110, size: 24, name: n });
-  phBox(x + 20, y + 240, 472, 150, p, n);
-  if (i < 2) R({ x: x + 524, y: y + 180, w: 40, h: 50, shape: pres.shapes.RIGHT_ARROW, fill: C.or, name: `A${3 + i * 2}|wipeL|seta${i}` });
-});
-T([
-  { text: "↻  FEEDBACK  ", options: { bold: true, color: C.text } },
-  { text: "As reações do ambiente (clientes, vendas, avaliações) voltam a entrar no sistema e permitem ajustar.  ", options: { color: C.muted } },
-  { text: "[Como a Nata Lisboa recebe retorno e se ajusta]", options: { italic: true, color: C.ph } },
-], { x: 128, y: 724, w: 1664, h: 74, size: 24, valign: "middle", margin: 7, line: C.dim, dash: "dash", name: "A7|fade|feedback" });
-quote(128, 818, 1664, 104, "“[Excerto da entrevista sobre o funcionamento da Nata Lisboa.]”");
-cur.addNotes("b) SISTEMA ABERTO (≈1 min)\nEM GERAL: a abordagem sistémica (Teoria Geral dos Sistemas; Katz & Kahn) vê a organização como um sistema aberto que depende do ambiente: inputs → processo de transformação → outputs, com feedback que permite corrigir.\nNA NATA LISBOA: substituir os exemplos [Ex.: …] pelos dados confirmados na entrevista.\nClique: citação.");
-
-// ───────────────────────── 7. c) AMBIENTE EXTERNO (geral)
-section("c) Forças do ambiente externo");
-slide("CONTEUDO");
-header("4", "// AMBIENTE EXTERNO · EM GERAL", ["O ", ["AMBIENTE"], " EXTERNO"]);
-R({ x: 140, y: 250, w: 640, h: 640, shape: pres.shapes.OVAL, line: C.ring, lw: 1.25, dash: "dash", name: "A1|zoom|geral" });
-mono("AMBIENTE GERAL", { x: 310, y: 290, w: 300, h: 30, align: "center", name: "A1|zoom|geral" });
-R({ x: 270, y: 380, w: 380, h: 380, shape: pres.shapes.OVAL, fill: C.or, ft: 90, line: C.or, lw: 1.5, name: "A2|zoom|tarefa" });
-mono("AMBIENTE DE TAREFA", { x: 310, y: 414, w: 300, h: 30, size: 20, color: C.phLabel, align: "center", cs: 0, name: "A2|zoom|tarefa" });
-R({ x: 370, y: 480, w: 180, h: 180, shape: pres.shapes.OVAL, fill: C.or, name: "A3|zoom|org" });
-T("NATA\nLISBOA", { x: 370, y: 480, w: 180, h: 180, size: 28, bold: true, color: C.bg, align: "center", valign: "middle", name: "A3|zoom|org" });
-card(840, 250, 952, 300, "A4|rise|cardTarefa");
-mono("AMBIENTE DE TAREFA (ESPECÍFICO) · IMPACTO DIRETO", { x: 868, y: 274, w: 900, h: 30, color: C.or, name: "A4|rise|cardTarefa" });
-T("Grupos com que a organização interage diretamente e que afetam, de imediato, o cumprimento dos seus objetivos.",
-  { x: 868, y: 318, w: 896, h: 80, size: 26, name: "A4|rise|cardTarefa" });
-{ let cx = 868; ["Clientes", "Fornecedores", "Concorrentes", "Grupos de pressão"].forEach((t) => { cx += chip(cx, 470, t, "A4|rise|cardTarefa") + 14; }); }
-card(840, 578, 952, 312, "A5|rise|cardGeral");
-mono("AMBIENTE GERAL (CONTEXTUAL) · IMPACTO INDIRETO", { x: 868, y: 602, w: 900, h: 30, color: C.muted, name: "A5|rise|cardGeral" });
-T("Condições amplas, fora do controlo da organização, que afetam todas as organizações do setor.",
-  { x: 868, y: 646, w: 896, h: 80, size: 26, name: "A5|rise|cardGeral" });
-{ let cx = 868; ["Económicas", "Político-legais", "Socioculturais"].forEach((t) => { cx += chip(cx, 744, t, "A5|rise|cardGeral", C.muted) + 14; }); }
-{ let cx = 868; ["Demográficas", "Tecnológicas", "Globais"].forEach((t) => { cx += chip(cx, 806, t, "A5|rise|cardGeral", C.muted) + 14; }); }
-cur.addNotes("c) AMBIENTE EXTERNO — EM GERAL (≈45 s)\nO ambiente externo são as forças e instituições fora da organização que a podem afetar.\n• Ambiente de tarefa (específico): impacto direto e imediato — clientes, fornecedores, concorrentes e grupos de pressão.\n• Ambiente geral (contextual): impacto indireto — condições económicas, político-legais, socioculturais, demográficas, tecnológicas e globais.\nConfirmar a lista de forças com o PDF do Tópico 1.");
-
-// ───────────────────────── 8. c) FORÇAS NA NATA LISBOA
-slide("CONTEUDO");
-header("4", "// AMBIENTE EXTERNO · NA NATA LISBOA", ["FORÇAS NA ", ["NATA LISBOA"]]);
-mono("FORÇAS DE TAREFA · IMPACTO DIRETO", { x: 128, y: 214, w: 1200, h: 30, color: C.or, name: "A1|fade|lblTarefa" });
-[["CLIENTES", "[Quem são: turistas, residentes, empresas…?]"], ["FORNECEDORES", "[Principais: matérias-primas, embalagens, café…]"],
- ["CONCORRENTES", "[Outras pastelarias e cadeias de pastéis de nata]"], ["GRUPOS DE PRESSÃO", "[ASAE, autarquia, media, avaliações online…]"]].forEach(([l, p], i) => {
+header("6", "// AMBIENTE EXTERNO · FORÇA A FORÇA", ["FORÇAS NA ", ["NATA LISBOA"]]);
+mono("② NA NATA LISBOA · FORÇAS DE TAREFA (IMPACTO DIRETO)", { x: 128, y: 210, w: 1500, h: 30, color: C.or, name: "A1|fade|lblTarefa" });
+[["CLIENTES", "Quem compra.", "[Turistas, residentes, estudantes, empresas?]"], ["FORNECEDORES", "Quem fornece recursos.", "[Matérias-primas, embalagens, café, equipamento]"],
+ ["CONCORRENTES", "Quem disputa os clientes.", "[Pastelarias e cadeias de pastéis de nata perto da loja]"], ["GRUPOS DE PRESSÃO", "Quem influencia de fora.", "[ASAE, câmara municipal, media, avaliações online]"]].forEach(([l, g, p], i) => {
   const x = 128 + i * 420, n = `A${2 + i}|rise|tarefa${i}`;
-  card(x, 254, 404, 160, n);
-  mono(l, { x: x + 22, y: 272, w: 360, h: 30, name: n });
-  T(p, { x: x + 22, y: 310, w: 360, h: 90, size: 25, italic: true, color: C.ph, name: n });
+  card(x, 248, 404, 196, n);
+  mono(l, { x: x + 22, y: 264, w: 360, h: 30, color: C.text, name: n });
+  T(g, { x: x + 22, y: 298, w: 360, h: 32, size: 22, color: C.muted, name: n });
+  T(p, { x: x + 22, y: 336, w: 360, h: 96, size: 23, italic: true, color: C.ph, name: n });
 });
-mono("FORÇAS GERAIS · IMPACTO INDIRETO", { x: 128, y: 444, w: 1200, h: 30, name: "A6|fade|lblGeral" });
-[["ECONÓMICAS", "[Ex.: inflação, preço dos ovos e da energia, turismo]"], ["POLÍTICO-LEGAIS", "[Ex.: segurança alimentar, leis laborais, IVA]"],
- ["SOCIOCULTURAIS", "[Ex.: hábitos de consumo, tradição do pastel de nata]"], ["DEMOGRÁFICAS", "[Ex.: turistas vs. residentes, faixa etária]"],
- ["TECNOLÓGICAS", "[Ex.: entregas por app, pagamentos, redes sociais]"], ["GLOBAIS", "[Ex.: presença internacional, turismo global]"]].forEach(([l, p], i) => {
-  const x = 128 + (i % 3) * 560, y = 484 + Math.floor(i / 3) * 136, n = `A${7 + i}|rise|geral${i}`;
-  card(x, y, 544, 122, n);
-  mono(l, { x: x + 22, y: y + 16, w: 500, h: 30, name: n });
-  T(p, { x: x + 22, y: y + 52, w: 500, h: 60, size: 25, italic: true, color: C.ph, name: n });
+mono("② NA NATA LISBOA · FORÇAS GERAIS (IMPACTO INDIRETO)", { x: 128, y: 462, w: 1500, h: 30, color: C.muted, name: "A6|fade|lblGeral" });
+[["ECONÓMICAS", "", "[Ex.: inflação, preço dos ovos e da energia, turismo]"],
+ ["POLÍTICO-LEGAIS", "Regras de higiene e segurança alimentar; Livro de Reclamações Eletrónico.", "[Outras: leis laborais, IVA]"],
+ ["SOCIOCULTURAIS", "", "[Ex.: hábitos de consumo, tradição do pastel de nata]"],
+ ["DEMOGRÁFICAS", "", "[Ex.: turistas vs. residentes, faixa etária dos clientes]"],
+ ["TECNOLÓGICAS", "Delivery pela Uber Eats e take away NATA&GO.", "[Outras: pagamentos, redes sociais]"],
+ ["GLOBAIS", "Lojas em 5 países: Portugal, Espanha, Áustria, Alemanha e Angola.", "[Impacto do turismo na loja]"]].forEach(([l, f, p], i) => {
+  const x = 128 + (i % 3) * 560, y = 500 + Math.floor(i / 3) * 140, n = `A${7 + i}|rise|geral${i}`;
+  card(x, y, 544, 128, n);
+  mono(l, { x: x + 22, y: y + 14, w: 500, h: 30, color: C.text, name: n });
+  T(f ? [{ text: "■ " + f + " ", options: { color: C.text } }, { text: p, options: { italic: true, color: C.ph } }] : p,
+    { x: x + 22, y: y + 48, w: 500, h: 72, size: 21, italic: !f, color: C.ph, name: n });
 });
-quote(128, 778, 1664, 120, "“[Excerto em que a Mônica fala de clientes, concorrência ou mercado.]”");
-cur.addNotes("c) FORÇAS NA NATA LISBOA (≈1 min)\nPara cada força, indicar o que a afeta em concreto. Os textos [Ex.: …] são sugestões a confirmar com a entrevista — substituir ou apagar.\nDestacar as 2 ou 3 forças com mais impacto.\nClique: citação.");
+mono("■ " + CONTENT.fonte, { x: 128, y: 774, w: 1664, h: 26, size: 16, cs: 0, color: C.dim, name: "A12|fade|fonte" });
+quote(128, 806, 1664, 112, "“[Excerto em que a Mônica fala de clientes, concorrência ou mercado.]”", "K1|rise|citacao", L3);
+cur.addNotes("FORÇAS NA NATA LISBOA (≈1 min)\nTeoria no slide anterior; aqui fica o detalhe de cada força na Nata Lisboa. Os factos marcados com ■ vêm do site oficial; os textos [Ex.: …] são sugestões a confirmar com a entrevista.\nDestacar as 2 ou 3 forças com mais impacto, segundo a Mônica.\nClique: citação.");
 
-// ───────────────────────── 9. d) COMPLEXIDADE
-section("d) Complexidade do ambiente");
+// ───────────────────────── 9. COMPLEXIDADE
 slide("CONTEUDO");
-header("5", "// AMBIENTE EXTERNO", ["GRAU DE ", ["COMPLEXIDADE"]]);
+header("6", "// AMBIENTE EXTERNO", ["GRAU DE ", ["COMPLEXIDADE"]]);
 mono("GRAU DE MUDANÇA →", { x: 318, y: 222, w: 620, h: 30, align: "center", name: "A1|fade|eixos" });
 T("Estável", { x: 318, y: 262, w: 310, h: 44, size: 28, bold: true, align: "center", name: "A1|fade|eixos" });
 T("Dinâmico", { x: 628, y: 262, w: 310, h: 44, size: 28, bold: true, align: "center", name: "A1|fade|eixos" });
@@ -317,142 +313,78 @@ T("Complexo", { x: 128, y: 544, w: 180, h: 230, size: 28, bold: true, valign: "m
   T(b, { x: x + 24, y: y + 146, w: 270, h: 40, size: 25, bold: true, color: i === 3 ? C.or : C.muted, name: n });
 });
 mono("Matriz de incerteza ambiental (Duncan, 1972)", { x: 128, y: 800, w: 810, h: 30, size: 20, cs: 0, color: C.dim, name: "A5|fade|fonte" });
-mono("EM GERAL", { x: 1000, y: 222, w: 792, h: 30, color: C.or, name: "A6|fade|geral" });
-T("A complexidade mede quantos componentes do ambiente afetam a organização; a mudança, a rapidez com que esses fatores se alteram. Juntos determinam o grau de incerteza que os gestores enfrentam.",
-  { x: 1000, y: 260, w: 792, h: 160, size: 26, name: "A6|fade|geral" });
-R({ x: 1000, y: 436, w: 792, h: 230, fill: C.or, ft: 93, line: C.or, lw: 1.25, dash: "dash", name: "A7|rise|especifico" });
-mono("NA NATA LISBOA", { x: 1020, y: 452, w: 752, h: 30, color: C.phLabel, name: "A7|rise|especifico" });
+mono(L1, { x: 1000, y: 210, w: 792, h: 30, color: C.or, name: "A6|fade|geral" });
+T("A complexidade mede quantos componentes do ambiente afetam a organização; a mudança, a rapidez com que esses fatores se alteram. Juntos determinam a incerteza que os gestores enfrentam. Quanto maior a incerteza, mais os gestores precisam de informação, flexibilidade e decisões rápidas.",
+  { x: 1000, y: 246, w: 792, h: 214, size: 24, name: "A6|fade|geral" });
+R({ x: 1000, y: 470, w: 792, h: 214, fill: C.or, ft: 93, line: C.or, lw: 1.25, dash: "dash", name: "A7|rise|especifico" });
+mono(L2, { x: 1020, y: 484, w: 752, h: 30, color: C.phLabel, name: "A7|rise|especifico" });
 T([
   { text: "N.º de componentes: ", options: { bold: true, color: C.text } }, { text: "[poucos / muitos — quais?]", options: { italic: true, color: C.ph, breakLine: true } },
   { text: "Ritmo de mudança: ", options: { bold: true, color: C.text } }, { text: "[lento / rápido — porquê?]", options: { italic: true, color: C.ph, breakLine: true } },
   { text: "Conclusão: ", options: { bold: true, color: C.text } }, { text: "[Célula _ · incerteza ______]", options: { italic: true, color: C.ph } },
-], { x: 1020, y: 494, w: 752, h: 160, size: 26, psa: 10, name: "A7|rise|especifico" });
-quote(1000, 696, 792, 170, "“[Excerto em que a Mônica fala de mudanças no mercado ou na concorrência.]”");
-cur.addNotes("d) GRAU DE COMPLEXIDADE (≈45 s)\nEM GERAL: dois eixos — grau de mudança (estável ↔ dinâmico) e grau de complexidade (poucos ↔ muitos componentes). Da combinação resultam 4 células, da incerteza mais baixa (1) à mais elevada (4).\nNA NATA LISBOA: indicar em que célula fica e justificar com as forças do slide anterior. Sugestão: pintar a célula escolhida de laranja.\nClique: citação.");
+], { x: 1020, y: 524, w: 752, h: 150, size: 25, psa: 10, name: "A7|rise|especifico" });
+quote(1000, 706, 792, 200, "“[Excerto em que a Mônica fala de mudanças no mercado ou na concorrência.]”", "K1|rise|citacao", "③ NA PRÁTICA · CITAÇÃO DA MÔNICA");
+cur.addNotes("GRAU DE COMPLEXIDADE (≈45 s)\nEM GERAL: dois eixos — grau de mudança (estável ↔ dinâmico) e grau de complexidade (poucos ↔ muitos componentes). Da combinação resultam 4 células, da incerteza mais baixa (1) à mais elevada (4).\nNA NATA LISBOA: indicar em que célula fica e justificar com as forças do slide anterior. Sugestão: pintar a célula escolhida de laranja.\nClique: citação.");
 
-// ───────────────────────── 10. e) CULTURA — 6 DIMENSÕES
-section("e) Cultura organizacional");
+// ───────────────────────── 10. CULTURA — 6 DIMENSÕES
+section("Cultura organizacional");
 slide("CONTEUDO");
-header("6", "// CULTURA ORGANIZACIONAL", ["CULTURA: AS ", ["6 DIMENSÕES"]]);
-T("Valores, crenças e práticas partilhadas que orientam o comportamento dos membros. Cada dimensão é um contínuo entre dois polos — o ● marca onde a Nata Lisboa se situa.",
-  { x: 128, y: 206, w: 1664, h: 72, size: 25, color: C.muted, name: "A1|fade|intro" });
-mono("POLO A", { x: 230, y: 292, w: 280, h: 30, size: 20, align: "right", name: "A1|fade|intro" });
-mono("POSIÇÃO NA NATA LISBOA", { x: 550, y: 292, w: 360, h: 30, size: 20, align: "center", cs: 0, name: "A1|fade|intro" });
-mono("POLO B", { x: 950, y: 292, w: 280, h: 30, size: 20, name: "A1|fade|intro" });
-mono("EVIDÊNCIA (OBSERVADO / DITO)", { x: 1260, y: 292, w: 520, h: 30, size: 20, name: "A1|fade|intro" });
+header("7", "// TÓPICO 2 · CULTURA ORGANIZACIONAL", ["CULTURA: AS ", ["6 DIMENSÕES"]]);
+mono(L1, { x: 128, y: 206, w: 400, h: 30, color: C.or, name: "A1|fade|intro" });
+T("A cultura organizacional são os valores, crenças, tradições e formas de fazer partilhados que influenciam o modo como os membros pensam e agem — «a forma como as coisas se fazem aqui». Pode descrever-se em 6 dimensões, cada uma um contínuo entre dois polos (Hofstede et al., 1990).",
+  { x: 128, y: 240, w: 1664, h: 72, size: 24, color: C.text, name: "A1|fade|intro" });
+mono("POLO A", { x: 230, y: 324, w: 280, h: 30, size: 19, align: "right", name: "A1|fade|intro" });
+mono("② POSIÇÃO NA NATA LISBOA", { x: 540, y: 324, w: 380, h: 30, size: 19, align: "center", cs: 0, color: C.phLabel, name: "A1|fade|intro" });
+mono("POLO B", { x: 950, y: 324, w: 280, h: 30, size: 19, name: "A1|fade|intro" });
+mono("③ EVIDÊNCIA · O QUE A MÔNICA DISSE", { x: 1260, y: 324, w: 520, h: 30, size: 19, cs: 0, color: C.phLabel, name: "A1|fade|intro" });
 [["Processos", "Resultados"], ["Colaborador", "Tarefa"], ["Paroquial", "Profissional"],
  ["Sistema aberto", "Sistema fechado"], ["Controlo flexível", "Controlo apertado"], ["Normativa", "Pragmática"]].forEach(([a, b], i) => {
-  const y = 332 + i * 92, n = `A${2 + i}|wipeL|dim${i + 1}`;
-  card(128, y, 1664, 80, n);
-  mono(`D${i + 1}`, { x: 150, y: y + 24, w: 60, h: 32, size: 24, color: C.or, name: n });
-  T(a, { x: 210, y: y + 20, w: 300, h: 40, size: 26, bold: true, align: "right", name: n });
-  R({ x: 550, y: y + 40, w: 360, h: 0, shape: pres.shapes.LINE, line: "6F8DC7", lw: 2, name: n });
-  R({ x: 544, y: y + 34, w: 12, h: 12, shape: pres.shapes.OVAL, fill: "6F8DC7", name: n });
-  R({ x: 904, y: y + 34, w: 12, h: 12, shape: pres.shapes.OVAL, fill: "6F8DC7", name: n });
-  R({ x: 716, y: y + 26, w: 28, h: 28, shape: pres.shapes.OVAL, fill: C.or, line: "FFFFFF", lw: 1.5, name: n });
-  T(b, { x: 950, y: y + 20, w: 290, h: 40, size: 26, bold: true, name: n });
-  T("[O que observámos / o que foi dito]", { x: 1260, y: y + 20, w: 520, h: 40, size: 24, italic: true, color: C.ph, name: n });
+  const y = 360 + i * 88, n = `A${2 + i}|wipeL|dim${i + 1}`;
+  card(128, y, 1664, 76, n);
+  mono(`D${i + 1}`, { x: 150, y: y + 22, w: 60, h: 32, size: 24, color: C.or, name: n });
+  T(a, { x: 210, y: y + 18, w: 300, h: 40, size: 26, bold: true, align: "right", name: n });
+  R({ x: 550, y: y + 38, w: 360, h: 0, shape: pres.shapes.LINE, line: "6F8DC7", lw: 2, name: n });
+  R({ x: 544, y: y + 32, w: 12, h: 12, shape: pres.shapes.OVAL, fill: "6F8DC7", name: n });
+  R({ x: 904, y: y + 32, w: 12, h: 12, shape: pres.shapes.OVAL, fill: "6F8DC7", name: n });
+  R({ x: 716, y: y + 24, w: 28, h: 28, shape: pres.shapes.OVAL, fill: C.or, line: "FFFFFF", lw: 1.5, name: n });
+  T(b, { x: 950, y: y + 18, w: 290, h: 40, size: 26, bold: true, name: n });
+  T("[O que observámos / o que foi dito]", { x: 1260, y: y + 18, w: 520, h: 40, size: 23, italic: true, color: C.ph, name: n });
 });
-T("↳ Arrastar cada ● para a posição certa. Confirmar os nomes das 6 dimensões com o PDF do Tópico 2.",
-  { x: 128, y: 892, w: 1664, h: 36, size: 22, italic: true, color: C.dim, name: "A8|fade|nota" });
-cur.addNotes("e) CULTURA — 6 DIMENSÕES (≈1 min 15 s)\nEM GERAL: cultura organizacional = valores, crenças e práticas partilhadas. Modelo de 6 dimensões (Hofstede et al., 1990):\nD1 Processos ↔ Resultados: foco em \"como\" se faz vs. no resultado.\nD2 Colaborador ↔ Tarefa: preocupação com as pessoas vs. apenas com o trabalho feito.\nD3 Paroquial ↔ Profissional: identidade ligada à empresa vs. à profissão.\nD4 Sistema aberto ↔ fechado: facilidade de integrar pessoas novas.\nD5 Controlo flexível ↔ apertado: rigor com custos, horários, regras.\nD6 Normativa ↔ Pragmática: seguir regras vs. orientar-se para o cliente.\nSe o PDF do Tópico 2 usar outras dimensões, trocar os nomes dos polos.");
+T("↳ Arrastar cada ● para a posição da Nata Lisboa. Confirmar os nomes das 6 dimensões com o PDF do Tópico 2.",
+  { x: 128, y: 894, w: 1664, h: 34, size: 21, italic: true, color: C.dim, name: "A8|fade|nota" });
+cur.addNotes("CULTURA — 6 DIMENSÕES (≈1 min 15 s)\nEM GERAL: cultura organizacional = valores, crenças e práticas partilhadas. Modelo de 6 dimensões (Hofstede et al., 1990):\nD1 Processos ↔ Resultados: foco em \"como\" se faz vs. no resultado.\nD2 Colaborador ↔ Tarefa: preocupação com as pessoas vs. apenas com o trabalho feito.\nD3 Paroquial ↔ Profissional: identidade ligada à empresa vs. à profissão.\nD4 Sistema aberto ↔ fechado: facilidade de integrar pessoas novas.\nD5 Controlo flexível ↔ apertado: rigor com custos, horários, regras.\nD6 Normativa ↔ Pragmática: seguir regras vs. orientar-se para o cliente.\nNA NATA LISBOA: posição (●) e evidência de cada dimensão, com base no que a Mônica disse.\nSe o PDF do Tópico 2 usar outras dimensões, trocar os nomes dos polos.");
 
-// ───────────────────────── 11. e) COMO SE APRENDE A CULTURA
+t3("aprendizagem");
+// ───────────────────────── 12. NÍVEIS DE GESTÃO
+section("Os gestores");
 slide("CONTEUDO");
-header("6", "// CULTURA ORGANIZACIONAL", ["COMO SE ", ["APRENDE"], " A CULTURA"]);
-[["1", "Histórias", "Narrativas sobre pessoas e acontecimentos marcantes que mostram o que a organização valoriza.", "[Ex.: a história da fundação, um cliente marcante]"],
- ["2", "Rituais", "Atividades repetidas que reforçam os valores-chave: reuniões, formações, celebrações.", "[Ex.: rotina de abertura da loja, formação inicial]"],
- ["3", "Símbolos materiais", "Espaço, decoração, fardas e objetos comunicam o que é importante.", "[Ex.: azulejos, farda, balcão com produção à vista]"],
- ["4", "Linguagem", "Termos e expressões próprias que identificam e unem os membros.", "[Ex.: expressões usadas pela equipa no dia a dia]"]].forEach(([num, t, g, p], i) => {
-  const x = 128 + i * 422, y = 222, n = `A${1 + i}|rise|forma${i}`;
-  card(x, y, 398, 524, n);
-  R({ x: x + 28, y: y + 26, w: 64, h: 64, shape: pres.shapes.OVAL, line: C.or, lw: 1.5, name: n });
-  T(num, { x: x + 28, y: y + 26, w: 64, h: 64, size: 30, bold: true, color: C.or, align: "center", valign: "middle", name: n });
-  T(t, { x: x + 28, y: y + 108, w: 350, h: 44, size: 32, bold: true, name: n });
-  T(g, { x: x + 28, y: y + 162, w: 342, h: 150, size: 24, name: n });
-  phBox(x + 16, y + 330, 366, 176, p, n);
+header("8", "// TÓPICO 1 · OS GESTORES", ["NÍVEIS DE ", ["GESTÃO"]]);
+mono(L1, { x: 128, y: 206, w: 400, h: 30, color: C.or, name: "A1|fade|intro" });
+T("Numa estrutura tradicional (piramidal), os gestores distribuem-se por três níveis. Quanto mais alto o nível, mais as decisões são estratégicas e de longo prazo; quanto mais baixo, mais operacionais e do dia a dia.",
+  { x: 128, y: 240, w: 1664, h: 72, size: 24, name: "A1|fade|intro" });
+cur.addImage({ path: "pyramid.png", x: I(168), y: I(330), w: I(560), h: I(472), altText: "Pirâmide com os três níveis de gestão: topo, intermédia e primeira linha", objectName: "A2|zoom|piramide" });
+T("TOPO", { x: 388, y: 410, w: 120, h: 36, size: 26, bold: true, color: C.bg, align: "center", name: "A2|zoom|piramide" });
+T("INTERMÉDIA", { x: 268, y: 530, w: 360, h: 36, size: 28, bold: true, align: "center", name: "A2|zoom|piramide" });
+T("PRIMEIRA LINHA", { x: 223, y: 684, w: 450, h: 36, size: 28, bold: true, align: "center", name: "A2|zoom|piramide" });
+T([{ text: "OPERACIONAIS: ", options: { color: C.muted } }, { text: "[n.º aprox.]", options: { color: C.ph, italic: true } }],
+  { x: 128, y: 806, w: 640, h: 32, size: 21, font: F.mono, align: "center", name: "A2|zoom|piramide" });
+[["GESTÃO DE TOPO", "Decisões estratégicas: missão, objetivos e políticas para toda a organização.", [{ text: "② ", options: { color: C.or, bold: true } }, { text: "[Quem são na Nata Lisboa: sede / franchisado]", options: { italic: true, color: C.ph } }]],
+ ["GESTÃO INTERMÉDIA", "Traduzem a estratégia em planos e coordenam outros gestores.", [{ text: "② ", options: { color: C.or, bold: true } }, { text: "Mônica Cardoso", options: { bold: true, color: C.text } }, { text: " — Gerente Operacional ", options: { color: C.text } }, { text: "[confirmar]", options: { italic: true, color: C.ph } }]],
+ ["PRIMEIRA LINHA", "Dirigem o trabalho diário dos colaboradores operacionais.", [{ text: "② ", options: { color: C.or, bold: true } }, { text: "[Ex.: responsáveis de turno]", options: { italic: true, color: C.ph } }]]].forEach(([l, g, p], i) => {
+  const y = 330 + i * 148, n = `A${3 + i}|rise|nivel${i}`;
+  card(840, y, 952, 134, n, i === 1 ? C.card2 : C.card);
+  mono(l, { x: 868, y: y + 14, w: 900, h: 30, color: i === 0 ? C.or : C.muted, name: n });
+  T(g, { x: 868, y: y + 46, w: 900, h: 36, size: 23, name: n });
+  T(p, { x: 868, y: y + 86, w: 900, h: 36, size: 23, name: n });
 });
-card(128, 770, 800, 150, "A5|rise|forte");
-mono("CULTURA FORTE OU FRACA?", { x: 152, y: 788, w: 760, h: 30, name: "A5|rise|forte" });
-T("Forte = valores-chave intensamente partilhados e aceites.", { x: 152, y: 824, w: 760, h: 36, size: 24, name: "A5|rise|forte" });
-T("[Posição do grupo sobre a Nata Lisboa e porquê]", { x: 152, y: 864, w: 760, h: 40, size: 25, italic: true, color: C.ph, name: "A5|rise|forte" });
-quote(960, 774, 832, 146, "“[Excerto sobre a integração de novos colaboradores.]”");
-cur.addNotes("e) COMO SE APRENDE A CULTURA (≈45 s)\nEM GERAL: os colaboradores aprendem a cultura através de histórias, rituais, símbolos materiais e linguagem (Robbins & Coulter). A integração (socialização) dos novos colaboradores é o momento em que isto é mais visível.\nCultura forte: os valores centrais são intensamente partilhados; tem mais influência no comportamento.\nClique: citação.");
+T([{ text: "② Estrutura: ", options: { bold: true } }, { text: "[Tradicional (piramidal) ou outra? Justificar]", options: { italic: true, color: C.ph } }],
+  { x: 840, y: 778, w: 952, h: 60, size: 23, valign: "middle", margin: 7, line: C.dim, dash: "dash", name: "A6|fade|estrutura" });
+quote(128, 850, 1664, 76, "“[Como a Mônica descreve o seu lugar na hierarquia.]”", "K1|rise|citacao", L3);
+cur.addNotes("NÍVEIS DE GESTÃO (≈45 s)\nEM GERAL: gestão de topo (decisões estratégicas), gestão intermédia (planos táticos, coordena gestores) e gestão de primeira linha (supervisiona o trabalho operacional). Na base estão os operacionais, que não gerem ninguém.\nNA NATA LISBOA: situar a Mônica Cardoso — como gerente operacional, provavelmente gestão intermédia (confirmar se gere outros gestores ou diretamente a equipa).\nClique: citação.");
 
-// ───────────────────────── 12. f) NÍVEIS DE GESTÃO
-section("f) Os gestores");
-slide("CONTEUDO");
-header("7", "// GESTORES", ["NÍVEIS DE ", ["GESTÃO"]]);
-cur.addImage({ path: "pyramid.png", x: I(128), y: I(240), w: I(640), h: I(540), altText: "Pirâmide com os três níveis de gestão: topo, intermédia e primeira linha", objectName: "A1|zoom|piramide" });
-T("TOPO", { x: 378, y: 330, w: 140, h: 40, size: 28, bold: true, color: C.bg, align: "center", name: "A1|zoom|piramide" });
-T("INTERMÉDIA", { x: 248, y: 470, w: 400, h: 40, size: 30, bold: true, align: "center", name: "A1|zoom|piramide" });
-T("PRIMEIRA LINHA", { x: 198, y: 646, w: 500, h: 40, size: 30, bold: true, align: "center", name: "A1|zoom|piramide" });
-T([{ text: "OPERACIONAIS (NÃO GESTORES): ", options: { color: C.muted } }, { text: "[n.º aprox.]", options: { color: C.ph, italic: true } }],
-  { x: 128, y: 800, w: 640, h: 32, size: 22, font: F.mono, align: "center", name: "A1|zoom|piramide" });
-[["GESTÃO DE TOPO", "Decisões estratégicas: objetivos e políticas para toda a organização.", [{ text: "[Quem são na Nata Lisboa e que decisões tomam]", options: { italic: true, color: C.ph } }]],
- ["GESTÃO INTERMÉDIA", "Traduzem a estratégia em planos e coordenam outros gestores.", [{ text: "Mônica Cardoso", options: { bold: true, color: C.text } }, { text: " — Gerente Operacional ", options: { color: C.text } }, { text: "[confirmar nível e decisões que toma]", options: { italic: true, color: C.ph } }]],
- ["PRIMEIRA LINHA", "Dirigem o trabalho diário dos colaboradores operacionais.", [{ text: "[Ex.: responsáveis de loja ou de turno]", options: { italic: true, color: C.ph } }]]].forEach(([l, g, p], i) => {
-  const y = 240 + i * 186, n = `A${2 + i}|rise|nivel${i}`;
-  card(840, y, 952, 168, n, i === 1 ? C.card2 : C.card);
-  mono(l, { x: 868, y: y + 18, w: 900, h: 30, color: i === 0 ? C.or : C.muted, name: n });
-  T(g, { x: 868, y: y + 54, w: 900, h: 40, size: 26, name: n });
-  T(p, { x: 868, y: y + 104, w: 900, h: 44, size: 26, name: n });
-});
-T([{ text: "Estrutura: ", options: { bold: true } }, { text: "[Tradicional (piramidal) ou outra? Justificar]", options: { italic: true, color: C.ph } }],
-  { x: 840, y: 812, w: 952, h: 70, size: 26, valign: "middle", margin: 7, line: C.dim, dash: "dash", name: "A5|fade|estrutura" });
-cur.addNotes("f) NÍVEIS DE GESTÃO (≈45 s)\nEM GERAL: numa estrutura tradicional (piramidal) há gestão de topo (decisões estratégicas), gestão intermédia (planos táticos, coordena gestores) e gestão de primeira linha (supervisiona o trabalho operacional). Na base estão os operacionais, que não gerem ninguém.\nNA NATA LISBOA: situar a Mônica Cardoso — como gerente operacional, provavelmente gestão intermédia (confirmar na entrevista se gere outros gestores ou diretamente a equipa).");
-
-// ───────────────────────── 13. f) FUNÇÕES, PAPÉIS, COMPETÊNCIAS
-slide("CONTEUDO");
-header("7", "// GESTORES · MÔNICA CARDOSO", ["FUNÇÕES, PAPÉIS, ", ["COMPETÊNCIAS"]]);
-const item = (b, t, last) => [{ text: "+ ", options: { bold: true, color: C.or } }, { text: b, options: { bold: true } }, { text: " — " + t, options: { color: C.muted, breakLine: !last } }];
-[["FUNÇÕES · FAYOL", "O que faz", [["Planear", "definir objetivos e o caminho"], ["Organizar", "distribuir tarefas e recursos"], ["Liderar", "motivar e orientar pessoas"], ["Controlar", "medir e corrigir o desempenho"]], "[Exemplo de cada função no dia a dia da Mônica]"],
- ["PAPÉIS · MINTZBERG", "Como atua", [["Interpessoais", "figura de proa, líder, ligação"], ["Informacionais", "monitor, disseminador, porta-voz"], ["Decisionais", "empreendedor, gestor de perturbações, distribuidor de recursos, negociador"]], "[Papéis mais visíveis + exemplo]"],
- ["COMPETÊNCIAS · KATZ", "O que mais usa", [["Técnicas", "saber fazer específico da área"], ["Humanas", "trabalhar com e através de pessoas"], ["Conceptuais", "ver a organização como um todo"]], "[Competências mais usadas + porquê]"]].forEach(([l, t, its, p], i) => {
-  const x = 128 + i * 554, y = 222, n = `A${1 + i}|rise|col${i}`;
-  card(x, y, 538, 560, n);
-  mono(l, { x: x + 28, y: y + 22, w: 482, h: 30, color: C.or, name: n });
-  T(t, { x: x + 28, y: y + 58, w: 482, h: 48, size: 36, bold: true, name: n });
-  T(its.flatMap(([b, d], k) => item(b, d, k === its.length - 1)), { x: x + 28, y: y + 120, w: 482, h: 250, size: 24, psa: 8, name: n });
-  phBox(x + 20, y + 388, 498, 152, p, n);
-});
-quote(128, 806, 1664, 112, "“[Excerto em que a Mônica descreve o seu dia a dia como gerente operacional.]”");
-cur.addNotes("f) FUNÇÕES, PAPÉIS E COMPETÊNCIAS (≈1 min 15 s)\nEM GERAL:\n• Funções (Fayol): planear, organizar, liderar e controlar.\n• Papéis (Mintzberg): interpessoais, informacionais e decisionais — 10 papéis no total.\n• Competências (Katz): técnicas (mais importantes na primeira linha), humanas (importantes em todos os níveis) e conceptuais (mais importantes no topo).\nNA NATA LISBOA: ligar cada coluna a exemplos concretos do trabalho da Mônica Cardoso.\nClique: citação.");
-
-// ───────────────────────── 14. g) DESAFIOS
-section("g) Diversidade, globalização e tecnologia");
-slide("CONTEUDO");
-header("8", "// DIVERSIDADE · GLOBALIZAÇÃO · TECNOLOGIA", ["OS ", ["DESAFIOS"], " DA GESTÃO"]);
-[["Gestão da diversidade", "Diferenças visíveis (idade, género, origem) e profundas (valores, personalidade). Boas práticas: recrutamento inclusivo, mentoria, formação e horários que conciliem trabalho e família.", "[Práticas da Nata Lisboa na gestão da equipa]"],
- ["Globalização", "Mercados, concorrentes e fornecedores sem fronteiras. Atitude dos gestores: etnocêntrica, policêntrica ou geocêntrica. Exige adaptação a culturas e mercados diferentes.", "[Desafio / oportunidade: turismo, mercados externos…]"],
- ["Evolução tecnológica", "Digitalização, automação e inteligência artificial mudam processos, competências e a relação com o cliente: encomendas online, entregas, pagamentos, redes sociais.", "[Desafio / resposta da Nata Lisboa]"]].forEach(([t, g, p], i) => {
-  const x = 128 + i * 554, y = 222, n = `A${1 + i}|rise|desafio${i}`;
-  card(x, y, 538, 560, n);
-  // ícones desenhados com formas
-  const ix = x + 28, iy = y + 24;
-  if (i === 0) {
-    R({ x: ix, y: iy + 6, w: 44, h: 44, shape: pres.shapes.OVAL, fill: C.or, name: n });
-    R({ x: ix + 26, y: iy, w: 44, h: 44, shape: pres.shapes.OVAL, fill: "8FB0EE", name: n });
-    R({ x: ix + 14, y: iy + 26, w: 44, h: 44, shape: pres.shapes.OVAL, fill: "06142F", line: "8FB0EE", name: n });
-  } else if (i === 1) {
-    R({ x: ix, y: iy, w: 68, h: 68, shape: pres.shapes.OVAL, fill: "8FB0EE", name: n });
-    R({ x: ix + 20, y: iy, w: 28, h: 68, shape: pres.shapes.OVAL, line: C.bg, lw: 1.5, name: n });
-    R({ x: ix, y: iy + 34, w: 68, h: 0, shape: pres.shapes.LINE, line: C.bg, lw: 1.5, name: n });
-  } else {
-    R({ x: ix + 6, y: iy + 6, w: 56, h: 56, shape: pres.shapes.ROUNDED_RECTANGLE, radius: 0.12, fill: "8FB0EE", name: n });
-    R({ x: ix + 20, y: iy + 20, w: 28, h: 28, fill: C.bg, name: n });
-    for (let k = 0; k < 3; k++) {
-      R({ x: ix + 16 + k * 14, y: iy, w: 0, h: 6, shape: pres.shapes.LINE, line: "8FB0EE", lw: 2, name: n });
-      R({ x: ix + 16 + k * 14, y: iy + 62, w: 0, h: 6, shape: pres.shapes.LINE, line: "8FB0EE", lw: 2, name: n });
-    }
-  }
-  T(t, { x: x + 28, y: y + 110, w: 482, h: 44, size: 32, bold: true, name: n });
-  T(g, { x: x + 28, y: y + 164, w: 482, h: 210, size: 24, name: n });
-  phBox(x + 20, y + 388, 498, 152, p, n);
-});
-quote(128, 806, 1664, 112, "“[Excerto da entrevista sobre diversidade, expansão ou tecnologia.]”");
-cur.addNotes("g) DIVERSIDADE, GLOBALIZAÇÃO E TECNOLOGIA (≈1 min)\nEM GERAL:\n• Diversidade: diferenças superficiais e profundas entre pessoas; gerir bem traz criatividade e melhor resposta a clientes diferentes.\n• Globalização: atitudes etnocêntrica (o nosso modo é o melhor), policêntrica (os locais sabem melhor) e geocêntrica (o melhor de cada lado).\n• Tecnologia: novas ferramentas mudam o trabalho e exigem novas competências.\nNA NATA LISBOA: práticas concretas e desafios referidos pela Mônica.\nClique: citação.");
-
+t3("funcoes");
+section("Desafios");
+t3("desafios");
 // ───────────────────────── 15. CONCLUSÕES
 section("Fecho");
 slide("CONTEUDO");
@@ -467,7 +399,7 @@ card(128, 540, 1100, 300, "A4|rise|teoria");
 mono("TEORIA × PRÁTICA", { x: 156, y: 564, w: 1040, h: 30, color: C.or, name: "A4|rise|teoria" });
 T("Onde a Nata Lisboa confirma a teoria e onde se afasta dela.", { x: 156, y: 606, w: 1040, h: 40, size: 26, name: "A4|rise|teoria" });
 T("[O que a entrevista à Mônica Cardoso nos mostrou sobre a teoria da UC.]", { x: 156, y: 660, w: 1040, h: 150, size: 28, italic: true, color: C.ph, name: "A4|rise|teoria" });
-quote(1260, 540, 532, 300, "“[Frase final da entrevista para fechar a apresentação.]”", "K1|rise|citacao", "CITAÇÃO · MÔNICA CARDOSO");
+quote(1260, 540, 532, 300, "“[Frase final da entrevista para fechar a apresentação.]”", "K1|rise|citacao", "③ CITAÇÃO · MÔNICA CARDOSO");
 cur.addNotes("CONCLUSÕES (≈45 s)\nTrês ideias-chave, curtas. Terminar com a ligação teoria × prática e com uma frase da entrevista (clique).");
 
 // ───────────────────────── 16. REFERÊNCIAS

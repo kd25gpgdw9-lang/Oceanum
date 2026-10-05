@@ -1,0 +1,501 @@
+{
+ "fonte": "Fonte dos factos: natalisboa.com (consultado em 05/10/2026)",
+ "t3": {
+  "caracterizacao": {
+   "num": "2",
+   "eyebrow": "// CARACTERIZAÇÃO DE UMA ORGANIZAÇÃO",
+   "title": [
+    "A ",
+    [
+     "NATA LISBOA"
+    ]
+   ],
+   "lead": "Caracterizar uma organização é descrever quem ela é antes de a analisar: o que faz, para quem, onde, com que dimensão e com que modelo de negócio. É o ponto de partida para aplicar a teoria dos Tópicos 1 e 2.",
+   "layout": "grid",
+   "cols": 2,
+   "items": [
+    {
+     "t": "Identidade",
+     "d": "Nome, setor de atividade, ano de fundação e localização da sede. Responde à pergunta «quem somos?»."
+    },
+    {
+     "t": "Atividade",
+     "d": "Produtos e serviços oferecidos, clientes a que se dirige e canais pelos quais chega até eles."
+    },
+    {
+     "t": "Dimensão",
+     "d": "Número de unidades e de colaboradores e presença geográfica, nacional e internacional."
+    },
+    {
+     "t": "Modelo de negócio",
+     "d": "Como cria valor e cresce: lojas próprias, franchising, parcerias e diferentes canais de venda."
+    }
+   ],
+   "nata": [
+    {
+     "f": "Setor: restauração · coffee shops especializadas em pastel de nata."
+    },
+    {
+     "f": "Missão: «transformar o doce de Lisboa num doce planetário»."
+    },
+    {
+     "f": "Sede: Atrium Saldanha, Lisboa."
+    },
+    {
+     "f": "Rede: 27 lojas listadas em Portugal, de Braga a Faro, e 5 no estrangeiro: Viena, Bilbau, Frankfurt, Luanda e Talatona."
+    },
+    {
+     "f": "Crescimento por franchising; vendas em loja, take away (NATA&GO) e delivery (Uber Eats)."
+    },
+    {
+     "p": "[Ano de fundação · loja da Mônica · n.º de colaboradores]"
+    }
+   ],
+   "quote": "[Como a Mônica descreve a Nata Lisboa em poucas palavras.]",
+   "example": "[Um dia típico na loja: horário, movimento, produtos mais vendidos.]",
+   "notes": "CARACTERIZAÇÃO (≈1 min)\nEM GERAL: antes de aplicar a teoria, caracterizamos a organização: identidade, atividade, dimensão e modelo de negócio.\nNA NATA LISBOA: os factos vêm do site oficial (consultado a 05/10/2026). Completar com o ano de fundação, a loja onde a Mônica trabalha e o n.º de colaboradores.\nNA PRÁTICA: clique para mostrar a citação da Mônica."
+  },
+  "gestao": {
+   "num": "3",
+   "eyebrow": "// TÓPICO 1 · OS GESTORES E AS ORGANIZAÇÕES",
+   "title": [
+    "O QUE É ",
+    [
+     "GERIR"
+    ]
+   ],
+   "lead": "Gestão é o processo de coordenar e supervisionar o trabalho de outras pessoas para que as atividades sejam realizadas de forma eficiente e eficaz (Robbins & Coulter). O gestor é quem coordena esse trabalho.",
+   "layout": "grid",
+   "cols": 2,
+   "items": [
+    {
+     "t": "Eficiência",
+     "k": "FAZER BEM AS COISAS",
+     "d": "Obter o máximo resultado com o mínimo de recursos: tempo, dinheiro, matérias-primas e esforço. Diz respeito aos meios."
+    },
+    {
+     "t": "Eficácia",
+     "k": "FAZER AS COISAS CERTAS",
+     "d": "Realizar as atividades que levam a organização a atingir os seus objetivos. Diz respeito aos fins."
+    },
+    {
+     "t": "Quem é gestor",
+     "k": "GESTORES VS. OPERACIONAIS",
+     "d": "O gestor dirige o trabalho de outras pessoas; os colaboradores operacionais executam tarefas sem supervisionar ninguém."
+    },
+    {
+     "t": "Porque importa",
+     "k": "UNIVERSALIDADE DA GESTÃO",
+     "d": "Organizações bem geridas conquistam clientes e retêm colaboradores. A gestão aplica-se a qualquer tipo e dimensão de organização."
+    }
+   ],
+   "nata": [
+    {
+     "f": "Meta da marca: que saborear um NATA seja «igual em Lisboa, Porto, Bilbau, Viena, Luanda» — exige eficácia (mesma qualidade) e eficiência (mesmo processo)."
+    },
+    {
+     "p": "[Eficiência na loja: ex. produção em fornadas para reduzir desperdício]"
+    },
+    {
+     "p": "[Eficácia na loja: ex. objetivos de vendas e satisfação do cliente]"
+    },
+    {
+     "p": "[Quem gere a loja e quem são os operacionais]"
+    }
+   ],
+   "quote": "[O que é, para a Mônica, «gerir bem» uma loja.]",
+   "example": "[Situação em que teve de equilibrar rapidez e qualidade no atendimento.]",
+   "notes": "O QUE É GERIR (≈1 min)\nEM GERAL: gestão = coordenar o trabalho de outros com eficiência (fazer bem, poupar recursos) e eficácia (fazer o que leva aos objetivos). Gestor ≠ operacional. A gestão é universal.\nNA NATA LISBOA: a promessa de uma experiência igual em todas as lojas obriga a ser eficiente e eficaz ao mesmo tempo.\nNA PRÁTICA: clique para a citação da Mônica."
+  },
+  "caracteristicas": {
+   "num": "3",
+   "eyebrow": "// TÓPICO 1 · O QUE É UMA ORGANIZAÇÃO",
+   "title": [
+    "AS ",
+    [
+     "3 CARACTERÍSTICAS"
+    ],
+    " COMUNS"
+   ],
+   "lead": "Uma organização é um conjunto deliberado de pessoas reunidas para atingir um objetivo específico. Seja uma pastelaria, uma escola ou um hospital, todas partilham três características (Robbins & Coulter).",
+   "layout": "grid",
+   "cols": 3,
+   "numbered": true,
+   "items": [
+    {
+     "t": "Objetivo distinto",
+     "d": "A razão de ser da organização, expressa na missão, na visão e em metas concretas que orientam todas as decisões."
+    },
+    {
+     "t": "Pessoas",
+     "d": "Os objetivos só se cumprem através de pessoas que tomam decisões e realizam o trabalho, dos gestores aos operacionais."
+    },
+    {
+     "t": "Estrutura deliberada",
+     "d": "Regras, funções, hierarquia e procedimentos definem quem faz o quê, a quem reporta e como o trabalho se coordena."
+    }
+   ],
+   "nata": [
+    {
+     "f": "Objetivo: «transformar o doce de Lisboa num doce planetário»."
+    },
+    {
+     "p": "[Pessoas: n.º de colaboradores da loja e funções — balcão, produção, gerência]"
+    },
+    {
+     "p": "[Estrutura: sede → franchisado → gerente de loja → equipa?]"
+    },
+    {
+     "p": "[Uma regra ou procedimento que todos têm de cumprir]"
+    }
+   ],
+   "quote": "[Excerto que mostra uma destas características no dia a dia da loja.]",
+   "example": "[Como a equipa se organiza num turno com muito movimento.]",
+   "notes": "3 CARACTERÍSTICAS (≈1 min)\nEM GERAL: objetivo distinto, pessoas e estrutura deliberada (Robbins & Coulter, Tópico 1).\nNA NATA LISBOA: ligar cada característica a um dado concreto — missão, equipa, hierarquia.\nNA PRÁTICA: clique para a citação."
+  },
+  "historia": {
+   "num": "4",
+   "eyebrow": "// TÓPICO 2 · HISTÓRIA DA GESTÃO",
+   "title": [
+    "A ",
+    [
+     "HISTÓRIA"
+    ],
+    " DA GESTÃO"
+   ],
+   "lead": "A forma de gerir evoluiu ao longo do século XX. Cada abordagem respondeu aos problemas do seu tempo, e muitas das suas ideias continuam presentes nas organizações de hoje.",
+   "layout": "timeline",
+   "cols": 4,
+   "items": [
+    {
+     "k": "1900–1930",
+     "t": "Clássica",
+     "d": "Taylor (gestão científica): a «melhor forma» de fazer cada tarefa. Fayol: funções da gestão e 14 princípios. Weber: burocracia, regras e hierarquia."
+    },
+    {
+     "k": "1930–1950",
+     "t": "Comportamental",
+     "d": "Estudos de Hawthorne (Mayo): motivação, relações humanas e o grupo influenciam a produtividade tanto como as condições físicas."
+    },
+    {
+     "k": "1940 →",
+     "t": "Quantitativa",
+     "d": "Estatística, modelos e sistemas de informação para apoiar decisões: planeamento, gestão de stocks e qualidade total."
+    },
+    {
+     "k": "1960 →",
+     "t": "Contemporânea",
+     "d": "Abordagem sistémica (organização como sistema aberto) e contingencial: não há uma única forma certa de gerir, depende da situação."
+    }
+   ],
+   "nata": [
+    {
+     "f": "Clássica: experiência «igual» em todas as lojas, com receita e processo padronizados — ideia próxima de Taylor e Fayol."
+    },
+    {
+     "f": "Contemporânea: o franchising adapta a marca a cidades e países diferentes (Portugal, Espanha, Áustria, Alemanha, Angola)."
+    },
+    {
+     "p": "[Comportamental: como a gerência motiva a equipa]"
+    },
+    {
+     "p": "[Quantitativa: controlo de vendas, stocks e desperdício]"
+    }
+   ],
+   "quote": "[Excerto sobre regras, procedimentos ou motivação da equipa.]",
+   "example": "[Um procedimento padronizado na produção ou no atendimento.]",
+   "notes": "HISTÓRIA DA GESTÃO (≈1 min)\nEM GERAL: quatro grandes abordagens — clássica (Taylor, Fayol, Weber), comportamental (Hawthorne, Mayo), quantitativa e contemporânea (sistémica e contingencial).\nNA NATA LISBOA: mostrar traços de cada abordagem — padronização (clássica), motivação (comportamental), números (quantitativa), adaptação a cada mercado (contingencial).\nNA PRÁTICA: clique para a citação."
+  },
+  "sistema": {
+   "num": "5",
+   "eyebrow": "// TÓPICO 2 · ABORDAGEM SISTÉMICA",
+   "title": [
+    "UM ",
+    [
+     "SISTEMA ABERTO"
+    ]
+   ],
+   "lead": "Na abordagem sistémica (Teoria Geral dos Sistemas; Katz & Kahn), a organização é um sistema aberto: depende do ambiente, de onde recebe recursos e para onde devolve resultados. As partes são interdependentes — o que acontece numa afeta as outras.",
+   "layout": "flow",
+   "cols": 4,
+   "items": [
+    {
+     "k": "ENTRADAS",
+     "t": "Inputs",
+     "d": "Recursos obtidos do ambiente: pessoas, matérias-primas, capital, informação, tecnologia e equipamento."
+    },
+    {
+     "k": "TRANSFORMAÇÃO",
+     "t": "Processo",
+     "d": "Trabalho, operações, tecnologia e atividades de gestão que transformam as entradas."
+    },
+    {
+     "k": "SAÍDAS",
+     "t": "Outputs",
+     "d": "Produtos e serviços, resultados financeiros, emprego, informação e impacto na comunidade."
+    },
+    {
+     "k": "RETORNO",
+     "t": "Feedback",
+     "d": "Informação sobre os resultados (vendas, reclamações, avaliações) que volta ao sistema e permite corrigir."
+    }
+   ],
+   "nata": [
+    {
+     "p": "[Inputs: farinha, ovos, leite, açúcar, café, embalagens, colaboradores, fornos]"
+    },
+    {
+     "p": "[Processo: produção diária dos pastéis, atendimento, limpeza, stocks]"
+    },
+    {
+     "f": "Outputs: pastéis de nata, bebidas e refeições; venda em loja, take away (NATA&GO) e delivery (Uber Eats)."
+    },
+    {
+     "f": "Feedback: aderente ao Livro de Reclamações Eletrónico."
+    },
+    {
+     "p": "[Como a loja usa as opiniões dos clientes]"
+    }
+   ],
+   "quote": "[Excerto sobre o funcionamento diário da loja.]",
+   "example": "[Algo que mudou na loja por causa do feedback dos clientes.]",
+   "notes": "SISTEMA ABERTO (≈1 min)\nEM GERAL: inputs → processo → outputs, com feedback; a organização depende do ambiente e as suas partes são interdependentes.\nNA NATA LISBOA: substituir os [Ex.] pelo que a Mônica confirmou. Outputs e canais de venda vêm do site.\nNA PRÁTICA: clique para a citação."
+  },
+  "ambiente": {
+   "num": "6",
+   "eyebrow": "// AMBIENTE EXTERNO",
+   "title": [
+    "O ",
+    [
+     "AMBIENTE"
+    ],
+    " EXTERNO"
+   ],
+   "lead": "O ambiente externo são as forças e instituições fora da organização que a podem afetar. Divide-se em dois níveis: o ambiente de tarefa, com impacto direto e imediato, e o ambiente geral, que afeta de forma indireta todas as organizações do setor.",
+   "layout": "grid",
+   "cols": 1,
+   "items": [
+    {
+     "k": "IMPACTO DIRETO",
+     "t": "Ambiente de tarefa (específico)",
+     "d": "Clientes (quem compra), fornecedores (quem fornece recursos), concorrentes (quem disputa os mesmos clientes) e grupos de pressão (reguladores, sindicatos, media, associações)."
+    },
+    {
+     "k": "IMPACTO INDIRETO",
+     "t": "Ambiente geral (contextual)",
+     "d": "Condições económicas (inflação, juros, rendimento), político-legais (leis, impostos), socioculturais (hábitos, valores), demográficas (idade, população), tecnológicas (inovação) e globais (mercados internacionais)."
+    }
+   ],
+   "nata": [
+    {
+     "f": "Global: presença em 5 países — Portugal, Espanha, Áustria, Alemanha e Angola."
+    },
+    {
+     "f": "Tecnológico: venda por delivery (Uber Eats) além da loja."
+    },
+    {
+     "f": "Político-legal: regras de higiene e segurança alimentar e Livro de Reclamações Eletrónico."
+    },
+    {
+     "p": "[As 3 forças que mais afetam a loja, segundo a Mônica]"
+    }
+   ],
+   "quote": "[Excerto em que a Mônica fala de clientes, concorrência ou mercado.]",
+   "example": "[Um acontecimento externo que mudou o trabalho na loja.]",
+   "notes": "AMBIENTE EXTERNO (≈45 s)\nEM GERAL: ambiente de tarefa (clientes, fornecedores, concorrentes, grupos de pressão) e ambiente geral (económico, político-legal, sociocultural, demográfico, tecnológico, global).\nNA NATA LISBOA: factos do site + as forças que a Mônica destacou. O detalhe força a força está no slide seguinte.\nNA PRÁTICA: clique para a citação."
+  },
+  "aprendizagem": {
+   "num": "7",
+   "eyebrow": "// TÓPICO 2 · CULTURA ORGANIZACIONAL",
+   "title": [
+    "COMO SE ",
+    [
+     "APRENDE"
+    ],
+    " A CULTURA"
+   ],
+   "lead": "Os colaboradores aprendem a cultura sobretudo no dia a dia e na integração (socialização). Robbins & Coulter destacam quatro formas de transmissão. Uma cultura é forte quando os valores-chave são intensamente partilhados e aceites por todos.",
+   "layout": "grid",
+   "cols": 2,
+   "items": [
+    {
+     "t": "Histórias",
+     "d": "Narrativas sobre pessoas e acontecimentos marcantes — fundadores, crises, sucessos — que mostram o que a organização valoriza."
+    },
+    {
+     "t": "Rituais",
+     "d": "Sequências repetidas de atividades que reforçam os valores-chave: reuniões, formações, celebrações e prémios."
+    },
+    {
+     "t": "Símbolos materiais",
+     "d": "Espaço, decoração, fardas e objetos comunicam o que é importante e o tipo de comportamento esperado."
+    },
+    {
+     "t": "Linguagem",
+     "d": "Termos, siglas e expressões próprias que identificam os membros e os unem à cultura da organização."
+    }
+   ],
+   "nata": [
+    {
+     "f": "Símbolos: o nome «NATA» e a assinatura «The world needs nata» ligam a marca a Lisboa e ao mundo."
+    },
+    {
+     "p": "[Histórias: a fundação da marca, um cliente marcante]"
+    },
+    {
+     "p": "[Rituais: abertura da loja, formação inicial]"
+    },
+    {
+     "p": "[Linguagem: expressões usadas pela equipa]"
+    },
+    {
+     "p": "[Cultura forte ou fraca? Porquê]"
+    }
+   ],
+   "quote": "[Excerto sobre a integração de novos colaboradores.]",
+   "example": "[O que um colaborador novo aprende na primeira semana.]",
+   "notes": "COMO SE APRENDE A CULTURA (≈45 s)\nEM GERAL: histórias, rituais, símbolos materiais e linguagem (Robbins & Coulter). A socialização é o momento-chave. Cultura forte = valores intensamente partilhados.\nNA NATA LISBOA: exemplos concretos de cada forma.\nNA PRÁTICA: clique para a citação."
+  },
+  "funcoes": {
+   "num": "8",
+   "eyebrow": "// TÓPICO 1 · OS GESTORES · MÔNICA CARDOSO",
+   "title": [
+    "FUNÇÕES, PAPÉIS, ",
+    [
+     "COMPETÊNCIAS"
+    ]
+   ],
+   "lead": "Para descrever o trabalho de um gestor usam-se três perspetivas: as funções que desempenha (Fayol), os papéis que assume no dia a dia (Mintzberg) e as competências de que precisa (Katz).",
+   "layout": "grid",
+   "cols": 3,
+   "items": [
+    {
+     "k": "FUNÇÕES · FAYOL",
+     "t": "O que faz",
+     "l": [
+      [
+       "Planear",
+       "definir objetivos e o caminho"
+      ],
+      [
+       "Organizar",
+       "distribuir tarefas e recursos"
+      ],
+      [
+       "Liderar",
+       "motivar e orientar pessoas"
+      ],
+      [
+       "Controlar",
+       "medir e corrigir o desempenho"
+      ]
+     ]
+    },
+    {
+     "k": "PAPÉIS · MINTZBERG",
+     "t": "Como atua",
+     "l": [
+      [
+       "Interpessoais",
+       "figura de proa, líder, ligação"
+      ],
+      [
+       "Informacionais",
+       "monitor, disseminador, porta-voz"
+      ],
+      [
+       "Decisionais",
+       "empreendedor, gestor de conflitos, distribuidor de recursos, negociador"
+      ]
+     ]
+    },
+    {
+     "k": "COMPETÊNCIAS · KATZ",
+     "t": "O que mais usa",
+     "l": [
+      [
+       "Técnicas",
+       "saber fazer específico, mais usadas na primeira linha"
+      ],
+      [
+       "Humanas",
+       "trabalhar com pessoas, importantes em todos os níveis"
+      ],
+      [
+       "Conceptuais",
+       "ver o todo, mais usadas no topo"
+      ]
+     ]
+    }
+   ],
+   "nata": [
+    {
+     "p": "[Planear: ex. escalas e encomendas da semana]"
+    },
+    {
+     "p": "[Organizar: ex. distribuir funções no turno]"
+    },
+    {
+     "p": "[Liderar: ex. motivar a equipa em dias de muito movimento]"
+    },
+    {
+     "p": "[Controlar: ex. vendas, desperdício, qualidade]"
+    },
+    {
+     "p": "[Papéis e competências que a Mônica mais usa]"
+    }
+   ],
+   "quote": "[Excerto em que a Mônica descreve o seu dia a dia como gerente operacional.]",
+   "example": "[Um problema que a Mônica resolveu: que papel e competência usou.]",
+   "notes": "FUNÇÕES, PAPÉIS E COMPETÊNCIAS (≈1 min 15 s)\nEM GERAL: funções (Fayol: planear, organizar, liderar, controlar); papéis (Mintzberg: interpessoais, informacionais, decisionais — 10 no total); competências (Katz: técnicas, humanas, conceptuais).\nNA NATA LISBOA: um exemplo do trabalho da Mônica para cada função.\nNA PRÁTICA: clique para a citação."
+  },
+  "desafios": {
+   "num": "9",
+   "eyebrow": "// DIVERSIDADE · GLOBALIZAÇÃO · TECNOLOGIA",
+   "title": [
+    "OS ",
+    [
+     "DESAFIOS"
+    ],
+    " DA GESTÃO"
+   ],
+   "lead": "Os gestores atuais enfrentam equipas mais diversas, mercados sem fronteiras e mudanças tecnológicas rápidas. Gerir bem estes desafios é hoje uma fonte de vantagem competitiva.",
+   "layout": "grid",
+   "cols": 3,
+   "items": [
+    {
+     "k": "PESSOAS",
+     "t": "Gestão da diversidade",
+     "d": "Diferenças visíveis (idade, género, origem) e profundas (valores, personalidade). Boas práticas: recrutamento inclusivo, mentoria, formação e horários que conciliem trabalho e família."
+    },
+    {
+     "k": "MERCADOS",
+     "t": "Globalização",
+     "d": "Mercados, concorrentes e fornecedores sem fronteiras. Atitude dos gestores: etnocêntrica (o nosso modo é o melhor), policêntrica (os locais sabem melhor) ou geocêntrica (o melhor de cada lado)."
+    },
+    {
+     "k": "FERRAMENTAS",
+     "t": "Evolução tecnológica",
+     "d": "Digitalização, automação e inteligência artificial mudam processos, competências e a relação com o cliente: encomendas online, entregas, pagamentos e redes sociais."
+    }
+   ],
+   "nata": [
+    {
+     "f": "Globalização: lojas em Viena, Bilbau, Frankfurt, Luanda e Talatona; descrita como «a marca portuguesa mais internacionalizada na restauração» (RTP Internacional)."
+    },
+    {
+     "f": "Tecnologia: delivery pela Uber Eats e take away NATA&GO."
+    },
+    {
+     "p": "[Diversidade: nacionalidades e idades na equipa da loja]"
+    },
+    {
+     "p": "[Práticas de integração e conciliação]"
+    }
+   ],
+   "quote": "[Excerto sobre diversidade na equipa, expansão ou tecnologia.]",
+   "example": "[Como a loja lida com clientes e colaboradores de várias nacionalidades.]",
+   "notes": "DESAFIOS DA GESTÃO (≈1 min)\nEM GERAL: diversidade (superficial e profunda), globalização (atitudes etnocêntrica, policêntrica, geocêntrica) e tecnologia.\nNA NATA LISBOA: a presença internacional e o delivery vêm do site; completar com a realidade da loja.\nNA PRÁTICA: clique para a citação."
+  }
+ }
+}
