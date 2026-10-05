@@ -127,7 +127,7 @@ cur.addNotes("ABERTURA (≈30 s)\nApresentar a organização: Nata Lisboa — [s
 // ───────────────────────── 2. GRUPO
 slide("CONTEUDO");
 header("0", "// QUEM SOMOS", ["O GRUPO"]);
-const membros = [["Ryan Magalhães", "137142", "ryan.png"], ["Guilherme Barreiro", "", ""]];
+const membros = [["Ryan Magalhães", "137142", "ryan.png"], ["Guilherme Barreiro", "", "guilherme.png"]];
 membros.forEach(([nm, mec, foto], i) => {
   const x = 128 + i * 844, y = 236, n = `A${i + 1}|rise|membro${i + 1}`;
   card(x, y, 820, 260, n);
