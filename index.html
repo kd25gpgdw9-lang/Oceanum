@@ -1702,6 +1702,7 @@ svg.anim{width:100%;height:auto;display:block;border-radius:12px}
 .co-own{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.co-own>div{border:1px solid var(--line2);border-radius:10px;padding:8px;text-align:center}.co-own b{font-size:19px;display:block}.co-own small{font-size:11px;color:var(--mut)}
 .co-rec{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:end;margin:6px 0 10px}.co-rec>div{display:flex;flex-direction:column;align-items:center;gap:2px}.co-rec i{width:70%;border-radius:4px 4px 0 0;display:block}.co-rec .r0{background:#16a34a}.co-rec .r1{background:#4ade80}.co-rec .r2{background:#facc15}.co-rec .r3{background:#fb923c}.co-rec .r4{background:#ef4444}.co-rec small{font-size:10.5px;color:var(--mut);text-align:center}
 @media (max-width:700px){.co-sc{grid-template-columns:repeat(2,1fr)}}
+.inv-types{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 
 </style>
 <style>
@@ -1933,7 +1934,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.61", "date": "05/10/2026", "notes": ["Investimentos completos: carteira ao vivo, rentabilidade vs índices, risco (nota 1–7, VaR, stress), proventos, alocação, mercado, impostos PT/BR, importação CSV", "Cotações em tempo real (Yahoo via o teu script Google, cripto em streaming, câmbio do BCE) e renda fixa com CDI/IPCA/Selic diários", "Análise de empresas: o que faz, donos, gestão, demonstrações financeiras, múltiplos, Piotroski, Altman, Graham e Bazin", "Assistente de investimentos com IA que raciocina com os maiores investidores e pensadores, com perfil, regras e verificação"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.63", "date": "05/10/2026", "notes": ["Investimentos completos: carteira ao vivo, rentabilidade vs índices, risco (nota 1–7, VaR, stress), proventos, alocação, mercado, impostos PT/BR, importação CSV", "Cotações em tempo real (Yahoo via o teu script Google, cripto em streaming, câmbio do BCE) e renda fixa com CDI/IPCA/Selic diários", "Análise de empresas: o que faz, donos, gestão, demonstrações financeiras, múltiplos, Piotroski, Altman, Graham e Bazin", "Assistente de investimentos com IA que raciocina com os maiores investidores e pensadores, com perfil, regras e verificação"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -2341,7 +2342,7 @@ function optList(f, rec) {
 function fieldHTML(f, rec) {
   const v = rec[f.k], id = 'f_' + f.k, req = f.req ? ' required' : '';
   const lab = `<label for="${id}">${f.l}${f.req ? ' <b class="req">*</b>' : ''}</label>`;
-  const help = f.h ? `<small>${f.h}</small>` : '';
+  const hh = typeof f.h === 'function' ? f.h(rec) : f.h, help = hh ? `<small>${hh}</small>` : '';
   let inp;
   switch (f.t) {
     case 'area': inp = `<textarea id="${id}" name="${f.k}" rows="${f.rows || 3}" placeholder="${esc(f.ph || '')}">${esc(v)}</textarea>`; break;
@@ -2556,7 +2557,7 @@ L.PSTAT = ['Ideia', 'Planejado', 'Em andamento', 'Pausado', 'Concluído', 'Cance
 L.ACCT = ['Conta à ordem', 'Poupança', 'Reserva', 'Dinheiro', 'Cartão de crédito', 'Corretora', 'Outro'];
 L.METHOD = ['Débito', 'Crédito', 'MB WAY', 'Multibanco', 'Transferência', 'Débito direto', 'Dinheiro', 'PayPal'];
 L.CUR = ['EUR', 'USD', 'BRL', 'GBP', 'CHF', 'CAD', 'JPY'];
-L.ACLS = ['Ação', 'ETF', 'FII', 'REIT', 'BDR', 'Fundo', 'PPR', 'Previdência', 'Obrigação', 'Título público', 'Tesouro Direto', 'Certificados de Aforro', 'Certificados do Tesouro', 'Depósito a prazo', 'CDB', 'LCI/LCA', 'LC', 'Debênture', 'CRI/CRA', 'Poupança', 'Cripto', 'Commodity', 'Ouro', 'Imóvel', 'Crowdlending/P2P', 'Outro'];
+L.ACLS = ['Ação', 'ETF', 'FII', 'REIT', 'BDR', 'Fundo', 'PPR', 'Previdência', 'Obrigação', 'Título público', 'Tesouro Direto', 'Certificados de Aforro', 'Certificados do Tesouro', 'Depósito a prazo', 'CDB', 'LCI/LCA', 'LC', 'Debênture', 'CRI/CRA', 'Poupança', 'Cripto', 'Commodity', 'Ouro', 'Imóvel', 'Crowdlending/P2P', 'Opção', 'Futuro', 'CFD', 'Caixa em moeda estrangeira', 'Outro'];
 L.RFC = ['Título público', 'Tesouro Direto', 'Certificados de Aforro', 'Certificados do Tesouro', 'Depósito a prazo', 'CDB', 'LCI/LCA', 'LC', 'Debênture', 'CRI/CRA', 'Poupança', 'Crowdlending/P2P'];
 L.MUSCLES = ['Peito', 'Dorsais', 'Trapézio', 'Lombar', 'Ombros', 'Bíceps', 'Tríceps', 'Antebraços', 'Abdómen', 'Oblíquos', 'Glúteos', 'Quadríceps', 'Isquiotibiais', 'Gémeos'];
 L.RUNT = ['Regenerativa', 'Rodagem', 'Longa', 'Fartlek', 'Intervalado', 'Tempo / Limiar', 'Prova', 'Livre'];
@@ -2703,20 +2704,31 @@ S.wishlist = { label: 'Desejo de compra', title: r => r.product, fields: [
 /* ---- Investimentos ---- */
 S.assets = { label: 'Ativo', title: r => r.ticker ? r.ticker + ' · ' + r.name : r.name, fields: [
   F('name', 'Nome', 'text', { req: 1 }), F('ticker', 'Ticker'), F('cls', 'Classe', 'sel', { o: L.ACLS, req: 1 }), F('broker', 'Corretora'),
-  F('sym', 'Símbolo da cotação ao vivo', 'text', { show: r => !L.RFC.includes(r.cls), h: 'Ex.: AAPL, VWCE.DE, PETR4.SA, EDP.LS, BTC-EUR. Preenche-se sozinho quando escolhes o ativo na pesquisa (Mercado).' }),
-  F('idx', 'Rentabilidade', 'sel', { o: ['Pré-fixado', '% do CDI', 'CDI +', 'IPCA +', 'Selic +', 'Poupança'], show: r => L.RFC.includes(r.cls), h: 'Como o título rende. Em Portugal (depósitos, Certificados) usa Pré-fixado com a taxa anual.' }),
+  F('sym', 'Símbolo da cotação ao vivo', 'text', { show: r => !L.RFC.includes(r.cls) && r.cls !== 'Caixa em moeda estrangeira', h: 'Ex.: AAPL, VWCE.DE, PETR4.SA, EDP.LS, BTC-EUR. Preenche-se sozinho quando escolhes o ativo na pesquisa (Mercado).' }),
+  F('idx', 'Rentabilidade', 'sel', { o: ['Pré-fixado', '% do CDI', 'CDI +', 'IPCA +', 'Selic +', 'Poupança'], show: r => L.RFC.includes(r.cls) && !(r.cls === 'Tesouro Direto' && r.td), h: 'Como o título rende. Em Portugal (depósitos, Certificados) usa Pré-fixado com a taxa anual.' }),
   F('rate', 'Taxa', 'num', { show: r => L.RFC.includes(r.cls) && r.idx !== 'Poupança', h: '% ao ano (pré-fixado e o "+" de IPCA/CDI/Selic) ou % do CDI (ex.: 110)' }),
   F('venc', 'Vencimento', 'date', { show: r => L.RFC.includes(r.cls) }), F('liq', 'Liquidez', 'sel', { o: ['Diária', 'No vencimento', 'D+30', 'Outra'], show: r => L.RFC.includes(r.cls) }),
   F('irx', 'Isento de imposto', 'bool', { show: r => L.RFC.includes(r.cls), h: 'LCI, LCA, poupança, Certificados de Aforro não são isentos em PT (28%).' }),
+  F('td', 'Título do Tesouro Direto', 'text', { show: r => r.cls === 'Tesouro Direto', h: 'Ex.: Tesouro IPCA+ 2035. Com o nome certo, o valor segue o preço de resgate oficial (marcação a mercado).' }),
+  F('mrate', 'Taxa de mercado atual (marcação a mercado)', 'num', { show: r => L.RFC.includes(r.cls) && r.cls !== 'Tesouro Direto' && ['Pré-fixado', 'IPCA +', 'CDI +', 'Selic +'].includes(r.idx), h: 'Opcional, para obrigações e debêntures negociáveis: a taxa a que o título negoceia hoje. Vazio = valor na curva.' }),
+  F('mult', 'Multiplicador do contrato', 'num', { show: r => ['Opção', 'Futuro', 'CFD', 'Obrigação'].includes(r.cls), h: 'Opções EUA: 100. Opções B3: 1. Mini-índice: 0,2. Obrigações cotadas em % do nominal: 0,01.' }),
+  F('under', 'Ativo subjacente', 'text', { show: r => ['Opção', 'Futuro', 'CFD'].includes(r.cls) }), F('optType', 'Tipo de opção', 'sel', { o: ['Call (compra)', 'Put (venda)'], show: r => r.cls === 'Opção' }), F('strike', 'Preço de exercício (strike)', 'num', { show: r => r.cls === 'Opção' }),
+  F('alav', 'Alavancagem', 'num', { show: r => ['Futuro', 'CFD'].includes(r.cls), h: 'Ex.: 5 = 1:5. A margem é o valor da posição a dividir pela alavancagem.' }), F('margem', 'Margem depositada', 'money', { show: r => ['Futuro', 'CFD'].includes(r.cls), h: 'Opcional: se vazio, calculada pela alavancagem.' }),
   F('currency', 'Moeda', 'sel', { o: L.CUR }), F('country', 'País'), F('sector', 'Setor'),
   F('price', 'Preço atual (por unidade)', 'num', { h: 'Na moeda do ativo. Com símbolo ao vivo atualiza sozinho.', show: r => !L.RFC.includes(r.cls) }), F('priceDate', 'Data do preço', 'date', { show: r => !L.RFC.includes(r.cls) }),
   F('target', 'Alocação alvo', 'pct'), F('notes', 'Notas', 'area', { rows: 2 })
 ], defaults: () => ({ cls: 'ETF', currency: 'EUR', priceDate: U.today() }) };
+L.INC = ['Dividendo', 'JCP', 'Rendimento', 'Juros', 'Aluguer'];
+L.QTX = ['Compra', 'Venda', 'Bonificação', 'Subscrição', 'Transferência (entrada)', 'Transferência (saída)'];
 S.invtx = { label: 'Movimento de investimento', title: r => r.type, fields: [
-  rel('asset', 'Ativo', 'assets', { req: 1 }), F('type', 'Tipo', 'sel', { o: ['Compra', 'Venda', 'Dividendo', 'Juros', 'Taxa'], req: 1 }), F('date', 'Data', 'date', { req: 1 }),
-  F('qty', 'Quantidade', 'num', { show: r => ['Compra', 'Venda'].includes(r.type) }), F('price', 'Preço unitário', 'num', { show: r => ['Compra', 'Venda'].includes(r.type) }),
-  F('amount', 'Valor', 'money', { show: r => !['Compra', 'Venda'].includes(r.type) }), F('fees', 'Comissões', 'money'),
-  rel('account', 'Conta de dinheiro', 'accounts', { h: 'Debita/credita esta conta (ex.: corretora)' }), F('note', 'Nota')
+  rel('asset', 'Ativo', 'assets', { req: 1 }), F('type', 'Tipo', 'sel', { o: ['Compra', 'Venda', 'Dividendo', 'JCP', 'Rendimento', 'Juros', 'Aluguer', 'Amortização', 'Bonificação', 'Desdobramento/Grupamento', 'Subscrição', 'Transferência (entrada)', 'Transferência (saída)', 'Taxa'], req: 1, h: 'Rendimento = FII/REIT. Juros = cupões e juros de renda fixa. Aluguer = empréstimo de ações. Venda sem ter o ativo = venda a descoberto.' }), F('date', 'Data', 'date', { req: 1 }),
+  F('qty', 'Quantidade', 'num', { show: r => L.QTX.includes(r.type), h: 'Opções/futuros: número de contratos. Tesouro: número de títulos (pode ter decimais).' }),
+  F('price', 'Preço unitário', 'num', { show: r => L.QTX.includes(r.type), h: r => r.type === 'Bonificação' ? 'Custo atribuído por ação (pode ser 0)' : /Transferência/.test(r.type) ? 'Preço médio que tinhas na outra corretora' : '' }),
+  F('ratio', 'Fator', 'num', { show: r => r.type === 'Desdobramento/Grupamento', h: 'Desdobramento 1 → 2: escreve 2. Grupamento 10 → 1: escreve 0,1.' }),
+  F('amount', 'Valor bruto', 'money', { show: r => !L.QTX.includes(r.type) && r.type !== 'Desdobramento/Grupamento' }),
+  F('tax', 'Imposto retido na fonte', 'money', { show: r => L.INC.includes(r.type), h: 'JCP no Brasil: 15%. Dividendos dos EUA: 15–30%. Em Portugal: 28% (ou 25% retido).' }),
+  F('fees', 'Comissões', 'money', { show: r => r.type !== 'Desdobramento/Grupamento' }),
+  rel('account', 'Conta de dinheiro', 'accounts', { h: 'Debita/credita esta conta (ex.: corretora)', show: r => !['Bonificação', 'Desdobramento/Grupamento', 'Transferência (entrada)', 'Transferência (saída)'].includes(r.type) }), F('note', 'Nota')
 ], defaults: () => ({ type: 'Compra', date: U.today() }) };
 
 /* ---- Universidade ---- */
@@ -2903,9 +2915,9 @@ Fin.accBal = (a, upTo) => {
   OS.all('transactions').forEach(t => { if (upTo && t.date > upTo) return; if (t.date > U.today() && !upTo) return; const v = U.num(t.amount);
     if (t.type === 'Receita' && t.account === a.id) b += v; else if (t.type === 'Despesa' && t.account === a.id) b -= v;
     else if (t.type === 'Transferência') { if (t.account === a.id) b -= v; if (t.toAccount === a.id) b += v; } });
-  OS.all('invtx').forEach(t => { if (t.account !== a.id) return; if (upTo && t.date > upTo) return; const gross = ['Compra', 'Venda'].includes(t.type) ? U.num(t.qty) * U.num(t.price) : U.num(t.amount);
+  OS.all('invtx').forEach(t => { if (t.account !== a.id) return; if (upTo && t.date > upTo) return; const gross = ['Compra', 'Venda', 'Subscrição'].includes(t.type) ? U.num(t.qty) * U.num(t.price) * (U.num((OS.get('assets', t.asset) || {}).mult) || 1) : U.num(t.amount);
     const fx = Inv.fx((OS.get('assets', t.asset) || {}).currency);
-    if (t.type === 'Compra') b -= gross * fx + U.num(t.fees); else if (t.type === 'Venda') b += gross * fx - U.num(t.fees); else if (t.type === 'Taxa') b -= U.num(t.amount) + U.num(t.fees); else b += U.num(t.amount) * fx - U.num(t.fees); });
+    if (['Bonificação', 'Desdobramento/Grupamento', 'Transferência (entrada)', 'Transferência (saída)'].includes(t.type)) return; if (t.type === 'Compra' || t.type === 'Subscrição') b -= gross * fx + U.num(t.fees); else if (t.type === 'Venda') b += gross * fx - U.num(t.fees); else if (t.type === 'Taxa') b -= U.num(t.amount) + U.num(t.fees); else b += (U.num(t.amount) - U.num(t.tax)) * fx - U.num(t.fees); });
   return b;
 };
 Fin.accounts = () => OS.all('accounts').filter(a => !a.archived);
@@ -4442,6 +4454,7 @@ IX.scriptQuotes = async syms => { syms = [...new Set(syms.filter(Boolean))]; if 
     Object.entries(j.q).forEach(([s, o]) => { if (o && o.p != null) { IX.setQ(s, o, 'Yahoo Finance'); got++; } }); }
   IX.st.script = 'ok'; IX.st.scriptAt = Date.now(); return got; };
 IX.fund = async s => { const k = 'oc_f1_' + s, c = U.ls.get(k, null); if (c && Date.now() - c.at < 12 * 36e5) return c.f; const j = await sget('&op=f&s=' + encodeURIComponent(s), 40000); if (!j.f) { IX.st.script = 'old'; throw new Error('script antigo'); } try { U.ls.set(k, { at: Date.now(), f: j.f }); } catch (e) { } return j.f; };
+IX.agenda = async syms => { const j = await sget('&op=c&s=' + encodeURIComponent(syms.slice(0, 25).join(',')), 40000); if (!j.c) { IX.st.script = 'old'; throw new Error('script antigo'); } return j.c; };
 IX.search = async (q, news = 0) => { const j = await sget('&op=s&q=' + encodeURIComponent(q) + '&n=' + news); if (!j.q) { IX.st.script = 'old'; throw new Error('script antigo'); } return j; };
 /* histórico de um símbolo (guardado 12 h no aparelho) */
 const HK = (s, r, i) => 'oc_h1_' + s + '_' + r + '_' + i;
@@ -4539,34 +4552,66 @@ const factor = (a, d0, d1) => { if (d1 <= d0) return 1; const r = n(a.rate) / 10
     case 'Poupança': return idxAt('poup', d1) / idxAt('poup', d0);
     default: return Math.pow(1 + r, yrs); } };
 IX.factor = factor;
-IX.isRF = a => !!a.idx && !a.sym; // renda fixa com indexador (os antigos sem indexador continuam com preço manual)
+IX.isRF = a => !!a.idx && !a.sym && !(a.cls === 'Tesouro Direto' && a.td); // renda fixa com indexador (os antigos sem indexador continuam com preço manual)
 IX.needSeries = () => { const need = {}; OS.all('assets').filter(IX.isRF).forEach(a => { const k = { '% do CDI': 'cdi', 'CDI +': 'cdi', 'Selic +': 'selic', 'IPCA +': 'ipca', Poupança: 'poup' }[a.idx]; if (!k) return; const d = (U.sortBy(OS.all('invtx').filter(t => t.asset === a.id), t => t.date)[0] || {}).date; if (d && (!need[k] || d < need[k])) need[k] = d; }); return need; };
 /* imposto sobre o ganho de renda fixa */
 const rfTax = (a, gain, days) => { if (gain <= 0 || a.irx) return 0; if (a.currency === 'BRL' || ['Tesouro Direto', 'CDB', 'LC', 'Debênture', 'CRI/CRA', 'LCI/LCA'].includes(a.cls)) return gain * (days <= 180 ? .225 : days <= 360 ? .2 : days <= 720 ? .175 : .15); return gain * .28; };
-const rfPos = (a, at = today()) => { const end = a.venc && a.venc < at ? a.venc : at; let cost = 0, value = 0, divs = 0, fees = 0, first = null, realized = 0;
-  U.sortBy(OS.all('invtx').filter(t => t.asset === a.id && t.date <= at), t => t.date).forEach(t => { const amt = ['Compra', 'Venda'].includes(t.type) ? n(t.qty || 1) * n(t.price) : n(t.amount);
-    if (t.type === 'Compra') { value += amt * factor(a, t.date, end); cost += amt + n(t.fees); first = first || t.date; }
-    else if (t.type === 'Venda') { const vAt = value / factor(a, t.date, end); const frac = vAt ? Math.min(1, amt / vAt) : 1; realized += amt - cost * frac; cost -= cost * frac; value -= amt * factor(a, t.date, end); }
-    else if (t.type === 'Dividendo' || t.type === 'Juros') divs += amt - n(t.fees); else if (t.type === 'Taxa') fees += amt; });
-  value = Math.max(0, value); const fx = Inv.fx(a.currency), gain = value - cost, days = first ? U.diff(at, first) : 0, tax = rfTax(a, gain, days);
-  return { qty: value > 0 ? 1 : 0, avg: cost, cost: cost * fx, value: value * fx, pl: gain * fx, ret: cost ? gain / cost : 0, realized: realized * fx, divs: divs * fx, total: (gain + realized + divs) * fx, stale: false, hasPrice: true, rf: true, tax: tax * fx, net: (value - tax) * fx, days, matured: !!(a.venc && a.venc < at) }; };
+/* ================= movimentos → posição (todos os tipos) ================= */
+const INC = IX.INC = new Set(L.INC || ['Dividendo', 'JCP', 'Rendimento', 'Juros', 'Aluguer']);
+IX.mult = a => n(a.mult) || 1;
+IX.isLev = a => ['Futuro', 'CFD'].includes(a.cls);
+/* aplica um movimento ao estado (valores em dinheiro da moeda do ativo; aceita posições vendidas a descoberto) */
+const step = (s, t, m = 1) => { const q = n(t.qty), p = n(t.price), fee = n(t.fees), amt = n(t.amount);
+  switch (t.type) {
+    case 'Compra': case 'Subscrição': { let left = q, f = fee; if (s.qty < 0 && left > 0) { const cov = Math.min(left, -s.qty), avg = s.cost / (s.qty * m), fc = q ? fee * cov / q : 0; s.realized += cov * m * (avg - p) - fc; s.qty += cov; s.cost = s.qty * m * avg; left -= cov; f -= fc; } if (left > 0) { s.qty += left; s.cost += left * p * m + f; } s.first = s.first || t.date; break; }
+    case 'Venda': { let left = q, f = fee; if (s.qty > 0 && left > 0) { const sv = Math.min(left, s.qty), avg = s.cost / (s.qty * m), fs = q ? fee * sv / q : 0; s.realized += sv * m * (p - avg) - fs; s.qty -= sv; s.cost = s.qty * m * avg; left -= sv; f -= fs; s.sold = (s.sold || 0) + sv * p * m; } if (left > 0) { s.qty -= left; s.cost -= left * p * m - f; s.first = s.first || t.date; } break; }
+    case 'Bonificação': case 'Transferência (entrada)': s.qty += q; s.cost += q * p * m; s.first = s.first || t.date; break;
+    case 'Transferência (saída)': { const avg = s.qty ? s.cost / (s.qty * m) : 0; s.qty -= q; s.cost = s.qty * m * avg; break; }
+    case 'Desdobramento/Grupamento': { const r = n(t.ratio) || 1; s.qty *= r; break; }
+    case 'Amortização': if (s.cost >= amt) s.cost -= amt; else { s.realized += amt - Math.max(0, s.cost); s.cost = 0; } s.realized -= fee; s.amort += amt; break;
+    case 'Taxa': s.fees += amt + fee; break;
+    default: if (INC.has(t.type)) { s.gross += amt; s.tax += n(t.tax); s.divs += amt - n(t.tax) - fee; } }
+  if (Math.abs(s.qty) < 1e-9) { s.qty = 0; s.cost = 0; } return s; };
+IX.step = step;
+IX.st0 = () => ({ qty: 0, cost: 0, realized: 0, divs: 0, gross: 0, tax: 0, fees: 0, amort: 0, first: null });
+const posCalc = (a, price, upTo) => { const m = IX.mult(a), s = IX.st0(); U.sortBy(OS.all('invtx').filter(t => t.asset === a.id && (!upTo || t.date <= upTo)), t => t.date).forEach(t => step(s, t, m));
+  const fx = Inv.fx(a.currency), p = a.cls === 'Caixa em moeda estrangeira' ? 1 : price != null ? price : n(a.price) || (s.qty ? s.cost / (s.qty * m) : 0);
+  let value, cost, pl; const expo = s.qty * p * m;
+  if (IX.isLev(a)) { const margin = n(a.margem) || Math.abs(s.cost) / (n(a.alav) || 1); pl = expo - s.cost; value = s.qty ? margin + pl : 0; cost = s.qty ? margin : 0; }
+  else { value = expo; cost = s.cost; pl = value - cost; }
+  return { qty: s.qty, avg: s.qty ? s.cost / (s.qty * m) : 0, cost: cost * fx, value: value * fx, pl: pl * fx, ret: cost ? pl / Math.abs(cost) : 0, realized: s.realized * fx, divs: s.divs * fx, gross: s.gross * fx, taxW: s.tax * fx, fees: s.fees * fx, total: (pl + s.realized + s.divs) * fx,
+    exposure: Math.abs(expo) * fx, short: s.qty < 0, lev: IX.isLev(a) && cost ? Math.abs(expo) / Math.abs(cost) : null, price: p, stale: a.cls !== 'Caixa em moeda estrangeira' && (!a.priceDate || U.diff(U.today(), a.priceDate) > 7), hasPrice: !!n(a.price) || a.cls === 'Caixa em moeda estrangeira', first: s.first }; };
+IX.posCalc = posCalc;
+/* renda fixa: rende sozinha; com taxa de mercado, mostra a marcação a mercado */
+const rfPos = (a, at = today()) => { const end = a.venc && a.venc < at ? a.venc : at; let cost = 0, value = 0, divs = 0, fees = 0, first = null, realized = 0, gross = 0, taxW = 0;
+  U.sortBy(OS.all('invtx').filter(t => t.asset === a.id && t.date <= at), t => t.date).forEach(t => { const amt = L.QTX.includes(t.type) ? n(t.qty || 1) * n(t.price) : n(t.amount);
+    if (t.type === 'Compra' || t.type === 'Subscrição' || t.type === 'Transferência (entrada)') { value += amt * factor(a, t.date, end); cost += amt + n(t.fees); first = first || t.date; }
+    else if (t.type === 'Venda' || t.type === 'Amortização' || t.type === 'Transferência (saída)') { const vAt = value / factor(a, t.date, end); const frac = vAt ? Math.min(1, amt / vAt) : 1; if (t.type !== 'Transferência (saída)') realized += amt - cost * frac; cost -= cost * frac; value -= amt * factor(a, t.date, end); }
+    else if (INC.has(t.type)) { divs += amt - n(t.tax) - n(t.fees); gross += amt; taxW += n(t.tax); } else if (t.type === 'Taxa') fees += amt; });
+  value = Math.max(0, value); const curve = value; let mam = null;
+  if (n(a.mrate) && a.venc && a.venc > at && ['Pré-fixado', 'IPCA +', 'CDI +', 'Selic +'].includes(a.idx)) { const tr = U.diff(a.venc, at) / 365; mam = curve * Math.pow((1 + n(a.rate) / 100) / (1 + n(a.mrate) / 100), tr); value = mam; }
+  const fx = Inv.fx(a.currency), gain = value - cost, days = first ? U.diff(at, first) : 0, tax = rfTax(a, gain, days);
+  return { qty: value > 0 ? 1 : 0, avg: cost, cost: cost * fx, value: value * fx, pl: gain * fx, ret: cost ? gain / cost : 0, realized: realized * fx, divs: divs * fx, gross: gross * fx, taxW: taxW * fx, total: (gain + realized + divs) * fx, stale: false, hasPrice: true, rf: true, tax: tax * fx, net: (value - tax) * fx, days, matured: !!(a.venc && a.venc < at), curve: curve * fx, mam: mam != null ? mam * fx : null, exposure: value * fx }; };
 IX.rfPos = rfPos;
 
 /* ================= posição de cada ativo (com cotação ao vivo) ================= */
-const posBase = Inv.pos;
-IX.quoteFor = a => { if (!a.sym) return null; const q = IX.q(a.sym); return q && q.p != null ? q : null; };
+IX.tdSym = a => a.cls === 'Tesouro Direto' && a.td ? 'TD:' + String(a.td).trim() : null;
+IX.quoteFor = a => { const s = IX.tdSym(a) || a.sym; if (!s) return null; const q = IX.q(s); return q && q.p != null ? q : null; };
 Inv.pos = a => { if (IX.isRF(a)) return rfPos(a);
-  const q = IX.quoteFor(a); if (!q) return posBase(a);
+  const q = IX.quoteFor(a); if (!q) return posCalc(a);
   const qc = q.cur || a.currency || 'EUR', ac = a.currency || 'EUR', price = qc === ac ? q.p : q.p * Inv.fx(qc) / Inv.fx(ac), pcv = q.pc ? (qc === ac ? q.pc : q.pc * Inv.fx(qc) / Inv.fx(ac)) : null;
-  const o = posBase(Object.assign({}, a, { price, priceDate: today() }));
-  o.live = q; o.price = price; o.dayPct = pcv ? price / pcv - 1 : 0; o.day = pcv ? (price - pcv) * o.qty * Inv.fx(ac) : 0; o.stale = IX.age(a.sym) > 3 * 864e5; o.hasPrice = true; return o; };
+  const o = posCalc(a, price); o.live = q; o.dayPct = pcv ? price / pcv - 1 : 0; o.day = pcv ? (price - pcv) * o.qty * IX.mult(a) * Inv.fx(ac) : 0; o.stale = IX.age(IX.tdSym(a) || a.sym) > 3 * 864e5; o.hasPrice = true; return o; };
+Inv.divs = (from, to) => U.sum(OS.all('invtx').filter(t => INC.has(t.type) && (!from || t.date >= from) && (!to || t.date <= to)), t => (n(t.amount) - n(t.tax) - n(t.fees)) * Inv.fx((OS.get('assets', t.asset) || {}).currency));
+Inv.contribByMonth = k => OS.Fin.months(k).map(ym => U.sum(OS.all('invtx').filter(t => U.ym(t.date) === ym && ['Compra', 'Subscrição', 'Venda'].includes(t.type)), t => { const a = OS.get('assets', t.asset) || {}; return (t.type === 'Venda' ? -1 : 1) * n(t.qty) * n(t.price) * IX.mult(a) * Inv.fx(a.currency); }));
 
 /* guarda o último preço no ativo (para o património e outros aparelhos), no máximo a cada 15 min */
-const persist = () => { const now = Date.now(); OS.all('assets').forEach(a => { if (!a.sym || IX.isRF(a)) return; const q = IX.quoteFor(a); if (!q) return; const qc = q.cur || a.currency || 'EUR', ac = a.currency || 'EUR', p = U.r2(qc === ac ? q.p : q.p * Inv.fx(qc) / Inv.fx(ac));
+const persist = () => { const now = Date.now(); OS.all('assets').forEach(a => { if (!(a.sym || IX.tdSym(a)) || IX.isRF(a)) return; const q = IX.quoteFor(a); if (!q) return; const qc = q.cur || a.currency || 'EUR', ac = a.currency || 'EUR', p = U.r2(qc === ac ? q.p : q.p * Inv.fx(qc) / Inv.fx(ac));
   if (a.priceDate === today() && Math.abs(n(a.price) - p) / (p || 1) < .003) return; if (a._pAt && now - a._pAt < 15 * 6e4) return; OS.upd('assets', a.id, { price: p, priceDate: today(), _pAt: now }, { silent: true }); }); };
 
 /* ================= ciclo ao vivo ================= */
-IX.symsHeld = () => OS.all('assets').filter(a => a.sym && !IX.isRF(a) && Inv.pos(a).qty > 0).map(a => a.sym);
+IX.symsHeld = () => OS.all('assets').filter(a => a.sym && !IX.isRF(a) && Inv.pos(a).qty !== 0).map(a => a.sym);
+IX.tdList = (U.ls.get('oc_td1', null) || {}).l || [];
+IX.loadTD = async (force) => { const c = U.ls.get('oc_td1', null); if (!force && c && Date.now() - c.at < 10 * 6e4) return c.l; const j = await sget('&op=td'); if (!j.td) { IX.st.script = 'old'; throw new Error('script antigo'); } IX.tdList = j.td; U.ls.set('oc_td1', { at: Date.now(), l: j.td }); j.td.forEach(x => IX.setQ('TD:' + x.n, { p: x.pr, pc: null, cur: 'BRL', nm: x.n, ex: 'Tesouro Direto', open: true, t: x.t, buy: x.pc, txc: x.tc, txv: x.tv, venc: x.v }, 'Tesouro Direto')); return j.td; };
 IX.symsWatch = () => (cfg().watch || []).slice();
 IX.extra = new Set(); // símbolos pedidos pelo ecrã aberto (índices, detalhe de um ativo)
 const onInv = () => /^#?investimentos/.test(location.hash.replace(/^#/, '#'));
@@ -4577,6 +4622,7 @@ IX.tick = async (force) => { if (busy || (document.hidden && !force)) return; bu
   try { if (scr() && IX.st.script !== 'old') await IX.scriptQuotes(all.filter(s => !(isCrypto(s) && IX.age(s) < 15000 && PX[s].src === 'Binance (tempo real)'))); }
   catch (e) { IX.st.script = IX.st.script === 'old' ? 'old' : 'erro'; IX.st.scriptErr = e.message; }
   try { await IX.cgQuotes(all.filter(s => isCrypto(s) && (!scr() || IX.st.script !== 'ok'))); } catch (e) { }
+  if (scr() && OS.all('assets').some(a => IX.tdSym(a))) { try { await IX.loadTD(); } catch (e) { } }
   const need = IX.needSeries(); for (const [k, d] of Object.entries(need)) { try { await IX.loadSeries(k, d); } catch (e) { } }
   persist(); busy = false; IX.lastTick = Date.now(); if (onInv()) OS.request(); };
 const loop = () => { const ms = onInv() ? 20000 : 300000; if (Date.now() - lastTick >= ms - 500) IX.tick(); };
@@ -4593,7 +4639,7 @@ IX.paintTot = () => { const els = document.querySelectorAll('[data-live]'); if (
   els.forEach(el => { const k = el.dataset.live; if (k === 'val') el.textContent = IX.M(S.val); else if (k === 'day') { el.textContent = IX.M(S.day, { sign: 1 }); el.className = el.className.replace(/\b(pos|neg)\b/g, '') + ' ' + (S.day >= 0 ? 'pos' : 'neg'); } else if (k === 'pl') el.textContent = IX.M(S.pl, { sign: 1 }); }); };
 
 /* ================= resumo da carteira ================= */
-IX.positions = () => OS.all('assets').map(a => Object.assign({ a }, Inv.pos(a))).filter(p => p.qty > 0 || p.value > 0);
+IX.positions = () => OS.all('assets').map(a => Object.assign({ a }, Inv.pos(a))).filter(p => p.qty !== 0 || p.value > 0);
 IX.summary = () => { const P = IX.positions(), val = U.sum(P, p => p.value), cost = U.sum(P, p => p.cost), day = U.sum(P, p => p.day || 0), prev = val - day;
   const divs12 = Inv.divs(U.addDays(today(), -365)), realized = U.sum(OS.all('assets').map(a => Inv.pos(a)), p => p.realized);
   return { P, val, cost, pl: val - cost, ret: cost ? (val - cost) / cost : 0, day, dayPct: prev ? day / prev : 0, divs12, realized, total: val - cost + realized + Inv.divs() }; };
@@ -4616,14 +4662,17 @@ IX.build = async () => { const tx = U.sortBy(OS.all('invtx').filter(t => t.date)
   const pxs = {}, V = new Array(dates.length).fill(0), Fl = new Array(dates.length).fill(0), Dv = new Array(dates.length).fill(0), C = new Array(dates.length).fill(0), missing = [], perAsset = {};
   const di = new Map(dates.map((d, i) => [d, i])), idxOf = d => { if (di.has(d)) return di.get(d); let lo = 0, hi = dates.length - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (dates[m] < d) lo = m + 1; else hi = m; } return lo; };
   for (const a of assets) { const T = tx.filter(t => t.asset === a.id), fxA = i => a.currency && a.currency !== 'EUR' ? (fxs[a.currency] && fxs[a.currency][i] ? 1 / fxs[a.currency][i] : Inv.fx(a.currency)) : 1;
-    T.forEach(t => { const i = idxOf(t.date), amt = ['Compra', 'Venda'].includes(t.type) ? n(t.qty || 1) * n(t.price) : n(t.amount); if (i >= dates.length) return; const e = amt * fxA(i);
-      if (t.type === 'Compra') Fl[i] += e + n(t.fees) * fxA(i); else if (t.type === 'Venda') Fl[i] -= e - n(t.fees) * fxA(i); else if (t.type === 'Dividendo' || t.type === 'Juros') Dv[i] += e - n(t.fees) * fxA(i); else if (t.type === 'Taxa') Fl[i] += 0; });
+    const mA = IX.mult(a); T.forEach(t => { const i = idxOf(t.date), amt = L.QTX.includes(t.type) ? n(t.qty || (IX.isRF(a) ? 1 : 0)) * n(t.price) * (IX.isRF(a) ? 1 : mA) : n(t.amount); if (i >= dates.length) return; const e = amt * fxA(i), fe = n(t.fees) * fxA(i);
+      if (t.type === 'Compra' || t.type === 'Subscrição') Fl[i] += IX.isLev(a) ? (n(a.margem) ? 0 : e / (n(a.alav) || 1)) + fe : e + fe; else if (t.type === 'Venda') Fl[i] -= IX.isLev(a) ? 0 : e - fe; else if (t.type === 'Transferência (entrada)') Fl[i] += e; else if (t.type === 'Transferência (saída)') Fl[i] -= e; else if (t.type === 'Amortização') Fl[i] -= e - fe; else if (INC.has(t.type)) Dv[i] += e - n(t.tax) * fxA(i) - fe; });
+      if (IX.isLev(a) && n(a.margem)) { const i0 = idxOf(T[0].date); if (i0 < dates.length) Fl[i0] += n(a.margem) * fxA(i0); }
     const va = new Array(dates.length).fill(0);
     if (IX.isRF(a)) { dates.forEach((d, i) => { if (d < T[0].date) return; va[i] = rfPos(a, d).value; }); pxs[a.id] = dates.map(d => d < T[0].date ? null : factor(a, T[0].date, d)); }
-    else { let closes = null; if (a.sym) { try { const h = await IX.hist(a.sym, rangeFor(d0), '1d'); if (h && h.t.length) { const m = {}; h.t.forEach((t, k) => m[tsISO(t)] = h.c[k]); closes = ffill(m, dates); const hc = h.cur === 'GBp' || h.cur === 'GBX' ? .01 : 1; if (hc !== 1) closes = closes.map(x => x == null ? x : x * hc); } } catch (e) { } }
+    else { let closes = null; if (a.sym) { try { const h = await IX.hist(a.sym, rangeFor(d0), '1d'); if (h && h.t.length) { const m = {}; h.t.forEach((t, k) => m[tsISO(t)] = h.c[k]); closes = ffill(m, dates); const hc = h.cur === 'GBp' || h.cur === 'GBX' ? .01 : 1; if (hc !== 1) closes = closes.map(x => x == null ? x : x * hc);
+          const sp = (h.spl || []).map(([ts, r]) => [tsISO(ts), r]).filter(x => x[1] > 0 && x[1] !== 1); if (sp.length) closes = closes.map((x, k) => x == null ? x : x * sp.filter(z => z[0] > dates[k]).reduce((g, z) => g * z[1], 1)); } } catch (e) { } }
       if (!closes) missing.push(a.ticker || a.name);
-      let qty = 0, cost = 0, ti = 0; dates.forEach((d, i) => { while (ti < T.length && T[ti].date <= d) { const t = T[ti]; if (t.type === 'Compra') { qty += n(t.qty); cost += n(t.qty) * n(t.price); } else if (t.type === 'Venda') { const avg = qty ? cost / qty : 0; qty -= n(t.qty); cost -= avg * n(t.qty); } ti++; }
-        const px = closes && closes[i] != null ? closes[i] : (i === dates.length - 1 && n(Inv.pos(a).price || a.price)) || (qty ? cost / qty : 0); va[i] = qty * px * fxA(i); });
+      const st = IX.st0(); let ti = 0; dates.forEach((d, i) => { while (ti < T.length && T[ti].date <= d) { step(st, T[ti], mA); ti++; }
+        const px = a.cls === 'Caixa em moeda estrangeira' ? 1 : closes && closes[i] != null ? closes[i] : (i === dates.length - 1 && n(Inv.pos(a).price || a.price)) || (st.qty ? st.cost / (st.qty * mA) : 0), expo = st.qty * px * mA;
+        va[i] = (IX.isLev(a) ? (st.qty ? (n(a.margem) || Math.abs(st.cost) / (n(a.alav) || 1)) + expo - st.cost : 0) : expo) * fxA(i); });
       if (closes) { const lastI = dates.length - 1, p = Inv.pos(a); if (p.qty) va[lastI] = p.value; pxs[a.id] = closes.map((c, i) => c == null ? null : c * fxA(i)); } }
     va.forEach((v, i) => V[i] += v); perAsset[a.id] = va; }
   // custo acumulado (aportes líquidos)
@@ -4661,7 +4710,7 @@ IX.STRESS = [
   ['Inverno cripto', 'Cripto −75% (2018, 2022)', { eq: 0, reit: 0, crypto: -.75, gold: 0, bond: 0, rf: 0 }],
   ['Real desvaloriza 20%', 'Tudo o que está em BRL vale −20% em euros', { cur: { BRL: -.2 } }],
   ['Dólar desvaloriza 15%', 'Tudo o que está em USD vale −15% em euros', { cur: { USD: -.15 } }]];
-const kindOf = a => a.cls === 'Cripto' ? 'crypto' : ['FII', 'REIT', 'Imóvel'].includes(a.cls) ? 'reit' : ['Ouro', 'Commodity'].includes(a.cls) ? 'gold' : a.cls === 'Obrigação' || /obriga|bond|treasury|aggregate/i.test(a.name || '') ? 'bond' : IX.isRF(a) || L.RFC.includes(a.cls) ? 'rf' : 'eq';
+const kindOf = a => a.cls === 'Caixa em moeda estrangeira' ? 'rf' : a.cls === 'Cripto' ? 'crypto' : ['FII', 'REIT', 'Imóvel'].includes(a.cls) ? 'reit' : ['Ouro', 'Commodity'].includes(a.cls) ? 'gold' : a.cls === 'Obrigação' || /obriga|bond|treasury|aggregate/i.test(a.name || '') ? 'bond' : IX.isRF(a) || L.RFC.includes(a.cls) ? 'rf' : 'eq';
 IX.risk = (h, benchCum) => { if (!h || h.dates.length < 25) return null; const N = h.dates.length, W0 = Math.max(1, N - 253);
   const R = h.R.slice(W0).filter(r => isFinite(r)), val = IX.summary().val || 0;
   const sd = Math.sqrt(cov(R, R)), vol = sd * Math.sqrt(252), var1 = -q(R, .05), tail = R.filter(r => r <= -var1), cvar1 = tail.length ? -mean(tail) : var1, varP = 1.645 * sd;
@@ -4677,7 +4726,7 @@ IX.risk = (h, benchCum) => { if (!h || h.dates.length < 25) return null; const N
   const C = rets.map((a, i) => rets.map((b, j) => { const d = Math.sqrt(S[i][i] * S[j][j]); return d ? S[i][j] / d : (i === j ? 1 : 0); }));
   const divRatio = varp ? U.sum(assets, x => x.w * x.vol) / Math.sqrt(varp * 252) : 1;
   // stress
-  const Pall = IX.positions(), stress = IX.STRESS.map(([nm, ds, sh]) => { let loss = 0; Pall.forEach(p => { const k = kindOf(p.a); if (sh.cur) loss += p.value * (sh.cur[p.a.currency || 'EUR'] || 0); else loss += p.value * (sh[k] || 0); }); return { nm, ds, loss, pct: val ? loss / val : 0 }; });
+  const Pall = IX.positions(), stress = IX.STRESS.map(([nm, ds, sh]) => { let loss = 0; Pall.forEach(p => { const k = kindOf(p.a), base = IX.isLev(p.a) || p.a.cls === 'Opção' ? (p.short ? -p.exposure : p.exposure) : p.value; if (sh.cur) loss += p.value * (sh.cur[p.a.currency || 'EUR'] || 0); else loss += base * (sh[k] || 0); }); return { nm, ds, loss, pct: val ? loss / val : 0 }; });
   const liq = U.sum(Pall.filter(p => !(IX.isRF(p.a) && p.a.liq && p.a.liq !== 'Diária') && !['Imóvel', 'PPR', 'Previdência', 'Crowdlending/P2P'].includes(p.a.cls)), p => p.value) / (val || 1);
   return { vol, sri: IX.SRI(vol), var1, cvar1, varP, var1e: var1 * val, var21e: var1 * Math.sqrt(21) * val, cvar21e: cvar1 * Math.sqrt(21) * val, mdd, curDD: dd[dd.length - 1], maxUw, dd, beta, corr, assets, C, names: P.map(p => p.a.ticker || p.a.sym || p.a.name), divRatio, stress, liq, n: R.length }; };
 IX.BENCH = cc => cc === 'BR' ? [['CDI', 'CDI'], ['IPCA', 'IPCA (inflação)'], ['^BVSP', 'Ibovespa'], ['^GSPC', 'S&P 500']] : [['URTH', 'MSCI World'], ['^GSPC', 'S&P 500'], ['PSI20.LS', 'PSI (Lisboa)'], ['dep:' + ((((OS.LiveRates && OS.LiveRates.vals(cc)) || {}).dep || {}).v || 1.6), 'Depósito a prazo']];
@@ -4699,8 +4748,8 @@ const cc = () => (OS.Country ? OS.Country.code() : 'PT');
 const pctS = (v, d = 2) => (v >= 0 ? '+' : '') + U.pct(v, d);
 const tone = v => v > 0 ? 'pos' : v < 0 ? 'neg' : 'mut';
 const TABS = [['', 'Visão'], ['carteira', 'Carteira'], ['rentabilidade', 'Rentabilidade'], ['risco', 'Risco'], ['proventos', 'Proventos'], ['alocacao', 'Alocação'], ['mercado', 'Mercado'], ['empresas', 'Análise de empresas'], ['ia', 'Assistente IA'], ['movimentos', 'Movimentos'], ['impostos', 'Impostos'], ['cotacoes', 'Cotações']];
-const GROUP = c => ({ 'Ação': 'Ações', BDR: 'Ações', ETF: 'ETFs', FII: 'Fundos imobiliários', REIT: 'Fundos imobiliários', Fundo: 'Fundos', PPR: 'Reforma (PPR / previdência)', 'Previdência': 'Reforma (PPR / previdência)', Cripto: 'Cripto', Commodity: 'Ouro e commodities', Ouro: 'Ouro e commodities', 'Imóvel': 'Imóveis', Outro: 'Outros' }[c] || (L.RFC.includes(c) || c === 'Obrigação' ? 'Renda fixa' : 'Outros'));
-const GC = { 'Ações': '#5cc8e6', ETFs: '#7c8cf8', 'Fundos imobiliários': '#f2a65a', Fundos: '#a78bfa', 'Renda fixa': '#34d399', Cripto: '#f472b6', 'Ouro e commodities': '#fbbf24', 'Reforma (PPR / previdência)': '#60a5fa', 'Imóveis': '#fb7185', Outros: '#94a3b8' };
+const GROUP = c => ({ 'Opção': 'Derivados', Futuro: 'Derivados', CFD: 'Derivados', 'Caixa em moeda estrangeira': 'Caixa', 'Ação': 'Ações', BDR: 'Ações', ETF: 'ETFs', FII: 'Fundos imobiliários', REIT: 'Fundos imobiliários', Fundo: 'Fundos', PPR: 'Reforma (PPR / previdência)', 'Previdência': 'Reforma (PPR / previdência)', Cripto: 'Cripto', Commodity: 'Ouro e commodities', Ouro: 'Ouro e commodities', 'Imóvel': 'Imóveis', Outro: 'Outros' }[c] || (L.RFC.includes(c) || c === 'Obrigação' ? 'Renda fixa' : 'Outros'));
+const GC = { Derivados: '#e879f9', Caixa: '#cbd5e1', 'Ações': '#5cc8e6', ETFs: '#7c8cf8', 'Fundos imobiliários': '#f2a65a', Fundos: '#a78bfa', 'Renda fixa': '#34d399', Cripto: '#f472b6', 'Ouro e commodities': '#fbbf24', 'Reforma (PPR / previdência)': '#60a5fa', 'Imóveis': '#fb7185', Outros: '#94a3b8' };
 const pxCell = (s, v, d) => s ? `<span class="mono px" data-pxs="${esc(s)}" data-k="p">${U.nf(v, d)}</span>` : `<span class="mono">${U.nf(v, d)}</span>`;
 const chCell = (s, c) => `<span class="mono ${tone(c)}" ${s ? `data-pxs="${esc(s)}" data-k="ch"` : ''}>${pctS(c)}</span>`;
 
@@ -4746,9 +4795,13 @@ const alerts = S => { const out = [], val = S.val || 1;
   S.P.forEach(p => { if (p.value / val > .25 && S.P.length > 2 && p.a.cls !== 'ETF') out.push(`<b>${esc(p.a.ticker || p.a.name)}</b> pesa ${U.pct(p.value / val)} da carteira (concentração alta).`); });
   OS.all('assets').filter(a => IX.isRF(a) && a.venc && a.venc >= U.today() && U.diff(a.venc, U.today()) <= 30).forEach(a => out.push(`<b>${esc(a.name)}</b> vence a ${U.fmtD(a.venc)}: decide onde reinvestir.`));
   const noSym = S.P.filter(p => !p.a.sym && !IX.isRF(p.a) && !['Imóvel', 'PPR', 'Previdência', 'Outro', 'Crowdlending/P2P'].includes(p.a.cls)); if (noSym.length) out.push(`${noSym.length} ativo(s) sem símbolo de cotação (${noSym.slice(0, 4).map(p => esc(p.a.ticker || p.a.name)).join(', ')}): <a class="acc" href="#investimentos.carteira">define o símbolo</a> para atualizarem sozinhos.`);
+  const ev = IX.detected ? IX.detected() : []; if (ev.length) out.push(`${ev.length} evento(s) detetado(s) por registar (dividendos/desdobramentos): <a class="acc" href="#investimentos.proventos">ver e registar</a>.`);
+  OS.all('assets').filter(a => a.cls === 'Opção' && a.venc && a.venc >= U.today() && U.diff(a.venc, U.today()) <= 7 && Inv.pos(a).qty).forEach(a => out.push(`Opção <b>${esc(a.ticker || a.name)}</b> vence a ${U.fmtD(a.venc)}.`));
   return out.length ? `<div class="pn"><div class="pn-h"><h3>Atenção</h3></div>${out.map(x => `<div class="note" style="margin:4px 0">${x}</div>`).join('')}</div>` : ''; };
+const TYPES = [['Ação, ETF, FII, BDR, fundo', null, 'search'], ['CDB, LCI/LCA, debênture (BR)', { cls: 'CDB', idx: '% do CDI', rate: 100, currency: 'BRL', liq: 'Diária' }], ['Tesouro Direto', 'td'], ['Depósito a prazo / Certificados (PT)', { cls: 'Depósito a prazo', idx: 'Pré-fixado', rate: 2, currency: 'EUR' }], ['Obrigação (cotada em % do nominal)', { cls: 'Obrigação', mult: .01, currency: 'EUR' }], ['PPR / previdência', { cls: 'PPR', currency: 'EUR' }], ['Cripto', null, 'search'], ['Ouro / commodity', { cls: 'Ouro', sym: 'GC=F', currency: 'USD' }], ['Opção', { cls: 'Opção', mult: 100, currency: 'USD', optType: 'Call (compra)' }], ['Futuro / CFD (alavancado)', { cls: 'CFD', alav: 5, mult: 1, currency: 'EUR' }], ['Caixa em moeda estrangeira', { cls: 'Caixa em moeda estrangeira', name: 'Dólares na corretora', currency: 'USD' }], ['Imóvel', { cls: 'Imóvel', currency: 'EUR' }], ['Crowdlending / P2P', { cls: 'Crowdlending/P2P', idx: 'Pré-fixado', rate: 8, currency: 'EUR' }], ['Outro', { cls: 'Outro' }]];
+const addTypes = () => `<div class="inv-types">${TYPES.map(([l, d, k]) => k === 'search' ? `<a class="chip" href="#investimentos.mercado">${esc(l)}</a>` : d === 'td' ? `<a class="chip" href="#investimentos.cotacoes">${esc(l)}</a>` : `<button class="chip" data-new="assets" data-defs='${esc(JSON.stringify(d))}'>${esc(l)}</button>`).join('')}</div>`;
 const onboarding = () => `<div class="pn inv-on"><h3>Começa a tua carteira</h3><p class="mut">Pesquisa um ativo (ex.: <i>VWCE</i>, <i>Apple</i>, <i>PETR4</i>, <i>Bitcoin</i>) e adiciona-o, ou regista renda fixa (Tesouro, CDB, Certificados de Aforro, depósito a prazo) com a taxa: o Oceanum calcula o rendimento dia a dia.</p>
-  <div class="row gap8" style="flex-wrap:wrap"><a class="btn pri" href="#investimentos.mercado">${UI.ic('search')}Pesquisar ativo</a>${UI.addBtn('assets', 'Renda fixa', { cls: 'CDB', idx: '% do CDI', rate: 100, currency: 'BRL', liq: 'Diária' }, '')}${UI.addBtn('assets', 'Depósito / Certificados', { cls: 'Depósito a prazo', idx: 'Pré-fixado', rate: 2, currency: 'EUR' }, '')}<a class="btn ghost" href="#investimentos.movimentos">Importar CSV da corretora</a></div>
+  <div class="row gap8" style="flex-wrap:wrap"><a class="btn pri" href="#investimentos.mercado">${UI.ic('search')}Pesquisar ativo</a><a class="btn ghost" href="#investimentos.movimentos">Importar CSV da corretora</a></div><b style="font-size:13px">Ou escolhe o tipo:</b>${addTypes()}
   ${IX.hasScript() ? '' : `<div class="note" style="margin-top:12px">Para cotações em tempo real de todas as bolsas, liga o script em <a class="acc" href="#investimentos.cotacoes">Cotações</a>. A cripto já atualiza sem nada.</div>`}</div>`;
 
 /* ================= saúde da carteira (regras objetivas, sem IA) ================= */
@@ -4775,10 +4828,11 @@ T.carteira = () => { const S = IX.summary(); if (!S.P.length) return onboarding(
     return `<section class="inv-g"><div class="inv-gh"><span class="dot" style="background:${GC[g] || 'var(--mut)'}"></span><h3>${esc(g)}</h3><span class="mut">${U.pct(gv / val, 1)}</span><b class="mono">${M(gv)}</b><span class="mono ${tone(gv - gc)}">${gc ? pctS((gv - gc) / gc, 1) : ''}</span></div>
     <div class="tblw"><table class="tbl inv-t"><thead><tr><th>Ativo</th>${rf ? '<th>Rende</th><th class="mh">Vencimento</th><th class="r mh">Aplicado</th><th class="r">Valor bruto</th><th class="r">Líquido (estim.)</th>' : '<th class="r mh">Qtd.</th><th class="r mh">Preço médio</th><th class="r">Preço</th><th class="r">Dia</th><th class="r">Valor</th>'}<th class="r mh">L/P</th><th class="r">Rent.</th><th class="r mh">Peso</th></tr></thead><tbody>
     ${U.sortBy(arr, p => p.value, -1).map(p => { const a = p.a, cur = a.currency || 'EUR';
-      return `<tr class="click" ${a.sym ? `data-act="invOpen" data-s="${esc(a.sym)}"` : `data-edit="assets:${a.id}"`} tabindex="0"><td><b>${esc(a.ticker || a.sym || a.name)}</b>${p.live ? '<span class="lv-mini" title="cotação ao vivo"></span>' : ''}<div class="mut" style="font-size:12px">${esc(a.name)}${a.broker ? ' · ' + esc(a.broker) : ''}</div></td>
+      return `<tr class="click" ${a.sym ? `data-act="invOpen" data-s="${esc(a.sym)}"` : `data-edit="assets:${a.id}"`} tabindex="0"><td><b>${esc(a.ticker || a.sym || a.name)}</b>${p.live ? '<span class="lv-mini" title="cotação ao vivo"></span>' : ''}<div class="mut" style="font-size:12px">${esc(a.name)}${a.broker ? ' · ' + esc(a.broker) : ''}${p.short ? ' · <span class="bdg neg">vendido</span>' : ''}${p.lev ? ` · exposição ${M(p.exposure, { dec: 0 })} · ${U.nf(p.lev, 1)}×` : ''}${a.cls === 'Opção' ? ` · ${esc(a.optType || '')} ${a.strike ? 'strike ' + U.nf(n(a.strike), 2) : ''}${a.venc ? ' · vence ' + U.fmtD(a.venc) : ''}` : ''}${p.mam != null ? ` · <span title="na curva: ${M(p.curve)}">a mercado</span>` : ''}${IX.tdSym(a) ? ' · preço oficial do Tesouro' : ''}</div></td>
       ${rf ? `<td>${esc(a.idx || '')} ${a.idx === 'Poupança' ? '' : U.nf(n(a.rate), 2) + (a.idx === '% do CDI' ? '%' : '% a.a.')}</td><td class="mh">${a.venc ? U.fmtD(a.venc) + (p.matured ? ' <span class="bdg">vencido</span>' : '') : (a.liq || '—')}</td><td class="r mono mh">${M(p.cost)}</td><td class="r mono">${M(p.value)}</td><td class="r mono">${M(p.net != null ? p.net : p.value)}</td>`
       : `<td class="r mono mh">${U.nf(p.qty, p.qty % 1 ? 4 : 0)}</td><td class="r mono mh">${IX.Mc(p.avg, cur)}</td><td class="r">${p.hasPrice ? pxCell(a.sym, p.price != null ? p.price : n(a.price), 2) : '—'}${p.stale && !p.live ? ' <span class="warn" title="cotação antiga">•</span>' : ''}</td><td class="r">${p.live && p.live.pc ? chCell(a.sym, p.dayPct) : '—'}</td><td class="r mono">${M(p.value)}</td>`}
       <td class="r mono mh ${tone(p.pl)}">${M(p.pl, { sign: 1 })}</td><td class="r mono ${tone(p.ret)}">${pctS(p.ret, 1)}</td><td class="r mono mh">${U.pct(p.value / val, 1)}${n(a.target) ? `<div class="mut" style="font-size:11px">alvo ${a.target}%</div>` : ''}</td></tr>`; }).join('')}</tbody></table></div></section>`; }).join('')}
+  ${UI.toggle('Adicionar outro tipo de investimento', addTypes(), 'invTypes', 'plus')}
   <p class="mut" style="font-size:12px">Toca num ativo para ver gráfico, estatísticas e notícias. Valores em ${IX.view()}${IX.view() !== 'EUR' ? ' (convertidos ao câmbio atual)' : ''}. Renda fixa: valor calculado com ${cc() === 'BR' ? 'CDI, Selic, IPCA e poupança do Banco Central' : 'a taxa indicada'}; o líquido desconta o imposto estimado.</p>`; };
 
 /* ================= RENTABILIDADE ================= */
@@ -4837,26 +4891,49 @@ T.risco = () => { if (!OS.all('invtx').length) return onboarding(); const h = en
   <p class="mut" style="font-size:12px">Como ler: a volatilidade e o VaR usam os retornos diários reais dos últimos ${r.n} dias úteis; o VaR diz o limite das perdas em 95% dos casos, o CVaR a perda média nos 5% piores. O passado não garante o futuro: crises novas podem ser maiores.</p>`; };
 
 /* ================= PROVENTOS ================= */
-T.proventos = () => { const D = OS.all('invtx').filter(t => t.type === 'Dividendo' || t.type === 'Juros'), eur = t => n(t.amount) * Inv.fx((OS.get('assets', t.asset) || {}).currency) - n(t.fees) * Inv.fx((OS.get('assets', t.asset) || {}).currency);
-  const S = IX.summary(), ms = OS.Fin.months(24), byM = ms.map(ym => U.sum(D.filter(t => U.ym(t.date) === ym), eur)), tot = U.sum(D, eur), y12 = U.sum(byM.slice(-12)), avg = y12 / 12, meta = n(cfg().meta);
-  const byA = Object.entries(U.groupBy(D, t => t.asset)).map(([id, arr]) => { const a = OS.get('assets', id) || { name: '—' }, p = Inv.pos(a), d12 = U.sum(arr.filter(t => t.date >= U.addDays(U.today(), -365)), eur); return { a, p, tot: U.sum(arr, eur), d12, dy: p.value ? d12 / p.value : 0, yoc: p.cost ? d12 / p.cost : 0, n: arr.length, last: U.sortBy(arr, t => t.date).pop() }; }).sort((x, y) => y.d12 - x.d12);
-  const det = detected();
-  return `<div class="kpis">${UI.kpi('Recebido no total', M(tot))}${UI.kpi('Últimos 12 meses', M(y12), S.val ? 'dividend yield ' + U.pct(y12 / S.val, 2) : '')}${UI.kpi('Média por mês', M(avg), 'renda passiva atual')}${UI.kpi('Yield on cost', S.cost ? U.pct(y12 / S.cost, 2) : '—', 'sobre o que pagaste')}${UI.kpi('Meta de renda passiva', meta ? U.pct(avg / meta) : '—', meta ? M(avg, { dec: 0 }) + ' de ' + M(meta, { dec: 0 }) + '/mês' : 'define abaixo')}</div>
-  <div class="pn"><div class="pn-h"><h3>Proventos por mês</h3><span class="mut" style="font-size:12px">dividendos, rendimentos de FII, juros e cupões</span></div>${C.mount({ type: 'bar', labels: ms.map(U.fmtYM), series: [{ name: 'Proventos', data: byM, color: 'var(--pos)' }], fmt: MK, empty: 'Ainda sem proventos registados.' }, 220)}
-    <div class="row gap8" style="margin-top:10px;align-items:center;flex-wrap:wrap"><label class="mut" for="invMeta">Meta de renda passiva por mês (€)</label><div class="inp-wrap" style="width:140px"><input id="invMeta" type="number" step="any" data-bind="invcfg.meta" data-fk="invMeta" value="${meta || ''}"><span>€</span></div>${meta && avg ? `<span class="mut">ao ritmo atual faltam ${M(Math.max(0, (meta - avg) / (y12 / (S.val || 1) / 12 || 1)), { dec: 0 })} investidos com este yield</span>` : ''}</div></div>
-  ${det.length ? `<div class="pn"><div class="pn-h"><h3>${UI.ic('info')}Proventos detetados que ainda não registaste</h3><button class="btn sm pri" data-act="invDivAll">Registar todos (${det.length})</button></div><div class="list">${det.slice(0, 12).map(d => `<div class="li"><div class="li-t"><b>${esc(d.a.ticker || d.a.sym)}</b><small>${U.fmtD(d.date)} · ${U.nf(d.qty, 4)} × ${IX.Mc(d.per, d.a.currency || d.cur, 4)}</small></div><span class="mono pos">${IX.Mc(d.amt, d.a.currency || d.cur)}</span></div>`).join('')}</div><p class="mut" style="font-size:12px;margin:6px 0 0">Valores brutos pelo histórico do Yahoo Finance × a quantidade que tinhas na data. Confirma no extrato da corretora (impostos retidos não incluídos).</p></div>` : ''}
-  <section><div class="sech"><h2>Por ativo</h2></div>${UI.table({ key: 'divs', rows: byA, empty: 'Regista dividendos e juros em Movimentos (tipo Dividendo ou Juros).', cols: [
+T.proventos = () => { const INC = IX.INC, D = OS.all('invtx').filter(t => INC.has(t.type)), fxOf = t => Inv.fx((OS.get('assets', t.asset) || {}).currency), net = t => (n(t.amount) - n(t.tax) - n(t.fees)) * fxOf(t);
+  const S = IX.summary(), ms = OS.Fin.months(24), TY = ['Dividendo', 'JCP', 'Rendimento', 'Juros', 'Aluguer'], TC = { Dividendo: 'var(--pos)', JCP: '#5cc8e6', Rendimento: '#f2a65a', Juros: '#a78bfa', Aluguer: '#f472b6' };
+  const tot = U.sum(D, net), last12 = D.filter(t => t.date >= U.addDays(U.today(), -365)), y12 = U.sum(last12, net), tax12 = U.sum(last12, t => n(t.tax) * fxOf(t)), avg = y12 / 12, meta = n(cfg().meta);
+  const byA = Object.entries(U.groupBy(D, t => t.asset)).map(([id, arr]) => { const a = OS.get('assets', id) || { name: '—' }, p = Inv.pos(a), d12 = U.sum(arr.filter(t => t.date >= U.addDays(U.today(), -365)), net), h = a.sym && DETC[a.sym]; return { a, p, tot: U.sum(arr, net), d12, dy: p.value ? d12 / p.value : 0, yoc: p.cost ? d12 / p.cost : 0, n: arr.length, last: U.sortBy(arr, t => t.date).pop(), g: h ? divGrowth(h) : null }; }).sort((x, y) => y.d12 - x.d12);
+  const det = detected(), proj = projection(), cal = agenda(), recent = U.sortBy(D, t => t.date, -1).slice(0, 8);
+  return `<div class="kpis">${UI.kpi('Recebido no total', M(tot), 'líquido de impostos')}${UI.kpi('Últimos 12 meses', M(y12), S.val ? 'dividend yield ' + U.pct(y12 / S.val, 2) : '')}${UI.kpi('Média por mês', M(avg), 'renda passiva atual')}${UI.kpi('Projeção 12 meses', M(proj.total), 'com a carteira de hoje')}${UI.kpi('Imposto retido (12m)', M(tax12), 'na fonte (JCP, EUA, PT…)')}${UI.kpi('Meta de renda passiva', meta ? U.pct(avg / meta) : '—', meta ? M(avg, { dec: 0 }) + ' de ' + M(meta, { dec: 0 }) + '/mês' : 'define abaixo')}</div>
+  <div class="g g-main"><div class="pn"><div class="pn-h"><h3>Recebidos por mês</h3><span class="mut" style="font-size:12px">por tipo, líquido</span></div>${C.mount({ type: 'bar', stacked: true, labels: ms.map(U.fmtYM), series: TY.map(ty => ({ name: ty === 'Rendimento' ? 'Rendimentos (FII/REIT)' : ty === 'Juros' ? 'Juros e cupões' : ty === 'Aluguer' ? 'Aluguer de ações' : ty, data: ms.map(ym => U.sum(D.filter(t => t.type === ty && U.ym(t.date) === ym), net)), color: TC[ty] })).filter(se => se.data.some(Boolean)), fmt: MK, empty: 'Ainda sem proventos registados.' }, 230)}
+      <div class="row gap8" style="margin-top:10px;align-items:center;flex-wrap:wrap"><label class="mut" for="invMeta">Meta de renda passiva por mês (€)</label><div class="inp-wrap" style="width:140px"><input id="invMeta" type="number" step="any" data-bind="invcfg.meta" data-fk="invMeta" value="${meta || ''}"><span>€</span></div>${meta && avg && S.val ? `<span class="mut">ao yield atual (${U.pct(y12 / S.val, 2)}) precisas de ~${M(meta * 12 / (y12 / S.val), { dec: 0 })} investidos</span>` : ''}</div></div>
+    <div class="pn"><div class="pn-h"><h3>Próximos 12 meses (projeção)</h3><span class="mut" style="font-size:12px">pagamentos do último ano × as tuas quantidades</span></div>${C.mount({ type: 'bar', labels: proj.labels, series: [{ name: 'Projeção', data: proj.data, color: 'var(--pos)' }], fmt: MK, empty: IX.hasScript() ? 'A calcular com o histórico de dividendos…' : 'Liga o script em Cotações para projetar.' }, 230)}</div></div>
+  <div class="pn"><div class="pn-h"><h3>${UI.ic('cal')}Agenda de dividendos</h3><span class="mut" style="font-size:12px">data-ex (tens de ter o ativo no dia anterior) e pagamento</span></div>${cal.length ? `<div class="tblw"><table class="tbl"><thead><tr><th>Ativo</th><th>Data-ex</th><th>Pagamento</th><th class="r">Por ano / unidade</th><th class="r">Estimativa para ti</th><th class="r">Yield</th></tr></thead><tbody>${cal.map(x => `<tr class="${x.ex >= U.today() ? '' : 'mut'}"><td><b>${esc(x.a.ticker || x.a.sym)}</b></td><td>${x.ex ? U.fmtD(x.ex) + (x.ex >= U.today() ? ` <span class="bdg acc">daqui a ${U.diff(x.ex, U.today())} d</span>` : '') : '—'}</td><td>${x.pay ? U.fmtD(x.pay) : '—'}</td><td class="r mono">${x.rate ? IX.Mc(x.rate, x.a.currency || 'EUR', 2) : '—'}</td><td class="r mono pos">${x.est ? M(x.est) : '—'}</td><td class="r mono">${x.dy ? U.pct(x.dy, 2) : '—'}</td></tr>`).join('')}</tbody></table></div>` : `<p class="mut">${IX.hasScript() ? 'A procurar as próximas datas…' : 'Liga o script em Cotações para veres a agenda.'}</p>`}</div>
+  ${det.length ? `<div class="pn"><div class="pn-h"><h3>${UI.ic('info')}Eventos detetados que ainda não registaste</h3><button class="btn sm pri" data-act="invDivAll">Registar todos (${det.length})</button></div><div class="list">${det.slice(0, 12).map(d => `<div class="li"><div class="li-t"><b>${esc(d.a.ticker || d.a.sym)} · ${d.split ? (d.ratio >= 1 ? 'desdobramento 1→' + U.nf(d.ratio, 2) : 'grupamento ' + U.nf(1 / d.ratio, 2) + '→1') : 'dividendo'}</b><small>${U.fmtD(d.date)}${d.split ? '' : ' · ' + U.nf(d.qty, 4) + ' × ' + IX.Mc(d.per, d.a.currency || d.cur, 4)}</small></div>${d.split ? '' : `<span class="mono pos">${IX.Mc(d.amt, d.a.currency || d.cur)}</span>`}</div>`).join('')}</div><p class="mut" style="font-size:12px;margin:6px 0 0">Do histórico do Yahoo Finance × a quantidade que tinhas na data. Dividendos em valor bruto: acrescenta o imposto retido no extrato da corretora.</p></div>` : ''}
+  ${recent.length ? `<div class="pn"><div class="pn-h"><h3>Últimos recebidos</h3><span class="mut" style="font-size:12px">reinvestir = comprar mais do mesmo ativo</span></div><div class="list">${recent.map(t => { const a = OS.get('assets', t.asset) || {}, q = IX.quoteFor(a), netv = n(t.amount) - n(t.tax) - n(t.fees); return `<div class="li"><span class="when">${U.fmtD(t.date)}</span><div class="li-t click" data-edit="invtx:${t.id}"><b>${esc(a.ticker || a.name || '—')} · ${esc(t.type)}</b><small>bruto ${IX.Mc(n(t.amount), a.currency || 'EUR')}${n(t.tax) ? ' · retido ' + IX.Mc(n(t.tax), a.currency || 'EUR') : ''}</small></div><span class="mono pos">${IX.Mc(netv, a.currency || 'EUR')}</span>${q && netv >= q.p ? `<button class="btn xs" data-act="invDrip" data-id="${t.id}">Reinvestir</button>` : ''}</div>`; }).join('')}</div></div>` : ''}
+  <section><div class="sech"><h2>Por ativo</h2></div>${UI.table({ key: 'divs', rows: byA, empty: 'Regista proventos em Movimentos (Dividendo, JCP, Rendimento, Juros ou Aluguer).', cols: [
     { l: 'Ativo', v: x => `<b>${esc(x.a.ticker || x.a.name)}</b><div class="mut" style="font-size:12px">${esc(x.a.name)}</div>`, s: x => x.a.name }, { l: 'Recebido', cls: 'r', v: x => `<span class="mono">${M(x.tot)}</span>`, s: x => x.tot }, { l: '12 meses', cls: 'r', v: x => `<span class="mono">${M(x.d12)}</span>`, s: x => x.d12 },
-    { l: 'Yield', cls: 'r', v: x => `<span class="mono">${U.pct(x.dy, 2)}</span>`, s: x => x.dy }, { l: 'Yield on cost', cls: 'r', v: x => `<span class="mono">${U.pct(x.yoc, 2)}</span>`, s: x => x.yoc }, { l: 'Último', v: x => x.last ? U.fmtD(x.last.date) : '' },
+    { l: 'Yield', cls: 'r', v: x => `<span class="mono">${U.pct(x.dy, 2)}</span>`, s: x => x.dy }, { l: 'Yield on cost', cls: 'r', v: x => `<span class="mono">${U.pct(x.yoc, 2)}</span>`, s: x => x.yoc }, { l: 'Cresc. dividendo/ano', cls: 'r', v: x => x.g == null ? '—' : `<span class="mono ${tone(x.g)}">${pctS(x.g, 1)}</span>`, s: x => x.g || 0 }, { l: 'Último', v: x => x.last ? U.fmtD(x.last.date) : '' },
     { l: 'Número mágico', cls: 'r', v: x => { const per = x.d12 && x.p.qty ? x.d12 / 12 / x.p.qty : 0, price = x.p.qty ? x.p.value / x.p.qty : 0; return per ? `<span class="mono" title="quantidade para os proventos de um mês comprarem mais uma unidade">${U.nf(Math.ceil(price / per))}</span>` : '—'; } }] })}</section>`; };
-/* dividendos do histórico do Yahoo × quantidade na data, ainda não registados */
+A.invDrip = b => { const t = OS.get('invtx', b.dataset.id); if (!t) return; const a = OS.get('assets', t.asset), q = IX.quoteFor(a); if (!q) return; const netv = n(t.amount) - n(t.tax) - n(t.fees), qty = Math.floor(netv / q.p * 1e4) / 1e4;
+  UI.openForm('invtx', null, { asset: a.id, type: 'Compra', date: U.today(), qty: IX.isCrypto(a.sym) ? qty : Math.floor(netv / q.p), price: U.r2(q.p), note: 'Reinvestimento de ' + t.type.toLowerCase() }, { title: 'Reinvestir em ' + (a.ticker || a.sym) }); };
+/* histórico do Yahoo (5 anos) para dividendos, desdobramentos, crescimento e projeção */
 const DETC = {};
-const detected = () => { const out = []; OS.all('assets').filter(a => a.sym && !IX.isRF(a)).forEach(a => { const h = DETC[a.sym]; if (!h) { if (!DETC['_' + a.sym]) { DETC['_' + a.sym] = 1; IX.hist(a.sym, '2y', '1d').then(x => { DETC[a.sym] = x || { div: [] }; OS.request(); }).catch(() => { }); } return; }
-  const T2 = U.sortBy(OS.all('invtx').filter(t => t.asset === a.id), t => t.date), recorded = T2.filter(t => t.type === 'Dividendo');
-  (h.div || []).forEach(([ts, per]) => { const date = U.iso(new Date(ts * 1000)); if (date > U.today()) return; let qty = 0; T2.forEach(t => { if (t.date < date) { if (t.type === 'Compra') qty += n(t.qty); if (t.type === 'Venda') qty -= n(t.qty); } }); if (qty <= 0) return;
-    if (recorded.some(t => Math.abs(U.diff(t.date, date)) <= 45)) return; out.push({ a, date, qty, per: per * (h.cur === 'GBp' ? .01 : 1), amt: qty * per * (h.cur === 'GBp' ? .01 : 1), cur: h.cur }); }); });
-  return U.sortBy(out, x => x.date, -1); };
-A.invDivAll = () => { const det = detected(); det.forEach(d => OS.add('invtx', { asset: d.a.id, type: 'Dividendo', date: d.date, amount: U.r2(d.amt), note: 'Detetado automaticamente (bruto)' }, { silent: true })); OS.request(); UI.toast(det.length + ' provento(s) registado(s)', 'pos'); };
+const histOf = a => { const h = DETC[a.sym]; if (h) return h; if (!DETC['_' + a.sym] && (IX.hasScript() || IX.isCrypto(a.sym))) { DETC['_' + a.sym] = 1; IX.hist(a.sym, '5y', '1d').then(x => { DETC[a.sym] = x || { div: [], spl: [] }; OS.request(); }).catch(() => { }); } return null; };
+const isoTs = ts => U.iso(new Date(ts * 1000));
+/* fator para converter dividendos ajustados em valor por ação na época */
+const splitF = (h, date) => (h.spl || []).filter(z => isoTs(z[0]) > date).reduce((g, z) => g * (z[1] || 1), 1);
+const qtyAt = (a, date) => { const st = IX.st0(); U.sortBy(OS.all('invtx').filter(t => t.asset === a.id && t.date < date), t => t.date).forEach(t => IX.step(st, t, IX.mult(a))); return st.qty; };
+const detected = () => { const out = []; OS.all('assets').filter(a => a.sym && !IX.isRF(a) && !IX.isCrypto(a.sym)).forEach(a => { const h = histOf(a); if (!h) return;
+  const T2 = OS.all('invtx').filter(t => t.asset === a.id), first = (U.sortBy(T2.filter(t => L.QTX.includes(t.type)), t => t.date)[0] || {}).date; if (!first) return; const gc = h.cur === 'GBp' ? .01 : 1;
+  (h.spl || []).forEach(([ts, r]) => { const date = isoTs(ts); if (date <= first || date > U.today() || !r || r === 1) return; if (T2.some(t => t.type === 'Desdobramento/Grupamento' && Math.abs(U.diff(t.date, date)) <= 10)) return; out.push({ a, date, split: true, ratio: r }); });
+  (h.div || []).forEach(([ts, per]) => { const date = isoTs(ts); if (date > U.today() || date <= first) return; const qty = qtyAt(a, date); if (qty <= 0) return; if (T2.some(t => IX.INC.has(t.type) && Math.abs(U.diff(t.date, date)) <= 45)) return; const p2 = per * gc * splitF(h, date); out.push({ a, date, qty, per: p2, amt: qty * p2, cur: h.cur === 'GBp' ? 'GBP' : h.cur }); }); });
+  return [...U.sortBy(out.filter(x => x.split), x => x.date, -1), ...U.sortBy(out.filter(x => !x.split), x => x.date, -1)]; };
+A.invDivAll = () => { const det = detected(); det.forEach(d => OS.add('invtx', d.split ? { asset: d.a.id, type: 'Desdobramento/Grupamento', date: d.date, ratio: d.ratio, note: 'Detetado automaticamente' } : { asset: d.a.id, type: d.a.cls === 'FII' || d.a.cls === 'REIT' ? 'Rendimento' : 'Dividendo', date: d.date, amount: U.r2(d.amt), note: 'Detetado automaticamente (bruto)' }, { silent: true })); OS.request(); UI.toast(det.length + ' evento(s) registado(s)', 'pos'); };
+IX.detected = detected;
+const divGrowth = h => { const by = {}; (h.div || []).forEach(([ts, per]) => { const y = isoTs(ts).slice(0, 4); by[y] = (by[y] || 0) + per; }); const ys = Object.keys(by).sort().filter(y => y < U.today().slice(0, 4)).slice(1); if (ys.length < 3) return null; const a0 = by[ys[0]], a1 = by[ys[ys.length - 1]]; return a0 > 0 ? Math.pow(a1 / a0, 1 / (ys.length - 1)) - 1 : null; };
+const projection = () => { const months = Array.from({ length: 12 }, (_, i) => U.addMonths(U.ym(U.today()), i + 1)), data = months.map(() => 0);
+  IX.positions().filter(p => p.qty > 0 && p.a.sym && !IX.isCrypto(p.a.sym)).forEach(p => { const h = histOf(p.a); if (!h) return; const gc = h.cur === 'GBp' ? .01 : 1, fx = Inv.fx(p.a.currency);
+    (h.div || []).filter(([ts]) => ts * 1000 > Date.now() - 365 * 864e5).forEach(([ts, per]) => { const ym = U.addMonths(isoTs(ts).slice(0, 7), 12), i = months.indexOf(ym); if (i >= 0) data[i] += per * gc * p.qty * fx * (p.a.currency === 'BRL' && /JCP/i.test(p.a.notes || '') ? .85 : 1); }); });
+  OS.all('assets').filter(a => IX.isRF(a) && a.idx && a.venc).forEach(() => { });
+  return { labels: months.map(U.fmtYM), data, total: U.sum(data) }; };
+let AG = null, AGat = 0;
+const agenda = () => { const held = IX.positions().filter(p => p.qty > 0 && p.a.sym && !IX.isCrypto(p.a.sym) && !/^\^|=X$|=F$/.test(p.a.sym));
+  if (!AG && IX.hasScript() && held.length && Date.now() - AGat > 6e4) { AGat = Date.now(); IX.agenda(held.map(p => p.a.sym)).then(c => { AG = c || {}; OS.request(); }).catch(() => { AG = {}; }); }
+  if (!AG) return []; return U.sortBy(held.map(p => { const c = AG[p.a.sym] || {}; if (!c.ex && !c.pay) return null; const freq = (() => { const h = DETC[p.a.sym]; const k = h ? (h.div || []).filter(([ts]) => ts * 1000 > Date.now() - 365 * 864e5).length : 0; return k || 4; })();
+    return { a: p.a, ex: c.ex ? isoTs(c.ex) : null, pay: c.pay ? isoTs(c.pay) : null, rate: c.rate, dy: c.dy, est: c.rate ? c.rate / freq * p.qty * Inv.fx(p.a.currency) : null }; }).filter(Boolean), x => x.ex || '0', -1); };
 
 /* ================= ALOCAÇÃO ================= */
 const KEYS = [['grp', 'Tipo'], ['cls', 'Classe'], ['sector', 'Setor'], ['country', 'País'], ['currency', 'Moeda'], ['broker', 'Corretora']];
@@ -4940,8 +5017,8 @@ T.movimentos = () => `<div class="row gap8" style="flex-wrap:wrap;margin-bottom:
   ${IMP ? impPanel() : ''}
   ${UI.table({ key: 'invtx', coll: 'invtx', rows: U.sortBy(OS.all('invtx'), t => t.date, -1), limit: 100, empty: 'Sem movimentos.', emptyAct: UI.addBtn('invtx', 'Registar compra', null, ''), cols: [
   { l: 'Data', v: t => `<span class="mono">${U.fmtD(t.date)}</span>`, s: t => t.date }, { l: 'Ativo', v: t => { const a = OS.get('assets', t.asset) || {}; return esc(a.ticker || a.name || '—'); } },
-  { l: 'Tipo', v: t => UI.badge(t.type, t.type === 'Compra' ? 'acc' : t.type === 'Venda' ? 'vio' : t.type === 'Taxa' ? 'neg' : 'pos') }, { l: 'Qtd.', cls: 'r', v: t => t.qty ? `<span class="mono">${U.nf(t.qty, 4)}</span>` : '' },
-  { l: 'Preço', cls: 'r', v: t => t.price ? `<span class="mono">${U.nf(t.price, 2)}</span>` : '' }, { l: 'Valor', cls: 'r', v: t => `<span class="mono">${U.nf(['Compra', 'Venda'].includes(t.type) ? n(t.qty) * n(t.price) : n(t.amount), 2)}</span>` },
+  { l: 'Tipo', v: t => UI.badge(t.type, t.type === 'Compra' || t.type === 'Subscrição' ? 'acc' : t.type === 'Venda' ? 'vio' : t.type === 'Taxa' ? 'neg' : IX.INC.has(t.type) ? 'pos' : '') }, { l: 'Qtd.', cls: 'r', v: t => t.qty ? `<span class="mono">${U.nf(t.qty, 4)}</span>` : '' },
+  { l: 'Preço', cls: 'r', v: t => t.price ? `<span class="mono">${U.nf(t.price, 2)}</span>` : t.ratio ? `<span class="mono">fator ${U.nf(t.ratio, 4)}</span>` : '' }, { l: 'Valor', cls: 'r', v: t => t.type === 'Desdobramento/Grupamento' ? '' : `<span class="mono">${U.nf(L.QTX.includes(t.type) ? n(t.qty) * n(t.price) * IX.mult(OS.get('assets', t.asset) || {}) : n(t.amount), 2)}</span>${n(t.tax) ? `<div class="mut" style="font-size:11px">retido ${U.nf(t.tax, 2)}</div>` : ''}` },
   { l: 'Comissões', cls: 'r', v: t => t.fees ? `<span class="mono">${U.nf(t.fees, 2)}</span>` : '' }, { l: 'Nota', v: t => esc(t.note || '') }] })}`;
 A.invImp = () => { IMP = IMP ? null : { text: '', rows: null, err: '' }; OS.request(); };
 const impPanel = () => `<div class="pn"><div class="pn-h"><h3>Importar movimentos</h3><button class="icon-btn" data-act="invImp" aria-label="Fechar">${UI.ic('x')}</button></div>
@@ -4957,50 +5034,50 @@ document.addEventListener('input', e => { if (e.target.id === 'invImpTxt' && IMP
 A.invImpParse = () => { impParse(); OS.request(); };
 const numP = s => { s = String(s == null ? '' : s).replace(/[^\d,.\-]/g, ''); if (!s) return 0; if (s.includes(',') && s.includes('.')) s = s.lastIndexOf(',') > s.lastIndexOf('.') ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, ''); else if (s.includes(',')) s = s.replace(',', '.'); return Math.abs(+s) || 0; };
 const dateP = s => { s = String(s || '').trim(); let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return m[0]; m = s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/); if (m) { const y = m[3].length === 2 ? '20' + m[3] : m[3]; return `${y}-${U.pad(+m[2])}-${U.pad(+m[1])}`; } return ''; };
-const typeP = s => { s = String(s || '').toLowerCase(); return /divid|provent|rendiment|distrib|jcp|juros sobre/.test(s) ? 'Dividendo' : /juro|interest|cupão|cupom|coupon/.test(s) ? 'Juros' : /vend|sell|^v$|^s$|resgat/.test(s) ? 'Venda' : /taxa|fee|comiss|custódia/.test(s) ? 'Taxa' : /compr|buy|^c$|^b$|aplica|subscri/.test(s) ? 'Compra' : ''; };
+const typeP = s => { s = String(s || '').toLowerCase(); return /jcp|juros sobre/.test(s) ? 'JCP' : /rendiment/.test(s) ? 'Rendimento' : /bonifica|bonus/.test(s) ? 'Bonificação' : /amortiza/.test(s) ? 'Amortização' : /alugu|lending|empréstimo de/.test(s) ? 'Aluguer' : /subscri/.test(s) ? 'Subscrição' : /divid|provent|distrib/.test(s) ? 'Dividendo' : /juro|interest|cupão|cupom|coupon/.test(s) ? 'Juros' : /vend|sell|^v$|^s$|resgat/.test(s) ? 'Venda' : /taxa|fee|comiss|custódia/.test(s) ? 'Taxa' : /compr|buy|^c$|^b$|aplica|subscri/.test(s) ? 'Compra' : ''; };
 const impParse = () => { IMP.err = ''; IMP.rows = null; const txt = (document.getElementById('invImpTxt') || {}).value || IMP.text; IMP.text = txt; const lines = txt.split(/\r?\n/).filter(l => l.trim()); if (lines.length < 2) { IMP.err = 'Preciso de uma linha de cabeçalho e pelo menos um movimento.'; return; }
   const sep = [';', '\t', ','].map(c => [c, lines[0].split(c).length]).sort((a, b) => b[1] - a[1])[0][0], split = l => { const out = []; let cur = '', q = false; for (const ch of l) { if (ch === '"') q = !q; else if (ch === sep && !q) { out.push(cur); cur = ''; } else cur += ch; } out.push(cur); return out.map(x => x.trim()); };
   const H = split(lines[0]).map(h => h.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')), col = re => H.findIndex(h => re.test(h));
   const ci = { d: col(/^(data|date|dia)|data d|trade date|negocia/), tk: col(/ticker|simbolo|symbol|codigo|ativo|produto|instrument|isin|papel/), ty: col(/^tipo|type|operac|movimenta|side|c\/v|direction|acao$/), q: col(/quant|qty|shares|qtd|unidades|number/), p: col(/preco|price|cotacao|unit/), v: col(/valor|amount|total|montante|value|liquido/), f: col(/taxa|fee|comiss|custos|corretagem/), cur: col(/moeda|currency/) };
   if (ci.d < 0 || ci.tk < 0) { IMP.err = 'Não encontrei as colunas de data e de ativo/ticker no cabeçalho.'; return; }
-  const rows = []; lines.slice(1).forEach(l => { const c = split(l), date = dateP(c[ci.d]), tk = (c[ci.tk] || '').trim(); if (!date || !tk) return; let type = typeP(ci.ty >= 0 ? c[ci.ty] : ''); const qtyRaw = ci.q >= 0 ? String(c[ci.q]) : '', qty = numP(qtyRaw), price = ci.p >= 0 ? numP(c[ci.p]) : 0, amount = ci.v >= 0 ? numP(c[ci.v]) : 0;
+  const rows = []; const ci2 = { tax: col(/imposto|withholding|retid|\btax\b/) }; lines.slice(1).forEach(l => { const c = split(l), date = dateP(c[ci.d]), tk = (c[ci.tk] || '').trim(); if (!date || !tk) return; let type = typeP(ci.ty >= 0 ? c[ci.ty] : ''); const qtyRaw = ci.q >= 0 ? String(c[ci.q]) : '', qty = numP(qtyRaw), price = ci.p >= 0 ? numP(c[ci.p]) : 0, amount = ci.v >= 0 ? numP(c[ci.v]) : 0;
     if (!type) type = /^-/.test(qtyRaw.trim()) ? 'Venda' : qty ? 'Compra' : amount ? 'Dividendo' : ''; if (!type) return;
-    const amt0 = ['Compra', 'Venda'].includes(type) ? qty : amount; if (!amt0) return;
-    rows.push({ date, tk, type, qty, price: price || (qty && amount ? amount / qty : 0), amount: ['Compra', 'Venda'].includes(type) ? qty * (price || (qty && amount ? amount / qty : 0)) : amount, fees: ci.f >= 0 ? numP(c[ci.f]) : 0, cur: ci.cur >= 0 ? String(c[ci.cur] || '').toUpperCase().slice(0, 3) : '' }); });
+    const amt0 = L.QTX.includes(type) ? qty : amount; if (!amt0) return;
+    rows.push({ date, tk, type, qty, price: price || (qty && amount ? amount / qty : 0), amount: L.QTX.includes(type) ? qty * (price || (qty && amount ? amount / qty : 0)) : amount, fees: ci.f >= 0 ? numP(c[ci.f]) : 0, tax: ci2.tax >= 0 ? numP(c[ci2.tax]) : 0, cur: ci.cur >= 0 ? String(c[ci.cur] || '').toUpperCase().slice(0, 3) : '' }); });
   if (!rows.length) { IMP.err = 'Não reconheci nenhum movimento. Confirma que há colunas de data, ativo e tipo (ou quantidade).'; return; }
   const find = tk => OS.all('assets').find(a => [a.ticker, a.sym, a.name].some(x => x && x.toUpperCase() === tk.toUpperCase()));
   IMP.dup = 0; IMP.rows = rows.filter(r => { const a = find(r.tk); if (a && OS.all('invtx').some(t => t.asset === a.id && t.date === r.date && t.type === r.type && Math.abs(n(t.qty) - r.qty) < 1e-6 && Math.abs(n(t.price) - r.price) < .01)) { IMP.dup++; return false; } return true; });
   IMP.newA = [...new Set(IMP.rows.filter(r => !find(r.tk)).map(r => r.tk))]; };
 A.invImpGo = () => { if (!IMP || !IMP.rows) return; const find = tk => OS.all('assets').find(a => [a.ticker, a.sym, a.name].some(x => x && x.toUpperCase() === tk.toUpperCase())); let nA = 0;
   IMP.rows.forEach(r => { let a = find(r.tk); if (!a) { const isS = /^[A-Z0-9.\-=^]{1,15}$/.test(r.tk) && !/^[A-Z]{2}[A-Z0-9]{9}\d$/.test(r.tk); a = OS.add('assets', { name: r.tk, ticker: r.tk.replace(/\.[A-Z]{1,2}$/, ''), sym: isS ? r.tk : '', cls: IX.isCrypto(r.tk) ? 'Cripto' : 'Ação', currency: r.cur && L.CUR.includes(r.cur) ? r.cur : metaOf(r.tk)[0] }, { silent: true }); nA++; }
-    OS.add('invtx', Object.assign({ asset: a.id, type: r.type, date: r.date, fees: r.fees || '', note: 'Importado' }, ['Compra', 'Venda'].includes(r.type) ? { qty: r.qty, price: U.r2(r.price * 1e4) / 1e4 } : { amount: U.r2(r.amount) }), { silent: true }); });
+    OS.add('invtx', Object.assign({ asset: a.id, type: r.type, date: r.date, fees: r.fees || '', note: 'Importado' }, L.QTX.includes(r.type) ? { qty: r.qty, price: U.r2(r.price * 1e4) / 1e4 } : { amount: U.r2(r.amount), tax: r.tax || '' }), { silent: true }); });
   UI.toast(`${IMP.rows.length} movimento(s) importado(s)${nA ? ', ' + nA + ' ativo(s) criado(s): confirma o símbolo de cotação de cada um' : ''}`, 'pos'); IMP = null; OS.request(); IX.tick(true); };
 A.invExp = () => { const rows = [['data', 'ticker', 'simbolo', 'nome', 'classe', 'tipo', 'quantidade', 'preco', 'valor', 'taxas', 'moeda']].concat(U.sortBy(OS.all('invtx'), t => t.date).map(t => { const a = OS.get('assets', t.asset) || {}; return [t.date, a.ticker || '', a.sym || '', a.name || '', a.cls || '', t.type, t.qty || '', t.price || '', t.amount || '', t.fees || '', a.currency || 'EUR']; }));
   const blob = new Blob(['﻿' + rows.map(r => r.map(x => /[;"\n]/.test(String(x)) ? '"' + String(x).replace(/"/g, '""') + '"' : x).join(';')).join('\n')], { type: 'text/csv' }), u = URL.createObjectURL(blob), el = document.createElement('a'); el.href = u; el.download = 'oceanum-investimentos.csv'; el.click(); setTimeout(() => URL.revokeObjectURL(u), 2000); };
 
 /* ================= IMPOSTOS ================= */
 T.impostos = () => { const tx = U.sortBy(OS.all('invtx'), t => t.date), state = {}, sales = [];
-  tx.forEach(t => { const a = OS.get('assets', t.asset); if (!a || IX.isRF(a)) return; const s = state[a.id] = state[a.id] || { q: 0, c: 0 }; const fx = Inv.fx(a.currency);
-    if (t.type === 'Compra') { s.q += n(t.qty); s.c += n(t.qty) * n(t.price) + n(t.fees); } else if (t.type === 'Venda') { const avg = s.q ? s.c / s.q : 0, q = n(t.qty), gross = q * n(t.price), gain = gross - n(t.fees) - avg * q; sales.push({ a, date: t.date, gross, gain, grossE: gross * fx, gainE: gain * fx, held: firstBuy(a, t.date) }); s.c -= avg * q; s.q -= q; } });
+  tx.forEach(t => { const a = OS.get('assets', t.asset); if (!a || IX.isRF(a)) return; const st = state[a.id] = state[a.id] || IX.st0(), fx = Inv.fx(a.currency), m = IX.mult(a), before = st.realized, wasShort = st.qty < 0;
+    IX.step(st, t, m); if ((t.type === 'Venda' && !wasShort) || ((t.type === 'Compra' || t.type === 'Subscrição') && wasShort) || t.type === 'Amortização') { const gain = st.realized - before, gross = t.type === 'Amortização' ? n(t.amount) : n(t.qty) * n(t.price) * m; if (Math.abs(gain) > 1e-9 || t.type === 'Venda') sales.push({ a, date: t.date, gross, gain, grossE: gross * fx, gainE: gain * fx, held: firstBuy(a, t.date), kind: t.type === 'Amortização' ? 'amortização' : wasShort ? 'fecho de venda a descoberto' : '' }); } });
   const yr = OS.ui.invTaxY || U.today().slice(0, 4), ys = [...new Set([U.today().slice(0, 4), ...sales.map(s => s.date.slice(0, 4))])].sort().reverse();
   const br = sales.filter(s => s.a.currency === 'BRL' && s.date.startsWith(yr)), pt = sales.filter(s => s.a.currency !== 'BRL' && s.date.startsWith(yr));
-  const divs = OS.all('invtx').filter(t => (t.type === 'Dividendo' || t.type === 'Juros') && t.date.startsWith(yr)), divE = U.sum(divs, t => n(t.amount) * Inv.fx((OS.get('assets', t.asset) || {}).currency));
+  const divs = OS.all('invtx').filter(t => IX.INC.has(t.type) && t.date.startsWith(yr)), divE = U.sum(divs, t => n(t.amount) * Inv.fx((OS.get('assets', t.asset) || {}).currency)), taxE = U.sum(divs, t => n(t.tax) * Inv.fx((OS.get('assets', t.asset) || {}).currency));
   const ptGain = U.sum(pt.filter(s => !(s.a.cls === 'Cripto' && s.held >= 365)), s => s.gainE), cryptoEx = pt.filter(s => s.a.cls === 'Cripto' && s.held >= 365);
   const brM = Object.entries(U.groupBy(br, s => s.date.slice(0, 7))).sort().map(([ym, arr]) => { const acoes = arr.filter(s => ['Ação', 'BDR'].includes(s.a.cls) && s.a.cls !== 'BDR'), fii = arr.filter(s => ['FII', 'REIT'].includes(s.a.cls)), outros = arr.filter(s => !acoes.includes(s) && !fii.includes(s));
     const vAc = U.sum(acoes, s => s.gross), gAc = U.sum(acoes, s => s.gain), isento = vAc <= 20000, irAc = isento ? 0 : Math.max(0, gAc) * .15, irF = Math.max(0, U.sum(fii, s => s.gain)) * .2, irO = Math.max(0, U.sum(outros, s => s.gain)) * .15;
     const [y, m] = ym.split('-').map(Number), venc = U.iso(new Date(y, m + 1, 0)); return { ym, vAc, gAc, isento, irAc, irF, irO, ir: irAc + irF + irO, venc, gO: U.sum(outros, s => s.gain), gF: U.sum(fii, s => s.gain) }; });
   return `<div class="row gap6 inv-per">${ys.map(y => `<button class="chip ${yr === y ? 'on' : ''}" data-ui="invTaxY" data-v="${y}">${y}</button>`).join('')}</div>
   <div class="pn"><div class="pn-h"><h3>🇵🇹 Portugal (IRS, anexo G e J)</h3><span class="mut" style="font-size:12px">ativos fora do Brasil</span></div>
-    <div class="kpis">${UI.kpi('Mais-valias realizadas', M(U.sum(pt, s => s.gainE), { sign: 1 }), pt.length + ' venda(s)')}${UI.kpi('Imposto estimado (28%)', M(Math.max(0, ptGain) * .28), 'taxa autónoma; podes optar por englobar', { tone: ptGain > 0 ? 'warn' : '' })}${UI.kpi('Dividendos e juros', M(divE), 'tributados a 28% (cá) ou retidos lá fora')}${UI.kpi('Cripto isenta (> 365 dias)', M(U.sum(cryptoEx, s => s.gainE), { sign: 1 }))}</div>
-    ${pt.length ? UI.table({ key: 'taxpt', rows: pt, cols: [{ l: 'Data', v: s => U.fmtD(s.date) }, { l: 'Ativo', v: s => esc(s.a.ticker || s.a.name) }, { l: 'Detido', v: s => s.held + ' dias' }, { l: 'Valor de venda', cls: 'r', v: s => `<span class="mono">${M(s.grossE)}</span>` }, { l: 'Mais/menos-valia', cls: 'r', v: s => `<span class="mono ${tone(s.gainE)}">${M(s.gainE, { sign: 1 })}</span>` }] }) : '<p class="mut">Sem vendas neste ano.</p>'}
+    <div class="kpis">${UI.kpi('Mais-valias realizadas', M(U.sum(pt, s => s.gainE), { sign: 1 }), pt.length + ' venda(s)')}${UI.kpi('Imposto estimado (28%)', M(Math.max(0, ptGain) * .28), 'taxa autónoma; podes optar por englobar', { tone: ptGain > 0 ? 'warn' : '' })}${UI.kpi('Proventos brutos', M(divE), taxE ? 'imposto já retido: ' + M(taxE) + ' (dedutível em PT até ao limite da convenção)' : 'tributados a 28% (cá) ou retidos lá fora')}${UI.kpi('Cripto isenta (> 365 dias)', M(U.sum(cryptoEx, s => s.gainE), { sign: 1 }))}</div>
+    ${pt.length ? UI.table({ key: 'taxpt', rows: pt, cols: [{ l: 'Data', v: s => U.fmtD(s.date) }, { l: 'Ativo', v: s => esc(s.a.ticker || s.a.name) }, { l: 'Detido', v: s => s.held + ' dias' + (s.kind ? ` <span class="bdg">${esc(s.kind)}</span>` : '') }, { l: 'Valor de venda', cls: 'r', v: s => `<span class="mono">${M(s.grossE)}</span>` }, { l: 'Mais/menos-valia', cls: 'r', v: s => `<span class="mono ${tone(s.gainE)}">${M(s.gainE, { sign: 1 })}</span>` }] }) : '<p class="mut">Sem vendas neste ano.</p>'}
     <p class="mut" style="font-size:12px">Estimativa com o preço médio. Menos-valias abatem às mais-valias do mesmo ano (e dos 5 seguintes se englobares). Ativos estrangeiros vão no anexo J. Confirma com o simulador do Portal das Finanças.</p></div>
   <div class="pn"><div class="pn-h"><h3>🇧🇷 Brasil (IR mensal, DARF 6015)</h3><span class="mut" style="font-size:12px">ativos em BRL</span></div>
     ${brM.length ? `<div class="tblw"><table class="tbl"><thead><tr><th>Mês</th><th class="r">Vendas de ações</th><th class="r">Ganho ações</th><th class="r">Ganho FII</th><th class="r">Ganho ETF/outros</th><th class="r">IR devido</th><th>DARF até</th></tr></thead><tbody>${brM.map(r => `<tr><td>${U.fmtYM(r.ym)}</td><td class="r mono">${IX.Mc(r.vAc, 'BRL')}${r.isento && r.vAc ? ' <span class="bdg pos">isento</span>' : ''}</td><td class="r mono ${tone(r.gAc)}">${IX.Mc(r.gAc, 'BRL')}</td><td class="r mono ${tone(r.gF)}">${IX.Mc(r.gF, 'BRL')}</td><td class="r mono ${tone(r.gO)}">${IX.Mc(r.gO, 'BRL')}</td><td class="r mono ${r.ir ? 'warn' : ''}">${IX.Mc(r.ir, 'BRL')}</td><td>${r.ir >= 10 ? U.fmtD(r.venc) : r.ir ? 'acumula (< R$ 10)' : '—'}</td></tr>`).join('')}</tbody></table></div>` : '<p class="mut">Sem vendas em BRL neste ano.</p>'}
     <p class="mut" style="font-size:12px">Ações: vendas até R$ 20 mil no mês são isentas; acima, 15% sobre o ganho (swing trade). FII: 20% sem isenção. ETF e BDR: 15% sem isenção. Day trade (20%) não é detetado. Prejuízos podem compensar ganhos futuros da mesma categoria. Rendimentos de FII e dividendos são isentos; JCP tem 15% retido. Estimativa: confirma com um contador.</p></div>`; };
-const firstBuy = (a, before) => { const t = U.sortBy(OS.all('invtx').filter(x => x.asset === a.id && x.type === 'Compra' && x.date <= before), x => x.date)[0]; return t ? U.diff(before, t.date) : 0; };
+const firstBuy = (a, before) => { const t = U.sortBy(OS.all('invtx').filter(x => x.asset === a.id && L.QTX.includes(x.type) && x.date <= before), x => x.date)[0]; return t ? U.diff(before, t.date) : 0; };
 
 /* ================= COTAÇÕES E LIGAÇÕES ================= */
-T.cotacoes = () => { const c = OS.one('inbox'), st = IX.st, has = IX.hasScript(), v4 = (c.ver || 0) >= 5 && st.script !== 'old', fx = OS.one('profile').fx || {};
+T.cotacoes = () => { const c = OS.one('inbox'), st = IX.st, has = IX.hasScript(), v4 = (c.ver || 0) >= 6 && st.script !== 'old', fx = OS.one('profile').fx || {};
   return `<div class="pn"><div class="pn-h"><h3>${UI.ic('sync')}Cotações em tempo real</h3>${liveBadge()}</div>
   <div class="ib-w">
     <div class="ib-s ${has && v4 && st.script === 'ok' ? 'done' : ''}"><i>1</i><div><b>Ações, ETFs, fundos, FII, índices e câmbio de todas as bolsas (Yahoo Finance)</b>
@@ -5012,8 +5089,13 @@ T.cotacoes = () => { const c = OS.one('inbox'), st = IX.st, has = IX.hasScript()
     <div class="ib-s ${IX.fxRates ? 'done' : ''}"><i>4</i><div><b>Câmbio</b><p>${IX.fxRates ? `✓ Taxas do BCE de ${U.fmtD(IX.fxDate)}: 1 € = ${['USD', 'BRL', 'GBP'].map(k => IX.fxRates[k] ? U.nf(IX.fxRates[k], 4) + ' ' + k : '').filter(Boolean).join(' · ')}. Com o script, o câmbio também passa a ser ao vivo.` : 'A obter as taxas do BCE…'}</p></div></div>
     ${cc() === 'BR' || OS.all('assets').some(a => ['% do CDI', 'CDI +', 'IPCA +', 'Selic +', 'Poupança'].includes(a.idx)) ? `<div class="ib-s done"><i>5</i><div><b>Renda fixa brasileira</b><p>CDI, Selic, IPCA e poupança diários do Banco Central do Brasil: o valor de cada CDB, LCI, LCA, Tesouro e poupança é calculado dia a dia.</p></div></div>` : ''}
   </div></div>
+  ${IX.hasScript() ? tdPanel() : ''}
   <div class="pn"><div class="pn-h"><h3>Preço manual</h3><span class="mut" style="font-size:12px">para ativos sem cotação (imóveis, PPR, fundos sem símbolo…)</span></div>${OS.all('assets').filter(a => !a.sym && !IX.isRF(a)).length ? `<div class="list">${OS.all('assets').filter(a => !a.sym && !IX.isRF(a)).map(a => `<form class="li" data-form="setPrice" data-id="${a.id}"><div class="li-t"><b>${esc(a.ticker || a.name)}</b><small>${esc(a.cls)} · ${a.priceDate ? 'preço de ' + U.fmtD(a.priceDate) : 'sem preço'}</small></div><div class="inp-wrap" style="width:150px"><input type="number" step="any" name="p" value="${a.price ?? ''}" aria-label="Preço de ${esc(a.ticker || a.name)}"><span>${a.currency || 'EUR'}</span></div><button class="btn sm">Guardar</button></form>`).join('')}</div>` : '<p class="mut">Todos os ativos têm cotação automática ou são renda fixa.</p>'}</div>
   <div class="pn"><div class="pn-h"><h3>Câmbio manual (sem internet)</h3><span class="mut" style="font-size:12px">quantos € vale 1 unidade</span></div><div class="row gap16" style="flex-wrap:wrap">${['USD', 'BRL', 'GBP'].map(k => `<label class="row gap8"><span class="mono">1 ${k} =</span><div class="inp-wrap" style="width:120px"><input type="number" step="any" data-bind="profile.fx.${k}" data-fk="fx${k}" value="${fx[k] || ''}" aria-label="Câmbio ${k}"><span>€</span></div></label>`).join('')}</div></div>`; };
+let TDL = 0;
+const tdPanel = () => { if (!IX.tdList.length && !TDL) { TDL = 1; IX.loadTD().then(() => OS.request()).catch(() => { }); }
+  const L2 = IX.tdList; if (!L2.length) return '';
+  return UI.toggle(`Tesouro Direto · preços e taxas de hoje (${L2.length} títulos)`, `<div class="tblw"><table class="tbl"><thead><tr><th>Título</th><th>Taxa de compra</th><th>Taxa de venda</th><th class="r">Preço de compra</th><th class="r">Preço de resgate (mercado)</th><th>Vencimento</th><th></th></tr></thead><tbody>${L2.map(x => `<tr><td><b>${esc(x.n)}</b></td><td>${esc(x.tc || '—')}</td><td>${esc(x.tv || '—')}</td><td class="r mono">${x.pc ? IX.Mc(x.pc, 'BRL') : '—'}</td><td class="r mono">${IX.Mc(x.pr, 'BRL')}</td><td>${x.v ? U.fmtD(x.v) : ''}</td><td><button class="btn xs" data-new="assets" data-defs='${esc(JSON.stringify({ name: x.n, ticker: x.n.replace(/^Tesouro /, 'TD '), cls: 'Tesouro Direto', td: x.n, currency: 'BRL', country: 'Brasil', venc: x.v, broker: 'Tesouro Direto' }))}'>+ Carteira</button></td></tr>`).join('')}</tbody></table></div><p class="mut" style="font-size:12px">Fonte: Tesouro Direto (oficial). Com o título na carteira, o valor segue o preço de resgate: é a marcação a mercado (o que recebias se vendesses hoje). Regista a compra com o número de títulos (pode ter decimais) e o preço unitário.</p>`, 'tdTab', 'bank'); };
 A.invCheck = async () => { UI.toast('A verificar o script…'); IX.st.script = ''; try { if (OS.Inbox && OS.Inbox.check) await OS.Inbox.check(); await IX.tick(true); UI.toast(IX.st.script === 'ok' ? 'Cotações ao vivo ligadas ✓' : 'Ainda não: confirma que implementaste uma Nova versão.', IX.st.script === 'ok' ? 'pos' : 'warn'); } catch (e) { UI.toast('Falhou: ' + e.message, 'neg'); } OS.request(); };
 T.ia = () => (OS.InvAI ? OS.InvAI.view() : UI.empty('A carregar…'));
 })();
@@ -5131,7 +5213,7 @@ IA.facts = (extra = {}) => { const S = IX.summary(), val = S.val || 0, H = IX.he
     politica_investimento: { max_por_ativo_pct: pol.maxAtivo, max_cripto_pct: pol.maxCripto, aporte_mensal: pol.aporte || null, horizonte_anos: pol.horizonte, objetivo: pol.objetivo || null, evitar: pol.evitar || null, alocacao_alvo_pct: tg },
     carteira: { valor_total_eur: r2(val), aplicado_eur: r2(S.cost), lucro_eur: r2(S.pl), lucro_pct: pc(S.ret), variacao_hoje_eur: r2(S.day), variacao_hoje_pct: pc(S.dayPct), proventos_12m_eur: r2(S.divs12), yield_12m_pct: val ? pc(S.divs12 / val) : null, realizado_vendas_eur: r2(S.realized), n_ativos: S.P.length },
     alocacao_atual_pct: Object.fromEntries(Object.entries(alloc).map(([k, v]) => [k, pc(v / (val || 1))])),
-    posicoes: U.sortBy(S.P, x => x.value, -1).slice(0, 30).map(x => ({ ticker: x.a.ticker || x.a.sym || x.a.name, nome: x.a.name, classe: x.a.cls, moeda: x.a.currency || 'EUR', pais: x.a.country || null, setor: x.a.sector || null, valor_eur: r2(x.value), peso_pct: pc(x.value / (val || 1)), rent_pct: pc(x.ret), lucro_eur: r2(x.pl), dia_pct: x.live && x.live.pc ? pc(x.dayPct) : null, proventos_eur: r2(x.divs), renda_fixa: x.rf ? { indexador: x.a.idx, taxa: n(x.a.rate), vencimento: x.a.venc || null, liquido_estimado_eur: r2(x.net) } : undefined, cotacao_ao_vivo: !!x.live })),
+    posicoes: U.sortBy(S.P, x => x.value, -1).slice(0, 30).map(x => ({ ticker: x.a.ticker || x.a.sym || x.a.name, nome: x.a.name, classe: x.a.cls, moeda: x.a.currency || 'EUR', pais: x.a.country || null, setor: x.a.sector || null, valor_eur: r2(x.value), peso_pct: pc(x.value / (val || 1)), rent_pct: pc(x.ret), lucro_eur: r2(x.pl), dia_pct: x.live && x.live.pc ? pc(x.dayPct) : null, proventos_eur: r2(x.divs), renda_fixa: x.rf ? { indexador: x.a.idx, taxa: n(x.a.rate), vencimento: x.a.venc || null, liquido_estimado_eur: r2(x.net) } : undefined, cotacao_ao_vivo: !!x.live, vendido: x.short || undefined, alavancagem: x.lev ? r2(x.lev) : undefined, exposicao_eur: x.lev || x.a.cls === 'Opção' ? r2(x.exposure) : undefined })),
     rentabilidade: m ? { total_pct: pc(m.tot), anual_pct: m.years >= .9 ? pc(m.ann) : null, tir_pct: pc(m.xirr), volatilidade_anual_pct: pc(m.vol), sharpe: r2(m.sharpe), queda_maxima_pct: pc(m.mdd), meses_positivos: m.pos + '/' + m.nm, anos: r2(m.years) } : 'histórico ainda não calculado',
     risco: (() => { try { const r = IX.hcache ? IX.risk(IX.hcache, IX._rb) : null; return r ? { nota_risco_1a7: r.sri, perfil_maximo: p ? ({ Conservador: 3, Moderado: 4, Arrojado: 5, Agressivo: 6 })[p.nome] : null, volatilidade_anual_pct: pc(r.vol), var95_1mes_eur: r2(r.var21e), cvar_1mes_eur: r2(r.cvar21e), queda_maxima_pct: pc(r.mdd), queda_atual_pct: pc(r.curDD), beta: r2(r.beta), rácio_diversificacao: r2(r.divRatio), liquidez_imediata_pct: pc(r.liq), stress: r.stress.map(x => ({ cenario: x.nm, perda_pct: pc(x.pct), perda_eur: r2(x.loss) })), contribuicao_risco: r.assets.slice(0, 8).map(x => ({ ativo: x.a.ticker || x.a.name, peso_pct: pc(x.w), parte_do_risco_pct: pc(x.rc), volatilidade_pct: pc(x.vol) })) } : 'histórico ainda não calculado'; } catch (e) { return null; } })(),
     saude_carteira: { pontuacao_0_100: H.score, verificacoes: H.items.map(i => (i.ok ? 'OK: ' : 'FALHA: ') + i.t), diversificacao_efetiva_ativos: r2(H.eff), maior_posicao_pct: pc(H.top), cripto_pct: pc(H.cryptoW) },
@@ -8892,12 +8974,14 @@ const KEY = '${key}';
 function doGet(e) {
   const p = e.parameter || {};
   if (p.k !== KEY) return out({ ok: false, msg: 'Chave errada' });
-  if (p.op === 'ping') return out({ ok: true, v: 5 });
+  if (p.op === 'ping') return out({ ok: true, v: 6 });
   // ---- cotações em tempo real (Yahoo Finance) para os Investimentos ----
   if (p.op === 'q') return out({ ok: true, q: cotacoes_(String(p.s || '')) });
   if (p.op === 'h') return out({ ok: true, h: historico_(String(p.s || ''), String(p.r || '1y'), String(p.i || '1d')) });
   if (p.op === 's') return out(Object.assign({ ok: true }, procura_(String(p.q || ''), Number(p.n || 0))));
   if (p.op === 'f') return out({ ok: true, f: empresa_(String(p.s || '')) });
+  if (p.op === 'td') return out({ ok: true, td: tesouro_() });
+  if (p.op === 'c') return out({ ok: true, c: agenda_(String(p.s || '')) });
   // ---- sincronização: os dados do Oceanum num ficheiro do teu Google Drive ----
   if (p.op === 'list') { const all = dados_(); const m = {}; Object.keys(all).forEach(function (id) { m[id] = all[id].t || 0; }); return out({ ok: true, docs: m }); }
   if (p.op === 'get') { const all = dados_(), ids = String(p.ids || '').split(',').filter(String); const o = {}; (ids.length ? ids : Object.keys(all)).forEach(function (id) { if (all[id]) o[id] = all[id]; }); return out({ ok: true, docs: o }); }
@@ -8972,6 +9056,19 @@ function empresa_(s) { const C = CacheService.getScriptCache(), k = 'f:' + s, h 
   [['annual', TS_], ['quarterly', ['TotalRevenue', 'NetIncome', 'OperatingIncome', 'FreeCashFlow']]].forEach(function (g) { const j = yget_('/ws/fundamentals-timeseries/v1/finance/timeseries/' + encodeURIComponent(s) + '?type=' + g[1].map(function (x) { return g[0] + x; }).join(',') + '&period1=' + (g[0] === 'annual' ? p1 : p2 - 3 * 365 * 86400) + '&period2=' + p2);
     ((j && j.timeseries && j.timeseries.result) || []).forEach(function (r) { const key = r.meta && r.meta.type && r.meta.type[0]; if (!key || !r[key]) return; ts[key] = r[key].filter(function (x) { return x && x.reportedValue; }).map(function (x) { return [x.asOfDate, x.reportedValue.raw, x.currencyCode]; }); }); });
   const o = { sum: sum, ts: ts, at: Date.now() }; try { const js = JSON.stringify(o); if (js.length < 99000) C.put(k, js, 21600); } catch (e) { } return o; }
+// ---- Tesouro Direto: preços e taxas oficiais (marcação a mercado) ----
+function tesouro_() { const C = CacheService.getScriptCache(), h = C.get('td'); if (h) return JSON.parse(h); let j = null;
+  try { const r = UrlFetchApp.fetch('https://www.tesourodireto.com.br/o/rentabilidade/investir', { muteHttpExceptions: true, headers: UA_ }); if (r.getResponseCode() === 200) j = JSON.parse(r.getContentText()); } catch (e) { }
+  const l = []; Object.keys(j || {}).forEach(function (k) { (j[k] || []).forEach(function (x) { if (x && x.treasuryBondName) l.push({ n: x.treasuryBondName, pr: x.unitaryRedemptionValue, pc: x.unitaryInvestmentValue, tc: x.investmentProfitabilityIndexerName, tv: x.redemptionProfitabilityFeeIndexerName, v: String(x.maturityDate || '').slice(0, 10), t: x.lastMarketPricingDate, min: x.investmentBondMinimumValue }); }); });
+  if (l.length) C.put('td', JSON.stringify(l), 600); return l; }
+// ---- agenda de dividendos (data-ex, pagamento, valor anual) ----
+function agenda_(s) { const syms = s.split(',').filter(String).slice(0, 25), C = CacheService.getScriptCache(), out = {}, c = crumb_();
+  syms.forEach(function (x) { const k = 'c:' + x, h = C.get(k); if (h) { out[x] = JSON.parse(h); return; }
+    try { const r = UrlFetchApp.fetch(YH_[0] + '/v10/finance/quoteSummary/' + encodeURIComponent(x) + '?modules=calendarEvents,summaryDetail&crumb=' + encodeURIComponent(c.cr), { muteHttpExceptions: true, headers: { 'User-Agent': UA_['User-Agent'], Cookie: c.ck } });
+      if (r.getResponseCode() !== 200) return; const q = (JSON.parse(r.getContentText()).quoteSummary.result || [])[0] || {}, ce = q.calendarEvents || {}, sd = q.summaryDetail || {}, v = function (o) { return o && o.raw != null ? o.raw : null; };
+      const o = { ex: v(ce.exDividendDate) || v(sd.exDividendDate), pay: v(ce.dividendDate), rate: v(sd.dividendRate) || v(sd.trailingAnnualDividendRate), dy: v(sd.dividendYield) || v(sd.trailingAnnualDividendYield), res: ce.earnings && ce.earnings.earningsDate && ce.earnings.earningsDate[0] ? v(ce.earnings.earningsDate[0]) : null };
+      out[x] = o; C.put(k, JSON.stringify(o), 21600); } catch (e) { } });
+  return out; }
 function procura_(q, n) { if (!q) return { q: [], news: [] }; const C = CacheService.getScriptCache(), k = 's:' + q + ':' + n, h = C.get(k); if (h) return JSON.parse(h);
   const j = yget_('/v1/finance/search?q=' + encodeURIComponent(q) + '&quotesCount=10&newsCount=' + (n || 0) + '&lang=pt-PT') || {};
   const o = { q: (j.quotes || []).filter(function (x) { return x.symbol; }).map(function (x) { return { s: x.symbol, n: x.longname || x.shortname || x.symbol, t: x.quoteType, ty: x.typeDisp, ex: x.exchDisp || x.exchange }; }),
