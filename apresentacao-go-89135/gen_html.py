@@ -4,7 +4,7 @@ import json, re, html
 ROOT = '/tmp/claude-0/-home-user-Oceanum/6dc23658-084b-521e-a979-d9257be44f77/scratchpad/ppt/'
 H = '/home/user/Oceanum/apresentacao-go-89135/nata-lisboa.html'
 C = json.load(open(ROOT + 'content.json'))
-t = open(H, encoding='utf-8').read()
+t = open(ROOT + 'base.html', encoding='utf-8').read()
 e = lambda s: html.escape(s, quote=False)
 
 # ── blocos existentes
@@ -94,6 +94,7 @@ Dica: clicar num cartão salta para esse tema.">
 # ── forças
 f = blocks[8]
 f = f.replace('<div class="badge">4</div>', '<div class="badge">6</div>').replace('// Ambiente externo · na Nata Lisboa', '// Ambiente externo · força a força')
+f = f.replace('[Principais: matérias-primas, embalagens, café…]', '[Além do franqueador, que entrega os produtos: café, embalagens…]')
 f = f.replace('<p class="lbl or in fade" style="--d:0">Forças de tarefa · impacto direto</p>', '<p class="lbl or in fade" style="--d:0">② Na Nata Lisboa · forças de tarefa (impacto direto)</p>')
 f = f.replace('<p class="lbl in fade" style="--d:5">Forças gerais · impacto indireto</p>', '<p class="lbl in fade" style="--d:5">② Na Nata Lisboa · forças gerais (impacto indireto)</p>')
 for lab, g in [('Clientes', 'Quem compra.'), ('Fornecedores', 'Quem fornece recursos.'), ('Concorrentes', 'Quem disputa os clientes.'), ('Grupos de pressão', 'Quem influencia de fora.')]:
@@ -148,6 +149,10 @@ assert '140385' in g
 en = blocks[4].replace('<div class="badge">0</div>', '<div class="badge">1</div>').replace('<p class="lbl">Excerto da entrevista</p>', '<p class="lbl">Frase marcante da entrevista</p>')
 cz = blocks[15].replace('<p class="lbl">Citação · Mônica Cardoso</p>', '<p class="lbl">③ Citação · Mônica Cardoso</p>')
 refs = blocks[16]
+_old = '<p>Nata Lisboa. <span class="ph" data-k="r-site">[(data de acesso). Título da página. URL]</span></p>'
+assert _old in refs
+refs = refs.replace(_old, '<p>Associação Portuguesa de Franchising. (s.d.). <i>Nata Lisboa</i>. Consultado a 5 de outubro de 2026, em https://associacaofranchising.pt/project/nata-lisboa/</p>\n      <p>Nata Lisboa. (s.d.). <i>NATA Lisboa – The world needs nata</i>. Consultado a 5 de outubro de 2026, em https://www.natalisboa.com</p>\n      <p>Portugal Resident. (2012, 2 de agosto). <i>Yummy pastéis de nata to represent Portugal</i>. https://www.portugalresident.com</p>')
+refs = refs.replace('gap:9px;font-size:15.5px;line-height:1.4', 'gap:7px;font-size:14.5px;line-height:1.38')
 
 new = (head + blocks[1] + g + roteiro + en +
        t3('caracterizacao') + t3('gestao') + t3('caracteristicas') + t3('historia') + t3('sistema') + t3('ambiente') +
@@ -157,24 +162,24 @@ css = '''
 /* modelo de 3 camadas */
 .t3{display:grid;grid-template-columns:1.72fr 1fr;grid-template-rows:1fr auto;gap:14px 20px;flex:1;min-height:0}
 .geral{display:flex;flex-direction:column;gap:8px;min-height:0;min-width:0}
-.lead{font-size:18px;line-height:1.45;color:var(--paper)}
+.lead{font-size:20px;line-height:1.45;color:var(--paper)}
 .items{display:grid;gap:12px;flex:1;min-height:0;margin-top:4px}
 .items.c1{grid-template-columns:1fr}.items.c2{grid-template-columns:1fr 1fr}.items.c3{grid-template-columns:repeat(3,1fr)}.items.c4{grid-template-columns:repeat(4,1fr)}
 .items.flow{gap:12px 30px}
 .items .it{padding:14px 16px;gap:5px;position:relative}
-.items .it h3{font-size:22px}
-.items .d{font-size:15.5px;line-height:1.42}
-.items.c4 .d{font-size:14.5px}
+.items .it h3{font-size:25px}
+.items .d{font-size:18px;line-height:1.42}
+.items.c4 .d{font-size:16.5px}
 .items.flow .it:not(:last-child)::after{content:"→";position:absolute;right:-25px;top:50%;transform:translateY(-50%);color:var(--nata);font:700 22px var(--f-body)}
 .items.timeline .it{border-top:3px solid var(--nata)}
 .nata{margin-top:0;padding:14px 18px;gap:9px;min-width:0}
-.nf{font-size:15.5px;line-height:1.4}
+.nf{font-size:17px;line-height:1.42}
 .nf .sq{color:var(--nata);font-weight:700}
-.nf .ph{font-size:15.5px}
+.nf .ph{font-size:17px}
 .src{font:400 11px/1.3 var(--f-mono);color:var(--dim);margin-top:auto}
-.fact{font-size:15px;line-height:1.4}
+.fact{font-size:16px;line-height:1.4}
 .ex{border:1.5px dashed var(--dim);padding:12px 16px;display:flex;flex-direction:column;gap:6px;justify-content:center}
-.ex .ph{font-size:16px}
+.ex .ph{font-size:17px}
 .t3 .quote{align-self:stretch;justify-content:center}
 .t3 .quote .q{font-size:22px}
 '''

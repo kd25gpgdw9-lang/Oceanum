@@ -1,5 +1,5 @@
 {
- "fonte": "Fonte dos factos: natalisboa.com (consultado em 05/10/2026)",
+ "fonte": "Fontes: natalisboa.com · APF · Portugal Resident",
  "t3": {
   "caracterizacao": {
    "num": "2",
@@ -33,22 +33,22 @@
    ],
    "nata": [
     {
-     "f": "Setor: restauração · coffee shops especializadas em pastel de nata."
+     "f": "Setor: restauração · a primeira cadeia de coffee shops em que o pastel de nata é a estrela."
     },
     {
      "f": "Missão: «transformar o doce de Lisboa num doce planetário»."
     },
     {
-     "f": "Sede: Atrium Saldanha, Lisboa."
+     "f": "Primeira loja: junho de 2012, no centro histórico de Lisboa; franqueador: Be-business. Sede: Atrium Saldanha."
     },
     {
-     "f": "Rede: 27 lojas listadas em Portugal, de Braga a Faro, e 5 no estrangeiro: Viena, Bilbau, Frankfurt, Luanda e Talatona."
+     "f": "Rede: 1 loja própria e 27 franchisadas em Portugal; lojas em Viena, Bilbau, Frankfurt, Luanda e Talatona."
     },
     {
-     "f": "Crescimento por franchising; vendas em loja, take away (NATA&GO) e delivery (Uber Eats)."
+     "f": "Franchising: entrada de 22 500 €, investimento de 70 a 150 mil €, royalties de 5 %."
     },
     {
-     "p": "[Ano de fundação · loja da Mônica · n.º de colaboradores]"
+     "p": "[Loja da Mônica · n.º de colaboradores]"
     }
    ],
    "quote": "[Como a Mônica descreve a Nata Lisboa em poucas palavras.]",
@@ -94,7 +94,7 @@
      "f": "Meta da marca: que saborear um NATA seja «igual em Lisboa, Porto, Bilbau, Viena, Luanda» — exige eficácia (mesma qualidade) e eficiência (mesmo processo)."
     },
     {
-     "p": "[Eficiência na loja: ex. produção em fornadas para reduzir desperdício]"
+     "f": "Eficiência: lojas sem cozinha, com produtos pré-confecionados e entrega direta — menos custos e menos desperdício."
     },
     {
      "p": "[Eficácia na loja: ex. objetivos de vendas e satisfação do cliente]"
@@ -143,7 +143,7 @@
      "p": "[Pessoas: n.º de colaboradores da loja e funções — balcão, produção, gerência]"
     },
     {
-     "p": "[Estrutura: sede → franchisado → gerente de loja → equipa?]"
+     "f": "Estrutura: franqueador (marca, produto e formação) → franchisados → equipa de cada loja."
     },
     {
      "p": "[Uma regra ou procedimento que todos têm de cumprir]"
@@ -190,7 +190,7 @@
    ],
    "nata": [
     {
-     "f": "Clássica: experiência «igual» em todas as lojas, com receita e processo padronizados — ideia próxima de Taylor e Fayol."
+     "f": "Clássica: produtos pré-confecionados, acabamento na loja e formação dada pelo franqueador garantem um processo «igual» em todas as lojas — ideia próxima de Taylor e Fayol."
     },
     {
      "f": "Contemporânea: o franchising adapta a marca a cidades e países diferentes (Portugal, Espanha, Áustria, Alemanha, Angola)."
@@ -242,10 +242,10 @@
    ],
    "nata": [
     {
-     "p": "[Inputs: farinha, ovos, leite, açúcar, café, embalagens, colaboradores, fornos]"
+     "f": "Inputs: produtos pré-confecionados entregues diretamente à loja; não há cozinha, só uma pequena copa."
     },
     {
-     "p": "[Processo: produção diária dos pastéis, atendimento, limpeza, stocks]"
+     "p": "[Processo: acabamento e forno dos pastéis, atendimento, limpeza]"
     },
     {
      "f": "Outputs: pastéis de nata, bebidas e refeições; venda em loja, take away (NATA&GO) e delivery (Uber Eats)."
@@ -297,6 +297,9 @@
      "f": "Político-legal: regras de higiene e segurança alimentar e Livro de Reclamações Eletrónico."
     },
     {
+     "f": "Fornecedor principal: o próprio franqueador, que entrega os produtos pré-confecionados."
+    },
+    {
      "p": "[As 3 forças que mais afetam a loja, segundo a Mônica]"
     }
    ],
@@ -343,7 +346,7 @@
      "p": "[Histórias: a fundação da marca, um cliente marcante]"
     },
     {
-     "p": "[Rituais: abertura da loja, formação inicial]"
+     "f": "Rituais: formação integral assegurada pelo franqueador a quem abre ou trabalha numa loja."
     },
     {
      "p": "[Linguagem: expressões usadas pela equipa]"

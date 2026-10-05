@@ -7,7 +7,8 @@ const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE";
 pres.title = "Nata Lisboa — Gestão das Organizações (89135)";
 pres.subject = "Caracterização de uma organização";
-pres.theme = { headFontFace: "Arial", bodyFontFace: "Arial" };
+const FT = process.env.CANVA === "1" ? "Arimo" : "Arial";
+pres.theme = { headFontFace: FT, bodyFontFace: FT };
 
 const I = (v) => v / 144;
 const C = {
@@ -15,7 +16,8 @@ const C = {
   dim: "7F96C2", or: "F5822A", ph: "F9C08F", phLabel: "F5A262", cream: "F3EBDC", quote: "A3410C",
   creamLabel: "6B5D4C", blue2: "1E3F86", ring: "6F8DC7", badge: "C9D6EE",
 };
-const F = { head: "Arial", body: "Arial", mono: "Courier New", serif: "Times New Roman" };
+const CANVA = process.env.CANVA === "1";
+const F = CANVA ? { head: "Arimo", body: "Arimo", mono: "Cousine", serif: "Tinos" } : { head: "Arial", body: "Arial", mono: "Courier New", serif: "Times New Roman" };
 const TOTAL = 17;
 
 pres.defineSlideMaster({
@@ -221,7 +223,7 @@ roteiro.forEach(([l, t, d, link], i) => {
   T(l, { x: x + 24, y: y + 14, w: 90, h: 100, font: F.serif, italic: true, size: 84, color: C.or, name: n });
   T(t, { x: x + 120, y: y + 26, w: 400, h: 44, size: 30, bold: true, name: n });
   T(d + "  →", { x: x + 120, y: y + 80, w: 400, h: 120, size: 23, color: C.muted, name: n });
-  R({ x, y, w: 544, h: 220, fill: "FFFFFF", ft: 100, name: n, link });
+  if (!CANVA) R({ x, y, w: 544, h: 220, fill: "FFFFFF", ft: 100, name: n, link });
 });
 cur.addNotes("ROTEIRO (≈20 s)\nNove temas, que cobrem as alíneas a) a g) do enunciado e os conteúdos dos Tópicos 1 e 2. Em cada tema seguimos sempre a mesma ordem: ① em geral (a teoria), ② na Nata Lisboa (a organização) e ③ na prática (citações e exemplos da Mônica, ao clique).\nNo modo de apresentação, clicar num cartão salta para o tema.");
 
@@ -270,7 +272,7 @@ t3("ambiente");
 slide("CONTEUDO");
 header("6", "// AMBIENTE EXTERNO · FORÇA A FORÇA", ["FORÇAS NA ", ["NATA LISBOA"]]);
 mono("② NA NATA LISBOA · FORÇAS DE TAREFA (IMPACTO DIRETO)", { x: 128, y: 210, w: 1500, h: 30, color: C.or, name: "A1|fade|lblTarefa" });
-[["CLIENTES", "Quem compra.", "[Turistas, residentes, estudantes, empresas?]"], ["FORNECEDORES", "Quem fornece recursos.", "[Matérias-primas, embalagens, café, equipamento]"],
+[["CLIENTES", "Quem compra.", "[Turistas, residentes, estudantes, empresas?]"], ["FORNECEDORES", "Quem fornece recursos.", "[Além do franqueador, que entrega os produtos: café, embalagens…]"],
  ["CONCORRENTES", "Quem disputa os clientes.", "[Pastelarias e cadeias de pastéis de nata perto da loja]"], ["GRUPOS DE PRESSÃO", "Quem influencia de fora.", "[ASAE, câmara municipal, media, avaliações online]"]].forEach(([l, g, p], i) => {
   const x = 128 + i * 420, n = `A${2 + i}|rise|tarefa${i}`;
   card(x, 248, 404, 196, n);
@@ -414,12 +416,14 @@ const refs = [
   [["Robbins, S. P., & Coulter, M. "], ["[(ano)]", false, true], [". "], ["Management", true], [" "], ["[(n.º ed.) — confirmar a edição usada na UC]", false, true], [". Pearson."]],
   [["PDFs das aulas de Gestão das Organizações (2026/2027). ISCA-UA."]],
   [["Anthropic. (2026). "], ["Claude", true], [" [Modelo de linguagem de grande escala]. https://claude.ai"]],
-  [["Nata Lisboa. "], ["[(data de acesso). Título da página. URL]", false, true]],
+  [["Associação Portuguesa de Franchising. (s.d.). "], ["Nata Lisboa", true], [". Consultado a 5 de outubro de 2026, em https://associacaofranchising.pt/project/nata-lisboa/"]],
+  [["Nata Lisboa. (s.d.). "], ["NATA Lisboa – The world needs nata", true], [". Consultado a 5 de outubro de 2026, em https://www.natalisboa.com"]],
+  [["Portugal Resident. (2012, 2 de agosto). "], ["Yummy pastéis de nata to represent Portugal", true], [". https://www.portugalresident.com"]],
   [["Cardoso, M. (2026). "], ["Entrevista presencial realizada pelo Grupo 8, 3 de outubro [comunicação pessoal]."]],
 ];
 T(refs.flatMap((parts, k) => [{ text: "+  ", options: { color: C.or, bold: true } }, ...parts.map(([t, it, ph], j) => ({
   text: t, options: { italic: !!(it || ph), color: ph ? C.ph : C.text, breakLine: j === parts.length - 1 && k < refs.length - 1 } }))]),
-  { x: 128, y: 222, w: 1060, h: 700, size: 22, psa: 9, name: "A1|fade|refs" });
+  { x: 128, y: 214, w: 1080, h: 720, size: 20, psa: 6, name: "A1|fade|refs" });
 card(1240, 222, 552, 300, "A2|rise|ia");
 mono("DECLARAÇÃO DE USO DE IA", { x: 1268, y: 246, w: 500, h: 30, color: C.or, name: "A2|rise|ia" });
 T([
@@ -443,4 +447,4 @@ T("Perguntas?  ·  Nata Lisboa", { x: 128, y: 590, w: 1000, h: 50, size: 34, col
 T("Um agradecimento especial a Mônica Cardoso pela disponibilidade.", { x: 128, y: 660, w: 1000, h: 44, size: 26, italic: true, color: C.ph, name: "A5|fade|agradecimento" });
 cur.addNotes("Agradecer e abrir para perguntas.");
 
-pres.writeFile({ fileName: "Nata_Lisboa_GO_89135.pptx" }).then((f) => console.log("escrito:", f));
+pres.writeFile({ fileName: CANVA ? "canva_raw.pptx" : "Nata_Lisboa_GO_89135.pptx" }).then((f) => console.log("escrito:", f));
