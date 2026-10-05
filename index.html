@@ -1693,7 +1693,7 @@ svg.anim{width:100%;height:auto;display:block;border-radius:12px}
 .rk-scale{flex:1;min-width:240px;display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.rk-scale span{text-align:center;padding:8px 0;border-radius:6px;font-weight:700;font-size:13px;opacity:.35;color:#0b1220}.rk-scale span.on{opacity:1;outline:2px solid var(--tx);transform:scale(1.08)}
 .rk-scale .s1{background:#34d399}.rk-scale .s2{background:#6ee7b7}.rk-scale .s3{background:#bef264}.rk-scale .s4{background:#fde047}.rk-scale .s5{background:#fdba74}.rk-scale .s6{background:#fb923c}.rk-scale .s7{background:#f87171}
 .rk-lab{grid-column:1/-1;display:flex;justify-content:space-between}.rk-lab small{font-size:11px;color:var(--mut)}.rk-pf{font-size:13px;font-weight:600;max-width:280px}.rk-c th{font-size:11px}
-@media (max-width:700px){.inv-t .mh{display:none}}
+@media (max-width:700px){.inv .mh{display:none}}
 .co-h h2{font-size:22px}.co-ai{display:flex;flex-direction:column;gap:10px;margin-top:14px}.co-ai .sai-h>div{flex:1}
 .co-sc{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}.co-sc>div{border:1px solid var(--line2);border-radius:10px;padding:8px;text-align:center}.co-sc b{display:block;font-size:20px}.co-sc small{font-size:11px;color:var(--mut);line-height:1.35}
 .co-ck{margin-top:8px}.co-ck>b{font-size:12.5px}.co-ck>div{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:2px 0;border-bottom:1px dashed var(--line)}.co-ck>div.mut{color:var(--mut)}
@@ -1703,6 +1703,7 @@ svg.anim{width:100%;height:auto;display:block;border-radius:12px}
 .co-rec{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:end;margin:6px 0 10px}.co-rec>div{display:flex;flex-direction:column;align-items:center;gap:2px}.co-rec i{width:70%;border-radius:4px 4px 0 0;display:block}.co-rec .r0{background:#16a34a}.co-rec .r1{background:#4ade80}.co-rec .r2{background:#facc15}.co-rec .r3{background:#fb923c}.co-rec .r4{background:#ef4444}.co-rec small{font-size:10.5px;color:var(--mut);text-align:center}
 @media (max-width:700px){.co-sc{grid-template-columns:repeat(2,1fr)}}
 .inv-types{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.ia-al-ch{display:flex;flex-direction:column;gap:4px;margin-top:10px;font-size:12.5px}.cmp-t tbody th{text-align:left;font-weight:500;color:var(--tx2);white-space:nowrap}
 
 </style>
 <style>
@@ -1934,7 +1935,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.63", "date": "05/10/2026", "notes": ["Investimentos completos: carteira ao vivo, rentabilidade vs índices, risco (nota 1–7, VaR, stress), proventos, alocação, mercado, impostos PT/BR, importação CSV", "Cotações em tempo real (Yahoo via o teu script Google, cripto em streaming, câmbio do BCE) e renda fixa com CDI/IPCA/Selic diários", "Análise de empresas: o que faz, donos, gestão, demonstrações financeiras, múltiplos, Piotroski, Altman, Graham e Bazin", "Assistente de investimentos com IA que raciocina com os maiores investidores e pensadores, com perfil, regras e verificação"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.67", "date": "05/10/2026", "notes": ["Todos os tipos de investimento: opções, futuros e CFD com alavancagem, venda a descoberto, caixa em moeda estrangeira, Tesouro Direto com marcação a mercado", "Eventos: desdobramentos e grupamentos (detetados sozinhos), bonificações, subscrições, transferências entre corretoras, amortizações, aluguer de ações", "Proventos completos: dividendos, JCP, rendimentos de FII, juros e cupões, imposto retido, agenda de datas-ex, projeção de 12 meses, crescimento e reinvestir"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -4616,7 +4617,7 @@ IX.symsWatch = () => (cfg().watch || []).slice();
 IX.extra = new Set(); // símbolos pedidos pelo ecrã aberto (índices, detalhe de um ativo)
 const onInv = () => /^#?investimentos/.test(location.hash.replace(/^#/, '#'));
 let busy = false, lastTick = 0;
-IX.tick = async (force) => { if (busy || (document.hidden && !force)) return; busy = true; lastTick = Date.now();
+IX.tick = async (force) => { if (busy) { if (force) IX._again = true; return; } if (document.hidden && !force) return; busy = true; lastTick = Date.now();
   const held = IX.symsHeld(), all = [...new Set([...held, ...IX.symsWatch(), ...IX.extra, ...Object.values(FXLIVE).filter(s => OS.all('assets').some(a => a.currency && FXLIVE[a.currency] === s) || FXLIVE[IX.view()] === s)])];
   wsStart(all); fhStart(all); IX.loadFx();
   try { if (scr() && IX.st.script !== 'old') await IX.scriptQuotes(all.filter(s => !(isCrypto(s) && IX.age(s) < 15000 && PX[s].src === 'Binance (tempo real)'))); }
@@ -4624,7 +4625,7 @@ IX.tick = async (force) => { if (busy || (document.hidden && !force)) return; bu
   try { await IX.cgQuotes(all.filter(s => isCrypto(s) && (!scr() || IX.st.script !== 'ok'))); } catch (e) { }
   if (scr() && OS.all('assets').some(a => IX.tdSym(a))) { try { await IX.loadTD(); } catch (e) { } }
   const need = IX.needSeries(); for (const [k, d] of Object.entries(need)) { try { await IX.loadSeries(k, d); } catch (e) { } }
-  persist(); busy = false; IX.lastTick = Date.now(); if (onInv()) OS.request(); };
+  persist(); busy = false; IX.lastTick = Date.now(); if (onInv()) OS.request(); if (IX._again) { IX._again = false; setTimeout(() => IX.tick(true), 50); } };
 const loop = () => { const ms = onInv() ? 20000 : 300000; if (Date.now() - lastTick >= ms - 500) IX.tick(); };
 OS.on('ready', () => { setTimeout(() => IX.tick(true), 1500); setInterval(loop, 5000); addEventListener('hashchange', () => { if (onInv() && Date.now() - lastTick > 8000) IX.tick(); }); document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - lastTick > 15000) IX.tick(); }); });
 
@@ -4747,7 +4748,7 @@ const cfg = () => OS.one('invcfg');
 const cc = () => (OS.Country ? OS.Country.code() : 'PT');
 const pctS = (v, d = 2) => (v >= 0 ? '+' : '') + U.pct(v, d);
 const tone = v => v > 0 ? 'pos' : v < 0 ? 'neg' : 'mut';
-const TABS = [['', 'Visão'], ['carteira', 'Carteira'], ['rentabilidade', 'Rentabilidade'], ['risco', 'Risco'], ['proventos', 'Proventos'], ['alocacao', 'Alocação'], ['mercado', 'Mercado'], ['empresas', 'Análise de empresas'], ['ia', 'Assistente IA'], ['movimentos', 'Movimentos'], ['impostos', 'Impostos'], ['cotacoes', 'Cotações']];
+const TABS = [['', 'Visão'], ['carteira', 'Carteira'], ['rentabilidade', 'Rentabilidade'], ['risco', 'Risco'], ['proventos', 'Proventos'], ['alocacao', 'Alocação'], ['mercado', 'Mercado'], ['empresas', 'Análise de empresas'], ['comparar', 'Comparar'], ['ia', 'Assistente IA'], ['movimentos', 'Movimentos'], ['impostos', 'Impostos'], ['cotacoes', 'Cotações']];
 const GROUP = c => ({ 'Opção': 'Derivados', Futuro: 'Derivados', CFD: 'Derivados', 'Caixa em moeda estrangeira': 'Caixa', 'Ação': 'Ações', BDR: 'Ações', ETF: 'ETFs', FII: 'Fundos imobiliários', REIT: 'Fundos imobiliários', Fundo: 'Fundos', PPR: 'Reforma (PPR / previdência)', 'Previdência': 'Reforma (PPR / previdência)', Cripto: 'Cripto', Commodity: 'Ouro e commodities', Ouro: 'Ouro e commodities', 'Imóvel': 'Imóveis', Outro: 'Outros' }[c] || (L.RFC.includes(c) || c === 'Obrigação' ? 'Renda fixa' : 'Outros'));
 const GC = { Derivados: '#e879f9', Caixa: '#cbd5e1', 'Ações': '#5cc8e6', ETFs: '#7c8cf8', 'Fundos imobiliários': '#f2a65a', Fundos: '#a78bfa', 'Renda fixa': '#34d399', Cripto: '#f472b6', 'Ouro e commodities': '#fbbf24', 'Reforma (PPR / previdência)': '#60a5fa', 'Imóveis': '#fb7185', Outros: '#94a3b8' };
 const pxCell = (s, v, d) => s ? `<span class="mono px" data-pxs="${esc(s)}" data-k="p">${U.nf(v, d)}</span>` : `<span class="mono">${U.nf(v, d)}</span>`;
@@ -4769,7 +4770,9 @@ V.investimentos = sub => {
   const miss = Inv.fxMissing();
   const fxNote = miss.length ? `<div class="note"><b>Câmbio em falta:</b> ${miss.join(', ')}. Sem internet, define-o em Cotações.</div>` : '';
   IX.extra = new Set();
-  return head + fxNote + `<div class="inv">${(T[s] || T[''])()}</div>`;
+  const body = (T[s] || T[''])();
+  setTimeout(() => { const miss = [...IX.extra].filter(x => !IX.q(x)); if (miss.length && Date.now() - (IX._qt || 0) > 4000) { IX._qt = Date.now(); IX.tick(true); } }, 60);
+  return head + fxNote + `<div class="inv">${body}</div>`;
 };
 const T = IX.T = {};
 
@@ -4885,7 +4888,7 @@ T.risco = () => { if (!OS.all('invtx').length) return onboarding(); const h = en
     ${UI.kpi('Beta vs ' + bk[1], r.beta == null ? '…' : U.nf(r.beta, 2), r.corr == null ? 'a calcular' : `correlação ${U.nf(r.corr, 2)} · se o ${bk[1]} cair 10%, a carteira tende a cair ~${U.pct(Math.abs(r.beta * .1), 1)}`)}</div>
   <div class="g g-main"><div class="pn"><div class="pn-h"><h3>Distância ao máximo (drawdown)</h3><span class="mut" style="font-size:12px">quanto estavas abaixo do pico em cada dia</span></div>${C.mount({ type: 'line', labels: ix.map(i => U.fmtDS(h.dates[i])), series: [{ name: 'Abaixo do máximo', data: ix.map(i => r.dd[i] * 100), color: 'var(--neg)' }], fmt: v => U.nf(v, 0) + '%', min0: false }, 230)}</div>
     <div class="pn"><div class="pn-h"><h3>Diversificação e liquidez</h3></div><dl class="kv"><dt>Rácio de diversificação</dt><dd class="mono">${U.nf(r.divRatio, 2)}×</dd><dt>Diversificação efetiva</dt><dd class="mono">${U.nf(IX.health(S).eff, 1)} ativos</dd><dt>Liquidez imediata</dt><dd class="mono">${U.pct(r.liq)}</dd><dt>Em moeda estrangeira</dt><dd class="mono">${U.pct(1 - IX.health(S).homeW)}</dd><dt>Cripto</dt><dd class="mono">${U.pct(IX.health(S).cryptoW, 1)}</dd></dl><p class="mut" style="font-size:12px;margin:8px 0 0">Rácio de diversificação &gt; 1,3× = os ativos compensam-se bem uns aos outros. Liquidez = o que consegues vender em poucos dias.</p></div></div>
-  <div class="pn"><div class="pn-h"><h3>${UI.ic('shield')}Testes de stress</h3><span class="mut" style="font-size:12px">quanto perderia a carteira de hoje se a história se repetisse</span></div><div class="tblw"><table class="tbl"><thead><tr><th>Cenário</th><th>O que aconteceu</th><th class="r">Perda</th><th class="r">%</th><th style="width:160px"></th></tr></thead><tbody>${r.stress.map(x => `<tr><td><b>${esc(x.nm)}</b></td><td class="mut" style="white-space:normal">${esc(x.ds)}</td><td class="r mono ${tone(x.loss)}">${M(x.loss, { sign: 1, dec: 0 })}</td><td class="r mono ${tone(x.pct)}">${pctS(x.pct, 1)}</td><td>${UI.bar(Math.min(1, Math.abs(x.pct) / .6), x.pct < -.25 ? 'neg' : x.pct < -.1 ? 'warn' : 'pos')}</td></tr>`).join('')}</tbody></table></div><p class="mut" style="font-size:12px;margin:6px 0 0">Choques históricos aproximados por tipo de ativo. A renda fixa levada até ao vencimento não perde valor nestes cenários.</p></div>
+  <div class="pn"><div class="pn-h"><h3>${UI.ic('shield')}Testes de stress</h3><span class="mut" style="font-size:12px">quanto perderia a carteira de hoje se a história se repetisse</span></div><div class="tblw"><table class="tbl"><thead><tr><th>Cenário</th><th class="r">Perda</th><th class="r">%</th><th class="mh" style="width:160px"></th></tr></thead><tbody>${r.stress.map(x => `<tr><td style="white-space:normal"><b>${esc(x.nm)}</b><div class="mut" style="font-size:12px">${esc(x.ds)}</div></td><td class="r mono ${tone(x.loss)}">${M(x.loss, { sign: 1, dec: 0 })}</td><td class="r mono ${tone(x.pct)}">${pctS(x.pct, 1)}</td><td class="mh">${UI.bar(Math.min(1, Math.abs(x.pct) / .6), x.pct < -.25 ? 'neg' : x.pct < -.1 ? 'warn' : 'pos')}</td></tr>`).join('')}</tbody></table></div><p class="mut" style="font-size:12px;margin:6px 0 0">Choques históricos aproximados por tipo de ativo. A renda fixa levada até ao vencimento não perde valor nestes cenários.</p></div>
   <div class="g g-main"><div class="pn"><div class="pn-h"><h3>De onde vem o risco</h3><span class="mut" style="font-size:12px">peso no dinheiro vs peso no risco</span></div><div class="tblw"><table class="tbl"><thead><tr><th>Ativo</th><th class="r">Peso</th><th class="r">Volatilidade</th><th>Contribuição para o risco</th></tr></thead><tbody>${top.map(x => `<tr><td><b>${esc(x.a.ticker || x.a.sym || x.a.name)}</b></td><td class="r mono">${U.pct(x.w, 1)}</td><td class="r mono">${U.pct(x.vol, 1)}</td><td><div class="row gap8" style="align-items:center">${UI.bar(Math.max(0, x.rc), x.rc > x.w * 1.5 ? 'neg' : x.rc > x.w ? 'warn' : 'pos')}<span class="mono" style="min-width:52px;text-align:right">${U.pct(x.rc, 1)}</span></div></td></tr>`).join('')}</tbody></table></div><p class="mut" style="font-size:12px;margin:6px 0 0">Vermelho: o ativo traz muito mais risco do que dinheiro (ex.: 11% do dinheiro e 35% do risco).</p></div>
     <div class="pn"><div class="pn-h"><h3>Correlação entre ativos</h3><span class="mut" style="font-size:12px">1 = andam juntos · 0 = independentes</span></div>${cidx.length > 1 ? `<div class="tblw"><table class="tbl hmt rk-c"><thead><tr><th></th>${cidx.map(i => `<th>${esc(r.names[i])}</th>`).join('')}</tr></thead><tbody>${cidx.map(i => `<tr><th>${esc(r.names[i])}</th>${cidx.map(j => { const v = r.C[i][j]; return `<td class="hm" style="background:rgba(${v >= 0 ? '248,113,113' : '52,211,153'},${Math.min(.85, Math.abs(v) * .8)})">${U.nf(v, 2)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>` : UI.empty('Precisas de pelo menos 2 ativos com histórico.')}</div></div>
   <p class="mut" style="font-size:12px">Como ler: a volatilidade e o VaR usam os retornos diários reais dos últimos ${r.n} dias úteis; o VaR diz o limite das perdas em 95% dos casos, o CVaR a perda média nos 5% piores. O passado não garante o futuro: crises novas podem ser maiores.</p>`; };
@@ -4964,6 +4967,7 @@ T.mercado = () => { const ind = IX.INDICES(cc()); ind.forEach(([s]) => IX.extra.
   return `<div class="pn"><div class="pn-h"><h3>${UI.ic('search')}Pesquisar ativos</h3><span class="mut" style="font-size:12px">ações, ETFs, FII, fundos, índices, cripto, câmbio de todas as bolsas</span></div>
     <form class="row gap8" data-form="invSearch"><input class="field grow" name="q" id="invQ" placeholder="ex.: VWCE, Apple, PETR4, EDP, Bitcoin, IWDA" value="${esc(SR.q)}" autocomplete="off" aria-label="Pesquisar"><button class="btn pri">${SR.busy ? 'A procurar…' : 'Procurar'}</button></form>
     ${SR.err ? `<p class="neg">${esc(SR.err)}</p>` : ''}${SR.res ? (SR.res.length ? `<div class="list" style="margin-top:8px">${SR.res.map(r => `<div class="li"><div class="li-t click" data-act="invOpen" data-s="${esc(r.s)}"><b>${esc(r.s)}</b><small>${esc(r.n)} · ${esc(r.ty || r.t || '')}${r.ex ? ' · ' + esc(r.ex) : ''}</small></div><button class="btn xs ghost" data-act="invWatch" data-s="${esc(r.s)}">${W.includes(r.s) ? '★ A acompanhar' : '☆ Acompanhar'}</button><button class="btn xs" data-act="invAddAsset" data-s="${esc(r.s)}" data-n="${esc(r.n)}" data-t="${esc(r.t || '')}" data-ex="${esc(r.ex || '')}">+ Carteira</button></div>`).join('')}</div>` : '<p class="mut">Nada encontrado.</p>') : ''}</div>
+  ${IX.alertsPanel ? IX.alertsPanel() : ''}
   <div class="pn"><div class="pn-h"><h3>Índices, câmbio e ouro</h3>${liveBadge()}</div><div class="mk-g">${ind.map(([s, l]) => card(s, l)).join('')}</div></div>
   <div class="pn"><div class="pn-h"><h3>★ A acompanhar</h3><span class="mut" style="font-size:12px">${W.length} ativo(s)</span></div>${W.length ? `<div class="mk-g">${W.map(s => card(s)).join('')}</div>` : UI.empty('Pesquisa e toca em ☆ Acompanhar para seguires ativos sem os comprar.')}</div>
   <div class="pn"><div class="pn-h"><h3>Cripto · top 10</h3><span class="mut" style="font-size:12px">CoinGecko</span></div>${cryptoTop()}</div>`; };
@@ -5001,7 +5005,7 @@ T.ativo = () => { const s = OS.ui.invSym; if (!s) return T.mercado(); IX.extra.a
   const news = Array.isArray(NEWS[s]) ? NEWS[s] : [], W = cfg().watch || [];
   return `<div class="row between gap12 inv-ah"><div><a class="acc" href="#investimentos.mercado" style="font-size:12px">← Mercado</a><h2 style="margin:4px 0 0">${esc((q && q.nm) || (a && a.name) || s)}</h2><span class="mut">${esc(s)}${q && q.ex ? ' · ' + esc(q.ex) : ''}${q && q.cur ? ' · ' + esc(q.cur) : ''}${q ? ' · ' + (q.open ? '<span class="pos">mercado aberto</span>' : 'mercado fechado') : ''}${q && q.src ? ' · ' + esc(q.src) : ''}</span></div>
     <div class="inv-ap"><div class="big-num">${q ? pxCell(s, q.p, q.p < 10 ? 4 : 2) : '—'}</div>${q && q.pc ? chCell(s, q.p / q.pc - 1) + ` <span class="mut" style="font-size:12px">hoje</span>` : ''}</div></div>
-  <div class="row gap8" style="flex-wrap:wrap;margin:8px 0">${a ? `<button class="btn sm pri" data-act="invAddAsset" data-s="${esc(s)}">Registar compra</button><button class="btn sm" data-new="invtx" data-defs='${esc(JSON.stringify({ asset: a.id, type: 'Venda', date: U.today(), price: q ? U.r2(q.p) : '' }))}'>Registar venda</button><button class="btn sm ghost" data-edit="assets:${a.id}">Editar ativo</button>` : `<button class="btn sm pri" data-act="invAddAsset" data-s="${esc(s)}" data-n="${esc((q && q.nm) || s)}" data-t="${esc((q && q.ty) || '')}">+ Adicionar à carteira</button>`}<button class="btn sm ghost" data-act="invWatch" data-s="${esc(s)}">${W.includes(s) ? '★ A acompanhar' : '☆ Acompanhar'}</button><button class="btn sm ghost" data-act="invCo" data-s="${esc(s)}">${UI.ic('building')}Análise da empresa</button><button class="btn sm ghost" data-act="invAskAsset" data-s="${esc(s)}">${UI.ic('zap')}Analisar com IA</button></div>
+  <div class="row gap8" style="flex-wrap:wrap;margin:8px 0">${a ? `<button class="btn sm pri" data-act="invAddAsset" data-s="${esc(s)}">Registar compra</button><button class="btn sm" data-new="invtx" data-defs='${esc(JSON.stringify({ asset: a.id, type: 'Venda', date: U.today(), price: q ? U.r2(q.p) : '' }))}'>Registar venda</button><button class="btn sm ghost" data-edit="assets:${a.id}">Editar ativo</button>` : `<button class="btn sm pri" data-act="invAddAsset" data-s="${esc(s)}" data-n="${esc((q && q.nm) || s)}" data-t="${esc((q && q.ty) || '')}">+ Adicionar à carteira</button>`}<button class="btn sm ghost" data-act="invWatch" data-s="${esc(s)}">${W.includes(s) ? '★ A acompanhar' : '☆ Acompanhar'}</button><button class="btn sm ghost" data-act="invAlert" data-s="${esc(s)}" data-v="${q ? q.p : ''}">🔔 Alerta</button><button class="btn sm ghost" data-act="invCo" data-s="${esc(s)}">${UI.ic('building')}Análise da empresa</button><button class="btn sm ghost" data-act="invAskAsset" data-s="${esc(s)}">${UI.ic('zap')}Analisar com IA</button></div>
   <div class="pn"><div class="pn-h"><div class="row gap6">${RNG.map(r => `<button class="chip ${rg === r[0] ? 'on' : ''}" data-ui="invRg" data-v="${r[0]}">${r[1]}</button>`).join('')}</div>${dat.length > 1 ? `<span class="mono ${tone(ch)}">${pctS(ch)} no período</span>` : ''}</div>
     ${dat.length > 1 ? C.mount({ type: 'line', labels: lab, series: [{ name: s, data: dat, color: ch >= 0 ? 'var(--pos)' : 'var(--neg)' }], fmt: v => U.nf(v, v < 10 ? 2 : 0), min0: false }, 280) : `<div class="chart-empty" style="height:280px">${h === 'busy' ? 'A carregar…' : IX.hasScript() || IX.isCrypto(s) ? 'Sem dados para este período.' : 'Liga o script em Cotações para veres gráficos.'}</div>`}</div>
   <div class="g g-main"><div class="pn"><div class="pn-h"><h3>Estatísticas</h3></div><dl class="kv">${q ? `<dt>Mínimo / máximo do dia</dt><dd class="mono">${q.lo != null ? U.nf(q.lo, 2) + ' – ' + U.nf(q.hi, 2) : '—'}</dd><dt>Mínimo / máximo 52 semanas</dt><dd class="mono">${q.l52 != null ? U.nf(q.l52, 2) + ' – ' + U.nf(q.h52, 2) : '—'}</dd>${q.l52 != null && q.h52 ? `<dt>Posição no intervalo de 52 sem.</dt><dd>${UI.bar((q.p - q.l52) / ((q.h52 - q.l52) || 1), '')}</dd>` : ''}<dt>Fecho anterior</dt><dd class="mono">${q.pc != null ? U.nf(q.pc, 2) : '—'}</dd><dt>Volume</dt><dd class="mono">${q.v ? U.nf(q.v) : '—'}</dd>` : '<dt>Cotação</dt><dd>sem dados</dd>'}${div12 ? `<dt>Proventos 12 meses (por unidade)</dt><dd class="mono">${U.nf(div12, 4)}</dd><dt>Dividend yield</dt><dd class="mono">${q ? U.pct(div12 / q.p, 2) : '—'}</dd>` : ''}${hy && hy.c && hy.c.length > 20 ? `<dt>Volatilidade 1 ano</dt><dd class="mono">${U.pct(volOf(hy.c), 1)}</dd><dt>Variação 1 ano</dt><dd class="mono ${tone(hy.c[hy.c.length - 1] / hy.c[0] - 1)}">${pctS(hy.c[hy.c.length - 1] / hy.c[0] - 1, 1)}</dd>` : ''}</dl></div>
@@ -5057,23 +5061,28 @@ A.invExp = () => { const rows = [['data', 'ticker', 'simbolo', 'nome', 'classe',
 
 /* ================= IMPOSTOS ================= */
 T.impostos = () => { const tx = U.sortBy(OS.all('invtx'), t => t.date), state = {}, sales = [];
-  tx.forEach(t => { const a = OS.get('assets', t.asset); if (!a || IX.isRF(a)) return; const st = state[a.id] = state[a.id] || IX.st0(), fx = Inv.fx(a.currency), m = IX.mult(a), before = st.realized, wasShort = st.qty < 0;
-    IX.step(st, t, m); if ((t.type === 'Venda' && !wasShort) || ((t.type === 'Compra' || t.type === 'Subscrição') && wasShort) || t.type === 'Amortização') { const gain = st.realized - before, gross = t.type === 'Amortização' ? n(t.amount) : n(t.qty) * n(t.price) * m; if (Math.abs(gain) > 1e-9 || t.type === 'Venda') sales.push({ a, date: t.date, gross, gain, grossE: gross * fx, gainE: gain * fx, held: firstBuy(a, t.date), kind: t.type === 'Amortização' ? 'amortização' : wasShort ? 'fecho de venda a descoberto' : '' }); } });
+  tx.forEach(t => { const a = OS.get('assets', t.asset); if (!a || IX.isRF(a)) return; const st = state[a.id] = state[a.id] || IX.st0(), fx = Inv.fx(a.currency), m = IX.mult(a), before = st.realized, wasShort = st.qty < 0, hadLong = st.qty > 0;
+    IX.step(st, t, m); if ((t.type === 'Venda' && hadLong) || ((t.type === 'Compra' || t.type === 'Subscrição') && wasShort) || t.type === 'Amortização') { const gain = st.realized - before, gross = t.type === 'Amortização' ? n(t.amount) : n(t.qty) * n(t.price) * m; if (Math.abs(gain) > 1e-9 || t.type === 'Venda') sales.push({ dt: t.type === 'Venda' && tx.some(x => x.asset === a.id && x.date === t.date && x.type === 'Compra'), a, date: t.date, gross, gain, grossE: gross * fx, gainE: gain * fx, held: firstBuy(a, t.date), kind: t.type === 'Amortização' ? 'amortização' : wasShort ? 'fecho de venda a descoberto' : '' }); } });
   const yr = OS.ui.invTaxY || U.today().slice(0, 4), ys = [...new Set([U.today().slice(0, 4), ...sales.map(s => s.date.slice(0, 4))])].sort().reverse();
   const br = sales.filter(s => s.a.currency === 'BRL' && s.date.startsWith(yr)), pt = sales.filter(s => s.a.currency !== 'BRL' && s.date.startsWith(yr));
   const divs = OS.all('invtx').filter(t => IX.INC.has(t.type) && t.date.startsWith(yr)), divE = U.sum(divs, t => n(t.amount) * Inv.fx((OS.get('assets', t.asset) || {}).currency)), taxE = U.sum(divs, t => n(t.tax) * Inv.fx((OS.get('assets', t.asset) || {}).currency));
   const ptGain = U.sum(pt.filter(s => !(s.a.cls === 'Cripto' && s.held >= 365)), s => s.gainE), cryptoEx = pt.filter(s => s.a.cls === 'Cripto' && s.held >= 365);
-  const brM = Object.entries(U.groupBy(br, s => s.date.slice(0, 7))).sort().map(([ym, arr]) => { const acoes = arr.filter(s => ['Ação', 'BDR'].includes(s.a.cls) && s.a.cls !== 'BDR'), fii = arr.filter(s => ['FII', 'REIT'].includes(s.a.cls)), outros = arr.filter(s => !acoes.includes(s) && !fii.includes(s));
-    const vAc = U.sum(acoes, s => s.gross), gAc = U.sum(acoes, s => s.gain), isento = vAc <= 20000, irAc = isento ? 0 : Math.max(0, gAc) * .15, irF = Math.max(0, U.sum(fii, s => s.gain)) * .2, irO = Math.max(0, U.sum(outros, s => s.gain)) * .15;
-    const [y, m] = ym.split('-').map(Number), venc = U.iso(new Date(y, m + 1, 0)); return { ym, vAc, gAc, isento, irAc, irF, irO, ir: irAc + irF + irO, venc, gO: U.sum(outros, s => s.gain), gF: U.sum(fii, s => s.gain) }; });
+  const brAll = sales.filter(s => s.a.currency === 'BRL'), carry = { ac: 0, dt: 0, fii: 0, out: 0 }, brMall = Object.entries(U.groupBy(brAll, s => s.date.slice(0, 7))).sort().map(([ym, arr]) => {
+    const dt = arr.filter(s => s.dt), sw = arr.filter(s => !s.dt), acoes = sw.filter(s => s.a.cls === 'Ação'), fii = sw.filter(s => ['FII', 'REIT'].includes(s.a.cls)), outros = sw.filter(s => !acoes.includes(s) && !fii.includes(s));
+    const vAc = U.sum(acoes, s => s.gross), gAc = U.sum(acoes, s => s.gain), isento = vAc <= 20000, gF = U.sum(fii, s => s.gain), gO = U.sum(outros, s => s.gain), gD = U.sum(dt, s => s.gain);
+    const tax = (g, k, rate, exempt) => { if (g < 0) { carry[k] += -g; return 0; } if (exempt) return 0; const use = Math.min(carry[k], g); carry[k] -= use; return (g - use) * rate; };
+    const irAc = tax(gAc, 'ac', .15, isento), irF = tax(gF, 'fii', .2, false), irO = tax(gO, 'out', .15, false), irD = tax(gD, 'dt', .2, false);
+    const [y, m] = ym.split('-').map(Number), venc = U.iso(new Date(y, m + 1, 0)); return { ym, vAc, gAc, isento, irAc, irF, irO, irD, ir: irAc + irF + irO + irD, venc, gO, gF, gD, carry: Object.assign({}, carry) }; });
+  const brM = brMall.filter(r => r.ym.startsWith(yr));
   return `<div class="row gap6 inv-per">${ys.map(y => `<button class="chip ${yr === y ? 'on' : ''}" data-ui="invTaxY" data-v="${y}">${y}</button>`).join('')}</div>
   <div class="pn"><div class="pn-h"><h3>🇵🇹 Portugal (IRS, anexo G e J)</h3><span class="mut" style="font-size:12px">ativos fora do Brasil</span></div>
     <div class="kpis">${UI.kpi('Mais-valias realizadas', M(U.sum(pt, s => s.gainE), { sign: 1 }), pt.length + ' venda(s)')}${UI.kpi('Imposto estimado (28%)', M(Math.max(0, ptGain) * .28), 'taxa autónoma; podes optar por englobar', { tone: ptGain > 0 ? 'warn' : '' })}${UI.kpi('Proventos brutos', M(divE), taxE ? 'imposto já retido: ' + M(taxE) + ' (dedutível em PT até ao limite da convenção)' : 'tributados a 28% (cá) ou retidos lá fora')}${UI.kpi('Cripto isenta (> 365 dias)', M(U.sum(cryptoEx, s => s.gainE), { sign: 1 }))}</div>
     ${pt.length ? UI.table({ key: 'taxpt', rows: pt, cols: [{ l: 'Data', v: s => U.fmtD(s.date) }, { l: 'Ativo', v: s => esc(s.a.ticker || s.a.name) }, { l: 'Detido', v: s => s.held + ' dias' + (s.kind ? ` <span class="bdg">${esc(s.kind)}</span>` : '') }, { l: 'Valor de venda', cls: 'r', v: s => `<span class="mono">${M(s.grossE)}</span>` }, { l: 'Mais/menos-valia', cls: 'r', v: s => `<span class="mono ${tone(s.gainE)}">${M(s.gainE, { sign: 1 })}</span>` }] }) : '<p class="mut">Sem vendas neste ano.</p>'}
     <p class="mut" style="font-size:12px">Estimativa com o preço médio. Menos-valias abatem às mais-valias do mesmo ano (e dos 5 seguintes se englobares). Ativos estrangeiros vão no anexo J. Confirma com o simulador do Portal das Finanças.</p></div>
   <div class="pn"><div class="pn-h"><h3>🇧🇷 Brasil (IR mensal, DARF 6015)</h3><span class="mut" style="font-size:12px">ativos em BRL</span></div>
-    ${brM.length ? `<div class="tblw"><table class="tbl"><thead><tr><th>Mês</th><th class="r">Vendas de ações</th><th class="r">Ganho ações</th><th class="r">Ganho FII</th><th class="r">Ganho ETF/outros</th><th class="r">IR devido</th><th>DARF até</th></tr></thead><tbody>${brM.map(r => `<tr><td>${U.fmtYM(r.ym)}</td><td class="r mono">${IX.Mc(r.vAc, 'BRL')}${r.isento && r.vAc ? ' <span class="bdg pos">isento</span>' : ''}</td><td class="r mono ${tone(r.gAc)}">${IX.Mc(r.gAc, 'BRL')}</td><td class="r mono ${tone(r.gF)}">${IX.Mc(r.gF, 'BRL')}</td><td class="r mono ${tone(r.gO)}">${IX.Mc(r.gO, 'BRL')}</td><td class="r mono ${r.ir ? 'warn' : ''}">${IX.Mc(r.ir, 'BRL')}</td><td>${r.ir >= 10 ? U.fmtD(r.venc) : r.ir ? 'acumula (< R$ 10)' : '—'}</td></tr>`).join('')}</tbody></table></div>` : '<p class="mut">Sem vendas em BRL neste ano.</p>'}
-    <p class="mut" style="font-size:12px">Ações: vendas até R$ 20 mil no mês são isentas; acima, 15% sobre o ganho (swing trade). FII: 20% sem isenção. ETF e BDR: 15% sem isenção. Day trade (20%) não é detetado. Prejuízos podem compensar ganhos futuros da mesma categoria. Rendimentos de FII e dividendos são isentos; JCP tem 15% retido. Estimativa: confirma com um contador.</p></div>`; };
+    ${brM.length ? `<div class="tblw"><table class="tbl"><thead><tr><th>Mês</th><th class="r">Vendas de ações</th><th class="r">Ganho ações</th><th class="r">Ganho FII</th><th class="r">Ganho ETF/outros</th><th class="r">Day trade</th><th class="r">IR devido</th><th>DARF até</th></tr></thead><tbody>${brM.map(r => `<tr><td>${U.fmtYM(r.ym)}</td><td class="r mono">${IX.Mc(r.vAc, 'BRL')}${r.isento && r.vAc ? ' <span class="bdg pos">isento</span>' : ''}</td><td class="r mono ${tone(r.gAc)}">${IX.Mc(r.gAc, 'BRL')}</td><td class="r mono ${tone(r.gF)}">${IX.Mc(r.gF, 'BRL')}</td><td class="r mono ${tone(r.gO)}">${IX.Mc(r.gO, 'BRL')}</td><td class="r mono ${tone(r.gD)}">${r.gD ? IX.Mc(r.gD, 'BRL') : '—'}</td><td class="r mono ${r.ir ? 'warn' : ''}">${IX.Mc(r.ir, 'BRL')}</td><td>${r.ir >= 10 ? U.fmtD(r.venc) : r.ir ? 'acumula (< R$ 10)' : '—'}</td></tr>`).join('')}</tbody></table></div>` : '<p class="mut">Sem vendas em BRL neste ano.</p>'}
+    ${brMall.length ? (() => { const c = brMall[brMall.length - 1].carry; return `<div class="note">Prejuízo acumulado a compensar: ações ${IX.Mc(c.ac, 'BRL')} · day trade ${IX.Mc(c.dt, 'BRL')} · FII ${IX.Mc(c.fii, 'BRL')} · ETF/outros ${IX.Mc(c.out, 'BRL')}</div>`; })() : ''}
+    <p class="mut" style="font-size:12px">Ações: vendas até R$ 20 mil no mês são isentas; acima, 15% sobre o ganho (swing trade). FII: 20% sem isenção. ETF e BDR: 15% sem isenção. Day trade (compra e venda no mesmo dia) é detetado e paga 20%. Os prejuízos acumulam e abatem os ganhos seguintes da mesma categoria (já descontados no IR devido). Rendimentos de FII e dividendos são isentos; JCP tem 15% retido. Estimativa: confirma com um contador.</p></div>`; };
 const firstBuy = (a, before) => { const t = U.sortBy(OS.all('invtx').filter(x => x.asset === a.id && L.QTX.includes(x.type) && x.date <= before), x => x.date)[0]; return t ? U.diff(before, t.date) : 0; };
 
 /* ================= COTAÇÕES E LIGAÇÕES ================= */
@@ -5446,6 +5455,87 @@ A.invCoAI = async b => { const s = b.dataset.s, st = CO[s]; if (!st || !st.f || 
     REP[s] = r; try { const keys = Object.keys(REP); if (keys.length > 15) delete REP[keys[0]]; U.ls.set('oc_corep', REP); } catch (e) { } }
   catch (e) { ST.aiErr = e.message || 'A IA não respondeu.'; }
   ST.ai = false; OS.request(); };
+})();
+
+</script>
+<script>
+/* OCEANUM — Investimentos+: alertas de preço (no ecrã, notificação e email pelo script Google mesmo com a app fechada)
+   e comparação de ativos lado a lado (rentabilidade, risco e múltiplos). */
+(() => {
+'use strict';
+const U = OS.U, UI = OS.UI, C = OS.C, A = OS.act, esc = U.esc, IX = OS.InvX, T = IX.T, Inv = OS.Inv;
+const n = v => U.num(v) || 0;
+const KINDS = [['acima', 'Preço sobe acima de'], ['abaixo', 'Preço desce abaixo de'], ['queda', 'Cai mais de X% no dia'], ['subida', 'Sobe mais de X% no dia'], ['dataex', 'Data-ex amanhã (dividendo)']];
+OS.S.palerts = { label: 'Alerta de preço', title: r => r.s + ' · ' + ((KINDS.find(k => k[0] === r.k) || [])[1] || ''), fields: [
+  { k: 's', l: 'Símbolo', t: 'text', req: 1, h: 'Ex.: AAPL, PETR4.SA, VWCE.DE, BTC-EUR' },
+  { k: 'k', l: 'Avisar quando', t: 'sel', o: KINDS, req: 1 },
+  { k: 'v', l: 'Valor', t: 'num', show: r => r.k !== 'dataex', h: r => r.k === 'queda' || r.k === 'subida' ? 'Percentagem (ex.: 5)' : 'Preço na moeda do ativo' },
+  { k: 'r', l: 'Repetir', t: 'sel', o: [['uma', 'Só uma vez'], ['diario', 'Todos os dias em que acontecer']] },
+  { k: 'n', l: 'Nota (o que fazer)', t: 'text', h: 'Ex.: comprar mais 5' }, { k: 'on', l: 'Ativo', t: 'bool' }],
+  defaults: () => ({ k: 'abaixo', r: 'uma', on: true }) };
+const AL = () => OS.all('palerts');
+/* ---------- verificação no aparelho (a cada atualização de preços) ---------- */
+const notify = (title, body) => { try { if (!('Notification' in window) || Notification.permission !== 'granted') return; if (navigator.serviceWorker && navigator.serviceWorker.ready) navigator.serviceWorker.ready.then(r => r.showNotification(title, { body, icon: 'icon-192.png', tag: 'oc-' + title })).catch(() => new Notification(title, { body })); else new Notification(title, { body }); } catch (e) { } };
+IX.checkAlerts = () => { const today = U.today(); AL().filter(a => a.on && a.s).forEach(a => { if (a.firedAt && (a.r !== 'diario' || a.firedAt === today)) return; const q = IX.q(a.s); let hit = '';
+  if (q && q.p != null) { const ch = q.pc ? (q.p / q.pc - 1) * 100 : 0;
+    if (a.k === 'acima' && q.p >= n(a.v)) hit = `${a.s} subiu para ${U.nf(q.p, 2)} ${q.cur || ''} (alvo ${U.nf(n(a.v), 2)})`;
+    if (a.k === 'abaixo' && q.p <= n(a.v)) hit = `${a.s} desceu para ${U.nf(q.p, 2)} ${q.cur || ''} (alvo ${U.nf(n(a.v), 2)})`;
+    if (a.k === 'queda' && ch <= -Math.abs(n(a.v))) hit = `${a.s} cai ${U.nf(ch, 2)}% hoje`;
+    if (a.k === 'subida' && ch >= Math.abs(n(a.v))) hit = `${a.s} sobe ${U.nf(ch, 2)}% hoje`; }
+  if (!hit) return; const msg = hit + (a.n ? ' — ' + a.n : ''); UI.toast('🔔 ' + msg, 'pos'); notify('Oceanum · alerta', msg);
+  OS.upd('palerts', a.id, a.r === 'diario' ? { firedAt: today, last: msg } : { firedAt: today, last: msg, on: false }, { silent: true }); }); };
+OS.on('ready', () => { const t = IX.tick; IX.tick = async f => { await t(f); try { IX.checkAlerts(); } catch (e) { } }; AL().forEach(a => a.s && a.on && a.k !== 'dataex' && IX.extra.add(a.s)); });
+/* símbolos dos alertas também entram no ciclo ao vivo */
+const symsW = IX.symsWatch; IX.symsWatch = () => [...new Set([...symsW(), ...AL().filter(a => a.on && a.s).map(a => a.s)])];
+/* ---------- envia a lista para o script (email com a app fechada) ---------- */
+const pushAlerts = U.deb(async () => { const c = OS.one('inbox'); if (!c.url || !c.key) return; const j = JSON.stringify(AL().map(a => ({ id: a.id, s: a.s, k: a.k, v: n(a.v), r: a.r, n: a.n || '', on: a.on ? 1 : 0 })));
+  try { const r = await fetch(c.url, { method: 'POST', body: new URLSearchParams({ k: c.key, op: 'al', j }), credentials: 'omit', cache: 'no-store' }); const o = JSON.parse(await r.text()); IX.st.alerts = o.ok ? (o.ativo ? 'email' : 'sem-email') : 'erro'; if (/investimentos/.test(location.hash)) OS.request(); } catch (e) { IX.st.alerts = 'erro'; } }, 1500);
+OS.on('change', c => { if (c === 'palerts') pushAlerts(); });
+OS.on('ready', () => setTimeout(pushAlerts, 4000));
+A.invAlert = b => UI.openForm('palerts', null, { s: b.dataset.s || '', k: b.dataset.k || 'abaixo', v: b.dataset.v ? U.r2(+b.dataset.v) : '', r: 'uma', on: true }, { title: 'Novo alerta' + (b.dataset.s ? ' · ' + b.dataset.s : '') });
+A.invNotif = async () => { if (!('Notification' in window)) { UI.toast('Este navegador não suporta notificações. No iPhone, instala o Oceanum no ecrã principal.', 'warn'); return; } const p = await Notification.requestPermission(); UI.toast(p === 'granted' ? 'Notificações ligadas' : 'Notificações recusadas', p === 'granted' ? 'pos' : 'warn'); OS.request(); };
+IX.alertsPanel = () => { const L = U.sortBy(AL(), a => (a.on ? 0 : 1) + (a.s || '')), np = 'Notification' in window ? Notification.permission : 'n/a', em = IX.st.alerts;
+  return `<div class="pn"><div class="pn-h"><h3>🔔 Alertas de preço</h3><button class="btn sm pri" data-act="invAlert">+ Alerta</button></div>
+    ${L.length ? `<div class="list">${L.map(a => { const q = IX.q(a.s), kk = (KINDS.find(k => k[0] === a.k) || [, ''])[1]; return `<div class="li ${a.on ? '' : 'mut'}"><div class="li-t click" data-edit="palerts:${a.id}"><b>${esc(a.s)} · ${esc(kk)} ${a.k !== 'dataex' ? U.nf(n(a.v), 2) + (a.k === 'queda' || a.k === 'subida' ? '%' : '') : ''}</b><small>${q ? 'agora ' + U.nf(q.p, 2) + ' ' + esc(q.cur || '') + ' · ' : ''}${a.on ? (a.r === 'diario' ? 'todos os dias' : 'uma vez') : 'disparado' + (a.firedAt ? ' a ' + U.fmtD(a.firedAt) : '')}${a.n ? ' · ' + esc(a.n) : ''}</small></div>${a.on ? '<span class="bdg pos">ativo</span>' : `<button class="btn xs ghost" data-act="invAlertOn" data-id="${a.id}">reativar</button>`}</div>`; }).join('')}</div>` : UI.empty('Cria alertas para seres avisado quando um ativo chegar ao preço que queres, cair muito num dia ou tiver data-ex amanhã.')}
+    <div class="ia-al-ch"><span class="${np === 'granted' ? 'pos' : 'mut'}">${np === 'granted' ? '✓ Notificações do aparelho ligadas (com a app aberta)' : `<button class="btn xs" data-act="invNotif">Ligar notificações no aparelho</button>`}</span>
+      <span class="${em === 'email' ? 'pos' : 'mut'}">${em === 'email' ? '✓ Email ligado: o script verifica a cada 15 min, mesmo com a app fechada' : IX.hasScript() ? 'Email com a app fechada: no Apps Script escolhe a função <b>ativarAlertas</b> → ▶ Executar → autoriza (uma vez). Precisa do código novo do script (Cotações).' : 'Liga o script Google em Cotações para receberes os alertas por email com a app fechada.'}</span></div></div>`; };
+A.invAlertOn = b => OS.upd('palerts', b.dataset.id, { on: true, firedAt: '' });
+
+/* ================= COMPARAR ATIVOS ================= */
+const CR = [['6mo', '6M'], ['1y', '1A'], ['2y', '2A'], ['5y', '5A']];
+const CH = {};
+const histC = (s, r) => { const k = s + '|' + r; if (CH[k]) return CH[k] === 'busy' ? null : CH[k]; CH[k] = 'busy'; IX.hist(s, r, r === '5y' ? '1wk' : '1d').then(h => { CH[k] = h || { t: [], c: [] }; OS.request(); }).catch(() => { CH[k] = { t: [], c: [] }; OS.request(); }); return null; };
+const FU = {};
+const fundC = s => { if (FU[s]) return FU[s] === 'busy' ? null : FU[s]; if (!IX.hasScript() || IX.isCrypto(s) || /^\^|=X$|=F$/.test(s)) return null; FU[s] = 'busy'; IX.fund(s).then(f => { FU[s] = f; OS.request(); }).catch(() => { FU[s] = null; }); return null; };
+let CQ = '', CRES = null;
+T.comparar = () => { const sel = OS.ui.invCmp || IX.positions().filter(p => p.a.sym).sort((a, b) => b.value - a.value).slice(0, 3).map(p => p.a.sym), rg = OS.ui.invCmpR || '1y', pal = ['var(--accent)', '#f2a65a', '#a78bfa', 'var(--pos)'];
+  sel.forEach(s => IX.extra.add(s)); const hs = sel.map(s => histC(s, rg)), ready = hs.every(Boolean);
+  let chart = '', stats = [];
+  if (ready && sel.length) { const day = t => U.iso(new Date(t * 1000)), all = [...new Set(hs.flatMap(h => h.t.map(day)))].sort(), k = Math.max(1, Math.ceil(all.length / 180)), dates = all.filter((_, i) => i % k === 0 || i === all.length - 1);
+    const ser = hs.map(h => { const m = {}; h.t.forEach((t, i) => m[day(t)] = h.c[i]); let last = null, base = null; return dates.map(d => { if (m[d] != null) last = m[d]; if (last != null && base == null) base = last; return last == null ? null : (last / base - 1) * 100; }); });
+    chart = C.mount({ type: 'line', labels: dates.map(U.fmtDS), series: sel.map((s, i) => ({ name: s, data: ser[i], color: pal[i] })), fmt: v => U.nf(v, 0) + '%', min0: false, area: false }, 300);
+    const rets = hs.map(h => { const r = []; for (let i = 1; i < h.c.length; i++) if (h.c[i - 1]) r.push(h.c[i] / h.c[i - 1] - 1); return r; }), per = rg === '5y' ? 52 : 252;
+    const sd = r => { const m = U.avg(r); return Math.sqrt(U.avg(r, x => (x - m) * (x - m))); }, mdd = c => { let p = -Infinity, d = 0; c.forEach(x => { if (x > p) p = x; d = Math.min(d, x / p - 1); }); return d; };
+    const corr = (a, b) => { const L2 = Math.min(a.length, b.length), x = a.slice(-L2), y = b.slice(-L2), mx = U.avg(x), my = U.avg(y); let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < L2; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; } return sxx && syy ? sxy / Math.sqrt(sxx * syy) : null; };
+    stats = sel.map((s, i) => { const h = hs[i], c = h.c.filter(x => x != null), q = IX.q(s), f = fundC(s), m = f && f.sum ? IX.coModel(f) : null, divs = (h.div || []).filter(d => d[0] * 1000 > Date.now() - 365 * 864e5).reduce((a, d) => a + d[1], 0);
+      return { s, nm: (q && q.nm) || (m && (m.pr.longName || m.pr.shortName)) || s, cur: (q && q.cur) || h.cur, p: q ? q.p : c[c.length - 1], ret: c.length > 1 ? c[c.length - 1] / c[0] - 1 : null, vol: rets[i].length > 5 ? sd(rets[i]) * Math.sqrt(per) : null, mdd: c.length ? mdd(c) : null, corr: i ? corr(rets[0], rets[i]) : 1, dy: q && q.p && divs ? divs / q.p : (m ? m.dy : null), m }; }); }
+  const fmt = (x, f) => x == null || !isFinite(x) ? '—' : f(x), P = x => fmt(x, v => U.pct(v, 1)), N = (x, d = 2) => fmt(x, v => U.nf(v, d));
+  const rows = [['Preço', x => N(x.p) + ' ' + esc(x.cur || '')], ['Rentabilidade no período', x => `<span class="${x.ret >= 0 ? 'pos' : 'neg'}">${P(x.ret)}</span>`], ['Volatilidade anual', x => P(x.vol)], ['Queda máxima', x => `<span class="neg">${P(x.mdd)}</span>`], ['Correlação com ' + esc(sel[0] || ''), x => N(x.corr)], ['Dividend yield', x => P(x.dy)],
+    ['P/L', x => N(x.m && x.m.pe, 1)], ['P/VP', x => N(x.m && x.m.pb)], ['ROE', x => P(x.m && x.m.roe)], ['Margem líquida', x => P(x.m && x.m.nm)], ['Dívida líq./EBITDA', x => fmt(x.m && x.m.ndEb, v => U.nf(v, 1) + '×')], ['Cresc. receita/ano', x => P(x.m && x.m.grow)], ['Piotroski', x => x.m && x.m.pio ? x.m.pio.score + '/' + x.m.pio.of : '—'], ['Preço justo de Graham', x => N(x.m && x.m.graham)], ['Valor de mercado', x => x.m && x.m.mcap ? U.nf(x.m.mcap / 1e9, 1) + ' mM' : '—']];
+  return `<div class="pn"><div class="pn-h"><h3>Comparar ativos</h3><span class="mut" style="font-size:12px">até 4: ações, ETFs, fundos, cripto, índices</span></div>
+    <div class="row gap6" style="flex-wrap:wrap;align-items:center">${sel.map((s, i) => `<span class="chip on" style="border-color:${pal[i]}">${esc(s)} <button class="icon-btn" style="width:18px;height:18px" data-act="invCmpDel" data-s="${esc(s)}" aria-label="Remover">${UI.ic('x')}</button></span>`).join('')}
+      ${sel.length < 4 ? `<form class="row gap6" data-form="invCmpAdd"><input class="field" name="q" value="${esc(CQ)}" placeholder="+ ativo (ex.: VOO, ITSA4)" style="width:200px" aria-label="Adicionar ativo"><button class="btn sm">Adicionar</button></form>` : ''}</div>
+    ${CRES ? `<div class="list" style="margin-top:6px">${CRES.map(r => `<div class="li click" data-act="invCmpPick" data-s="${esc(r.s)}"><div class="li-t"><b>${esc(r.s)}</b><small>${esc(r.n)} · ${esc(r.ex || '')}</small></div></div>`).join('')}</div>` : ''}
+    <div class="row gap6" style="margin:10px 0">${CR.map(([k, l]) => `<button class="chip ${rg === k ? 'on' : ''}" data-ui="invCmpR" data-v="${k}">${l}</button>`).join('')}</div>
+    ${sel.length ? (ready ? chart : '<div class="sai-busy"><div class="fd-spin"></div><span>A carregar o histórico…</span></div>') : UI.empty('Adiciona ativos para comparar.')}</div>
+  ${stats.length ? `<div class="pn"><div class="tblw"><table class="tbl cmp-t"><thead><tr><th></th>${stats.map((x, i) => `<th class="r" style="color:${pal[i]}">${esc(x.s)}<div class="mut" style="font-size:11px;font-weight:400">${esc(String(x.nm).slice(0, 28))}</div></th>`).join('')}</tr></thead><tbody>${rows.filter(([l, f]) => stats.some(x => !/^—$/.test(String(f(x)).replace(/<[^>]+>/g, '').trim()))).map(([l, f]) => `<tr><th>${l}</th>${stats.map(x => `<td class="r mono">${f(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="mut" style="font-size:12px;margin:6px 0 0">Rentabilidade em moeda local de cada ativo (sem câmbio). Os múltiplos aparecem para ações quando o script está ligado.</p>
+    <div class="row gap8" style="margin-top:8px"><button class="btn sm ghost" data-act="invCmpAI">${UI.ic('zap')}Pedir à IA para comparar</button></div></div>` : ''}`; };
+A.invCmpDel = b => { const cur = OS.ui.invCmp || IX.positions().filter(p => p.a.sym).sort((x, y) => y.value - x.value).slice(0, 3).map(p => p.a.sym); OS.setUI('invCmp', cur.filter(s => s !== b.dataset.s)); };
+A.invCmpPick = b => { const cur = OS.ui.invCmp || IX.positions().filter(p => p.a.sym).sort((x, y) => y.value - x.value).slice(0, 3).map(p => p.a.sym); CRES = null; CQ = ''; if (!cur.includes(b.dataset.s)) OS.setUI('invCmp', [...cur, b.dataset.s].slice(0, 4)); else OS.request(); };
+OS.forms.invCmpAdd = async (f, v) => { const q = String(v('q') || '').trim(); if (!q) return; CQ = q;
+  if (/^[A-Z0-9.^=\-]{1,15}$/.test(q) && (!IX.hasScript() || IX.q(q))) { A.invCmpPick({ dataset: { s: q } }); return; }
+  try { const j = IX.hasScript() ? await IX.search(q) : { q: [] }; CRES = (j.q || []).slice(0, 6); if (!CRES.length) { A.invCmpPick({ dataset: { s: q.toUpperCase() } }); return; } } catch (e) { A.invCmpPick({ dataset: { s: q.toUpperCase() } }); return; } OS.request(); };
+A.invCmpAI = () => { const sel = OS.ui.invCmp || IX.positions().filter(p => p.a.sym).sort((x, y) => y.value - x.value).slice(0, 3).map(p => p.a.sym); OS.setUI('invAIq', `Compara ${sel.join(', ')}: qual faz mais sentido para a minha carteira e perfil, com que peso, e porquê? Considera risco, custos, dividendos, avaliação e o que diriam os mestres.`); location.hash = 'investimentos.ia'; };
 })();
 
 </script>
@@ -8974,13 +9064,14 @@ const KEY = '${key}';
 function doGet(e) {
   const p = e.parameter || {};
   if (p.k !== KEY) return out({ ok: false, msg: 'Chave errada' });
-  if (p.op === 'ping') return out({ ok: true, v: 6 });
+  if (p.op === 'ping') return out({ ok: true, v: 7 });
   // ---- cotações em tempo real (Yahoo Finance) para os Investimentos ----
   if (p.op === 'q') return out({ ok: true, q: cotacoes_(String(p.s || '')) });
   if (p.op === 'h') return out({ ok: true, h: historico_(String(p.s || ''), String(p.r || '1y'), String(p.i || '1d')) });
   if (p.op === 's') return out(Object.assign({ ok: true }, procura_(String(p.q || ''), Number(p.n || 0))));
   if (p.op === 'f') return out({ ok: true, f: empresa_(String(p.s || '')) });
   if (p.op === 'td') return out({ ok: true, td: tesouro_() });
+  if (p.op === 'al') { PropertiesService.getScriptProperties().setProperty('AL', String(p.j || '[]').slice(0, 8500)); const on = ScriptApp.getProjectTriggers().some(function (t) { return t.getHandlerFunction() === 'verificarAlertas'; }); return out({ ok: true, ativo: on }); }
   if (p.op === 'c') return out({ ok: true, c: agenda_(String(p.s || '')) });
   // ---- sincronização: os dados do Oceanum num ficheiro do teu Google Drive ----
   if (p.op === 'list') { const all = dados_(); const m = {}; Object.keys(all).forEach(function (id) { m[id] = all[id].t || 0; }); return out({ ok: true, docs: m }); }
@@ -9069,6 +9160,24 @@ function agenda_(s) { const syms = s.split(',').filter(String).slice(0, 25), C =
       const o = { ex: v(ce.exDividendDate) || v(sd.exDividendDate), pay: v(ce.dividendDate), rate: v(sd.dividendRate) || v(sd.trailingAnnualDividendRate), dy: v(sd.dividendYield) || v(sd.trailingAnnualDividendYield), res: ce.earnings && ce.earnings.earningsDate && ce.earnings.earningsDate[0] ? v(ce.earnings.earningsDate[0]) : null };
       out[x] = o; C.put(k, JSON.stringify(o), 21600); } catch (e) { } });
   return out; }
+// ---- alertas de preço por email, mesmo com a app fechada ----
+// Corre UMA vez esta função no editor (▶ Executar) para ligar: pede autorização para enviar email e criar o temporizador.
+function ativarAlertas() { ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'verificarAlertas') ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('verificarAlertas').timeBased().everyMinutes(15).create(); MailApp.sendEmail(Session.getEffectiveUser().getEmail(), 'Oceanum · alertas ligados', 'Vais receber aqui os alertas de preço que criares no Oceanum (verificados a cada 15 minutos).'); }
+function verificarAlertas() { const P = PropertiesService.getScriptProperties(); let al = []; try { al = JSON.parse(P.getProperty('AL') || '[]'); } catch (e) { return; }
+  const ativos = al.filter(function (a) { return a.on; }); if (!ativos.length) return; const fired = JSON.parse(P.getProperty('ALF') || '{}'), hoje = Utilities.formatDate(new Date(), 'Europe/Lisbon', 'yyyy-MM-dd');
+  const q = cotacoes_(ativos.map(function (a) { return a.s; }).filter(function (x, i, l) { return l.indexOf(x) === i; }).join(',')), msgs = [];
+  const ag = ativos.some(function (a) { return a.k === 'dataex'; }) ? agenda_(ativos.filter(function (a) { return a.k === 'dataex'; }).map(function (a) { return a.s; }).join(',')) : {};
+  ativos.forEach(function (a) { if (fired[a.id] && (a.r !== 'diario' || fired[a.id] === hoje)) return; const x = q[a.s]; let hit = '';
+    if (x && x.p != null) { const ch = x.pc ? (x.p / x.pc - 1) * 100 : 0;
+      if (a.k === 'acima' && x.p >= a.v) hit = a.s + ' subiu para ' + x.p + ' ' + (x.cur || '') + ' (alvo ' + a.v + ')';
+      if (a.k === 'abaixo' && x.p <= a.v) hit = a.s + ' desceu para ' + x.p + ' ' + (x.cur || '') + ' (alvo ' + a.v + ')';
+      if (a.k === 'queda' && ch <= -Math.abs(a.v)) hit = a.s + ' cai ' + ch.toFixed(2) + '% hoje';
+      if (a.k === 'subida' && ch >= Math.abs(a.v)) hit = a.s + ' sobe ' + ch.toFixed(2) + '% hoje'; }
+    if (a.k === 'dataex' && ag[a.s] && ag[a.s].ex) { const d = Utilities.formatDate(new Date(ag[a.s].ex * 1000), 'UTC', 'yyyy-MM-dd'), am = Utilities.formatDate(new Date(Date.now() + 864e5), 'Europe/Lisbon', 'yyyy-MM-dd'); if (d === am) hit = a.s + ': data-ex amanhã (' + d + '). Para receberes o dividendo tens de ter o ativo hoje.'; }
+    if (hit) { msgs.push(hit + (a.n ? ' — ' + a.n : '')); fired[a.id] = hoje; } });
+  P.setProperty('ALF', JSON.stringify(fired));
+  if (msgs.length) MailApp.sendEmail(Session.getEffectiveUser().getEmail(), 'Oceanum · ' + (msgs.length === 1 ? msgs[0] : msgs.length + ' alertas de preço'), msgs.join('\\n') + '\\n\\nAbre o Oceanum para ver os detalhes.'); }
 function procura_(q, n) { if (!q) return { q: [], news: [] }; const C = CacheService.getScriptCache(), k = 's:' + q + ':' + n, h = C.get(k); if (h) return JSON.parse(h);
   const j = yget_('/v1/finance/search?q=' + encodeURIComponent(q) + '&quotesCount=10&newsCount=' + (n || 0) + '&lang=pt-PT') || {};
   const o = { q: (j.quotes || []).filter(function (x) { return x.symbol; }).map(function (x) { return { s: x.symbol, n: x.longname || x.shortname || x.symbol, t: x.quoteType, ty: x.typeDisp, ex: x.exchDisp || x.exchange }; }),
