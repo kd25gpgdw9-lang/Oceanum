@@ -127,18 +127,20 @@ cur.addNotes("ABERTURA (≈30 s)\nApresentar a organização: Nata Lisboa — [s
 // ───────────────────────── 2. GRUPO
 slide("CONTEUDO");
 header("G", "// QUEM SOMOS", ["O GRUPO"]);
+const membros = [["Ryan Magalhães", "137142"], ["Guilherme Barreiro", ""], ["", ""], ["", ""], ["", ""]];
 for (let i = 0; i < 5; i++) {
   const x = 128 + i * 338, y = 236, n = `A${i + 1}|rise|membro${i + 1}`;
   card(x, y, 312, 300, n);
   R({ x: x + 28, y: y + 28, w: 120, h: 120, shape: pres.shapes.OVAL, fill: "2A4C93", line: C.or, lw: 1.25, name: n });
   mono("FOTO", { x: x + 28, y: y + 28, w: 120, h: 120, align: "center", valign: "middle", color: "8FB0EE", name: n });
-  T("[Nome completo]", { x: x + 28, y: y + 172, w: 256, h: 40, size: 28, italic: true, color: C.ph, name: n });
-  mono("N.º MEC. [______]", { x: x + 28, y: y + 230, w: 256, h: 30, name: n });
+  const [nm, mec] = membros[i];
+  T(nm || "[Nome completo]", { x: x + 28, y: y + 172, w: 256, h: 40, size: 28, italic: !nm, bold: !!nm, color: nm ? C.text : C.ph, name: n });
+  mono("N.º MEC. " + (mec || "[______]"), { x: x + 28, y: y + 230, w: 256, h: 30, name: n });
 }
 card(128, 572, 1664, 170, "A6|rise|escolha");
 mono("PORQUE ESCOLHEMOS A NATA LISBOA", { x: 156, y: 596, w: 1600, h: 30, name: "A6|rise|escolha" });
-T("[Ligação do grupo à Nata Lisboa e como conseguimos acesso à Mônica Cardoso, gerente operacional.]",
-  { x: 156, y: 640, w: 1600, h: 80, size: 28, italic: true, color: C.ph, name: "A6|rise|escolha" });
+T("Um dos membros do grupo trabalha na Nata Lisboa, o que nos deu contacto direto com a gerente operacional, Mônica Cardoso.",
+  { x: 156, y: 640, w: 1600, h: 80, size: 28, color: C.text, name: "A6|rise|escolha" });
 card(128, 766, 1664, 140, "A7|rise|divisao");
 mono("QUEM APRESENTA O QUÊ", { x: 156, y: 788, w: 1600, h: 30, name: "A7|rise|divisao" });
 T("[0–a: ______ · b–c: ______ · d–e: ______ · f: ______ · g e conclusões: ______]",
