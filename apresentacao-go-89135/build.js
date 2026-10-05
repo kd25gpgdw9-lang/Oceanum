@@ -151,14 +151,14 @@ cur.addNotes("O GRUPO (≈20 s)\nCada membro apresenta-se rapidamente. Explicar 
 slide("CONTEUDO");
 header("i", "// ROTEIRO · CLIQUE NUM TEMA PARA SALTAR", ["O QUE VAMOS ", ["APRESENTAR"]]);
 const roteiro = [
-  ["0", "A entrevista", "Mônica Cardoso, gerente operacional"],
-  ["a", "3 características comuns", "Objetivos, pessoas, estrutura"],
-  ["b", "Sistema aberto", "Inputs, processo, outputs"],
-  ["c", "Forças do ambiente externo", "Ambiente geral e de tarefa"],
-  ["d", "Complexidade do ambiente", "Mudança × complexidade"],
-  ["e", "Cultura organizacional", "6 dimensões e como se aprende"],
-  ["f", "Os gestores", "Níveis, funções, papéis, competências"],
-  ["g", "Desafios da gestão", "Diversidade, globalização, tecnologia"],
+  ["1", "A entrevista", "Mônica Cardoso, gerente operacional"],
+  ["2", "3 características comuns", "Objetivos, pessoas, estrutura"],
+  ["3", "Sistema aberto", "Inputs, processo, outputs"],
+  ["4", "Forças do ambiente externo", "Ambiente geral e de tarefa"],
+  ["5", "Complexidade do ambiente", "Mudança × complexidade"],
+  ["6", "Cultura organizacional", "6 dimensões e como se aprende"],
+  ["7", "Os gestores", "Níveis, funções, papéis, competências"],
+  ["8", "Desafios da gestão", "Diversidade, globalização, tecnologia"],
 ];
 const alvo = [4, 5, 6, 7, 9, 10, 12, 14];
 roteiro.forEach(([l, t, d], i) => {
@@ -180,7 +180,7 @@ T("• • •", { x: 168, y: 280, w: 140, h: 86, size: 36, bold: true, color: "
 R({ x: 200, y: 392, w: 120, h: 32, shape: pres.shapes.ROUNDED_RECTANGLE, radius: 0.1, fill: "8FB0EE", name: "A1|zoom|icone" });
 card(372, 236, 660, 220, "A2|rise|ficha");
 [[400, 258, "ENTREVISTADA", "Mônica Cardoso", false], [720, 258, "CARGO / NÍVEL", "Gerente Operacional", false],
- [400, 356, "DATA · DURAÇÃO", "[dd/mm · __ min]", true], [720, 356, "MODALIDADE", "[Presencial / online]", true]].forEach(([x, y, l, v, ph]) => {
+ [400, 356, "DATA · DURAÇÃO", "03/10/2026 · 1 hora", false], [720, 356, "MODALIDADE", "Presencial", false]].forEach(([x, y, l, v, ph]) => {
   mono(l, { x, y, w: 300, h: 30, name: "A2|rise|ficha" });
   T(v, { x, y: y + 36, w: 300, h: 40, size: 28, bold: !ph, italic: ph, color: ph ? C.ph : C.text, name: "A2|rise|ficha" });
 });
@@ -196,7 +196,7 @@ quote(1072, 236, 720, 200, "“[Frase marcante da Mônica Cardoso, tal como foi 
 card(1072, 480, 720, 330, "A11|rise|tratamento");
 mono("TRATAMENTO DA INFORMAÇÃO", { x: 1100, y: 504, w: 660, h: 30, name: "A11|rise|tratamento" });
 T([
-  { text: "+  ", options: { color: C.or, bold: true } }, { text: "Gravação com consentimento: " }, { text: "[sim / não]", options: { italic: true, color: C.ph, breakLine: true } },
+  { text: "+  ", options: { color: C.or, bold: true } }, { text: "Gravação com consentimento: " }, { text: "sim", options: { bold: true, breakLine: true } },
   { text: "+  ", options: { color: C.or, bold: true } }, { text: "Transcrição revista pelo grupo", options: { breakLine: true } },
   { text: "+  ", options: { color: C.or, bold: true } }, { text: "Excertos organizados por bloco do guião", options: { breakLine: true } },
   { text: "+  ", options: { color: C.or, bold: true } }, { text: "Citações destacadas nas caixas creme" },
@@ -481,7 +481,7 @@ const refs = [
   [["Robbins, S. P., & Coulter, M. "], ["[(ano)]", false, true], [". "], ["Management", true], [" "], ["[(n.º ed.) — confirmar a edição usada na UC]", false, true], [". Pearson."]],
   [["PDFs das aulas de Gestão das Organizações (2026/2027). ISCA-UA."]],
   [["Nata Lisboa. "], ["[(data de acesso). Título da página. URL]", false, true]],
-  [["Cardoso, M. (2026). "], ["[Entrevista realizada pelo grupo, dia/mês]", false, true], ["."]],
+  [["Cardoso, M. (2026). "], ["Entrevista presencial realizada pelo Grupo 8, 3 de outubro [comunicação pessoal]."]],
 ];
 T(refs.flatMap((parts, k) => [{ text: "+  ", options: { color: C.or, bold: true } }, ...parts.map(([t, it, ph], j) => ({
   text: t, options: { italic: !!(it || ph), color: ph ? C.ph : C.text, breakLine: j === parts.length - 1 && k < refs.length - 1 } }))]),
