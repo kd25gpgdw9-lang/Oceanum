@@ -55,7 +55,7 @@ function T(text, o) {
     fill: o.fill ? { color: o.fill } : undefined, rotate: o.rot,
     line: o.line ? { color: o.line, width: o.lw || 1, dashType: o.dash || "solid" } : undefined,
     shadow: o.shadow ? { type: "outer", color: "030A1E", blur: 14, offset: 6, angle: 90, opacity: 0.45 } : undefined,
-    shape: o.shape,
+    shape: o.shape, hyperlink: o.link ? { slide: o.link, tooltip: 'Ir para este tema' } : undefined,
   });
 }
 function R(o) {
@@ -63,7 +63,7 @@ function R(o) {
     x: I(o.x), y: I(o.y), w: I(o.w), h: I(o.h),
     fill: o.fill ? { color: o.fill, transparency: o.ft || 0 } : { color: "FFFFFF", transparency: 100 },
     line: o.line ? { color: o.line, width: o.lw || 1, dashType: o.dash || "solid" } : { type: "none" },
-    objectName: o.name, rotate: o.rot, rectRadius: o.radius,
+    objectName: o.name, rotate: o.rot, rectRadius: o.radius, hyperlink: o.link ? { slide: o.link, tooltip: 'Ir para este tema' } : undefined,
     shadow: o.shadow ? { type: "outer", color: "030A1E", blur: 14, offset: 6, angle: 90, opacity: 0.45 } : undefined,
   });
 }
@@ -113,7 +113,7 @@ T([{ text: "Entrevista a ", options: {} }, { text: "Mônica Cardoso", options: {
   { x: 128, y: 714, w: 1000, h: 44, size: 30, color: C.muted, name: "A4|fade|subtitulo" });
 R({ x: 1300, y: 330, w: 440, h: 380, fill: C.cream, shadow: true, name: "A5|zoom|polaroid" });
 R({ x: 1320, y: 350, w: 400, h: 270, fill: C.blue2, name: "A5|zoom|polaroid" });
-T("[inserir logótipo\nou fachada]", { x: 1320, y: 350, w: 400, h: 270, size: 26, italic: true, color: "8FB0EE", align: "center", valign: "middle", name: "A5|zoom|polaroid" });
+cur.addImage({ path: "logo.png", x: I(1397), y: I(360), w: I(245), h: I(250), altText: "Logótipo da Nata Lisboa", objectName: "A6|zoom|logo" });
 T("Nata Lisboa", { x: 1300, y: 630, w: 440, h: 70, size: 34, italic: true, font: F.serif, color: "33415C", align: "center", valign: "middle", name: "A5|zoom|polaroid" });
 R({ x: 128, y: 800, w: 1160, h: 112, fill: "0F2860", line: "34548F", lw: 1.25, name: "A6|rise|ficha" });
 [[128, 250, "TURMA", "[Curso · __]", true], [378, 170, "GRUPO", "n.º [__]", true], [548, 250, "DOCENTE", "[Nome]", true],
@@ -147,7 +147,7 @@ cur.addNotes("O GRUPO (≈20 s)\nCada membro apresenta-se rapidamente. Explicar 
 
 // ───────────────────────── 3. ROTEIRO
 slide("CONTEUDO");
-header("i", "// ROTEIRO", ["O QUE VAMOS ", ["APRESENTAR"]]);
+header("i", "// ROTEIRO · CLIQUE NUM TEMA PARA SALTAR", ["O QUE VAMOS ", ["APRESENTAR"]]);
 const roteiro = [
   ["0", "A entrevista", "Mônica Cardoso, gerente operacional"],
   ["a", "3 características comuns", "Objetivos, pessoas, estrutura"],
@@ -158,12 +158,14 @@ const roteiro = [
   ["f", "Os gestores", "Níveis, funções, papéis, competências"],
   ["g", "Desafios da gestão", "Diversidade, globalização, tecnologia"],
 ];
+const alvo = [4, 5, 6, 7, 9, 10, 12, 14];
 roteiro.forEach(([l, t, d], i) => {
-  const x = 128 + (i % 4) * 422, y = i < 4 ? 236 : 580, n = `A${i + 1}|rise|item${i}`;
+  const x = 128 + (i % 4) * 422, y = i < 4 ? 236 : 580, n = `A${i + 1}|rise|item${i}`, link = alvo[i];
   card(x, y, 398, 316, n);
   T(l, { x: x + 28, y: y + 18, w: 120, h: 96, font: F.serif, italic: true, size: 80, color: C.or, name: n });
   T(t, { x: x + 28, y: y + 128, w: 342, h: 84, size: 32, bold: true, name: n });
-  T(d, { x: x + 28, y: y + 222, w: 342, h: 70, size: 24, color: C.muted, name: n });
+  T(d + "  →", { x: x + 28, y: y + 222, w: 342, h: 70, size: 24, color: C.muted, name: n });
+  R({ x, y, w: 398, h: 316, fill: "FFFFFF", ft: 100, name: n, link });
 });
 cur.addNotes("ROTEIRO (≈15 s)\nA apresentação segue as alíneas a) a g) do enunciado. Em cada tema: primeiro a teoria em geral, depois como se verifica na Nata Lisboa e, por fim, um exemplo ou citação da entrevista (caixas creme, que aparecem ao clique).");
 
@@ -500,6 +502,7 @@ mono("ESCALA 1:1 · PLANTA GERAL", { x: 128, y: 176, w: 900, h: 30, color: C.dim
 R({ x: 128, y: 222, w: 960, h: 0, shape: pres.shapes.LINE, line: "4E6CA8", lw: 1.5 });
 mono("// GESTÃO DAS ORGANIZAÇÕES · 89135", { x: 128, y: 300, w: 1000, h: 36, size: 26, cs: 4, name: "A2|fade|kicker" });
 T("OBRIGADO!", { x: 128, y: 350, w: 1200, h: 220, size: 168, bold: true, color: "EEF3FB", name: "A3|rise|obrigado" });
+cur.addImage({ path: "logo.png", x: I(1372), y: I(388), w: I(296), h: I(302), altText: "Logótipo da Nata Lisboa", objectName: "A3|zoom|logo" });
 T("Perguntas?  ·  Nata Lisboa", { x: 128, y: 590, w: 1000, h: 50, size: 34, color: C.muted, name: "A4|fade|perguntas" });
 T("Um agradecimento especial a Mônica Cardoso pela disponibilidade.", { x: 128, y: 660, w: 1000, h: 44, size: 26, italic: true, color: C.ph, name: "A5|fade|agradecimento" });
 cur.addNotes("Agradecer e abrir para perguntas.");
