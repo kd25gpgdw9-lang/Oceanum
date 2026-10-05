@@ -480,6 +480,7 @@ const refs = [
   [["Mintzberg, H. (1973). "], ["The nature of managerial work", true], [". Harper & Row."]],
   [["Robbins, S. P., & Coulter, M. "], ["[(ano)]", false, true], [". "], ["Management", true], [" "], ["[(n.º ed.) — confirmar a edição usada na UC]", false, true], [". Pearson."]],
   [["PDFs das aulas de Gestão das Organizações (2026/2027). ISCA-UA."]],
+  [["Anthropic. (2026). "], ["Claude", true], [" [Modelo de linguagem de grande escala]. https://claude.ai"]],
   [["Nata Lisboa. "], ["[(data de acesso). Título da página. URL]", false, true]],
   [["Cardoso, M. (2026). "], ["Entrevista presencial realizada pelo Grupo 8, 3 de outubro [comunicação pessoal]."]],
 ];
@@ -489,8 +490,8 @@ T(refs.flatMap((parts, k) => [{ text: "+  ", options: { color: C.or, bold: true 
 card(1240, 222, 552, 300, "A2|rise|ia");
 mono("DECLARAÇÃO DE USO DE IA", { x: 1268, y: 246, w: 500, h: 30, color: C.or, name: "A2|rise|ia" });
 T([
-  { text: "Ferramenta: ", options: { bold: true } }, { text: "[nome]", options: { italic: true, color: C.ph, breakLine: true } },
-  { text: "Tarefa: ", options: { bold: true } }, { text: "[ex.: estrutura e design dos slides]", options: { italic: true, color: C.ph, breakLine: true } },
+  { text: "Ferramenta: ", options: { bold: true } }, { text: "Claude (Anthropic)", options: { breakLine: true } },
+  { text: "Tarefa: ", options: { bold: true } }, { text: "design dos slides, correção ortográfica e revisão do contexto do guião", options: { breakLine: true } },
   { text: "Grupo: ", options: { bold: true } }, { text: "conteúdo e análise revistos por todos" },
 ], { x: 1268, y: 292, w: 500, h: 210, size: 24, psa: 10, name: "A2|rise|ia" });
 cur.addNotes("REFERÊNCIAS\nConfirmar a edição do Robbins & Coulter usada na UC e completar o site da Nata Lisboa e a data da entrevista. Declarar o uso de IA conforme as regras da UC.");
