@@ -116,7 +116,7 @@ R({ x: 1320, y: 350, w: 400, h: 270, fill: C.blue2, name: "A5|zoom|polaroid" });
 cur.addImage({ path: "logo.png", x: I(1397), y: I(360), w: I(245), h: I(250), altText: "Logótipo da Nata Lisboa", objectName: "A6|zoom|logo" });
 T("Nata Lisboa", { x: 1300, y: 630, w: 440, h: 70, size: 34, italic: true, font: F.serif, color: "33415C", align: "center", valign: "middle", name: "A5|zoom|polaroid" });
 R({ x: 128, y: 800, w: 1160, h: 112, fill: "0F2860", line: "34548F", lw: 1.25, name: "A6|rise|ficha" });
-[[128, 250, "TURMA", "[Curso · __]", true], [378, 170, "GRUPO", "n.º [__]", true], [548, 250, "DOCENTE", "[Nome]", true],
+[[128, 250, "CURSO", "Contabilidade", false], [378, 170, "GRUPO", "n.º 8", false], [548, 250, "DOCENTE", "Hugo de Almeida", false],
  [798, 490, "INSTITUIÇÃO", "ISCA · Univ. Aveiro · 2026/27", false]].forEach(([x, w, l, v, ph], i) => {
   if (i > 0) R({ x, y: 800, w: 0, h: 112, shape: pres.shapes.LINE, line: "34548F", lw: 1.25, name: "A6|rise|ficha" });
   mono(l, { x: x + 22, y: 818, w: w - 30, h: 30, name: "A6|rise|ficha" });
