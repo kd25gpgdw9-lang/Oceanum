@@ -2041,6 +2041,42 @@ html.spy-open,html.spy-open body{overflow:hidden}
 .un-mi .ic{width:18px;height:18px}
 .ce-ic .ic,.bk-fmt .ic{width:16px;height:16px}
 .ce-m .ic{width:20px;height:20px}
+/* ---------- Modo Jarvis ---------- */
+#jv{position:fixed;inset:0;z-index:84;overflow-y:auto;overscroll-behavior:contain;color:var(--tx);background:linear-gradient(rgba(120,220,255,.035) 1px,transparent 1px) 0 0/100% 32px,linear-gradient(90deg,rgba(120,220,255,.035) 1px,transparent 1px) 0 0/32px 100%,radial-gradient(ellipse 80% 55% at 50% 30%,#0c2d40,#050c13 65%,#03070b)}
+#jv[hidden]{display:none}
+html.jv-open,html.jv-open body{overflow:hidden}
+.jv-in{max-width:1180px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px))}
+.jv-h{display:flex;align-items:center;gap:12px}
+.jv-brand b{display:block;letter-spacing:.38em;color:#9be7ff;font-size:13px}.jv-brand small{letter-spacing:.32em;font-size:9.5px;color:var(--mut)}
+.jv-clock{margin-left:auto;text-align:right}.jv-clock b{display:block;font:600 30px/1 var(--mono);letter-spacing:-.04em;color:#e6fbff}.jv-clock small{color:var(--mut);font-size:11.5px}
+.jv-x{width:44px;height:44px;border-radius:50%;border:1px solid rgba(155,231,255,.35);background:rgba(8,28,40,.6);color:#cdf3ff;display:grid;place-items:center;cursor:pointer;flex:none}
+.jv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}
+.jv-core{grid-column:span 2;grid-row:span 2;display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 0}
+.jv-cv{width:min(78vw,340px);height:min(78vw,340px)}
+.jv-hi{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.jv-meta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:12px;color:var(--tx2,#9fb3c0)}.jv-meta i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.jv-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.jv-c{position:relative;min-width:0;padding:12px 14px;border-radius:14px;background:rgba(8,28,40,.55);border:1px solid rgba(120,220,255,.16);opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease;transition-delay:calc(var(--i) * 80ms + 150ms)}
+.jv-c[data-jvgo]{cursor:pointer}.jv-c[data-jvgo]:hover{border-color:rgba(120,220,255,.4)}
+.jv-c::before,.jv-c::after{content:'';position:absolute;width:12px;height:12px;border:2px solid rgba(125,211,252,.6)}.jv-c::before{top:-1px;left:-1px;border-right:0;border-bottom:0;border-top-left-radius:12px}.jv-c::after{bottom:-1px;right:-1px;border-left:0;border-top:0;border-bottom-right-radius:12px}
+#jv.on .jv-c{opacity:1;transform:none}
+.jv-core{opacity:0;transform:scale(.92);transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1)}#jv.on .jv-core{opacity:1;transform:none}
+.jv-c h4{margin:0 0 8px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#7dd3fc;font-weight:600}
+.jv-l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px}.jv-l li{display:flex;gap:8px;min-width:0}.jv-l b{font:600 12px var(--mono);color:#9be7ff;min-width:40px}.jv-l span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jv-n li{flex-direction:column;gap:0}.jv-n small{color:var(--mut);font-size:11.5px}
+.jv-big{font:600 34px/1 var(--mono);letter-spacing:-.04em;color:#e6fbff;display:flex;align-items:baseline;gap:8px}.jv-big small{font:12px var(--sans,inherit);letter-spacing:0;color:var(--mut)}.jv-big.neg{color:#f87171}.jv-big.pos{color:#4ade80}
+.jv-al{display:block;color:var(--tx2,#9fb3c0);font-size:12px;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jv-kv{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:3px 0}.jv-kv span{color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.jv-kv b{font-family:var(--mono);font-weight:600}
+.jv-wx{display:flex;align-items:center;gap:10px;color:#cdf3ff}.jv-wx b{font:600 30px/1 var(--mono)}.jv-wx small{display:block;color:var(--mut);font-size:12px}
+.jv-days{display:flex;gap:8px;margin-top:10px}.jv-days div{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:9px;background:rgba(255,255,255,.03);color:#cdf3ff}.jv-days small{color:var(--mut);font-size:11px}.jv-days b{font:600 12px var(--mono)}.jv-days i{font-style:normal;color:var(--mut);margin-left:4px;font-weight:400}
+.jv-news{display:flex;align-items:center;gap:10px;margin-top:14px;padding:9px 12px;border-radius:12px;border:1px solid rgba(120,220,255,.14);background:rgba(8,28,40,.5)}.jv-news>b{font-size:10px;letter-spacing:.24em;color:#7dd3fc;flex:none}
+.jv-tk{flex:1;min-width:0;overflow:hidden;white-space:nowrap}.jv-tr{display:inline-block;font-size:13px;will-change:transform}.jv-tr i{display:inline-block;width:5px;height:5px;border-radius:50%;background:#38bdf8;margin:0 14px;vertical-align:middle}
+@media (max-width:860px){.jv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.jv-clock b{font-size:24px}}
+#jvFab{position:fixed;right:20px;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:61;width:46px;height:46px;border-radius:50%;border:1px solid rgba(155,231,255,.55);background:radial-gradient(circle,#e6fbff 0 16%,#38bdf8 17% 24%,#0b2433 25% 100%);box-shadow:0 0 0 4px rgba(56,189,248,.12),0 10px 26px rgba(3,105,161,.45);cursor:pointer;display:grid;place-items:center}
+#jvFab[hidden]{display:none}
+#jvFab i{width:34px;height:34px;border-radius:50%;border:2px dashed rgba(155,231,255,.7)}
+.spy-morn{z-index:88}
+.jv-bar{height:5px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden;margin:2px 0 6px}.jv-bar i{display:block;height:100%;background:#22c55e;border-radius:9px}
 
 </style>
 <style>
@@ -2272,7 +2308,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.89", "date": "08/10/2026", "notes": ["Spyke: voz corrigida no iPhone (toca mesmo com o modo silencioso e sem ir para o altifalante de chamadas).", "Voz de homem humana: ElevenLabs (as vozes mais naturais) ou a IA Gemini, que agora descobre sozinha o modelo de voz da tua chave; a voz do aparelho deixou de soar a robô.", "Spyke com novo visual: conversa em balões, esfera que mexe ao ritmo da voz, animação ao acordar, microfone e escrita fixos em baixo, nada por baixo da barra do iPhone.", "O botão de definições do painel do Spyke volta a funcionar.", "Menos emojis em toda a app: ícones simples no lugar deles."]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.90", "date": "08/10/2026", "notes": ["Modo Jarvis: painel em ecrã inteiro com relógio, clima, agenda, prioridades, alertas, finanças, universidade, e-mail, hábitos e notícias; o X fecha e o botão redondo no canto traz de volta.", "Spyke conversa: depois de responder continua a ouvir sem dizeres o nome; diz \"Spyke\" enquanto ele fala para o interromper.", "Spyke lembra-se: \"lembra-te que…\", aprende sozinho nas conversas e \"esquece…\" apaga.", "Rotinas por voz: \"bom dia\", \"boa noite\" (balanço do dia), \"modo estudo\", \"modo treino\", \"modo trabalho\" e as tuas próprias rotinas.", "Avisos falados (30 e 10 min antes dos compromissos, contas do dia, tarefas, prova amanhã, inegociáveis), clima de Aveiro e notícias lidas em voz.", "E-mail: responder a falar ou com a IA (fica como rascunho no Gmail) e os eventos dos e-mails aparecem no calendário."]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -6226,6 +6262,8 @@ NW.fetch = async (sp, force) => { const need = sp.filter(s => force || !NW.cache
   try { U.ls.set('oc_news1', Object.fromEntries(Object.entries(NW.cache).slice(-24))); } catch (e) { } };
 Object.assign(NW.cache, U.ls.get('oc_news1', {}) || {});
 const itemsFor = (tab, topic, theme) => { const all = merge(specs(tab, topic, theme).map(s => NW.cache[s.id] && NW.cache[s.id].items)), cut = Date.now() - 48 * 36e5; return [...all.filter(x => !x.d || x.d >= cut), ...all.filter(x => x.d && x.d < cut)]; };
+// manchetes para o Spyke ler (Portugal + mundo), sem o nome do jornal no fim
+NW.headlines = async (n = 5) => { const sp = specs('PT', 'TOP', '').concat(specs('W', 'TOP', '')); try { if (scr()) await NW.fetch(sp); } catch (e) { } const L = merge([itemsFor('PT', 'TOP', ''), itemsFor('W', 'TOP', '')]); return L.slice(0, n).map(x => String(x.t || '').replace(/\s+[-–|]\s+[^-–|]{2,45}$/, '').trim()).filter(Boolean); };
 const freshSet = (tab, topic, theme) => new Set(specs(tab, topic, theme).flatMap(s => (NW.cache[s.id] && NW.cache[s.id].fresh) || []));
 const ago = d => { if (!d) return ''; const m = Math.round((Date.now() - d) / 6e4); return m < 1 ? 'agora' : m < 60 ? 'há ' + m + ' min' : m < 1440 ? 'há ' + Math.round(m / 60) + ' h' : U.fmtD(U.iso(new Date(d))); };
 const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
@@ -8272,7 +8310,7 @@ OS.on('ready', () => { draw(); if (B && B.phase !== 'end') wake(); });
 
 /* ---------- entradas ---------- */
 OS.on('ready', () => { const h = V.hoje; if (h && !h._fb) { V.hoje = s => h(s).replace(/(<a class="btn ghost sm" href="#next">[\s\S]*?<\/a>)/, `<div class="row gap6" style="flex-wrap:wrap;justify-content:flex-end"><a class="btn sm pri fb-hb" href="#foco">${UI.ic('lock')}Bloco de foco</a>$1</div>`); V.hoje._fb = 1; } });
-OS.FocusBlock = { cands, state: () => B, finish: e => B && finish(e), _set: v => { B = v; save(); draw(); } };
+OS.FocusBlock = { preset: th => { DR = { th, sel: {}, mins: {}, extra: [] }; OS.request(); }, cands, state: () => B, finish: e => B && finish(e), _set: v => { B = v; save(); draw(); } };
 })();
 
 </script>
@@ -8290,7 +8328,7 @@ OS.ONE_DEF.mail = { q: 'in:inbox newer_than:3d', n: 30, liq: 'from:linkedin.com 
 const cfg = () => Object.assign({}, OS.ONE_DEF.mail, OS.one('mail'));
 // cache só neste aparelho (os e-mails não vão para a sincronização)
 let M = U.ls.get(K, null) || { at: 0, items: [], ai: {}, sum: '', done: {}, li: { at: 0, items: [], sum: null } };
-M.done = M.done || {}; M.ai = M.ai || {}; M.li = M.li || { at: 0, items: [], sum: null };
+M.done = M.done || {}; M.ai = M.ai || {}; if (M.aiv !== 2) { M.ai = {}; M.sum = ''; M.aiv = 2; } M.li = M.li || { at: 0, items: [], sum: null };
 const save = () => { const keep = new Set(M.items.map(x => x.id).concat(M.li.items.map(x => x.id))); Object.keys(M.ai).forEach(k => { if (!keep.has(k)) delete M.ai[k]; }); Object.keys(M.done).forEach(k => { if (!keep.has(k)) delete M.done[k]; }); U.ls.set(K, M); };
 let busy = '', err = '';
 
@@ -8327,12 +8365,13 @@ const classify = async items => { const todo = items.filter(x => !M.ai[x.id]).sl
   const p = OS.one('profile');
   const o = await OS.AI.json([{ text: `És o assistente de e-mail de ${p.short || 'Ryan'} (estudante no ISCA-UA em Aveiro, trabalha, brasileiro a viver em Portugal). Hoje é ${U.today()}.
 Classifica cada e-mail numa categoria: "urgente" (prazo hoje/amanhã, pagamento em atraso, segurança da conta, universidade/trabalho a pedir ação já), "responder" (uma pessoa real espera resposta dele), "atencao" (importante ler, sem resposta), "info" (notificações, recibos, confirmações), "promo" (marketing, newsletters), "spam" (suspeito: phishing, burla, pede dados ou dinheiro, remetente estranho).
-Para cada e-mail: {"id","c","porque":"máx. 12 palavras","acao":"o que fazer, máx. 8 palavras, ou vazio","prazo":"AAAA-MM-DD ou null"}.
+Para cada e-mail: {"id","c","porque":"máx. 12 palavras","acao":"o que fazer, máx. 8 palavras, ou vazio","prazo":"AAAA-MM-DD ou null","evento":null ou {"titulo","data":"AAAA-MM-DD","hora":"HH:MM" ou null,"fim":"HH:MM" ou null,"local":"…" ou null}}.
+"evento" só quando o e-mail marca algo com data concreta para ele: reunião, entrevista, aula, consulta, exame, evento, entrega com prazo. Converte datas relativas ("amanhã", "sexta") usando a data do e-mail.
 Escreve também "resumo": 2 a 3 frases sobre o que precisa da atenção dele (todos os e-mails, não só estes). Não inventes nada que não esteja nos e-mails.
 JSON: {"resumo":"…","itens":[…]}
 E-mails novos: ${JSON.stringify(todo.map(x => ({ id: x.id, de: x.f, assunto: x.s, data: x.d.slice(0, 16), nao_lido: x.u, importante: x.imp, inicio: x.sn.slice(0, 320) })))}
 Outros já vistos (só para o resumo): ${JSON.stringify(items.filter(x => M.ai[x.id]).slice(0, 25).map(x => ({ assunto: x.s, c: M.ai[x.id].c })))}` }], .15);
-  (o.itens || []).forEach(r => { if (r && r.id && CATS.some(c => c[0] === r.c)) M.ai[r.id] = { c: r.c, why: String(r.porque || '').slice(0, 120), a: String(r.acao || '').slice(0, 80), due: /^\d{4}-\d\d-\d\d$/.test(r.prazo || '') ? r.prazo : '' }; });
+  (o.itens || []).forEach(r => { if (r && r.id && CATS.some(c => c[0] === r.c)) { M.ai[r.id] = { c: r.c, why: String(r.porque || '').slice(0, 120), a: String(r.acao || '').slice(0, 80), due: /^\d{4}-\d\d-\d\d$/.test(r.prazo || '') ? r.prazo : '' }; addEvent(items.find(x => x.id === r.id), r.evento); } });
   if (o.resumo) M.sum = String(o.resumo).slice(0, 600); };
 const refresh = async (manual) => { if (busy || !ready()) { if (manual && !ready()) UI.toast('Liga primeiro o script Google (aba Ligar contas)', 'warn'); return; }
   busy = 'mail'; err = ''; if (manual) OS.request();
@@ -8365,7 +8404,10 @@ const Mail = OS.Mail = {
     if (!c.urg && !c.resp) return 'Nos e-mails, nada urgente nem à espera de resposta.';
     return `Nos e-mails: ${c.urg ? c.urg + (c.urg === 1 ? ' urgente' : ' urgentes') : ''}${c.urg && c.resp ? ' e ' : ''}${c.resp ? c.resp + ' à espera de resposta' : ''}. ${top.map(x => nameOf(x.f) + ' sobre ' + x.s.replace(/^(re|res|fw|fwd|enc):\s*/i, '')).join('; ')}.`; },
   ctx: () => Mail.items().filter(x => ['urgente', 'responder', 'atencao'].includes(x.c)).slice(0, 8).map(x => `${catL(x.c)[2]}: ${nameOf(x.f)} — ${x.s}`).join('\n'),
-  _set: v => { M = Object.assign(M, v); save(); }
+  _set: v => { M = Object.assign(M, v); save(); },
+  // Spyke: "responde à Ana que envio amanhã" → rascunho no Gmail
+  replyByName: async (who, instr) => { const n = String(who || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''), L = Mail.items(); const it = L.find(x => nameOf(x.f).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(n)) || L.find(x => addrOf(x.f).includes(n)); if (!it) return { ok: false, msg: `Não encontrei um e-mail recente de ${who}.` };
+    if (!OS.AI || !OS.AI.key()) return { ok: false, msg: 'Preciso da IA ligada para escrever a resposta.' }; const body = await compose(it, instr); await saveDraft(it, body); M.done[it.id] = Date.now(); save(); return { ok: true, to: nameOf(it.f), body }; }
 };
 // Control Room: e-mails urgentes
 const I = OS.Intel;
@@ -8378,9 +8420,9 @@ const TB = [['', 'Resumo'], ['caixa', 'Caixa'], ['linkedin', 'LinkedIn'], ['cont
 V.email = sub => { const k = TB.some(t => t[0] === (sub || '')) ? (sub || '') : '';
   const when = M.at ? 'atualizado ' + U.rel(U.iso(new Date(M.at))) + ' às ' + new Date(M.at).toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }) : 'ainda não atualizado';
   return UI.head('E-mail & LinkedIn', 'O que precisa da tua atenção, separado do lixo.', `<button class="btn sm" data-act="mlRefresh" ${busy ? 'disabled' : ''}>${UI.ic('sync')}${busy ? 'A atualizar…' : 'Atualizar'}</button>`) + UI.tabs('email', TB, k) + `<div class="ml-page">${err ? `<div class="ib-st bad" style="margin-bottom:10px">${esc(err)}</div>` : ''}${!ready() || ver() < 9 ? (k === 'contas' ? '' : setupCard()) : ''}${P[k](when)}</div>`; };
-const setupCard = () => `<div class="pn ml-setup"><b>${ready() ? 'Falta atualizar o script Google para a versão 9' : 'Liga o teu Gmail ao Oceanum'}</b><p class="mut">${ready() ? 'O teu script ainda não tem a parte do e-mail.' : 'Usa o mesmo script Google do atalho de gastos e da sincronização.'} Demora 3 minutos, uma vez só.</p><a class="btn sm pri" href="#email.contas">Ver os passos</a></div>`;
+const setupCard = () => `<div class="pn ml-setup"><b>${ready() ? 'Falta atualizar o script Google' : 'Liga o teu Gmail ao Oceanum'}</b><p class="mut">${ready() ? 'O teu script ainda não tem a parte do e-mail.' : 'Usa o mesmo script Google do atalho de gastos e da sincronização.'} Demora 3 minutos, uma vez só.</p><a class="btn sm pri" href="#email.contas">Ver os passos</a></div>`;
 const row = (x, o = {}) => { const [c, ic, l] = catL(x.c); return `<div class="ml-it ${x.u ? 'unread' : ''} c-${c}"><div class="ml-ic" title="${l}"></div><div class="ml-t"><div class="ml-h"><b>${esc(nameOf(x.f))}</b><small>${U.fmtDS(x.d.slice(0, 10))} ${x.d.slice(11, 16) ? new Date(x.d).toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }) : ''}</small></div><div class="ml-s">${esc(x.s || '(sem assunto)')}</div><small class="ml-w">${esc([x.why, x.a ? '→ ' + x.a : '', x.due ? 'prazo ' + U.fmtDS(x.due) : ''].filter(Boolean).join(' · ') || x.sn.slice(0, 110))}</small>
-  <div class="ml-a"><a class="btn xs" href="${esc(gmailLink(x))}" target="_blank" rel="noopener">Abrir</a>${c === 'urgente' || c === 'responder' || c === 'atencao' ? `<button class="btn xs ghost" data-act="mlTask" data-id="${esc(x.id)}">${UI.ic('plus')}Tarefa</button><button class="btn xs ghost" data-act="mlDone" data-id="${esc(x.id)}">${UI.ic('check')}Feito</button>` : ''}<button class="btn xs ghost" data-act="mlDo" data-a="arquivar" data-id="${esc(x.id)}">Arquivar</button>${c === 'spam' || c === 'promo' ? `<button class="btn xs ghost" data-act="mlDo" data-a="spam" data-id="${esc(x.id)}">Spam</button>` : ''}${o.move === false ? '' : `<select class="ml-mv" data-mlmv="${esc(x.id)}" aria-label="Mudar categoria">${CATS.map(k => `<option value="${k[0]}"${k[0] === c ? ' selected' : ''}>${k[2]}</option>`).join('')}</select>`}</div></div></div>`; };
+  <div class="ml-a"><a class="btn xs" href="${esc(gmailLink(x))}" target="_blank" rel="noopener">Abrir</a>${c === 'urgente' || c === 'responder' || c === 'atencao' ? `<button class="btn xs pri" data-act="mlReply" data-id="${esc(x.id)}">Responder</button><button class="btn xs ghost" data-act="mlTask" data-id="${esc(x.id)}">${UI.ic('plus')}Tarefa</button><button class="btn xs ghost" data-act="mlDone" data-id="${esc(x.id)}">${UI.ic('check')}Feito</button>` : ''}<button class="btn xs ghost" data-act="mlDo" data-a="arquivar" data-id="${esc(x.id)}">Arquivar</button>${c === 'spam' || c === 'promo' ? `<button class="btn xs ghost" data-act="mlDo" data-a="spam" data-id="${esc(x.id)}">Spam</button>` : ''}${o.move === false ? '' : `<select class="ml-mv" data-mlmv="${esc(x.id)}" aria-label="Mudar categoria">${CATS.map(k => `<option value="${k[0]}"${k[0] === c ? ' selected' : ''}>${k[2]}</option>`).join('')}</select>`}</div></div></div>`; };
 const P = {};
 P[''] = when => { const L = Mail.items(), c = Mail.counts(), by = k => L.filter(x => x.c === k);
   if (!M.at) return ready() && ver() >= 9 ? `<div class="pn">${UI.empty('Ainda sem e-mails. Toca em Atualizar.')}</div>` : '';
@@ -8403,15 +8445,48 @@ P.linkedin = () => { const li = M.li, s = li.sum;
   ${(s.vagas || []).length ? `<div class="pn"><div class="pn-h"><h3>Vagas</h3></div><div class="list">${s.vagas.map(m => `<div class="li"><div class="li-t"><b>${esc(m.titulo || '')}</b><small>${esc([m.empresa, m.local].filter(Boolean).join(' · '))}</small></div><div class="li-r"><button class="btn xs ghost" data-act="mlOpp" data-t="${esc(m.titulo || '')}" data-e="${esc(m.empresa || '')}" data-id="${esc(m.id || '')}">${UI.ic('plus')}Oportunidades</button>${lk(m.id)}</div></div>`).join('')}</div></div>` : ''}
   ${(s.publicacoes || []).length ? UI.toggle('Outras notificações · ' + s.publicacoes.length, `<div class="list">${s.publicacoes.map(m => `<div class="li"><div class="li-t"><small>${esc(m.texto || '')}</small></div><div class="li-r">${lk(m.id)}</div></div>`).join('')}</div>`, 'mlLiO') : ''}`; };
 P.contas = () => { const c = cfg(), ib = OS.one('inbox');
-  return `<div class="pn fb-guide"><h3>1 · Gmail principal ${ready() && ver() >= 9 ? '<span class="pos">✓ ligado</span>' : ''}</h3>
-    ${!ready() ? `<p>Primeiro liga o script Google em <a class="acc" href="#definicoes">Definições → Atalho de gastos</a> (passos 1 e 2). Depois volta aqui.</p>` : ver() >= 9 ? '<p class="mut">O teu script já lê o Gmail. Podes atualizar quando quiseres.</p>' : ''}
-    ${ready() && ver() < 9 ? `<ol><li>Toca em <b>Copiar código novo</b>.</li><li>Abre <a class="acc" href="https://script.google.com/home" target="_blank" rel="noopener">script.google.com</a> → o teu projeto do Oceanum → apaga tudo → cola → <b>Guardar</b>.</li><li>Na lista de funções ao lado de ▶ escolhe <b>autorizarGmail</b> → <b>▶ Executar</b> → <b>Rever permissões</b> → a tua conta → Avançadas → Aceder → <b>Permitir</b> (agora pede também o Gmail).</li><li><b>Implementar → Gerir implementações → ✏️ → Versão: Nova versão → Implementar</b>. O endereço fica igual.</li><li>Volta aqui e toca em <b>Verificar</b>.</li></ol>
+  return `<div class="pn fb-guide"><h3>1 · Gmail principal ${ready() && ver() >= 10 ? '<span class="pos">✓ ligado</span>' : ready() && ver() >= 9 ? '<span class="mut">ligado · atualiza para poderes responder</span>' : ''}</h3>
+    ${!ready() ? `<p>Primeiro liga o script Google em <a class="acc" href="#definicoes">Definições → Atalho de gastos</a> (passos 1 e 2). Depois volta aqui.</p>` : ver() >= 10 ? '<p class="mut">O teu script já lê o Gmail e guarda respostas como rascunho.</p>' : ''}
+    ${ready() && ver() < 10 ? `<ol><li>Toca em <b>Copiar código novo</b> (versão 10: lê o Gmail e guarda respostas como rascunho).</li><li>Abre <a class="acc" href="https://script.google.com/home" target="_blank" rel="noopener">script.google.com</a> → o teu projeto do Oceanum → apaga tudo → cola → <b>Guardar</b>.</li><li>Na lista de funções ao lado de ▶ escolhe <b>autorizarGmail</b> → <b>▶ Executar</b> → <b>Rever permissões</b> → a tua conta → Avançadas → Aceder → <b>Permitir</b> (agora pede também o Gmail).</li><li><b>Implementar → Gerir implementações → ✏️ → Versão: Nova versão → Implementar</b>. O endereço fica igual.</li><li>Volta aqui e toca em <b>Verificar</b>.</li></ol>
       <div class="row gap8"><button class="btn sm pri" data-act="ibCopy" data-t="code">${UI.ic('link')}Copiar código novo</button><button class="btn sm" data-act="mlCheck">Verificar</button></div>` : ''}
     <p class="mut" style="font-size:12.5px;margin-top:8px">Privacidade: o script corre na tua conta Google e só envia ao Oceanum o assunto, o remetente e o início do texto dos e-mails recentes. Com a IA ligada, isso vai para a tua chave Gemini para ser separado e resumido. Ações (arquivar, spam) só quando tocas.</p></div>
   <div class="pn fb-guide"><h3>2 · O que ler</h3><div class="ws-form"><label>Pesquisa do Gmail<input class="field" data-bind="mail.q" value="${esc(c.q)}"></label><label>Quantos e-mails (máx. 50)<input class="field" type="number" min="5" max="50" data-bind="mail.n" value="${c.n}"></label><label>LinkedIn<input class="field" data-bind="mail.liq" value="${esc(c.liq)}"></label></div><small class="mut">Exemplos: <code>in:inbox newer_than:3d</code> · <code>is:unread newer_than:7d</code> · <code>in:inbox -category:promotions newer_than:2d</code></small></div>
   <div class="pn fb-guide"><h3>3 · Outras contas de e-mail</h3><ol><li><b>Outro Gmail:</b> entra nessa conta em script.google.com (janela anónima), cria um projeto, cola o <b>mesmo código</b>, executa <b>autorizarGmail</b>, implementa como Aplicação Web (Eu · Qualquer pessoa) e cola o endereço abaixo.</li><li><b>E-mail da universidade, Outlook, iCloud:</b> configura o reencaminhamento automático para o teu Gmail (no Outlook/Office 365: Definições → Correio → Reencaminhamento). Esses e-mails passam a aparecer aqui, com o endereço de destino.</li></ol>
     ${(c.accts || []).map((a, i) => `<div class="li"><div class="li-t"><b>${esc(a.label || 'Conta ' + (i + 2))}</b><small>${esc(a.url.replace(/^https:\/\/script\.google\.com\/macros\/s\//, '').slice(0, 24))}…</small></div><div class="li-r"><button class="btn xs ghost" data-act="mlAcctDel" data-i="${i}">${UI.ic('trash')}</button></div></div>`).join('')}
     <form class="fb-add" data-form="mlAcct" style="grid-template-columns:120px minmax(0,1fr) auto"><input class="field" name="l" placeholder="Nome (ex.: Pessoal)"><input class="field" name="u" placeholder="https://script.google.com/macros/s/…/exec" required autocapitalize="none" spellcheck="false"><button class="btn">Juntar</button></form></div>`; };
+
+/* ---------- eventos encontrados nos e-mails → calendário ---------- */
+OS.S.mailevents = { label: 'Evento do e-mail', title: r => r.title || 'Evento', fields: [
+  { k: 'title', l: 'Título', t: 'text', req: 1 }, { k: 'date', l: 'Dia', t: 'date', req: 1 }, { k: 'start', l: 'Início', t: 'time' }, { k: 'end', l: 'Fim', t: 'time' }, { k: 'place', l: 'Local', t: 'text' }, { k: 'from', l: 'De', t: 'text' }, { k: 'note', l: 'Nota', t: 'text' }] };
+function addEvent(it, ev) { try { if (!it || !ev || !/^\d{4}-\d\d-\d\d$/.test(ev.data || '') || ev.data < U.addDays(U.today(), -1)) return; const no = cfg().evNo || [];
+  if (no.includes(it.id) || OS.all('mailevents').some(e => e.mid === it.id)) return; const tm = x => /^\d\d:\d\d$/.test(x || '') ? x : '';
+  OS.add('mailevents', { mid: it.id, title: String(ev.titulo || it.s || 'Evento').slice(0, 120), date: ev.data, start: tm(ev.hora), end: tm(ev.fim), place: String(ev.local || '').slice(0, 120), from: nameOf(it.f), subj: String(it.s || '').slice(0, 160), src: it.src || 0 }, { silent: true }); } catch (e) { } }
+OS.on('del:mailevents', e => { if (!e.mid) return; const no = (cfg().evNo || []).concat(e.mid).slice(-300); OS.setOne('mail', { evNo: no }); });
+if (OS.Cal && OS.Cal.items) { OS.Cal.src.mail = ['E-mail', '#f59e0b']; const _it = OS.Cal.items; OS.Cal.items = (from, to) => { const out = _it(from, to); OS.all('mailevents').forEach(e => { if (e.date >= from && e.date <= to) out.push({ date: e.date, start: e.start || '', end: e.end || '', title: e.title + (e.place ? ' · ' + e.place : ''), src: 'mail', imp: true, edit: 'mailevents:' + e.id }); }); return out.sort((a, b) => (a.date + (a.start || '99')).localeCompare(b.date + (b.start || '99'))); }; }
+
+/* ---------- responder: o texto fica como rascunho no teu Gmail ---------- */
+const postTo = async (u, o) => { const r = await fetch(u, { method: 'POST', body: new URLSearchParams(Object.assign({ k: OS.one('inbox').key }, o)), credentials: 'omit', cache: 'no-store' }); const t = await r.text(); try { return JSON.parse(t); } catch (e) { return { ok: false, msg: t.slice(0, 160) }; } };
+const compose = async (it, instr) => { const p = OS.one('profile');
+  const o = await OS.AI.json([{ text: `Escreve a resposta de ${p.name || p.short || 'Ryan'} a este e-mail. Língua: a mesma do e-mail (se for português, usa o português de quem escreveu). Tom: educado, direto e humano; curto (2 a 6 frases). Termina com "${p.short || 'Ryan'}". Não inventes factos, datas ou compromissos que ele não disse.
+O que ele quer dizer: ${instr || '(responde de forma adequada e prática)'}
+E-mail de ${it.f} · assunto: ${it.s}
+Texto: ${it.sn.slice(0, 900)}
+JSON: {"texto":"a resposta completa, sem assunto"}` }], .5);
+  return String(o.texto || '').trim(); };
+const saveDraft = async (it, body) => { const u = sources()[it.src || 0]; if (!u) throw new Error('Script não ligado'); if (ver() < 10) throw new Error('Atualiza o script Google para a versão 10 (Ligar contas)');
+  const j = await postTo(u, { op: 'dr', id: it.id, b: body }); if (!j || !j.ok) throw new Error((j && j.msg) || 'O script não guardou o rascunho'); return true; };
+let RP = null;
+const replyModal = () => { if (!RP) return; const it = RP.it; UI.modal(`<div class="ml-rp"><div class="pn-h"><h3>Responder a ${esc(nameOf(it.f))}</h3><button class="icon-btn" data-mclose aria-label="Fechar">${UI.ic('x')}</button></div><small class="mut">${esc(it.s || '')}</small>
+  <div class="ml-rq">${esc(it.sn.slice(0, 260))}${it.sn.length > 260 ? '…' : ''}</div>
+  <div class="ml-rai"><input class="field" id="mlRi" placeholder="O que queres dizer? ex.: aceito, envio amanhã até às 18h" value="${esc(RP.instr || '')}"><button class="btn sm" data-act="mlRai" ${OS.AI && OS.AI.key() ? '' : 'disabled'}>${RP.busy ? 'A escrever…' : 'Escrever com IA'}</button></div>
+  <textarea id="mlRb" class="field" rows="7" placeholder="A tua resposta…">${esc(RP.body || '')}</textarea>
+  <div class="row gap8" style="margin-top:10px;flex-wrap:wrap"><button class="btn sm" data-act="mlRdict">${UI.ic('mic')}Ditar</button><span class="grow"></span><button class="btn pri" data-act="mlRsave">Guardar rascunho no Gmail</button></div>
+  ${RP.msg ? `<div class="ib-st ${RP.ok ? 'ok' : 'bad'}" style="margin-top:8px">${esc(RP.msg)}</div>` : ''}<small class="mut" style="display:block;margin-top:8px">Fica nos Rascunhos do Gmail: revês e envias de lá. O Oceanum nunca envia e-mails sozinho.</small></div>`); };
+const keepRP = () => { const b = document.getElementById('mlRb'), i = document.getElementById('mlRi'); if (RP) { if (b) RP.body = b.value; if (i) RP.instr = i.value; } };
+A.mlReply = b => { const it = byId(b.dataset.id); if (!it) return; RP = { it, body: '', instr: '' }; replyModal(); };
+A.mlRai = async () => { keepRP(); if (!RP || RP.busy) return; RP.busy = true; replyModal(); try { RP.body = await compose(RP.it, RP.instr); RP.msg = ''; } catch (e) { RP.msg = 'IA: ' + (e.message || 'erro'); RP.ok = false; } RP.busy = false; replyModal(); };
+A.mlRdict = () => { keepRP(); const SRc = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SRc) return UI.toast('Este navegador não deixa ditar', 'warn'); const r = new SRc(); r.lang = (OS.one('spyke').accent === 'PT') ? 'pt-PT' : 'pt-BR'; r.interimResults = false; r.onresult = e => { const t = [...e.results].map(x => x[0].transcript).join(' '); RP.body = (RP.body ? RP.body.trim() + ' ' : '') + t; replyModal(); }; r.onerror = () => UI.toast('Não consegui ouvir', 'warn'); UI.toast('A ouvir… fala a tua resposta'); try { r.start(); } catch (e) { } };
+A.mlRsave = async () => { keepRP(); if (!RP || !RP.body.trim()) return UI.toast('Escreve a resposta primeiro', 'warn'); try { await saveDraft(RP.it, RP.body.trim()); RP.msg = 'Rascunho guardado no Gmail. Abre o Gmail → Rascunhos para enviar.'; RP.ok = true; M.done[RP.it.id] = Date.now(); save(); } catch (e) { RP.msg = e.message; RP.ok = false; } replyModal(); OS.request(); };
 
 /* ---------- ações ---------- */
 const byId = id => M.items.find(x => x.id === id) || M.li.items.find(x => x.id === id);
@@ -8426,7 +8501,7 @@ A.mlTask = b => { const it = byId(b.dataset.id); if (!it) return; const x = Obje
 A.mlOpp = b => { const n = b.dataset.t + (b.dataset.e ? ' · ' + b.dataset.e : ''); if (OS.all('opps').some(o => o.name === n)) return UI.toast('Já está nas Oportunidades'); const it = byId(b.dataset.id); OS.add('opps', { name: n, inst: b.dataset.e, kind: 'Emprego', area: 'Carreira', status: 'Identificada', prio: '3', next: 'Ler a vaga e decidir', link: it ? gmailLink(it) : '' }); UI.toast('Guardada em Oportunidades', 'pos'); };
 A.mlContact = b => { if (OS.all('contacts').some(c => c.name === b.dataset.n)) return UI.toast('Já está na tua rede'); OS.add('contacts', { name: b.dataset.n, role: b.dataset.r, how: 'LinkedIn', strength: 1, last: U.today(), tags: ['LinkedIn'] }); UI.toast('Adicionado à rede (Carreira)', 'pos'); };
 A.mlSay = () => OS.Spyke && OS.Spyke.say((M.sum ? M.sum + ' ' : '') + Mail.speak());
-A.mlCheck = async () => { UI.toast('A verificar…'); await OS.Inbox.check(); UI.toast(ver() >= 9 ? 'Script atualizado ✓' : 'Ainda é a versão antiga (' + ver() + '). Confirma "Nova versão" ao implementar.', ver() >= 9 ? 'pos' : 'warn'); if (ver() >= 9) refresh(true); else OS.request(); };
+A.mlCheck = async () => { UI.toast('A verificar…'); await OS.Inbox.check(); UI.toast(ver() >= 10 ? 'Script atualizado ✓' : 'Ainda é a versão ' + ver() + '. Confirma "Nova versão" ao implementar.', ver() >= 10 ? 'pos' : 'warn'); if (ver() >= 9) refresh(true); else OS.request(); };
 A.mlAcctDel = b => { const a = (cfg().accts || []).slice(); a.splice(+b.dataset.i, 1); OS.setOne('mail', { accts: a }); };
 OS.forms.mlAcct = f => { const u = f.elements.u.value.trim(); if (!/^https:\/\/script\.google\.com\/(a\/[^/]+\/)?macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u)) return UI.toast('Endereço inválido (tem de terminar em /exec)', 'neg'); OS.setOne('mail', { accts: (cfg().accts || []).concat({ label: f.elements.l.value.trim(), url: u }) }); UI.toast('Conta juntada', 'pos'); };
 document.addEventListener('change', e => { const id = e.target.dataset && e.target.dataset.mlmv; if (!id) return; const it = byId(id); if (!it) return; M.ai[id] = Object.assign({}, info(it), { c: e.target.value, why: 'mudado por ti' }); save(); OS.request(); });
@@ -8440,6 +8515,43 @@ OS.on('ready', () => setTimeout(tick, 4000)); setInterval(tick, 60e3);
 
 </script>
 <script>
+/* OCEANUM — Clima (Open-Meteo: grátis, sem chave). Cidade do perfil (por omissão Aveiro). Guarda 30 min neste aparelho. */
+(() => {
+'use strict';
+const U = OS.U;
+const K = 'os2wx';
+const W = OS.Weather = {};
+const CODES = { 0: 'céu limpo', 1: 'quase limpo', 2: 'parcialmente nublado', 3: 'nublado', 45: 'nevoeiro', 48: 'nevoeiro com geada', 51: 'chuvisco fraco', 53: 'chuvisco', 55: 'chuvisco forte', 56: 'chuvisco gelado', 57: 'chuvisco gelado', 61: 'chuva fraca', 63: 'chuva', 65: 'chuva forte', 66: 'chuva gelada', 67: 'chuva gelada forte', 71: 'neve fraca', 73: 'neve', 75: 'neve forte', 77: 'grãos de neve', 80: 'aguaceiros fracos', 81: 'aguaceiros', 82: 'aguaceiros fortes', 85: 'aguaceiros de neve', 86: 'aguaceiros de neve fortes', 95: 'trovoada', 96: 'trovoada com granizo', 99: 'trovoada forte com granizo' };
+W.desc = c => CODES[c] || 'tempo variável';
+W.kind = c => c === 0 || c === 1 ? 'sol' : c === 2 ? 'sol-nuvem' : c === 3 || c === 45 || c === 48 ? 'nuvem' : c >= 71 && c <= 86 && ![80, 81, 82].includes(c) ? 'neve' : c >= 95 ? 'trovoada' : 'chuva';
+W.city = () => (OS.one('profile').city || 'Aveiro').trim();
+let data = U.ls.get(K, null), busy = null;
+const geo = async name => { const g = U.ls.get('os2wxgeo', null); if (g && g.n === name) return g;
+  const r = await fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&language=pt&name=' + encodeURIComponent(name)), j = await r.json(), x = (j.results || [])[0];
+  const o = x ? { n: name, lat: x.latitude, lon: x.longitude, label: x.name } : { n: name, lat: 40.6405, lon: -8.6538, label: 'Aveiro' }; U.ls.set('os2wxgeo', o); return o; };
+W.get = async force => { const city = W.city(); if (!force && data && data.city === city && Date.now() - data.at < 30 * 6e4) return data; if (busy) return busy;
+  busy = (async () => { try { const g = await geo(city);
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${g.lat}&longitude=${g.lon}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation,relative_humidity_2m&hourly=precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&timezone=Europe%2FLisbon&forecast_days=4`);
+    const j = await r.json(); if (!j.current) throw new Error('sem dados');
+    const h = new Date().getHours(), pp = (j.hourly && j.hourly.precipitation_probability || []).slice(h, h + 12);
+    data = { at: Date.now(), city, label: g.label, now: { t: Math.round(j.current.temperature_2m), feel: Math.round(j.current.apparent_temperature), code: j.current.weather_code, wind: Math.round(j.current.wind_speed_10m), hum: j.current.relative_humidity_2m, rainNext: pp.length ? Math.max(...pp) : null },
+      days: (j.daily.time || []).map((d, i) => ({ d, code: j.daily.weather_code[i], max: Math.round(j.daily.temperature_2m_max[i]), min: Math.round(j.daily.temperature_2m_min[i]), rain: j.daily.precipitation_probability_max[i], sunrise: (j.daily.sunrise[i] || '').slice(11, 16), sunset: (j.daily.sunset[i] || '').slice(11, 16) })) };
+    U.ls.set(K, data); return data; } catch (e) { return data; } finally { busy = null; } })();
+  return busy; };
+W.cached = () => data;
+// frase para o Spyke dizer
+W.say = (d = data, day = 0) => { if (!d || !d.now) return ''; const x = d.days[day] || d.days[0];
+  if (day === 0) return `Em ${d.label} estão ${d.now.t} graus${Math.abs(d.now.feel - d.now.t) >= 3 ? ', sensação de ' + d.now.feel : ''}, ${W.desc(d.now.code)}. Máxima de ${x.max} e mínima de ${x.min}${x.rain >= 30 ? `, ${x.rain}% de probabilidade de chuva${x.rain >= 60 ? ': leva guarda-chuva' : ''}` : ''}.`;
+  return `${day === 1 ? 'Amanhã' : 'Nesse dia'} em ${d.label}: ${W.desc(x.code)}, entre ${x.min} e ${x.max} graus${x.rain >= 30 ? `, ${x.rain}% de chuva` : ''}.`; };
+// ícone simples em SVG (sem emojis)
+W.icon = (code, size = 28) => { const k = W.kind(code), sun = '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/>', cloud = '<path d="M7 18h10.5a3.5 3.5 0 0 0 .4-7A5.5 5.5 0 0 0 7.3 9.6 4.2 4.2 0 0 0 7 18z"/>';
+  const body = k === 'sol' ? sun : k === 'sol-nuvem' ? '<g transform="translate(-3 -4) scale(.75)">' + sun + '</g><path d="M9 19h9a3 3 0 0 0 .3-6 4.6 4.6 0 0 0-8.9-1.2A3.6 3.6 0 0 0 9 19z"/>' : k === 'nuvem' ? cloud : k === 'neve' ? cloud + '<path d="M9 21l.01 0M12 22l.01 0M15 21l.01 0"/>' : k === 'trovoada' ? cloud + '<path d="M12.5 15l-2 3.5h3l-2 3.5"/>' : '<path d="M7 15h10.5a3.5 3.5 0 0 0 .4-7A5.5 5.5 0 0 0 7.3 6.6 4.2 4.2 0 0 0 7 15z"/><path d="M9 18l-1 3M13 18l-1 3M17 18l-1 3"/>';
+  return `<svg class="wx-ic" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`; };
+OS.on('ready', () => { if (!navigator.webdriver) setTimeout(() => W.get(), 3000); });
+})();
+
+</script>
+<script>
 /* OCEANUM — Spyke: assistente de voz (estilo J.A.R.V.I.S.), voz masculina.
    Com a app aberta: toca no microfone, diz "Spyke…" (palavra de ativação) ou bate duas palmas.
    Com a app fechada (limite do iPhone: uma app web não pode ouvir em segundo plano): Atalhos da Siri + "Atalhos vocais" do iOS
@@ -8449,11 +8561,13 @@ OS.on('ready', () => setTimeout(tick, 4000)); setInterval(tick, 60e3);
 'use strict';
 const U = OS.U, UI = OS.UI, V = OS.views, A = OS.act, esc = U.esc;
 const VOICES = [['Charon', 'Charon · informativo, grave'], ['Orus', 'Orus · firme'], ['Iapetus', 'Iapetus · claro'], ['Algenib', 'Algenib · rouco'], ['Alnilam', 'Alnilam · decidido'], ['Sadaltager', 'Sadaltager · sabedor'], ['Fenrir', 'Fenrir · enérgico'], ['Puck', 'Puck · animado'], ['Umbriel', 'Umbriel · descontraído']];
-OS.ONE_DEF.spyke = { eng: 'auto', elKey: '', elVoice: '', elModel: 'eleven_multilingual_v2', voice: 'Charon', accent: 'BR', speed: 1, ai: true, wake: false, clap: false, sens: 5, morning: true, siri: true, siriAsk: false };
+OS.ONE_DEF.spyke = { cont: true, barge: true, alerts: true, newsBrief: true, jarvisStart: true, eng: 'auto', elKey: '', elVoice: '', elModel: 'eleven_multilingual_v2', voice: 'Charon', accent: 'BR', speed: 1, ai: true, wake: false, clap: false, sens: 5, morning: true, siri: true, siriAsk: false };
 const cfg = () => Object.assign({}, OS.ONE_DEF.spyke, OS.one('spyke'));
 // vozes masculinas do ElevenLabs (as tuas próprias vozes aparecem quando carregas a lista)
 const EL = [['onwK4e9ZLuTAKqWW03F9', 'Daniel · grave e elegante (estilo Jarvis)'], ['pNInz6obpgDQGcFmaJgB', 'Adam · grave e firme'], ['nPczCjzI2devNBz1zQrb', 'Brian · grave e calmo'], ['JBFqnCBsd6RMkjVDRZzb', 'George · quente'], ['N2lVS1w4EtoT3dr4eOWO', 'Callum · rouco']];
 const S = OS.Spyke = {};
+OS.S.spymem = { label: 'Memória do Spyke', title: r => String(r.text || '').slice(0, 60), fields: [{ k: 'text', l: 'O que o Spyke sabe', t: 'area', req: 1, rows: 3 }, { k: 'date', l: 'Desde', t: 'date' }] , defaults: () => ({ date: U.today(), src: 'manual' }) };
+OS.S.spyroutines = { label: 'Rotina de voz', title: r => r.phrase || 'Rotina', fields: [{ k: 'phrase', l: 'Quando eu disser', t: 'text', req: 1, ph: 'ex.: modo leitura' }, { k: 'steps', l: 'O Spyke faz (um comando por linha)', t: 'area', rows: 5, req: 1, ph: 'abre as Leituras\nclima\nnotícias' }, { k: 'reply', l: 'E diz no fim (opcional)', t: 'text' }] };
 const N = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w\s€.,:%-]/g, ' ').replace(/\s+/g, ' ').trim();
 const WAKE = /\b(e?sp[aey]i?[ck]+e?|spike|spyke|spaik|spaiki|espaique|espaike|espique|spaique)\b/;
 const name = () => OS.one('profile').short || 'Ryan';
@@ -8465,6 +8579,7 @@ const dayS = d => U.parse(d).toLocaleDateString('pt-PT', { weekday: 'long', day:
 S.brief = (d = U.today()) => { const t = U.today(), fut = d > t, h = new Date().getHours(), out = [];
   const g = fut || h < 12 ? 'Bom dia' : h < 19 ? 'Boa tarde' : 'Boa noite';
   out.push(`${g}, ${name()}. ${fut ? 'Hoje' : 'Hoje'} é ${dayS(d)}.`);
+  try { const wx = OS.Weather && OS.Weather.cached(); if (wx && wx.now) out.push(OS.Weather.say(wx, fut ? 1 : 0).replace(/^Amanhã em/, 'Em')); } catch (e) { }
   try { const it = OS.Cal.items(d, d).filter(x => x.src !== 'task' && !x.done), timed = U.sortBy(it.filter(x => x.start), x => x.start), off = it.find(x => x.src === 'off');
     if (off) out.push('Hoje é dia de folga no trabalho.');
     if (timed.length) out.push(`Na agenda tens ${timed.length === 1 ? 'um compromisso' : timed.length + ' compromissos'}: ${listS(timed.slice(0, 4).map(x => x.title.replace(/^[^\wÀ-ú]+/, '') + ' às ' + x.start))}${timed.length > 4 ? ', e mais ' + (timed.length - 4) : ''}.`);
@@ -8477,6 +8592,7 @@ S.brief = (d = U.today()) => { const t = U.today(), fut = d > t, h = new Date().
   try { const bills = OS.Fin.upcoming(3).filter(x => x.amount < 0 && !x.tx && (x.rec || x.debt) && U.diff(x.date, d) <= 1); if (bills.length) out.push('Nas finanças: ' + listS(bills.slice(0, 2).map(x => `${x.title}, ${eurS(x.amount)}, ${x.late ? 'em atraso' : U.diff(x.date, d) <= 0 ? 'vence hoje' : 'vence amanhã'}`)) + '.'); } catch (e) { }
   try { const ex = U.sortBy(OS.all('assessments').filter(a => a.date >= d && U.diff(a.date, d) <= 7), a => a.date)[0]; if (ex) { const n = U.diff(ex.date, d); out.push(`${ex.type || 'Avaliação'} de ${(OS.get('subjects', ex.subject) || {}).name || ex.title} ${n === 0 ? 'é hoje' : n === 1 ? 'é amanhã' : 'daqui a ' + n + ' dias'}.`); } } catch (e) { }
   try { const sp = OS.one('fit').split[String(U.parse(d).getDay())]; if (sp && sp !== 'Descanso') out.push(`Treino de hoje: ${sp}.`); } catch (e) { }
+  try { if (!fut && cfg().newsBrief && S._news && S._news.length) out.push('Nas notícias: ' + S._news.slice(0, 3).join('; ') + '.'); } catch (e) { }
   try { if (OS.Quotes) out.push('E a verdade de hoje: ' + OS.Quotes.truth()); } catch (e) { }
   out.push(fut ? 'Bom dia de trabalho.' : 'Estou aqui se precisares.');
   return out.join(' '); };
@@ -8493,6 +8609,9 @@ S.ctx = () => { const t = U.today(), L = [], add = (k, v) => { if (v) L.push(k +
   try { add('Metas ativas', OS.all('goals').filter(g => g.status === 'Ativa').slice(0, 6).map(g => g.title + ' ' + Math.round(OS.Goal.info(g).p * 100) + '%').join('; ')); } catch (e) { }
   try { add('Treino', 'hoje ' + (OS.one('fit').split[String(new Date().getDay())] || '—')); } catch (e) { }
   try { if (OS.Mail) add('E-mails importantes', OS.Mail.ctx().replace(/\n/g, '; ')); } catch (e) { }
+  try { const wx = OS.Weather && OS.Weather.cached(); if (wx && wx.now) add('Clima', OS.Weather.say(wx, 0) + ' ' + OS.Weather.say(wx, 1)); } catch (e) { }
+  try { add('Pessoas da vida dele', OS.all('people').slice(0, 30).map(x => x.name + (x.rel ? ' (' + x.rel + ')' : '') + (x.birth ? ' anos ' + x.birth.slice(5) : '')).join('; ')); } catch (e) { }
+  try { add('Memória (coisas que ele te contou)', U.sortBy(OS.all('spymem'), m => m.date || '').reverse().slice(0, 60).map(m => m.text).join(' | ')); } catch (e) { }
   return L.join('\n').slice(0, 7800); };
 
 /* ================= voz ================= */
@@ -8553,7 +8672,7 @@ const sysSay = (text, my) => new Promise(res => { try { if (!window.speechSynthe
 const parts = (t, max) => { const s = String(t).match(/[^.!?]+[.!?]*\s*/g) || [t], out = []; let cur = ''; s.forEach(x => { if ((cur + x).length > max && cur) { out.push(cur.trim()); cur = ''; } cur += x; }); if (cur.trim()) out.push(cur.trim()); return out; };
 S.stop = () => { tok++; try { playing && playing.stop(); } catch (e) { } playing = null; try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) { } try { rec && rec.abort(); } catch (e) { } setSt('idle'); };
 const order = () => { const c = cfg(), has = { eleven: !!c.elKey, gemini: !!(OS.AI && OS.AI.key()), device: true }, pref = c.eng === 'gemini' ? ['gemini', 'eleven', 'device'] : c.eng === 'device' ? ['device'] : ['eleven', 'gemini', 'device']; return pref.filter(e => has[e]); };
-S.say = async (text, o = {}) => { if (!text) return; S.stop(); const my = ++tok; open(); if (!o.again) push('spyke', text); setSt('thinking'); hist.push({ r: 'spyke', t: text }); needTap = ''; voiceErr = '';
+S.say = async (text, o = {}) => { if (!text) return; S.stop(); const my = ++tok; if (!o.bg) { open(); if (!o.again) push('spyke', text); } else UI.toast(text.slice(0, 160)); setSt('thinking'); hist.push({ r: 'spyke', t: text }); needTap = ''; voiceErr = '';
   let res = '';
   const ord = o.eng ? [o.eng].concat(order().filter(x => x !== o.eng)) : order();
   for (const e of ord) { if (my !== tok) return; if (e === 'eleven' && !cfg().elKey) continue;
@@ -8562,8 +8681,8 @@ S.say = async (text, o = {}) => { if (!text) return; S.stop(); const my = ++tok;
     catch (er) { voiceErr += (voiceErr ? ' · ' : '') + (er.message || 'erro'); res = 'erro'; }
     if (res === 'ok' || res === 'blocked' || res === 'stop') break; }
   if (my !== tok || res === 'stop') return;
-  if (res === 'blocked') { needTap = text; unlocked = false; const lm = msgs.filter(m => m.r === 'spyke').pop(); if (lm) lm.tap = 1; setSt('idle'); renderChat(); return; }
-  setSt('idle'); diag(); if (o.listen) S.listen(); };
+  if (res === 'blocked') { needTap = text; unlocked = false; if (o.bg) { setSt('idle'); S.banner('Spyke tem um aviso', text, () => S.say(text, { tap: true })); return; } const lm = msgs.filter(m => m.r === 'spyke').pop(); if (lm) lm.tap = 1; setSt('idle'); renderChat(); return; }
+  setSt('idle'); diag(); if (!o.bg && (o.listen || (cfg().cont && conv && Date.now() < convUntil))) S.listen({ follow: true }); };
 let voiceErr = '';
 const diag = () => { if (!el) return; const d = el.querySelector('.spy-dg'); if (d) d.textContent = (engine ? 'Voz: ' + engine : '') + (voiceErr ? (engine ? ' · ' : '') + 'falhou antes: ' + voiceErr : ''); };
 
@@ -8573,8 +8692,9 @@ let rec = null, srErr = '';
 const SRERR = { 'not-allowed': 'Sem acesso ao microfone: Ajustes → Safari (ou Oceanum) → Microfone → Permitir.', 'service-not-allowed': 'O iPhone não deixou ditar: liga Ajustes → Geral → Teclado → Ativar ditado (e a Siri).', 'audio-capture': 'O microfone está a ser usado por outra coisa.', network: 'O ditado precisa de internet.' };
 const once = () => new Promise(res => { if (!SR) return res(''); srErr = ''; let fin = '', r; try { r = new SR(); } catch (e) { return res(''); } r.lang = cfg().accent === 'PT' ? 'pt-PT' : 'pt-BR'; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
   r.onresult = e => { let t = ''; for (const x of e.results) t += x[0].transcript; fin = t; cap('user', t); }; r.onerror = e => { srErr = SRERR[e.error] || (e.error && e.error !== 'no-speech' && e.error !== 'aborted' ? 'Erro do ditado: ' + e.error : ''); }; r.onend = () => { rec = null; session('playback'); res(fin.trim()); }; rec = r; try { session('play-and-record'); r.start(); } catch (e) { res(''); } });
-S.listen = async () => { if (!SR) { open(); setSt('idle'); cap('spyke', 'Este navegador não deixa ditar. Escreve abaixo.'); const i = U.$('#spyIn'); i && i.focus(); return; }
-  S.stop(); open(); pauseBg(); setSt('listening'); const t = await once(); resumeBg(); if (!t) { setSt('idle'); cap('spyke', srErr || 'Não ouvi nada. Toca outra vez no microfone ou escreve abaixo.'); return; } await S.handle(t); };
+let conv = false, convUntil = 0;
+S.listen = async (lo = {}) => { if (!lo.follow) { conv = true; convUntil = Date.now() + 30000; } if (!SR) { open(); setSt('idle'); cap('spyke', 'Este navegador não deixa ditar. Escreve abaixo.'); const i = U.$('#spyIn'); i && i.focus(); return; }
+  S.stop(); open(); pauseBg(); setSt('listening'); const t = await once(); resumeBg(); if (!t) { setSt('idle'); if (lo.follow && !srErr) { conv = false; const l = el && el.querySelector('.spy-st'); if (l) l.textContent = 'Conversa terminada. Toca no microfone para falar.'; return; } cap('spyke', srErr || 'Não ouvi nada. Toca outra vez no microfone ou escreve abaixo.'); return; } convUntil = Date.now() + 30000; await S.handle(t); };
 
 /* ---------- palavra de ativação e palmas (só com a app aberta e visível) ---------- */
 let wk = null, wkOn = false, clapSt = null, bgPaused = 0;
@@ -8583,6 +8703,7 @@ const resumeBg = () => { bgPaused = Math.max(0, bgPaused - 1); setTimeout(bgSync
 const wakeLoop = () => { if (!SR || wk || bgPaused || document.hidden || !cfg().wake || st !== 'idle') return; let r; try { r = new SR(); } catch (e) { return; } r.lang = cfg().accent === 'PT' ? 'pt-PT' : 'pt-BR'; r.continuous = true; r.interimResults = false;
   r.onresult = e => { const x = e.results[e.results.length - 1]; if (!x.isFinal) return; const raw = x[0].transcript, n = N(raw), m = n.match(WAKE); if (!m) return; const cmd = n.slice(m.index + m[0].length).replace(/^[\s,.:]+/, '');
     try { r.abort(); } catch (er) { } wk = null; S.wakeFx(); cap('user', raw);
+    conv = true; convUntil = Date.now() + 30000;
     if (cmd.length > 2) S.handle(cmd); else S.say(pickR(['Sim, ' + name() + '?', 'Às ordens.', 'Diz.', 'Estou a ouvir.']), { listen: true }); };
   r.onerror = e => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { OS.setOne('spyke', { wake: false }); UI.toast('Sem acesso ao microfone: a palavra de ativação foi desligada.', 'warn'); } };
   r.onend = () => { wk = null; setTimeout(wakeLoop, 600); }; wk = r; try { r.start(); } catch (e) { wk = null; } };
@@ -8591,7 +8712,7 @@ const startClap = async () => { if (clapSt || bgPaused || document.hidden || !cf
     const a = ac(); if (a.state !== 'running') await a.resume().catch(() => { }); const src = a.createMediaStreamSource(ms), an = a.createAnalyser(); an.fftSize = 512; src.connect(an); const buf = new Float32Array(an.fftSize);
     let avg = .01, last = 0, first = 0; const thr = .62 - (+cfg().sens || 5) * .05;
     clapSt = { on: true, ms, src, iv: setInterval(() => { an.getFloatTimeDomainData(buf); let pk = 0, sq = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i]); if (v > pk) pk = v; sq += v * v; } const rms = Math.sqrt(sq / buf.length), now = performance.now();
-      if (pk > thr && rms > avg * 5 && now - last > 130) { last = now; if (first && now - first > 180 && now - first < 800) { first = 0; stopClap(); S.wakeFx(); S.say(pickR(['Às ordens, ' + name() + '.', 'Sim?', 'Diz, chefe.']), { listen: true }); return; } first = now; }
+      if (pk > thr && rms > avg * 5 && now - last > 130) { last = now; if (first && now - first > 180 && now - first < 800) { first = 0; stopClap(); conv = true; convUntil = Date.now() + 30000; S.wakeFx(); S.say(pickR(['Às ordens, ' + name() + '.', 'Sim?', 'Diz, chefe.']), { listen: true }); return; } first = now; }
       else if (first && now - first > 800) first = 0; avg = avg * .97 + rms * .03; }, 25) }; }
   catch (e) { clapSt = null; OS.setOne('spyke', { clap: false }); UI.toast('Sem acesso ao microfone: as palmas foram desligadas.', 'warn'); } };
 const stopClap = () => { const c = clapSt; clapSt = null; if (!c) return; c.on = false; try { clearInterval(c.iv); } catch (e) { } try { c.src && c.src.disconnect(); } catch (e) { } try { c.ms && c.ms.getTracks().forEach(t => t.stop()); } catch (e) { } };
@@ -8600,14 +8721,79 @@ const bgSync = () => { const c = cfg(); if (document.hidden || bgPaused || st !=
 document.addEventListener('visibilitychange', bgSync);
 OS.on('one:spyke', () => setTimeout(bgSync, 100));
 
+
+/* ================= memória ================= */
+const memAdd = (text, src) => { const x = String(text || '').trim().replace(/\s+/g, ' '); if (x.length < 3) return false; const n = N(x); if (OS.all('spymem').some(m => N(m.text) === n || N(m.text).includes(n) || (n.includes(N(m.text)) && N(m.text).length > 12))) return false; OS.add('spymem', { text: x.charAt(0).toUpperCase() + x.slice(1), date: U.today(), src: src || 'voz' }); return true; };
+S.memAdd = memAdd;
+
+/* ================= rotinas ================= */
+// junta o que cada passo diria e fala tudo de uma vez no fim
+const runRoutine = async R => { const real = S.say, said = []; S.say = (txt) => { if (txt) said.push(txt); return Promise.resolve(); };
+  try { for (const step of String(R.steps || '').split('\n').map(x => x.trim()).filter(Boolean).slice(0, 12)) await S.handle(step, { quiet: true, inRoutine: true }); } finally { S.say = real; }
+  return S.say([...said, R.reply || ''].filter(Boolean).join(' ') || 'Rotina feita.'); };
+S.evening = () => { const t = U.today(), tm = U.addDays(t, 1), out = [`Boa noite, ${name()}. O balanço de hoje:`];
+  try { const done = OS.all('tasks').filter(x => x.doneAt === t).length, hs = OS.all('habits').filter(h => h.active && OS.Hab.due(h, t)), hd = hs.filter(h => OS.Hab.done(h, t)).length, mins = U.sum(OS.all('sessions').filter(x => x.date === t), x => x.minutes), spent = U.sum(OS.all('transactions').filter(x => x.date === t && x.type === 'Despesa'), x => U.num(x.amount));
+    out.push(`${done === 1 ? 'uma tarefa concluída' : done + ' tarefas concluídas'}, ${hd} de ${hs.length} hábitos${mins ? ', ' + mins + ' minutos de estudo' : ''}${spent ? ' e gastaste ' + eurS(spent) : ''}.`);
+    const left = OS.Tasks.open().filter(x => x.due && x.due <= t); if (left.length) out.push(`Ficou por fazer: ${listS(left.slice(0, 2).map(x => x.title))}.`);
+    const miss = hs.filter(h => h.core && !OS.Hab.done(h, t)); if (miss.length) out.push(`Ainda vais a tempo destes inegociáveis: ${listS(miss.slice(0, 3).map(h => h.name))}.`); } catch (e) { }
+  try { const it = U.sortBy(OS.Cal.items(tm, tm).filter(x => x.start && x.src !== 'task'), x => x.start); out.push(it.length ? `Amanhã: ${listS(it.slice(0, 3).map(x => x.title + ' às ' + x.start))}.` : 'Amanhã não tens compromissos com hora.');
+    const wx = OS.Weather && OS.Weather.cached(); if (wx && wx.now) out.push(OS.Weather.say(wx, 1));
+    const p1 = U.sortBy(OS.Tasks.open().filter(x => x.due === tm || x.sched === tm), x => +x.prio || 3)[0]; if (p1) out.push(`A primeira coisa de amanhã: ${p1.title}.`); } catch (e) { }
+  out.push(pickR(['Descansa bem. Amanhã há mais.', 'Dorme bem, amanhã continuamos.', 'Bom descanso. Amanhã é outro dia para vencer.']));
+  return out.join(' '); };
+const routineStudy = () => { const t = U.today(), out = ['Modo estudo.'];
+  try { const ex = U.sortBy(OS.all('assessments').filter(a => a.date >= t), a => a.date)[0]; if (ex) out.push(`A próxima avaliação é ${ex.type || ''} de ${(OS.get('subjects', ex.subject) || {}).name || ex.title}, ${U.diff(ex.date, t) === 0 ? 'hoje' : U.diff(ex.date, t) === 1 ? 'amanhã' : 'daqui a ' + U.diff(ex.date, t) + ' dias'}.`);
+    const rev = OS.St.revDue().length, cards = OS.all('cards').filter(c => !c.due || c.due <= t).length; if (rev || cards) out.push(`Tens ${rev ? rev + ' revisões' : ''}${rev && cards ? ' e ' : ''}${cards ? cards + ' cartões para rever' : ''}.`); } catch (e) { }
+  out.push('Abri o Bloco de foco com as pendências da universidade. Telemóvel longe, e vamos a isso.');
+  try { OS.FocusBlock && OS.FocusBlock.preset && OS.FocusBlock.preset('area:Universidade'); } catch (e) { } location.hash = 'foco'; return S.say(out.join(' ')); };
+const routineGym = () => { const sp = OS.one('fit').split[String(new Date().getDay())]; location.hash = 'treino'; return S.say(sp && sp !== 'Descanso' ? `Modo treino. Hoje é dia de ${sp}. Aquece bem, foca na técnica e regista as séries.` : 'Modo treino. Hoje não tens treino planeado: escolhe uma rotina e bora.'); };
+const routineWork = () => { const t = U.today(), sh = U.sortBy(OS.all('shifts').filter(s => s.date >= t), s => s.date + s.start)[0], out = ['Modo trabalho.'];
+  if (sh) out.push(sh.date === t ? `O teu turno hoje é das ${sh.start} às ${sh.end}.` : `O próximo turno é ${dayS(sh.date)}, das ${sh.start} às ${sh.end}.`);
+  try { const L = OS.Tasks.open().filter(x => { const p = OS.get('projects', x.project); return p && (['Profissional', 'Empresarial'].includes(p.type) || p.area === 'Trabalho'); }); if (L.length) out.push(`Nos projetos de trabalho tens ${L.length} tarefas; começa por ${L[0].title}.`); } catch (e) { }
+  location.hash = 'trabalho'; return S.say(out.join(' ')); };
+
+/* ================= avisos falados (com a app aberta) ================= */
+S.banner = (title, sub, onTap) => { document.querySelectorAll('.spy-morn').forEach(x => x.remove()); const b = document.createElement('button'); b.type = 'button'; b.className = 'spy-morn'; b.innerHTML = `<i>${UI.ic('mic')}</i><span><b>${esc(title)}</b><small>${esc(sub.slice(0, 140))}</small></span><em aria-hidden="true">×</em>`;
+  b.onclick = e => { b.remove(); if (e.target.closest('em')) return; onTap && onTap(); }; document.body.appendChild(b); setTimeout(() => b.remove(), 45000); };
+const said = k => { const m = U.ls.get('os2spSaid', {}); if (m[k]) return true; m[k] = Date.now(); Object.keys(m).forEach(x => { if (Date.now() - m[x] > 3 * 864e5) delete m[x]; }); U.ls.set('os2spSaid', m); return false; };
+const alertTick = () => { if (!cfg().alerts || document.hidden || (navigator.webdriver && !window.__spyTest) || st !== 'idle') return; const now = new Date(), h = now.getHours(); if (!window.__spyTest && (h >= 23 || h < 8)) return; if (OS.FocusBlock && OS.FocusBlock.state()) return;
+  const t = U.today(), nowM = h * 60 + now.getMinutes(), msgs = [];
+  try { OS.Cal.items(t, t).filter(x => x.start && !x.done && x.src !== 'task').forEach(x => { const d = U.t2m(x.start) - nowM; if (d > 10 && d <= 30 && !said('c30|' + t + x.title + x.start)) msgs.push(`daqui a ${d} minutos tens ${x.title}, às ${x.start}`); else if (d > 0 && d <= 10 && !said('c10|' + t + x.title + x.start)) msgs.push(`daqui a ${d} minutos: ${x.title}`); }); } catch (e) { }
+  try { if (nowM >= 540 && !said('bills|' + t)) { const b = OS.Fin.upcoming(1).filter(x => x.amount < 0 && !x.tx && (x.rec || x.debt) && x.date <= t); if (b.length) msgs.push('hoje vence ' + listS(b.slice(0, 2).map(x => x.title + ', ' + eurS(x.amount)))); } } catch (e) { }
+  try { if (nowM >= 1080 && !said('tasks|' + t)) { const L = OS.Tasks.open().filter(x => x.due === t); if (L.length) msgs.push(`ainda tens ${L.length === 1 ? 'uma tarefa' : L.length + ' tarefas'} com prazo hoje, como ${L[0].title}`); } } catch (e) { }
+  try { if (nowM >= 1140 && !said('exam|' + t)) { const ex = OS.all('assessments').find(a => a.date === U.addDays(t, 1)); if (ex) msgs.push(`amanhã tens ${ex.type || 'avaliação'} de ${(OS.get('subjects', ex.subject) || {}).name || ex.title}`); } } catch (e) { }
+  try { if (nowM >= 1260 && !said('hab|' + t)) { const H = OS.all('habits').filter(x => x.active && x.core && OS.Hab.due(x, t) && !OS.Hab.done(x, t)); if (H.length) msgs.push(`faltam ${H.length} inegociáveis: ${listS(H.slice(0, 3).map(x => x.name))}`); } } catch (e) { }
+  if (!msgs.length) return; const text = name() + ', ' + msgs.join('. ') + '.';
+  if (unlocked) S.say(text, { bg: !el || el.hidden }); else S.banner('Aviso do Spyke', text, () => S.say(text, { tap: true })); };
+setInterval(alertTick, 60e3); S._alertTick = alertTick;
+// notícias para o resumo da manhã (busca discreta)
+S._news = []; const newsTick = async () => { if (document.hidden || navigator.webdriver || !cfg().newsBrief || !OS.News || !OS.News.headlines) return; try { const H = await OS.News.headlines(5); if (H.length) S._news = H; } catch (e) { } };
+OS.on('ready', () => setTimeout(newsTick, 6000)); setInterval(newsTick, 30 * 60e3);
+
 /* ================= comandos ================= */
 const hist = [];
 const pickR = a => a[Math.floor(Math.random() * a.length)];
 const routes = () => { const out = []; document.querySelectorAll('.tn-dd a[href^="#"], #side a[href^="#"]').forEach(a => { const k = a.getAttribute('href').slice(1), l = (a.querySelector('b') || a.querySelector('span') || a).textContent.trim(); if (k && l && !out.some(x => x[0] === k)) out.push([k, l]); }); return out.concat([['definicoes', 'Definições'], ['spyke', 'Spyke'], ['email', 'E-mail']]); };
 const findRoute = q => { const n = N(q).replace(/^(o|a|os|as|aba|pagina|separador)\s+/, '').replace(/^(aba|pagina)\s+(de|do|da)?\s*/, ''); if (!n) return null; const R = routes(); return R.find(([k, l]) => N(l) === n || k === n) || R.find(([k, l]) => N(l).startsWith(n) || n.startsWith(N(l))) || R.find(([k, l]) => N(l).includes(n) || n.includes(N(l).split(' ')[0])); };
-S.handle = async raw => { const t = N(raw); push('user', raw); hist.push({ r: 'ryan', t: raw }); let m;
-  if (/^(para|parar|pare|chega|silencio|cala|obrigad|valeu|cancela)/.test(t)) { S.stop(); return S.say(pickR(['Às ordens.', 'Com certeza.', 'Fico por aqui.'])); }
-  if (/\b(bom dia|boa tarde|boa noite|resumo|briefing|como (esta|e) o meu dia|o que (eu )?tenho (pra |para )?hoje)\b/.test(t) && !/amanha/.test(t)) return S.say(S.brief());
+S.handle = async (raw, ho = {}) => { const t = N(raw); if (!ho.quiet) push('user', raw); hist.push({ r: 'ryan', t: raw }); let m;
+  if (/^(para|parar|pare|chega|silencio|cala|obrigad|valeu|cancela|e tudo|era so isso)/.test(t)) { conv = false; S.stop(); return S.say(pickR(['Às ordens.', 'Com certeza.', 'Fico por aqui.'])); }
+  // rotinas (as tuas primeiro)
+  const R = OS.all('spyroutines').find(r => r.phrase && (t === N(r.phrase) || t.startsWith(N(r.phrase)))); if (R && !ho.inRoutine) return runRoutine(R);
+  if (/\b(boa noite|fim do dia|balanco do dia|como correu o (meu )?dia)\b/.test(t)) return S.say(S.evening());
+  if (/\b(modo estudo|vou estudar|hora de estudar)\b/.test(t)) return routineStudy();
+  if (/\b(modo treino|vou treinar|hora de treinar)\b/.test(t)) return routineGym();
+  if (/\b(modo trabalho|vou trabalhar|vou para o trabalho)\b/.test(t)) return routineWork();
+  if (/\b(modo jarvis|painel jarvis|abre o painel|mostra o painel|ecra principal|hud)\b/.test(t)) { OS.Jarvis && OS.Jarvis.open(); return S.say('Modo Jarvis ativo.', { bg: !el || el.hidden }); }
+  // memória
+  if ((m = raw.match(/^\s*(?:spyke[,\s]+)?(?:lembra[- ]?te|memoriza|guarda (?:isto|isso|que)|não te esqueças|nao te esquecas|fica a saber|quero que saibas)\s*(?:de\s+)?(?:que\s+)?(.{3,})$/i))) { const f = memAdd(m[1], 'voz'); return S.say(f ? 'Guardado. Vou lembrar-me de que ' + m[1].replace(/[.!]+$/, '') + '.' : 'Isso já eu sabia.'); }
+  if (/(o que (e que )?(tu )?sabes (sobre|de) mim|a tua memoria|o que te lembras)/.test(t)) { const L = U.sortBy(OS.all('spymem'), x => x.date || '').reverse(); return S.say(L.length ? `Sei ${L.length} coisas sobre ti. Por exemplo: ${listS(L.slice(0, 4).map(x => x.text.replace(/[.!]+$/, '')))}.` : 'Ainda não me contaste nada. Diz: lembra-te que…'); }
+  if ((m = t.match(/^(?:esquece|apaga da memoria|esquece-te)(?: que| de que| o que te disse sobre| isso de)?\s+(.{3,})$/))) { const w = m[1].split(' ').filter(x => x.length > 3), L = OS.all('spymem').map(x => [x, w.filter(k => N(x.text).includes(k)).length]).filter(x => x[1]).sort((a, b) => b[1] - a[1]); if (!L.length) return S.say('Não encontrei isso na minha memória.'); OS.del('spymem', L[0][0].id); return S.say('Esquecido: ' + L[0][0].text.replace(/[.!]+$/, '') + '.'); }
+  // clima e notícias
+  if (/(como (esta|vai estar|fica) o tempo|previsao|clima|vai chover|chuva|temperatura|esta frio|esta calor|meteorologia|tempo (hoje|amanha|la fora|para amanha))/.test(t)) { if (!OS.Weather) return S.say('Sem dados do clima.'); setSt('thinking'); const wx = await OS.Weather.get(); if (!wx || !wx.now) return S.say('Não consegui ver o clima agora. Confirma a internet.'); return S.say(OS.Weather.say(wx, /amanha/.test(t) ? 1 : 0)); }
+  if (/(noticias|manchetes|o que (se )?passa no mundo|novidades do mundo|jornal)/.test(t) && !/(abre|abrir|mostra)/.test(t)) { setSt('thinking'); const H = OS.News && OS.News.headlines ? await OS.News.headlines(5) : []; S._news = H.length ? H : S._news; return S.say(H.length ? 'As principais notícias agora: ' + H.map((x, i) => (i ? '' : '') + x.replace(/[.]+$/, '')).join('. ') + '.' : 'Não consegui buscar as notícias. Liga o script Google em Definições para eu as ir buscar.'); }
+  // responder e-mail por voz → rascunho no Gmail
+  if ((m = raw.match(/^\s*(?:responde|responder|responda)\s+(?:ao|à|a|para o|para a|para)\s+([A-Za-zÀ-ú.@-]+)\s*(?:que|a dizer que|dizendo que|:)?\s*(.*)$/i))) { if (!OS.Mail) return S.say('O e-mail ainda não está ligado.'); setSt('thinking'); try { const r = await OS.Mail.replyByName(m[1], m[2]); return S.say(r.ok ? `Rascunho guardado no Gmail para ${r.to}: ${r.body.slice(0, 280)}` : r.msg); } catch (e) { return S.say('Não consegui guardar o rascunho: ' + (e.message || 'erro') + '.'); } }
+  if (/\b(bom dia|boa tarde|resumo|briefing|como (esta|e) o meu dia|o que (eu )?tenho (pra |para )?hoje)\b/.test(t) && !/amanha/.test(t)) return S.say(S.brief());
   if (/amanha/.test(t) && /(tenho|agenda|compromisso|resumo|planeado|fazer)/.test(t)) return S.say(S.brief(U.addDays(U.today(), 1)).replace(/^(Bom dia|Boa tarde|Boa noite), [^.]+\. Hoje é/, 'Amanhã é'));
   if (/(agenda|compromisso|calendario)/.test(t)) { const it = U.sortBy(OS.Cal.items(U.today(), U.today()).filter(x => x.src !== 'task' && x.start), x => x.start); return S.say(it.length ? 'Hoje: ' + listS(it.slice(0, 6).map(x => x.title + ' às ' + x.start)) + '.' : 'Nada com hora marcada hoje.'); }
   if (/(proxima (tarefa|acao)|o que (eu )?(faco|devo fazer|fazer agora)|prioridade|por onde comeco)/.test(t)) { const na = OS.Intel.next().slice(0, 3); return S.say(na.length ? `Agora: ${na[0].title}${na[0].why && na[0].why[0] ? ', porque ' + na[0].why[0] : ''}. Depois: ${listS(na.slice(1).map(n => n.title))}.` : 'Não tens nada pendente. Aproveita.'); }
@@ -8632,15 +8818,16 @@ S.handle = async raw => { const t = N(raw); push('user', raw); hist.push({ r: 'r
 const askAI = async raw => { if (!OS.AI || !OS.AI.key()) return S.say('Para conversas livres preciso da IA ligada. Vai a Definições e cola a tua chave Gemini. Os comandos rápidos funcionam sem ela.');
   setSt('thinking'); const R = routes();
   try { const o = await OS.AI.json([{ text: `És o Spyke, o assistente pessoal de ${name()} (estilo J.A.R.V.I.S. do Homem de Ferro): direto, calmo, confiante, leal, com um toque de humor seco. Tratas o ${name()} pelo nome (às vezes "chefe").
-Responde em português do Brasil, para ser dito em voz alta: no máximo 3 frases curtas, sem listas, sem markdown, sem emojis. Usa SÓ os dados abaixo; se não souberes, diz que não tens essa informação. Não inventes números.
+Responde em português do Brasil, para ser dito em voz alta: no máximo 3 frases curtas, sem listas, sem markdown, sem emojis. Nunca digas o teu próprio nome. Usa SÓ os dados abaixo; se não souberes, diz que não tens essa informação. Não inventes números.
 DADOS DO OCEANUM:
 ${S.ctx()}
 CONVERSA RECENTE:
 ${hist.slice(-6).map(h => (h.r === 'ryan' ? name() : 'Spyke') + ': ' + h.t).join('\n')}
 ${name()}: ${raw}
-JSON: {"fala":"o que dizes","abrir":"uma destas rotas se ele pediu para abrir/ver algo, senão vazio: ${R.map(r => r[0]).join(',')}","tarefa":"título se ele pediu para anotar/lembrar algo, senão vazio"}` }], .5);
+JSON: {"fala":"o que dizes","memoria":"se ele te contou um facto duradouro sobre a vida dele (pessoas, gostos, planos, datas), escreve-o numa frase curta na 3.ª pessoa; senão vazio","abrir":"uma destas rotas se ele pediu para abrir/ver algo, senão vazio: ${R.map(r => r[0]).join(',')}","tarefa":"título se ele pediu para anotar/lembrar algo, senão vazio"}` }], .5);
     // só cria tarefa se foste tu a pedir (um e-mail no contexto não pode criar tarefas sozinho)
     if (o.tarefa && /(anot|lembr|tarefa|adicion|marca|agenda|nao me deixes esquecer)/.test(N(raw))) OS.add('tasks', Object.assign(OS.Tasks.quickParse(String(o.tarefa)), { status: 'Próxima' }));
+    if (o.memoria && String(o.memoria).length > 5) memAdd(String(o.memoria), 'ia');
     if (o.abrir && R.some(r => r[0] === o.abrir)) location.hash = o.abrir;
     return S.say(String(o.fala || 'Não percebi.').slice(0, 700)); }
   catch (e) { return S.say('Não consegui pensar agora: ' + (e.message || 'erro') + '.'); } };
@@ -8658,7 +8845,12 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && Dat
 /* ================= painel (conversa) ================= */
 let st = 'idle', el = null, needTap = '', raf = 0, msgs = [], live = '', wakeAt = 0;
 const STL = { listening: 'A ouvir…', thinking: 'A preparar a resposta…', speaking: 'A falar…' };
-const setSt = s => { st = s; if (el) { el.dataset.st = s; const l = el.querySelector('.spy-st'); if (l) l.textContent = STL[s] || (cfg().wake ? 'Diz "Spyke" ou toca no microfone' : 'Toca no microfone e fala'); el.querySelectorAll('.spy-m.talking').forEach(x => x.classList.remove('talking')); if (s === 'speaking') { const m = el.querySelectorAll('.spy-m.spyke'); m.length && m[m.length - 1].classList.add('talking'); } } if (s === 'idle') setTimeout(bgSync, 300); orb(); };
+let barge = null;
+const bargeOff = () => { const r = barge; barge = null; try { r && r.abort(); } catch (e) { } };
+const bargeOn = () => { if (!cfg().barge || !SR || barge || st !== 'speaking' || document.hidden) return; let r; try { r = new SR(); } catch (e) { return; } r.lang = cfg().accent === 'PT' ? 'pt-PT' : 'pt-BR'; r.continuous = true; r.interimResults = true;
+  r.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) { if (WAKE.test(N(e.results[i][0].transcript))) { bargeOff(); S.stop(); conv = true; convUntil = Date.now() + 30000; push('spyke', 'Sim?'); setTimeout(() => S.listen({ follow: true }), 200); return; } } };
+  r.onerror = () => { }; r.onend = () => { if (barge === r) { barge = null; if (st === 'speaking') setTimeout(bargeOn, 250); } }; barge = r; try { r.start(); } catch (e) { barge = null; } };
+const setSt = s => { st = s; if (s === 'speaking') setTimeout(bargeOn, 400); else bargeOff(); if (el) { el.dataset.st = s; const l = el.querySelector('.spy-st'); if (l) l.textContent = STL[s] || (cfg().wake ? 'Diz "Spyke" ou toca no microfone' : 'Toca no microfone e fala'); el.querySelectorAll('.spy-m.talking').forEach(x => x.classList.remove('talking')); if (s === 'speaking') { const m = el.querySelectorAll('.spy-m.spyke'); m.length && m[m.length - 1].classList.add('talking'); } } if (s === 'idle') setTimeout(bgSync, 300); orb(); };
 const bubbles = () => msgs.map(m => `<div class="spy-m ${m.r}"><div class="spy-bb">${esc(m.t)}${m.tap ? `<button class="btn xs pri spy-tap" data-act="spyTap">${UI.ic('play')}Ouvir</button>` : ''}</div></div>`).join('') + (live ? `<div class="spy-m user live"><div class="spy-bb">${esc(live)}</div></div>` : '');
 const renderChat = () => { if (!el) return; const c = el.querySelector('.spy-chat'); if (!c) return; c.innerHTML = bubbles() || `<div class="spy-empty">Diz "Bom dia", pede uma tarefa ou pergunta qualquer coisa.</div>`; c.scrollTop = c.scrollHeight; if (st === 'speaking') setSt('speaking'); };
 const push = (r, t) => { live = ''; msgs.push({ r, t: String(t) }); if (msgs.length > 40) msgs = msgs.slice(-40); renderChat(); };
@@ -8677,6 +8869,7 @@ S.open = open; S.close = close;
 let SFX = null;
 const wakeSnd = () => { try { const rate = 22050, n = Math.round(rate * .9), b = new Uint8Array(n * 2); for (let i = 0; i < n; i++) { const t = i / rate, f = 180 + 900 * Math.pow(t / .9, 1.6), env = Math.min(1, t * 12) * Math.pow(1 - t / .9, 1.4), v = (Math.sin(2 * Math.PI * f * t) * .55 + Math.sin(2 * Math.PI * f * 2.01 * t) * .2 + Math.sin(2 * Math.PI * 1320 * t) * .12 * (t > .55 ? 1 : 0)) * env * .5, s = Math.max(-32767, Math.min(32767, Math.round(v * 32767))); b[2 * i] = s & 255; b[2 * i + 1] = (s >> 8) & 255; }
   let bin = ''; for (let i = 0; i < b.length; i += 8192) bin += String.fromCharCode.apply(null, b.subarray(i, i + 8192)); if (!SFX) { SFX = document.createElement('audio'); SFX.setAttribute('playsinline', ''); document.body.appendChild(SFX); } SFX.src = wav({ b64: btoa(bin), rate }); const p = SFX.play(); p && p.catch(() => { }); } catch (e) { } };
+S.wakeSound = () => wakeSnd();
 S.wakeFx = () => { wakeAt = performance.now(); open(); wakeSnd(); cancelAnimationFrame(raf); raf = 0; orb(); };
 function orb() { if (!el || el.hidden) return; const c = el.querySelector('.spy-orb'); if (!c) return; if (raf) return; const g = c.getContext('2d'), W = c.width, H = c.height, cx = W / 2, cy = H / 2; let t0 = performance.now(), sm = 0;
   const frame = now => { if (!el || el.hidden || !c.isConnected) { raf = 0; return; } const t = (now - t0) / 1000, wk = wakeAt ? Math.min(1, (now - wakeAt) / 1100) : 1;
@@ -8684,10 +8877,10 @@ function orb() { if (!el || el.hidden) return; const c = el.querySelector('.spy-
     const base = st === 'listening' ? .32 + .12 * Math.sin(t * 6) : st === 'thinking' ? .22 + .06 * Math.sin(t * 9) : st === 'speaking' ? .18 + sm * .95 : .1;
     const R = W * .44 * (wk < 1 ? .2 + .8 * (1 - Math.pow(1 - wk, 3)) : 1);
     g.clearRect(0, 0, W, H); const grd = g.createRadialGradient(cx, cy, 6, cx, cy, R); grd.addColorStop(0, `rgba(120,230,255,${.5 + base * .45})`); grd.addColorStop(.38, `rgba(14,165,233,${.22 + base * .35})`); grd.addColorStop(1, 'rgba(14,165,233,0)'); g.fillStyle = grd; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.fill();
-    g.lineCap = 'round'; [[.78, 1.6, .9, 8], [.64, -1, .6, 3], [.52, .7, .45, 5], [.92, -.4, .3, 12]].forEach(([rr, sp, al, seg], k) => { const r0 = R * rr + base * 16 * (k % 2 ? -1 : 1); g.strokeStyle = `rgba(160,235,255,${al * (wk < 1 ? wk : 1)})`; g.lineWidth = k === 3 ? 1.4 : 2.6; for (let i = 0; i < seg; i++) { const a = t * sp * (st === 'thinking' ? 3 : 1) * (wk < 1 ? 4 - 3 * wk : 1) + i * Math.PI * 2 / seg; g.beginPath(); g.arc(cx, cy, r0, a, a + Math.PI * 2 / seg * .62 * (wk < 1 ? wk : 1)); g.stroke(); } });
+    g.lineCap = 'round'; [[.78, 1.6, .9, 8], [.64, -1, .6, 3], [.52, .7, .45, 5], [.92, -.4, .3, 12]].forEach(([rr, sp, al, seg], k) => { const r0 = Math.max(2, R * rr + base * 16 * (k % 2 ? -1 : 1)); g.strokeStyle = `rgba(160,235,255,${al * (wk < 1 ? wk : 1)})`; g.lineWidth = k === 3 ? 1.4 : 2.6; for (let i = 0; i < seg; i++) { const a = t * sp * (st === 'thinking' ? 3 : 1) * (wk < 1 ? 4 - 3 * wk : 1) + i * Math.PI * 2 / seg; g.beginPath(); g.arc(cx, cy, r0, a, a + Math.PI * 2 / seg * .62 * (wk < 1 ? wk : 1)); g.stroke(); } });
     if (st === 'speaking') { g.strokeStyle = `rgba(200,245,255,${.25 + sm * .6})`; g.lineWidth = 2; g.beginPath(); for (let i = 0; i <= 64; i++) { const a = i / 64 * Math.PI * 2, rr = R * .36 + sm * 22 * Math.sin(a * 6 + t * 10) * Math.sin(a * 3 - t * 7); g.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr); } g.stroke(); }
-    if (wk < 1) { g.strokeStyle = `rgba(190,245,255,${1 - wk})`; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, R * (.3 + wk * .9), 0, 7); g.stroke(); }
-    g.fillStyle = 'rgba(232,250,255,.95)'; g.beginPath(); g.arc(cx, cy, (R * .17 + base * 30) * (wk < 1 ? .4 + .6 * wk : 1), 0, 7); g.fill();
+    if (wk < 1) { g.strokeStyle = `rgba(190,245,255,${1 - wk})`; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, Math.max(1, R * (.3 + wk * .9)), 0, 7); g.stroke(); }
+    g.fillStyle = 'rgba(232,250,255,.95)'; g.beginPath(); g.arc(cx, cy, Math.max(1, (R * .17 + base * 30) * (wk < 1 ? .4 + .6 * wk : 1)), 0, 7); g.fill();
     if (st === 'idle' && wk >= 1 && t > 1.2) { raf = 0; return; } raf = requestAnimationFrame(frame); };
   raf = requestAnimationFrame(frame); }
 A.spyOpen = () => { const was = !el || el.hidden; open(); if (was && st === 'idle' && !msgs.length) push('spyke', pickR([`Olá, ${name()}. Em que posso ajudar?`, 'Às ordens.', `Diz, ${name()}.`])); if (was) { wakeAt = performance.now(); orb(); } };
@@ -8696,8 +8889,8 @@ A.spyCfg = () => { close(); OS.go('spyke'); setTimeout(() => window.scrollTo(0, 
 A.spyListen = () => S.listen();
 A.spyStop = () => S.stop();
 A.spyTap = () => { msgs.forEach(m => { m.tap = 0; }); const t = needTap; needTap = ''; renderChat(); S.say(t, { tap: true, again: true }); };
-A.spySug = b => S.handle(b.dataset.q);
-OS.forms.spyAsk = f => { const q = f.elements.q.value.trim(); if (q) setTimeout(() => S.handle(q), 0); };
+A.spySug = b => { conv = false; S.handle(b.dataset.q); };
+OS.forms.spyAsk = f => { const q = f.elements.q.value.trim(); conv = false; if (q) setTimeout(() => S.handle(q), 0); };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && el && !el.hidden) close(); });
 
 /* ================= página do Spyke ================= */
@@ -8725,6 +8918,20 @@ V.spyke = sub => { const c = cfg(), ibc = ib(), link = op => ibc.url && ibc.key 
     ${c.clap ? `<div class="ws-form" style="margin-top:8px"><label>Sensibilidade das palmas<input type="range" min="1" max="9" data-bind="spyke.sens" value="${c.sens}"></label></div>` : ''}
     <label class="switch" style="margin-top:8px"><input type="checkbox" data-bind="spyke.morning" ${c.morning ? 'checked' : ''}><span></span>De manhã, ao abrir a app pela primeira vez, o Spyke dá o resumo do dia</label>
     <p class="mut" style="font-size:12.5px;margin:8px 0 0">${SR ? '' : 'Este navegador não tem reconhecimento de voz: usa o Safari no iPhone ou o Chrome. '}Só funciona com o Oceanum aberto e no ecrã (regra do iPhone). Gasta mais bateria: liga quando precisares. Com palmas ligadas, a palavra de ativação só ouve depois das palmas.</p></div>
+  <div class="pn"><div class="pn-h"><h3>Conversa</h3></div>
+    <label class="switch"><input type="checkbox" data-bind="spyke.cont" ${c.cont ? 'checked' : ''}><span></span>Conversa contínua: depois de responder continua a ouvir (até 30 s) sem dizeres o nome outra vez</label>
+    <label class="switch" style="margin-top:8px"><input type="checkbox" data-bind="spyke.barge" ${c.barge ? 'checked' : ''} ${SR ? '' : 'disabled'}><span></span>Interromper: diz "Spyke" enquanto ele fala e ele para e ouve-te</label>
+    <label class="switch" style="margin-top:8px"><input type="checkbox" data-bind="spyke.alerts" ${c.alerts ? 'checked' : ''}><span></span>Avisos falados: 30 e 10 min antes dos compromissos, contas do dia, tarefas às 18h, prova amanhã, inegociáveis às 21h (nunca entre as 23h e as 8h)</label>
+    <label class="switch" style="margin-top:8px"><input type="checkbox" data-bind="spyke.newsBrief" ${c.newsBrief ? 'checked' : ''}><span></span>Três notícias no resumo do dia</label>
+    <label class="switch" style="margin-top:8px"><input type="checkbox" data-bind="spyke.jarvisStart" ${c.jarvisStart ? 'checked' : ''}><span></span>Abrir o modo Jarvis quando abro a app</label></div>
+  <div class="pn"><div class="pn-h"><h3>Memória</h3><small class="mut">${OS.all('spymem').length} coisas</small></div>
+    <p class="mut" style="margin:0 0 8px;font-size:13px">Diz "Spyke, lembra-te que a minha mãe faz anos a 3 de março" e ele guarda. Ele também aprende sozinho o que lhe contas nas conversas. "Esquece…" apaga.</p>
+    <div class="list">${U.sortBy(OS.all('spymem'), m => m.date || '').reverse().slice(0, 40).map(m => `<div class="li"><div class="li-t"><b style="font-weight:500">${esc(m.text)}</b><small>${m.src === 'ia' ? 'aprendido numa conversa' : m.src === 'voz' ? 'disseste-me' : 'escrito por ti'} · ${U.fmtDS(m.date || U.today())}</small></div><div class="li-r"><button class="icon-btn" data-act="spyMemDel" data-id="${m.id}" aria-label="Esquecer">${UI.ic('trash')}</button></div></div>`).join('') || UI.empty('Ainda sem memórias.')}</div>
+    <form class="fb-add" data-form="spyMem" style="grid-template-columns:minmax(0,1fr) auto"><input class="field" name="t" placeholder="Ex.: Prefiro treinar de manhã" required><button class="btn">${UI.ic('plus')}Guardar</button></form></div>
+  <div class="pn"><div class="pn-h"><h3>Rotinas por voz</h3>${UI.addBtn('spyroutines', 'Nova rotina', null, 'sm')}</div>
+    <div class="spy-cmds">${[['"Bom dia"', 'clima, agenda, prioridades, hábitos, e-mails, contas, provas, treino, notícias e a verdade do dia'], ['"Boa noite"', 'o balanço do dia, o que ficou por fazer e o plano de amanhã'], ['"Modo estudo"', 'próxima prova, revisões e cartões; abre o Bloco de foco da universidade'], ['"Modo treino"', 'o treino de hoje e abre o Treino'], ['"Modo trabalho"', 'o próximo turno e as tarefas dos projetos de trabalho'], ['"Modo Jarvis"', 'abre o painel']].map(([a, b]) => `<div><b>${a}</b><small>${b}</small></div>`).join('')}
+    ${OS.all('spyroutines').map(r => `<div class="click" data-edit="spyroutines:${r.id}"><b>"${esc(r.phrase)}"</b><small>${esc(String(r.steps || '').split('\n').filter(Boolean).join(' · ').slice(0, 120))}</small></div>`).join('')}</div>
+    <small class="mut">Numa rotina tua, cada linha é um comando como dirias ao Spyke: "abre a Floresta", "clima", "notícias", "o que faço agora".</small></div>
   <div class="pn fb-guide"><h3>Com a app fechada: Siri e "Atalhos vocais"</h3>${siriReady() ? '' : `<p class="neg" style="margin:0 0 6px">Precisa do script Google na versão 9 (o mesmo do e-mail). <a class="acc" href="#email.contas">Ver passos</a></p>`}
     <label class="switch"><input type="checkbox" data-bind="spyke.siri" ${c.siri ? 'checked' : ''}><span></span>Enviar o resumo do dia para o teu script (a Siri lê-o com a app fechada)</label>
     <label class="switch" style="margin-top:6px"><input type="checkbox" data-bind="spyke.siriAsk" ${c.siriAsk ? 'checked' : ''}><span></span>Deixar a Siri fazer perguntas ao Spyke (guarda a tua chave Gemini no teu script Google)</label>
@@ -8735,8 +8942,10 @@ V.spyke = sub => { const c = cfg(), ibc = ib(), link = op => ibc.url && ibc.key 
     ${link('brief') ? `<div class="ib-link"><code>1 · ${esc(link('brief'))}</code><button class="btn sm" data-act="spyCopy" data-op="brief">Copiar</button></div><div class="ib-link"><code>2 · ${esc(link('ask'))}</code><button class="btn sm" data-act="spyCopy" data-op="ask">Copiar</button></div><button class="btn sm ghost" data-act="spyPush" ${siriReady() ? '' : 'disabled'}>${UI.ic('sync')}Enviar o resumo agora</button>` : ''}
     <p class="mut" style="font-size:12.5px">Os links têm a tua chave: não os partilhes.</p></div>
   <div class="pn"><div class="pn-h"><h3>O que podes dizer</h3></div><div class="spy-cmds">${[['"Bom dia" / "Resumo"', 'agenda, prioridades, hábitos, e-mails, contas, provas, treino e a verdade do dia'], ['"O que faço agora?"', 'a próxima ação pela prioridade da app'], ['"Agenda de amanhã"', 'o dia seguinte'], ['"Anota estudar Estatística amanhã !1"', 'cria tarefa (datas, @contexto e !prioridade)'], ['"Gastei 12 euros no almoço"', 'regista a despesa com a categoria certa'], ['"Quanto gastei este mês?" / "Saldo"', 'finanças'], ['"Os meus e-mails" / "LinkedIn"', 'resumo do que precisa de atenção'], ['"Abre a Floresta"', 'abre qualquer página'], ['"Quero focar"', 'abre o Bloco de foco'], ['"Versículo" / "Dá-me uma frase"', 'Fé e motivação'], ['Qualquer outra pergunta', 'responde com a IA, com os teus dados']].map(([a, b]) => `<div><b>${esc(a)}</b><small>${esc(b)}</small></div>`).join('')}</div></div></div>`; };
+A.spyMemDel = b => OS.del('spymem', b.dataset.id);
+OS.forms.spyMem = f => { const t = f.elements.t.value.trim(); if (t && !memAdd(t, 'manual')) UI.toast('Isso já está na memória'); };
 A.spyBrief = () => { open(); S.say(S.brief(), { tap: true }); };
-A.spyTest = b => { open(); S.say(`Olá, ${name()}. Eu sou o Spyke. Quando precisares de mim, é só chamar.`, { tap: true, eng: b && b.dataset && b.dataset.e }); };
+A.spyTest = b => { open(); S.say(`Olá, ${name()}. Esta é a minha voz. Quando precisares de mim, é só chamar.`, { tap: true, eng: b && b.dataset && b.dataset.e }); };
 A.spyEng = b => OS.setOne('spyke', { eng: b.dataset.v });
 A.spyElLoad = async () => { const c = cfg(); if (!c.elKey) return; UI.toast('A carregar as vozes…');
   try { const r = await fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': c.elKey } }); if (!r.ok) throw new Error(r.status === 401 ? 'chave inválida' : 'erro ' + r.status); const j = await r.json();
@@ -8754,6 +8963,94 @@ OS.on('ready', () => { setTimeout(bgSync, 1500); const h = new Date().getHours()
 // aviso discreto (não tapa a app): o toque também desbloqueia o som no iPhone
 S.morning = () => { const b = document.createElement('button'); b.type = 'button'; b.className = 'spy-morn'; b.innerHTML = `<i>${UI.ic('mic')}</i><span><b>${new Date().getHours() < 12 ? 'Bom dia' : 'Olá'}, ${esc(name())}</b><small>Toca para o Spyke te dar o resumo do dia</small></span><em aria-hidden="true">×</em>`;
   b.onclick = e => { b.remove(); if (e.target.closest('em')) return; open(); S.say(S.brief(), { tap: true }); }; document.body.appendChild(b); setTimeout(() => b.remove(), 30000); };
+})();
+
+</script>
+<script>
+/* OCEANUM — Modo Jarvis: painel em ecrã inteiro com o essencial do dia, ao vivo.
+   O X fecha o painel mas o botão redondo (núcleo) fica no canto para voltar quando quiseres. */
+(() => {
+'use strict';
+const U = OS.U, UI = OS.UI, A = OS.act, esc = U.esc;
+const J = OS.Jarvis = {};
+const cfg = () => Object.assign({ jarvisStart: true }, OS.one('spyke'));
+let el = null, fab = null, raf = 0, dataAt = 0, newsX = 0, newsW = 0;
+const name = () => OS.one('profile').short || 'Ryan';
+const eur = v => U.eur(v);
+const greet = () => { const h = new Date().getHours(); return h < 6 ? 'Boa madrugada' : h < 12 ? 'Bom dia' : h < 19 ? 'Boa tarde' : 'Boa noite'; };
+
+/* ---------- dados ---------- */
+const D = () => { const t = U.today(), nowM = new Date().getHours() * 60 + new Date().getMinutes(), o = {};
+  try { o.agenda = U.sortBy(OS.Cal.items(t, t).filter(x => x.src !== 'task' && !x.done), x => x.start || '99').slice(0, 6); } catch (e) { o.agenda = []; }
+  try { o.next = OS.Intel.next().slice(0, 4); } catch (e) { o.next = []; }
+  try { o.alerts = OS.Intel.alerts(); } catch (e) { o.alerts = []; }
+  try { const hs = OS.all('habits').filter(h => h.active && OS.Hab.due(h, t)); o.hab = [hs.filter(h => OS.Hab.done(h, t)).length, hs.length]; } catch (e) { o.hab = [0, 0]; }
+  try { o.study = U.sum(OS.all('sessions').filter(x => x.date === t), x => x.minutes); } catch (e) { o.study = 0; }
+  try { const F = OS.Fin, m = F.month(U.ym(t)); o.fin = { liq: F.liquid(), exp: m.exp, inc: m.inc, bill: F.upcoming(14).filter(x => x.amount < 0 && !x.tx)[0] }; } catch (e) { o.fin = null; }
+  try { o.exam = U.sortBy(OS.all('assessments').filter(a => a.date >= t), a => a.date)[0]; o.rev = OS.St.revDue().length; } catch (e) { }
+  try { o.mail = OS.Mail ? OS.Mail.counts() : null; } catch (e) { }
+  try { o.doneT = OS.all('tasks').filter(x => x.doneAt === t).length; } catch (e) { o.doneT = 0; }
+  o.wx = OS.Weather && OS.Weather.cached(); o.news = (OS.Spyke && OS.Spyke._news) || [];
+  o.dayP = Math.min(1, Math.max(0, (nowM - 360) / (1440 - 360 - 60)));
+  return o; };
+
+/* ---------- desenho ---------- */
+const card = (k, title, body, href) => `<section class="jv-c" style="--i:${k}" ${href ? `data-jvgo="${href}"` : ''}><h4>${title}</h4>${body}</section>`;
+function render() { if (!el) return; const o = D(), t = U.today(), urg = o.alerts.filter(a => a.lvl === 'urgent');
+  const wx = o.wx && o.wx.now ? `<div class="jv-wx">${OS.Weather.icon(o.wx.now.code, 40)}<div><b>${o.wx.now.t}°</b><small>${esc(OS.Weather.desc(o.wx.now.code))} · ${esc(o.wx.label)}</small></div></div><div class="jv-days">${o.wx.days.slice(1, 4).map(d => `<div>${OS.Weather.icon(d.code, 20)}<small>${U.WDS[U.parse(d.d).getDay()]}</small><b>${d.max}°<i>${d.min}°</i></b></div>`).join('')}</div>` : '<small class="mut">A carregar o clima…</small>';
+  const ag = o.agenda.length ? `<ul class="jv-l">${o.agenda.map(x => `<li><b>${x.start || '—'}</b><span>${esc(x.title)}</span></li>`).join('')}</ul>` : '<small class="mut">Sem compromissos hoje.</small>';
+  const nx = o.next.length ? `<ol class="jv-l jv-n">${o.next.map(n => `<li><span>${esc(n.title)}</span><small>${esc((n.why || [])[0] || n.kind || '')}</small></li>`).join('')}</ol>` : '<small class="mut">Nada pendente.</small>';
+  const al = `<div class="jv-big ${urg.length ? 'neg' : 'pos'}">${urg.length}<small>${urg.length === 1 ? 'urgente' : 'urgentes'}</small></div>${urg.slice(0, 2).map(a => `<small class="jv-al">${esc(a.title)}</small>`).join('')}`;
+  const fin = o.fin ? `<div class="jv-kv"><span>Disponível</span><b>${eur(o.fin.liq)}</b></div><div class="jv-kv"><span>Gasto do mês</span><b>${eur(o.fin.exp)}</b></div>${o.fin.bill ? `<div class="jv-kv"><span>${esc(o.fin.bill.title)}</span><b>${U.fmtDS(o.fin.bill.date)}</b></div>` : ''}` : '';
+  const un = o.exam ? `<div class="jv-big">${Math.max(0, U.diff(o.exam.date, t))}<small>dias para ${esc(o.exam.type || 'avaliação')}</small></div><small>${esc((OS.get('subjects', o.exam.subject) || {}).name || o.exam.title)}</small>${o.rev ? `<small class="jv-al">${o.rev} revisões para hoje</small>` : ''}` : `<small class="mut">Sem avaliações marcadas.</small>${o.rev ? `<small class="jv-al">${o.rev} revisões para hoje</small>` : ''}`;
+  const ml = o.mail && o.mail.at ? `<div class="jv-kv"><span>Urgentes</span><b class="${o.mail.urg ? 'neg' : ''}">${o.mail.urg}</b></div><div class="jv-kv"><span>Para responder</span><b>${o.mail.resp}</b></div><div class="jv-kv"><span>Não lidos</span><b>${o.mail.unread}</b></div>` : '<small class="mut">E-mail não ligado.</small>';
+  el.innerHTML = `<div class="jv-in">
+    <header class="jv-h"><div class="jv-brand"><b>SPYKE</b><small>MODO JARVIS</small></div><div class="jv-clock"><b data-jvt>${U.hm()}</b><small>${esc(new Date().toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' }))}</small></div><button class="jv-x" data-act="jvClose" aria-label="Fechar o modo Jarvis">${UI.ic('x')}</button></header>
+    <div class="jv-grid">
+      <section class="jv-core"><canvas class="jv-cv" width="520" height="520" aria-hidden="true"></canvas><div class="jv-hi">${esc(greet())}, ${esc(name())}</div>
+        <div class="jv-meta"><span><i style="background:#38bdf8"></i>Dia ${Math.round(o.dayP * 100)}%</span><span><i style="background:#22c55e"></i>Hábitos ${o.hab[0]}/${o.hab[1]}</span><span><i style="background:#f59e0b"></i>Estudo ${o.study} min</span></div>
+        <div class="jv-btns"><button class="btn pri" data-act="jvTalk">${UI.ic('mic')}Falar</button><button class="btn" data-act="jvSay" data-q="bom dia">Resumo</button><button class="btn" data-act="jvSay" data-q="modo estudo">Estudo</button><button class="btn" data-act="jvSay" data-q="boa noite">Boa noite</button></div></section>
+      ${card(1, 'Clima', wx)}${card(2, 'Agenda de hoje', ag, 'calendario')}${card(3, 'Prioridades', nx, 'next')}${card(4, 'Alertas', al, 'control')}
+      ${card(5, 'Finanças', fin, 'financas')}${card(6, 'Universidade', un, 'universidade')}${card(7, 'E-mail', ml, 'email')}${card(8, 'Hoje', `<div class="jv-kv"><span>Hábitos</span><b>${o.hab[0]}/${o.hab[1]}</b></div><div class="jv-bar"><i style="width:${o.hab[1] ? Math.round(o.hab[0] / o.hab[1] * 100) : 0}%"></i></div><div class="jv-kv"><span>Estudo</span><b>${o.study} min</b></div><div class="jv-kv"><span>Tarefas feitas</span><b>${o.doneT}</b></div>`, 'habitos')}
+    </div>
+    ${o.news.length ? `<div class="jv-news"><b>NOTÍCIAS</b><div class="jv-tk"><span class="jv-tr">${o.news.map(esc).join('<i></i>')}</span></div></div>` : ''}
+  </div>`;
+  dataAt = Date.now(); newsX = 0; newsW = 0; loop(o); }
+
+/* núcleo animado: anéis = dia, hábitos e estudo; partículas e varrimento de radar */
+function loop(o) { cancelAnimationFrame(raf); const c = el && el.querySelector('.jv-cv'); if (!c) return; const g = c.getContext('2d'), W = c.width, cx = W / 2, cy = W / 2, t0 = performance.now(), hp = o.hab[1] ? o.hab[0] / o.hab[1] : 0, sp = Math.min(1, o.study / 120);
+  const tr = el.querySelector('.jv-tr'), tk = el.querySelector('.jv-tk');
+  const frame = now => { if (!el || el.hidden) { raf = 0; return; } const t = (now - t0) / 1000, intro = Math.min(1, t / 1.4), e = 1 - Math.pow(1 - intro, 3);
+    g.clearRect(0, 0, W, W); const glow = g.createRadialGradient(cx, cy, 10, cx, cy, W * .48); glow.addColorStop(0, 'rgba(120,230,255,.35)'); glow.addColorStop(.45, 'rgba(14,165,233,.12)'); glow.addColorStop(1, 'rgba(14,165,233,0)'); g.fillStyle = glow; g.beginPath(); g.arc(cx, cy, W * .48, 0, 7); g.fill();
+    g.lineCap = 'round';
+    const ring = (r, p, col, w) => { g.strokeStyle = 'rgba(255,255,255,.07)'; g.lineWidth = w; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.stroke(); g.strokeStyle = col; g.beginPath(); g.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * p * e); g.stroke(); };
+    ring(W * .42, o.dayP, '#38bdf8', 7); ring(W * .36, hp, '#22c55e', 7); ring(W * .30, sp, '#f59e0b', 7);
+    for (let i = 0; i < 60; i++) { const a = i / 60 * Math.PI * 2 + t * .05; g.strokeStyle = `rgba(160,235,255,${i % 5 ? .18 : .5})`; g.lineWidth = i % 5 ? 1 : 2; g.beginPath(); g.moveTo(cx + Math.cos(a) * W * .46, cy + Math.sin(a) * W * .46); g.lineTo(cx + Math.cos(a) * W * (i % 5 ? .475 : .485), cy + Math.sin(a) * W * (i % 5 ? .475 : .485)); g.stroke(); }
+    [[.22, 1.2, 6], [.18, -1.8, 3], [.25, .5, 12]].forEach(([rr, s, n]) => { g.strokeStyle = 'rgba(170,240,255,.75)'; g.lineWidth = 2.2; for (let i = 0; i < n; i++) { const a = t * s + i * Math.PI * 2 / n; g.beginPath(); g.arc(cx, cy, Math.max(1, W * rr * e), a, a + Math.PI * 2 / n * .55); g.stroke(); } });
+    const sw = t * 1.3; const sg = g.createConicGradient ? g.createConicGradient(sw, cx, cy) : null; if (sg) { sg.addColorStop(0, 'rgba(120,230,255,.28)'); sg.addColorStop(.12, 'rgba(120,230,255,0)'); sg.addColorStop(1, 'rgba(120,230,255,0)'); g.fillStyle = sg; g.beginPath(); g.arc(cx, cy, W * .27, 0, 7); g.fill(); }
+    g.fillStyle = 'rgba(235,252,255,.96)'; g.beginPath(); g.arc(cx, cy, Math.max(1, W * (.07 + .008 * Math.sin(t * 2.2)) * e), 0, 7); g.fill();
+    g.strokeStyle = 'rgba(235,252,255,.5)'; g.lineWidth = 1.5; g.beginPath(); g.arc(cx, cy, Math.max(1, W * .1 * e), 0, 7); g.stroke();
+    if (tr && tk) { if (!newsW) newsW = tr.scrollWidth; newsX -= .6; if (newsX < -newsW) newsX = tk.clientWidth; tr.style.transform = `translateX(${newsX}px)`; }
+    const tt = el.querySelector('[data-jvt]'); if (tt && Math.floor(t * 10) % 10 === 0) tt.textContent = U.hm();
+    if (Date.now() - dataAt > 60e3) { render(); return; }
+    raf = requestAnimationFrame(frame); };
+  raf = requestAnimationFrame(frame); }
+
+/* ---------- abrir / fechar ---------- */
+const mkFab = () => { if (fab) return; fab = document.createElement('button'); fab.type = 'button'; fab.id = 'jvFab'; fab.setAttribute('aria-label', 'Abrir o modo Jarvis'); fab.title = 'Modo Jarvis'; fab.innerHTML = '<i></i>'; fab.onclick = () => J.open(true); document.body.appendChild(fab); };
+J.open = sound => { mkFab(); if (!el) { el = document.createElement('div'); el.id = 'jv'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Modo Jarvis'); document.body.appendChild(el); }
+  el.hidden = false; document.documentElement.classList.add('jv-open'); el.classList.remove('on'); render(); requestAnimationFrame(() => requestAnimationFrame(() => el && el.classList.add('on'))); if (fab) fab.hidden = true;
+  if (sound && OS.Spyke && OS.Spyke.wakeSound) OS.Spyke.wakeSound(); if (OS.Weather && !(OS.Weather.cached() || {}).now) OS.Weather.get().then(() => el && !el.hidden && render()); };
+J.close = () => { if (!el) return; el.hidden = true; el.classList.remove('on'); cancelAnimationFrame(raf); raf = 0; document.documentElement.classList.remove('jv-open'); if (fab) fab.hidden = false; };
+J.isOpen = () => !!(el && !el.hidden);
+A.jvClose = () => J.close();
+A.jvOpen = () => J.open(true);
+A.jvTalk = () => { OS.Spyke && OS.Spyke.listen(); };
+A.jvSay = b => { OS.Spyke && OS.Spyke.handle(b.dataset.q); };
+document.addEventListener('click', e => { const g = e.target.closest('[data-jvgo]'); if (g && el && el.contains(g)) { J.close(); OS.go(g.dataset.jvgo); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && J.isOpen() && !(document.getElementById('spy') && !document.getElementById('spy').hidden)) J.close(); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden && J.isOpen()) render(); });
+OS.on('ready', () => { mkFab(); if (cfg().jarvisStart && !navigator.webdriver && !(OS.FocusBlock && OS.FocusBlock.state()) && !/^#(spyke|foco)/.test(location.hash)) setTimeout(() => J.open(false), 400); });
 })();
 
 </script>
@@ -12160,7 +12457,7 @@ const KEY = '${key}';
 function doGet(e) {
   const p = e.parameter || {};
   if (p.k !== KEY) return out({ ok: false, msg: 'Chave errada' });
-  if (p.op === 'ping') return out({ ok: true, v: 9 });
+  if (p.op === 'ping') return out({ ok: true, v: 10 });
   // ---- cotações em tempo real (Yahoo Finance) para os Investimentos ----
   if (p.op === 'q') return out({ ok: true, q: cotacoes_(String(p.s || '')) });
   if (p.op === 'h') return out({ ok: true, h: historico_(String(p.s || ''), String(p.r || '1y'), String(p.i || '1d')) });
@@ -12173,6 +12470,7 @@ function doGet(e) {
   // ---- e-mail (Gmail) e LinkedIn (pelas notificações no Gmail), para o resumo do Oceanum ----
   if (p.op === 'gm') return out({ ok: true, gm: correio_(String(p.q || ''), Number(p.n || 30)) });
   if (p.op === 'ga') return out({ ok: true, n: acaoCorreio_(String(p.a || ''), String(p.ids || '')) });
+  if (p.op === 'dr') return out(rascunho_(String(p.id || ''), String(p.b || '')));
   // ---- Spyke: resumo do dia e perguntas pela Siri (funciona com a app fechada) ----
   if (p.op === 'br') { const P = PropertiesService.getScriptProperties(); P.setProperty('BR', String(p.j || '{}').slice(0, 8500)); P.setProperty('CX', String(p.cx || '').slice(0, 8500)); if (p.gk) P.setProperty('GK', String(p.gk).slice(0, 120)); else if (p.nogk) P.deleteProperty('GK'); return out({ ok: true }); }
   if (p.op === 'brief') return ContentService.createTextOutput(resumo_());
@@ -12226,6 +12524,11 @@ function correio_(q, n) { const th = GmailApp.search(q || 'in:inbox newer_than:3
   return r; }
 function acaoCorreio_(a, ids) { let n = 0; ids.split(',').filter(String).slice(0, 50).forEach(function (id) { try { const t = GmailApp.getThreadById(id); if (!t) return;
     if (a === 'lido') t.markRead(); else if (a === 'arquivar') t.moveToArchive(); else if (a === 'spam') t.moveToSpam(); else if (a === 'lixo') t.moveToTrash(); else if (a === 'estrela') t.getMessages().slice(-1)[0].star(); else return; n++; } catch (e) { } }); return n; }
+// resposta: fica como RASCUNHO no teu Gmail (nunca é enviada sem ti)
+function rascunho_(id, b) { if (!id || !b) return { ok: false, msg: 'Falta o e-mail ou o texto' }; const t = GmailApp.getThreadById(id); if (!t) return { ok: false, msg: 'E-mail não encontrado' };
+  const eu = String(Session.getEffectiveUser().getEmail() || '').toLowerCase(), ms = t.getMessages(); let m = ms[ms.length - 1];
+  for (let i = ms.length - 1; i >= 0; i--) { if (String(ms[i].getFrom()).toLowerCase().indexOf(eu) < 0) { m = ms[i]; break; } }
+  const d = m.createDraftReply(b.slice(0, 20000)); return { ok: true, id: d.getId() }; }
 // ---- Spyke pela Siri: o Oceanum envia o resumo do dia; o atalho lê-o em voz alta ----
 function resumo_() { let b = {}; try { b = JSON.parse(PropertiesService.getScriptProperties().getProperty('BR') || '{}'); } catch (e) { }
   const hoje = Utilities.formatDate(new Date(), 'Europe/Lisbon', 'yyyy-MM-dd');
