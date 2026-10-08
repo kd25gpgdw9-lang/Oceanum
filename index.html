@@ -1935,6 +1935,80 @@ button.hab-b{cursor:pointer;width:30px;height:30px;border-color:var(--accent);bo
 .ws-form{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.ws-form label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--tx2,var(--mut))}.ws-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.ws-thumbs img{height:120px;border-radius:10px;border:1px solid var(--line)}
 .wp-t{display:block;font-size:16px;margin:2px 0}.wp .pbar{margin:8px 0 4px}
 @media (max-width:860px){.ws-cal{grid-template-columns:repeat(2,minmax(0,1fr))}.ws-strip{grid-template-columns:repeat(7,minmax(64px,1fr));overflow-x:auto}}
+/* ---------- Bloco de foco ---------- */
+.fb-list{display:flex;flex-direction:column;gap:6px}
+.fb-it{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:11px;cursor:pointer;opacity:.62;transition:opacity .15s,border-color .15s}
+.fb-it.on{opacity:1;border-color:rgba(92,200,230,.35);background:rgba(92,200,230,.05)}
+.fb-it input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
+.fb-n{font:600 12px var(--mono);color:var(--mut);min-width:18px;text-align:right}
+.fb-t{min-width:0}.fb-t b{display:block;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fb-t small{display:block;color:var(--mut);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fb-m{display:flex;align-items:center;gap:4px}.fb-m input{width:58px;padding:6px 6px;border-radius:8px;border:1px solid var(--line);background:var(--bg2,rgba(255,255,255,.04));color:var(--tx);font:600 14px var(--mono);text-align:center}.fb-m small{color:var(--mut);font-size:11px}
+.fb-add{display:grid;grid-template-columns:minmax(0,1fr) 72px auto;gap:6px;margin-top:10px}
+.fb-apps{display:flex;flex-wrap:wrap;gap:6px}
+.fb-go{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:14px;background:#0B1C27;border:1px solid rgba(92,200,230,.3);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.fb-go small{display:block;color:var(--mut);font-size:12px}
+@media (max-width:860px){.fb-go{bottom:calc(76px + env(safe-area-inset-bottom,0px))}}
+.fb-guide ol{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.5}.fb-guide h3{margin:0}
+.fb-guide code{font-size:12px;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:5px}
+html.fb-on,html.fb-on body{overflow:hidden}
+#fblk{position:fixed;inset:0;z-index:85;overflow-y:auto;background:radial-gradient(ellipse at 50% -10%,#0E2A3A,#04080D 62%);color:var(--tx);padding:calc(18px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));overscroll-behavior:contain}
+#fblk[hidden]{display:none}
+.fb-in{max-width:560px;min-height:100%;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+.fb-top{width:100%;display:flex;justify-content:space-between;gap:10px;color:var(--mut);font-size:12px;letter-spacing:.04em}
+.fb-dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}.fb-dots i{width:22px;height:5px;border-radius:9px;background:rgba(255,255,255,.1)}.fb-dots i.cur{background:var(--accent)}.fb-dots i.done{background:#22c55e}.fb-dots i.skip{background:#a16207}
+.fb-title{margin:0;font-size:clamp(22px,5.4vw,32px);font-weight:650;letter-spacing:-.02em;text-wrap:balance;max-width:22ch}
+.fb-sub{margin:0;color:var(--tx2,#9fb3c0);font-size:13px}
+.fb-time{font:600 clamp(68px,20vw,132px)/1 var(--mono);letter-spacing:-.07em;margin-top:6px}.fb-time.over{color:#f59e0b}
+.fb-bar{width:min(78vw,360px);height:6px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden}.fb-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width 1s linear}
+.fb-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.fb-ask{width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
+.fb-ask>b{font-size:17px}
+.fb-code{display:flex;gap:6px;width:min(100%,320px)}.fb-code .field{flex:1;min-width:0}
+.fb-or{color:var(--mut);font-size:12px}.fb-msg{min-height:16px;font-size:13px}
+.fb-next{width:100%;max-width:380px;text-align:left;display:flex;flex-direction:column;gap:4px;margin-top:6px}.fb-next>small{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.fb-next div{display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border-radius:9px;background:rgba(255,255,255,.035);font-size:13px}.fb-next div span{color:var(--mut);font:12px var(--mono);white-space:nowrap}
+.fb-apps-on{color:var(--mut);font-size:11.5px;max-width:420px}
+.fb-exit{margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--mut);font-size:13px;padding:8px 12px;border-radius:9px;cursor:pointer}.fb-exit .ic{width:15px;height:15px}
+.fb-end .fb-big{font-size:46px}.fb-end h2{margin:0}
+.fb-sum{width:100%;max-width:420px;display:flex;flex-direction:column;gap:4px;text-align:left;margin:6px 0 10px}
+.fb-sum div{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:8px;padding:7px 10px;border-radius:9px;background:rgba(255,255,255,.035);font-size:13.5px}.fb-sum small{color:var(--mut);font:12px var(--mono)}
+.fb-sum .done span{color:#22c55e}.fb-sum .skip span{color:#f59e0b}.fb-sum .todo{opacity:.6}
+/* ---------- Spyke ---------- */
+#spy{position:fixed;inset:0;z-index:86;display:flex;align-items:flex-end;justify-content:center}
+#spy[hidden]{display:none}
+.spy-bg{position:absolute;inset:0;background:rgba(2,6,10,.62);backdrop-filter:none}
+.spy-card{position:relative;width:min(100%,460px);max-height:calc(100dvh - 20px);overflow-y:auto;margin:0 0 env(safe-area-inset-bottom,0px);padding:14px 16px 18px;border-radius:22px 22px 0 0;background:radial-gradient(ellipse at 50% 0%,#0d2c3d,#050b11 70%);border:1px solid rgba(92,200,230,.25);border-bottom:0;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;color:var(--tx)}
+@media (min-width:861px){#spy{align-items:center}.spy-card{border-radius:22px;border-bottom:1px solid rgba(92,200,230,.25)}}
+.spy-h{width:100%;display:flex;align-items:center;gap:8px}.spy-h b{letter-spacing:.32em;font-size:13px;color:#9be7ff}.spy-h span{flex:1;text-align:left;font-size:11.5px}
+.spy-orb{width:200px;height:200px}
+.spy-st{font-size:12px;color:var(--mut);letter-spacing:.04em;min-height:16px}
+.spy-u{font-size:13.5px;color:var(--tx2,#9fb3c0);font-style:italic;min-height:0;max-width:40ch}
+.spy-s{font-size:16px;line-height:1.5;max-width:42ch;white-space:pre-wrap}
+.spy-ctl{display:flex;align-items:center;gap:12px;margin-top:4px}
+.spy-mic{width:64px;height:64px;border-radius:50%;border:1px solid rgba(155,231,255,.5);background:radial-gradient(circle at 35% 30%,#38bdf8,#0369a1);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 6px rgba(56,189,248,.12),0 10px 30px rgba(3,105,161,.45)}
+.spy-mic .ic{width:28px;height:28px}
+#spy[data-st=listening] .spy-mic{background:radial-gradient(circle at 35% 30%,#f87171,#b91c1c);box-shadow:0 0 0 8px rgba(248,113,113,.18)}
+.spy-f{width:100%;display:flex;gap:6px}.spy-f .field{flex:1;min-width:0}
+.spy-sug{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.spy-sug .chip{font-size:12px}
+.spy-morn{position:fixed;z-index:62;left:50%;transform:translateX(-50%);top:calc(64px + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;border:1px solid rgba(92,200,230,.35);background:#0B1C27;color:var(--tx);box-shadow:0 12px 30px rgba(0,0,0,.4);text-align:left;cursor:pointer;width:min(92vw,380px)}
+.spy-morn i{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#38bdf8,#0369a1);color:#fff;flex:none}.spy-morn i .ic{width:18px;height:18px}
+.spy-morn span{flex:1;min-width:0}.spy-morn b{display:block;font-size:14px}.spy-morn small{color:var(--mut);font-size:12px}.spy-morn em{font-style:normal;color:var(--mut);font-size:20px;padding:0 4px}
+.spy-cmds{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}.spy-cmds div{padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.035)}.spy-cmds b{display:block;font-size:13px}.spy-cmds small{color:var(--mut);font-size:12px}
+/* ---------- E-mail & LinkedIn ---------- */
+.ml-list{display:flex;flex-direction:column;gap:6px}
+.ml-it{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;padding:10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.ml-it.unread{border-color:rgba(92,200,230,.3)}.ml-it.unread .ml-s{font-weight:650}
+.ml-it.c-urgente{border-left:3px solid #ef4444}.ml-it.c-responder{border-left:3px solid #38bdf8}.ml-it.c-spam{opacity:.75}
+.ml-ic{font-size:16px;line-height:1.4}
+.ml-t{min-width:0}.ml-h{display:flex;justify-content:space-between;gap:8px}.ml-h b{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ml-h small{color:var(--mut);font-size:11.5px;white-space:nowrap}
+.ml-s{font-size:14px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ml-w{display:block;color:var(--mut);font-size:12px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ml-a{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;align-items:center}
+.ml-mv{padding:3px 6px;border-radius:7px;border:1px solid var(--line);background:transparent;color:var(--mut);font-size:11.5px;max-width:130px}
+.ml-sum p{margin:0 0 6px;font-size:14.5px;line-height:1.55}
+.ml-f{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px}.ml-f .chip{white-space:nowrap}
+.ml-setup{border-color:rgba(245,158,11,.35)}
+.ml-page .pn-h{flex-wrap:wrap;gap:6px}
 
 </style>
 <style>
@@ -2166,7 +2240,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.86", "date": "08/10/2026", "notes": ["Floresta: a árvore nasce de semente e cresce aos poucos até ao fim do tempo; pílula no canto ao mudar de aba; janela flutuante (Picture-in-Picture) para quando sais da app; moedas para prémios teus e cenários da ilha", "Hábitos: grelha alinhada e só se marca o dia de hoje", "Visão Geral e Hoje: frase forte do dia e \"Verdade do dia\"", "Trabalho: horário e folgas, importar a escala por foto (a IA atualiza só os dias futuros do período) e projetos de trabalho"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.87", "date": "08/10/2026", "notes": ["Bloco de foco: escolhes o tema (ou o Oceanum escolhe pela prioridade), o tempo de cada pendência e as apps a bloquear; no fim pergunta \"Terminaste?\"; sair só com Face ID ou código.", "Spyke: assistente de voz com voz masculina — resumo do dia, perguntas, \"anota…\", \"gastei…\", \"abre…\"; palavra \"Spyke\" e duas palmas com a app aberta; Siri e Atalhos vocais com a app fechada.", "E-mail & LinkedIn: o Gmail entra no Oceanum e a IA separa urgente, responder, spam e promoções; LinkedIn lido pelas notificações no Gmail (vagas → Oportunidades, convites → Rede).", "Ligações entre áreas: avaliação ↔ plano de estudo, projeto/meta ↔ tarefas, turno ↔ folga, parcelas da mesma compra, oportunidade ↔ candidatura, Floresta ↔ sessões, desporto ↔ hábito de treino.", "Antes de apagar, o Oceanum diz o que muda nas outras áreas."]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -2479,7 +2553,7 @@ const UI = OS.UI = {};
 const { esc, fmtD, eur, num } = OS.U;
 
 /* ================= ÍCONES (traço 1.6, 24×24) ================= */
-const IP = UI.IP = { news: 'M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7 9h7M7 12h7M7 15h4', cross: 'M12 3v18M6.5 8.5h11', tree: 'M12 22v-5M12 3l5 6h-3l4 5h-4l3 3H7l3-3H6l4-5H7z', user: 'M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zM4 21c0-4.4 3.6-7 8-7s8 2.6 8 7', apple: 'M12 7c-2-2-6.5-1.5-6.5 3.5 0 4.5 3.2 9.5 6.5 9.5s6.5-5 6.5-9.5C18.5 5.5 14 5 12 7zM12 7c0-2 1-3.5 3-4.5', drop: 'M12 3c3.2 4.2 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 2.8-6.8 6-11z', hex: 'M12 2.5l8.2 4.75v9.5L12 21.5l-8.2-4.75v-9.5z',
+const IP = UI.IP = { mail: 'M3 6h18v12H3zM3 7l9 6 9-6', mic: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3', news: 'M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7 9h7M7 12h7M7 15h4', cross: 'M12 3v18M6.5 8.5h11', tree: 'M12 22v-5M12 3l5 6h-3l4 5h-4l3 3H7l3-3H6l4-5H7z', user: 'M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zM4 21c0-4.4 3.6-7 8-7s8 2.6 8 7', apple: 'M12 7c-2-2-6.5-1.5-6.5 3.5 0 4.5 3.2 9.5 6.5 9.5s6.5-5 6.5-9.5C18.5 5.5 14 5 12 7zM12 7c0-2 1-3.5 3-4.5', drop: 'M12 3c3.2 4.2 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 2.8-6.8 6-11z', hex: 'M12 2.5l8.2 4.75v9.5L12 21.5l-8.2-4.75v-9.5z',
   sun: 'M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',
   grid: 'M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z',
   radar: 'M12 12 19 5M12 3a9 9 0 1 0 9 9M12 7a5 5 0 1 0 5 5M12 11a1 1 0 1 0 1 1',
@@ -2673,7 +2747,7 @@ document.addEventListener('click', e => {
   if (e.target.closest('[data-close]')) { UI.closeDrawer(); return; }
   if (e.target.closest('[data-delrec]') && drawerState) {
     const { coll, id } = drawerState; const S = OS.S[coll];
-    UI.ask('Apagar ' + S.label.toLowerCase() + '?', 'Esta ação não pode ser desfeita.', 'Apagar', () => { S.beforeDel && S.beforeDel(OS.get(coll, id)); OS.del(coll, id); UI.closeDrawer(); UI.toast('Apagado'); });
+    UI.ask('Apagar ' + S.label.toLowerCase() + '?', ((S.delWarn && (() => { try { return S.delWarn(OS.get(coll, id)); } catch (er) { return ''; } })()) || '') + ' Esta ação não pode ser desfeita.', 'Apagar', () => { S.beforeDel && S.beforeDel(OS.get(coll, id)); OS.del(coll, id); UI.closeDrawer(); UI.toast('Apagado'); });
     return;
   }
   const sa = e.target.closest('[data-step-add]'); if (sa) { sa.insertAdjacentHTML('beforebegin', `<div class="step-row"><input type="checkbox"><input class="st-t" value=""><button type="button" class="icon-btn" data-step-del>${UI.ic('x')}</button></div>`); sa.previousElementSibling.querySelector('.st-t').focus(); return; }
@@ -3540,7 +3614,7 @@ I.alerts = () => {
   OS.all('goals').filter(g => g.status === 'Ativa').forEach(g => { const i = Goal.info(g); if (i.late) A('urgent', 'Metas', g.title, `Prazo passou a ${U.fmtDS(g.due)} · ${Math.round(i.p * 100)}% feito`, '#metas'); else if (i.behind) A('attention', 'Metas', g.title, `${Math.round(i.p * 100)}% feito, esperado ${Math.round(i.exp * 100)}% por esta altura`, '#metas'); });
   OS.all('projects').forEach(p => { const i = Proj.info(p); if (i.late) A('urgent', 'Projetos', p.name, `Prazo passou a ${U.fmtDS(p.due)} · ${Math.round(i.prog * 100)}%`, '#projetos'); else if (i.stalled) A('attention', 'Projetos', `${p.name} está parado`, `Sem atividade há ${i.idle} dias`, '#projetos'); });
   // Corpo
-  const lastW = [...OS.all('workouts'), ...OS.all('runs')].map(x => x.date).sort().pop();
+  const lastW = [...OS.all('workouts'), ...OS.all('runs'), ...OS.all('sportlog')].map(x => x.date).sort().pop();
   if (lastW && U.diff(t, lastW) >= 4) A('attention', 'Treino', `${U.diff(t, lastW)} dias sem treinar`, 'Último registo a ' + U.fmtDS(lastW), '#treino');
   const wk = U.monday(t), km = Run.kmIn(wk, t), planKm = U.sum(OS.all('runplan').filter(r => r.active), r => r.km) || U.num(OS.one('profile').runKmTarget);
   if (wd >= 5 && planKm && OS.all('runs').length && km < planKm * .5) A('attention', 'Corrida', `${U.r1(km)} km esta semana`, `Plano: ${planKm} km`, '#corrida');
@@ -4085,7 +4159,8 @@ A.focusStart = b => {
     <div class="fld"><label>Duração</label>${UI.seg('fdur', [['25', '25'], ['50', '50'], ['90', '90'], ['10', 'Só 10']], OS.ui.fdur || '50')}<small>Protocolo: 50 de foco, 10 de pausa. "Só 10 minutos" para vencer a preguiça.</small></div>
     <div class="fld"><label for="fsubj">Registar como estudo de</label><select id="fsubj"><option value="">Não registar como estudo</option>${St.current().map(s => `<option value="${s.id}"${s.id === subject ? ' selected' : ''}>${esc(s.name)}</option>`).join('')}${OS.all('skills').map(s => `<option value="sk:${s.id}">Competência · ${esc(s.name)}</option>`).join('')}</select></div>
     <label class="switch"><input type="checkbox" id="fphone" checked><span></span>Telemóvel noutra divisão</label>
-    <div class="note">Antes: abre só o material da sessão e escreve "No fim desta sessão eu vou conseguir…". Distrações vão para um papel.</div></div>
+    <div class="note">Antes: abre só o material da sessão e escreve "No fim desta sessão eu vou conseguir…". Distrações vão para um papel.</div>
+    <a class="btn ghost sm" href="#foco" data-close style="margin-top:10px">${UI.ic('lock')}Bloco de foco: várias pendências seguidas, saída com Face ID</a></div>
     <div class="drw-f"><span></span><button class="btn pri" data-act="focusGo" data-task="${task ? task.id : ''}" data-label="${esc(label)}">${UI.ic('play')}Começar</button></div>`;
   UI.drawer(html);
 };
@@ -7017,7 +7092,7 @@ function plant() { const c = cfg(), sp = SP[c.sp] ? c.sp : 'carvalho', ti = tagI
   LAST = null; save(); sndPlay(c.sound); try { navigator.wakeLock && navigator.wakeLock.request('screen').then(w => wake = w).catch(() => { }); } catch (e) { } loop(); try { vid(); } catch (e) { } OS.request(); }
 function finish(ok, why) { if (!RUN || RUN.phase !== 'grow') return; const mins = ok ? RUN.mins : Math.max(0, Math.floor((Date.now() - RUN.t0) / 6e4)), coins = ok ? coinsFor(RUN.mins) : 0;
   const t = OS.add('trees', { date: today(), t0: RUN.t0, mins, plan: RUN.mins, sp: RUN.sp, alive: !!ok, tag: RUN.tag, subject: RUN.subject, skill: RUN.skill, coins, why: why || '', seed: RUN.seed });
-  if (ok) { cfg().coins = (+cfg().coins || 0) + coins; OS.touch('forest'); if ((RUN.subject || RUN.skill) && mins >= 5) OS.add('sessions', { date: today(), subject: RUN.subject, skill: RUN.skill, minutes: mins, type: 'Estudo profundo', phone: true, focus: 5, learned: '🌳 Floresta: ' + SP[RUN.sp].n }); chime(); }
+  if (ok) { cfg().coins = (+cfg().coins || 0) + coins; OS.touch('forest'); if ((RUN.subject || RUN.skill) && mins >= 5) OS.add('sessions', { date: today(), subject: RUN.subject, skill: RUN.skill, minutes: mins, type: 'Estudo profundo', phone: true, focus: 5, learned: '🌳 Floresta: ' + SP[RUN.sp].n, tree: t.id }); chime(); }
   LAST = { id: t.id, ok: !!ok, sp: RUN.sp, mins, coins, why: why || '', seed: RUN.seed }; RUN = null; save(); sndStop(); try { wake && wake.release(); } catch (e) { } wake = null; clearInterval(tick); pill(); OS.request(); }
 function startBreak() { RUN = { phase: 'break', t0: Date.now(), mins: Math.max(1, +cfg().brk || 5) }; LAST = null; save(); loop(); OS.request(); }
 function loop() { clearInterval(tick); if (!RUN) return; tick = setInterval(step, 1000); step(); }
@@ -7991,6 +8066,672 @@ W.projetos = () => { const P = OS.all('projects').filter(isWork), act = P.filter
   ${act.length ? `<div class="g g2">${U.sortBy(act, p => (p.due || '9') + (p.prio || '3')).map(p => { const i = Proj.info(p); return `<div class="pn wp"><div class="row between gap8"><div class="click grow" data-edit="projects:${p.id}" style="min-width:0"><span class="eyebrow">${esc(p.status)}${p.due ? ' · prazo ' + U.fmtDS(p.due) : ''}</span><b class="wp-t">${esc(p.name)}</b>${p.objective ? `<small class="mut">${esc(p.objective)}</small>` : ''}</div><span class="mono">${U.pct(i.prog)}</span></div>${UI.bar(i.prog, i.late ? 'neg' : i.prog >= 1 ? 'pos' : '')}
     <div class="list" style="margin-top:6px">${i.open.slice(0, 5).map(x => OS.taskRow ? OS.taskRow(x) : esc(x.title)).join('')}</div><form class="row gap6" data-form="quickTask" data-project="${p.id}" style="margin-top:6px"><input class="field grow" name="t" placeholder="+ tarefa neste projeto" aria-label="Nova tarefa"><button class="btn sm">${UI.ic('plus')}</button></form>${i.late ? '<small class="neg">Prazo ultrapassado</small>' : i.stalled ? `<small class="warn">Parado há ${i.idle} dias</small>` : ''}</div>`; }).join('')}</div>` : UI.empty('Sem projetos de trabalho. Cria um para separar as tarefas de cada projeto.', UI.addBtn('projects', 'Criar projeto de trabalho', { type: 'Profissional', status: 'Em andamento', area: 'Trabalho' }, ''))}`; };
 OS.WorkSched = { dayInfo };
+})();
+
+</script>
+<script>
+/* OCEANUM — Bloco de foco: resolver pendências, uma de cada vez.
+   Escolhes o tema (ou o Oceanum escolhe pela prioridade da app toda), o tempo de cada pendência e as apps a bloquear.
+   Ecrã fechado: no fim de cada tempo pergunta "Terminaste?" — sim passa à seguinte, não acrescenta tempo.
+   Sair antes do fim pede Face ID ou o código.
+   Limite real: uma app web não consegue bloquear outras apps do iPhone. Esse bloqueio faz-se com o modo Foco + Atalhos
+   (o Oceanum pode ligar/desligar o Atalho sozinho); o guia está na aba "Bloquear apps". */
+(() => {
+'use strict';
+const U = OS.U, UI = OS.UI, V = OS.views, A = OS.act, esc = U.esc;
+const K = 'os2fblk';
+let B = U.ls.get(K, null);                 // bloco em curso
+const save = () => { if (B) U.ls.set(K, B); else U.ls.del(K); };
+const APPS = ['Instagram', 'TikTok', 'YouTube', 'WhatsApp', 'X (Twitter)', 'Facebook', 'Snapchat', 'Reddit', 'Netflix', 'Twitch', 'Discord', 'Telegram', 'Pinterest', 'Kwai', 'Jogos', 'Safari', 'Spotify', 'LinkedIn'];
+OS.ONE_DEF.focusblk = { apps: ['Instagram', 'TikTok', 'YouTube', 'WhatsApp', 'X (Twitter)', 'Netflix', 'Jogos'], sc: false, scOn: 'Oceanum Foco', scOff: 'Oceanum Fim', n: 5 };
+const cfg = () => Object.assign({}, OS.ONE_DEF.focusblk, OS.one('focusblk'));
+OS.S.focusblocks = { label: 'Bloco de foco', title: r => 'Bloco · ' + (r.theme || '') + ' · ' + U.fmtD(r.date), fields: [
+  { k: 'date', l: 'Dia', t: 'date' }, { k: 'theme', l: 'Tema', t: 'text' }, { k: 'planned', l: 'Pendências planeadas', t: 'num' }, { k: 'done', l: 'Resolvidas', t: 'num' },
+  { k: 'minutes', l: 'Minutos', t: 'num' }, { k: 'leaves', l: 'Saídas da app', t: 'num' }, { k: 'early', l: 'Saiu antes do fim', t: 'bool' }, { k: 'note', l: 'Nota', t: 'text' }] };
+
+/* ---------- pendências candidatas (mesma prioridade do Next Action) ---------- */
+const clamp = m => Math.max(5, Math.min(120, Math.round((U.num(m) || 25) / 5) * 5));
+const taskOf = n => n.edit && n.edit.startsWith('tasks:') ? OS.get('tasks', n.edit.slice(6)) : null;
+const subjOf = n => { const t = taskOf(n); if (t && t.subject) return t.subject; const m = (n.focus || '').match(/data-subject="([^"]+)"/); return m ? m[1] : ''; };
+const projName = id => (OS.get('projects', id) || {}).name || '';
+const themeL = th => th === 'auto' ? 'Automático (prioridade)' : th.startsWith('area:') ? th.slice(5) : th.startsWith('proj:') ? 'Projeto · ' + projName(th.slice(5)) : th.startsWith('subj:') ? 'Disciplina · ' + ((OS.get('subjects', th.slice(5)) || {}).name || '') : th;
+const cands = th => {
+  let na = OS.Intel.next();
+  if (th.startsWith('area:')) { const a = th.slice(5); na = na.filter(n => n.area === a || (taskOf(n) && taskOf(n).area === a)); }
+  else if (th.startsWith('proj:')) { const p = th.slice(5); na = na.filter(n => (taskOf(n) || {}).project === p); }
+  else if (th.startsWith('subj:')) { const s = th.slice(5); na = na.filter(n => subjOf(n) === s); }
+  const seen = new Set();
+  return na.map(n => { const t = taskOf(n); return { k: n.edit || (n.kind + ':' + n.title), title: n.title, kind: n.kind, area: n.area || '', why: (n.why || []).slice(0, 2).join(' · '), mins: clamp(n.eff), act: t ? '' : (n.act || ''), task: t ? t.id : '', subject: subjOf(n) }; })
+    .filter(x => !seen.has(x.k) && seen.add(x.k));
+};
+const themes = () => { const na = OS.Intel.next(), open = OS.Tasks.open();
+  return { areas: [...new Set(na.map(n => n.area).filter(Boolean))], projs: OS.all('projects').filter(p => !['Concluído', 'Cancelado'].includes(p.status) && open.some(t => t.project === p.id)), subs: OS.St.current().filter(s => na.some(n => subjOf(n) === s.id)) }; };
+
+/* ---------- rascunho do bloco (antes de começar) ---------- */
+let DR = { th: 'auto', sel: {}, mins: {}, extra: [] };
+const list = () => cands(DR.th).concat(DR.extra);
+const isSel = (x, i) => DR.sel[x.k] != null ? DR.sel[x.k] : i < cfg().n;
+const picked = () => list().filter(isSel).map(x => Object.assign({}, x, { mins: clamp(DR.mins[x.k] || x.mins) }));
+
+/* ---------- página ---------- */
+const TB = [['', 'Começar'], ['apps', 'Bloquear apps (iPhone)'], ['hist', 'Histórico']];
+V.foco = sub => { const k = TB.some(t => t[0] === (sub || '')) ? (sub || '') : '';
+  return UI.head('Bloco de foco', 'Resolve as tuas pendências, uma de cada vez. Sem fugir até acabar.', B ? `<button class="btn pri" data-act="fbShow">${UI.ic('focus')}Voltar ao bloco</button>` : '') + UI.tabs('foco', TB, k) + `<div class="fb-page">${P[k]()}</div>`; };
+const P = {};
+P[''] = () => { if (B) return `<div class="pn"><b>Tens um bloco em curso.</b><p class="mut">${B.items.filter(x => x.st === 'done').length} de ${B.items.length} pendências resolvidas.</p><button class="btn pri" data-act="fbShow">Voltar ao bloco</button></div>`;
+  const th = themes(), L = list(), sel = picked(), tot = U.sum(sel, x => x.mins), c = cfg(), opt = (v, l) => `<option value="${esc(v)}"${DR.th === v ? ' selected' : ''}>${esc(l)}</option>`;
+  return `<div class="pn"><div class="pn-h"><h3>1 · Tema</h3></div>
+    <select class="field" id="fbTheme" aria-label="Tema do bloco">${opt('auto', 'Automático — o Oceanum escolhe pela prioridade da app toda')}${th.areas.length ? `<optgroup label="Área">${th.areas.map(a => opt('area:' + a, a)).join('')}</optgroup>` : ''}${th.projs.length ? `<optgroup label="Projeto">${th.projs.map(p => opt('proj:' + p.id, p.name)).join('')}</optgroup>` : ''}${th.subs.length ? `<optgroup label="Disciplina">${th.subs.map(s => opt('subj:' + s.id, s.name)).join('')}</optgroup>` : ''}</select>
+    <small class="mut">Sem tema, a ordem vem do Next Action: atrasos, prazos, prioridade, impacto e metas.</small></div>
+  <div class="pn"><div class="pn-h"><h3>2 · Pendências e tempo de cada uma</h3><span class="mut">${sel.length} escolhidas · ${U.hours(tot)}</span></div>
+    <div class="fb-list">${L.map((x, i) => `<label class="fb-it ${isSel(x, i) ? 'on' : ''}"><input type="checkbox" data-fbk="${esc(x.k)}" ${isSel(x, i) ? 'checked' : ''}><span class="fb-n">${i + 1}</span><span class="fb-t"><b>${esc(x.title)}</b><small>${esc([x.kind, x.area, x.why].filter(Boolean).join(' · '))}</small></span><span class="fb-m"><input type="number" min="5" max="120" step="5" inputmode="numeric" data-fbm="${esc(x.k)}" value="${clamp(DR.mins[x.k] || x.mins)}" aria-label="Minutos"><small>min</small></span></label>`).join('') || UI.empty('Sem pendências neste tema. Escolhe outro ou acrescenta uma abaixo.')}</div>
+    <form class="fb-add" data-form="fbAdd"><input class="field" name="t" placeholder="Acrescentar pendência (ex.: responder ao e-mail da Joana)" required><input class="field" name="m" type="number" min="5" max="120" step="5" value="15" aria-label="Minutos"><button class="btn">${UI.ic('plus')}Juntar</button></form></div>
+  <div class="pn"><div class="pn-h"><h3>3 · Apps a bloquear</h3><a class="btn xs ghost" href="#foco.apps">Como bloquear?</a></div>
+    <div class="fb-apps">${APPS.map(a => `<button type="button" class="chip ${c.apps.includes(a) ? 'on' : ''}" data-act="fbApp" data-a="${esc(a)}">${esc(a)}</button>`).join('')}</div>
+    <label class="switch" style="margin-top:10px"><input type="checkbox" data-bind="focusblk.sc" ${c.sc ? 'checked' : ''}><span></span>Ligar o modo Foco do iPhone com o Atalho "${esc(c.scOn)}" ao começar</label></div>
+  <div class="fb-go"><div><b>${sel.length} pendência(s) · ${U.hours(tot)}</b><small>Para sair antes do fim: Face ID ou código.</small></div><button class="btn pri lg" data-act="fbGo" ${sel.length ? '' : 'disabled'}>${UI.ic('focus')}Começar bloco</button></div>`; };
+P.apps = () => { const c = cfg(), ap = c.apps.length ? c.apps.join(', ') : '(escolhe as apps na aba Começar)';
+  return `<div class="pn"><p style="margin:0 0 8px"><b>A verdade:</b> o iPhone não deixa nenhuma app web (nem o Safari) fechar ou bloquear outras apps. O que o Oceanum faz sozinho: ecrã fechado até acabares, saída só com Face ID ou código, e conta cada vez que sais da app. Para bloquear as outras apps de verdade usa o <b>modo Foco</b> + <b>Atalhos</b> (5 minutos, uma vez só):</p></div>
+  <div class="pn fb-guide"><h3>1 · Criar o modo Foco "Oceanum"</h3><ol><li>Ajustes → Foco → <b>+</b> → Personalizado → nome <b>Oceanum</b>.</li><li>Notificações → Pessoas: só favoritos. Apps: permite só as essenciais (Telefone, Oceanum).</li><li>Ecrãs → Ecrã principal → escolhe uma página só com o Oceanum. Com o Foco ligado as outras apps desaparecem do ecrã.</li></ol></div>
+  <div class="pn fb-guide"><h3>2 · Atalho "${esc(c.scOn)}" (o Oceanum chama-o ao começar)</h3><ol><li>App Atalhos → <b>+</b> → nome <b>${esc(c.scOn)}</b>.</li><li>Ação <b>Adicionar à data</b>: Data atual + <i>Entrada do atalho</i> minutos.</li><li>Ação <b>Guardar ficheiro</b>: guarda essa data em <code>Atalhos/oceanum-foco.txt</code> (substituir: sim, perguntar: não).</li><li>Ação <b>Definir Foco</b>: Oceanum → Ligado → até essa data.</li></ol></div>
+  <div class="pn fb-guide"><h3>3 · Atalho "${esc(c.scOff)}" (chamado quando o bloco acaba)</h3><ol><li>Ação <b>Guardar ficheiro</b>: texto <code>2000-01-01</code> em <code>Atalhos/oceanum-foco.txt</code>.</li><li>Ação <b>Definir Foco</b>: Oceanum → Desligado.</li></ol></div>
+  <div class="pn fb-guide"><h3>4 · Bloquear as apps (automação)</h3><ol><li>Atalhos → Automação → <b>+</b> → <b>App</b> → escolhe: <b>${esc(ap)}</b> → "É aberta" → <b>Executar imediatamente</b>.</li><li>Ações: <b>Obter ficheiro</b> <code>Atalhos/oceanum-foco.txt</code> → <b>Se</b> Data atual <i>é antes de</i> o conteúdo do ficheiro → <b>Mostrar notificação</b> "Estás num bloco de foco. Volta ao Oceanum." → <b>Ir para o ecrã principal</b>.</li><li>Pronto: durante o bloco essas apps fecham-se sozinhas mal as abres.</li></ol>
+    <div class="ws-form" style="margin-top:10px"><label>Nome do Atalho que liga<input class="field" data-bind="focusblk.scOn" value="${esc(c.scOn)}"></label><label>Nome do Atalho que desliga<input class="field" data-bind="focusblk.scOff" value="${esc(c.scOff)}"></label></div>
+    <label class="switch" style="margin-top:10px"><input type="checkbox" data-bind="focusblk.sc" ${c.sc ? 'checked' : ''}><span></span>Chamar os Atalhos automaticamente ao começar e ao acabar</label>
+    <div class="row gap8" style="margin-top:10px"><button class="btn ghost sm" data-act="fbTestSc">Testar Atalho agora</button></div></div>
+  <div class="pn"><b>Mais forte ainda:</b> <span class="mut">Ajustes → Tempo de ecrã → Limites de apps (1 min/dia) nas piores apps, com código do Tempo de ecrã guardado por outra pessoa.</span></div>`; };
+P.hist = () => { const H = U.sortBy(OS.all('focusblocks'), r => r.date + (r._c || '')).reverse(), wk = U.monday(U.today()), W = H.filter(r => r.date >= wk);
+  return `<div class="kpis">${UI.kpi('Blocos esta semana', W.length)}${UI.kpi('Pendências resolvidas', U.sum(W, r => r.done), 'esta semana')}${UI.kpi('Minutos de foco', U.sum(W, r => r.minutes), 'esta semana')}${UI.kpi('Saídas da app', H.length ? U.r1(U.sum(H, r => r.leaves) / H.length) : '—', 'média por bloco')}</div>
+  <div class="pn"><div class="list">${H.slice(0, 40).map(r => `<div class="li click" data-edit="focusblocks:${r.id}"><span class="when">${U.fmtDS(r.date)}</span><div class="li-t"><b>${esc(r.theme || 'Bloco')}</b><small>${r.done}/${r.planned} resolvidas · ${r.minutes} min · ${r.leaves || 0} saída(s)${r.early ? ' · saiu antes do fim' : ''}</small></div></div>`).join('') || UI.empty('Ainda sem blocos. Começa o primeiro.')}</div></div>`; };
+
+/* ---------- interações do rascunho ---------- */
+document.addEventListener('change', e => { const t = e.target;
+  if (t.id === 'fbTheme') { DR = { th: t.value, sel: {}, mins: {}, extra: DR.extra }; OS.request(); return; }
+  if (t.dataset && t.dataset.fbk != null) { DR.sel[t.dataset.fbk] = t.checked; OS.request(); return; }
+  if (t.dataset && t.dataset.fbm != null) { DR.mins[t.dataset.fbm] = clamp(t.value); OS.request(); } });
+OS.forms.fbAdd = f => { const t = f.elements.t.value.trim(); if (!t) return; const k = 'x:' + Date.now(); DR.extra.push({ k, title: t, kind: 'Pendência', area: '', why: 'acrescentada por ti', mins: clamp(f.elements.m.value), act: '', task: '', subject: '' }); DR.sel[k] = true; OS.request(); };
+A.fbApp = b => { const c = cfg(), a = b.dataset.a, apps = c.apps.includes(a) ? c.apps.filter(x => x !== a) : c.apps.concat(a); OS.setOne('focusblk', Object.assign({}, OS.one('focusblk'), { apps })); };
+const runSc = name => { if (!name) return; if (B) { B.grace = Date.now(); save(); } try { location.href = 'shortcuts://run-shortcut?name=' + encodeURIComponent(name) + '&input=text&text=' + (B ? Math.max(5, Math.ceil((B.items.filter(x => x.st !== 'done' && x.st !== 'skip').reduce((s, x) => s + x.mins, 0)) + 15)) : 25); } catch (e) { } };
+A.fbTestSc = () => runSc(cfg().scOn);
+
+/* ---------- o bloco ---------- */
+let wl = null; const wake = () => { try { navigator.wakeLock && navigator.wakeLock.request('screen').then(l => wl = l).catch(() => { }); } catch (e) { } };
+const cur = () => B && B.items[B.i];
+A.fbGo = () => { const items = picked(); if (!items.length) return UI.toast('Escolhe pelo menos uma pendência', 'neg'); const now = Date.now(), c = cfg();
+  B = { th: themeL(DR.th), items: items.map(x => Object.assign(x, { st: '', extra: 0, t0: 0, used: 0 })), i: 0, start: now, end: 0, phase: 'run', leaves: 0, away: 0, apps: c.apps.slice(), out: 0, grace: 0 };
+  begin(); DR = { th: DR.th, sel: {}, mins: {}, extra: [] }; wake(); draw(); if (c.sc) setTimeout(() => runSc(c.scOn), 400); };
+const begin = () => { const it = cur(); if (!it) return; it.t0 = Date.now(); B.end = it.t0 + it.mins * 6e4; B.phase = 'run'; save(); };
+const usedOf = it => it.used + (it.t0 ? Date.now() - it.t0 : 0);
+const SAFE = ['taskDone', 'habit', 'contactDone', 'mlDone'];
+const resolve = it => { try {
+  if (it.task) { const t = OS.get('tasks', it.task); if (t && t.status !== 'Feita') OS.Tasks.complete(it.task); }
+  else if (it.act) { const m = it.act.match(/data-act="(\w+)"/), ds = {}; it.act.replace(/data-([\w-]+)="([^"]*)"/g, (_, k, v) => { ds[k.replace(/-(\w)/g, (__, ch) => ch.toUpperCase())] = v; }); if (m && SAFE.includes(m[1]) && A[m[1]]) A[m[1]]({ dataset: ds, closest: () => null }); }
+} catch (e) { } };
+const stop = it => { it.used = usedOf(it); it.t0 = 0; };
+const next = () => { const i = B.items.findIndex(x => !x.st); if (i < 0) return finish(false); B.i = i; begin(); draw(); };
+A.fbDone = () => { const it = cur(); if (!it) return; stop(it); it.st = 'done'; resolve(it); UI.toast('Resolvida: ' + it.title, 'pos'); next(); };
+A.fbSkip = () => { const it = cur(); if (!it) return; stop(it); it.st = 'skip'; next(); };
+A.fbNo = () => { B.phase = 'more'; save(); draw(); };
+A.fbMore = b => { const m = +b.dataset.m || 10, it = cur(); it.extra += m; B.end = Date.now() + m * 6e4; B.phase = 'run'; save(); draw(); };
+A.fbExit = () => { B.prev = B.phase; B.phase = 'exit'; save(); draw(); setTimeout(() => { const i = U.$('#fbCode'); i && matchMedia('(pointer:fine)').matches && i.focus(); }, 60); };
+A.fbStay = () => { B.phase = B.prev && B.prev !== 'exit' ? B.prev : 'run'; save(); draw(); };
+A.fbBio = async b => { b.disabled = true; const ok = await OS.Lock.verifyBio(); b.disabled = false; if (ok) finish(true); };
+OS.forms.fbCode = async f => { const err = await OS.Lock.verifyCode(f.elements.c.value); if (!err) return finish(true); const m = U.$('#fbMsg'); if (m) m.textContent = err; f.elements.c.value = ''; };
+A.fbShow = () => { if (B) { B.hide = 0; save(); draw(); } };
+function finish(early) {
+  const it = cur(); if (it && it.t0) stop(it);
+  const done = B.items.filter(x => x.st === 'done'), mins = Math.round(U.sum(B.items, x => x.used) / 6e4);
+  const rec = OS.add('focusblocks', { date: U.today(), theme: B.th, planned: B.items.length, done: done.length, minutes: mins, leaves: B.leaves, early: !!early, note: done.map(x => x.title).join(' · ').slice(0, 300) }, { silent: true });
+  // tempo em pendências de estudo conta como sessão de estudo da disciplina
+  const bySub = {}; B.items.forEach(x => { if (x.subject && x.used >= 5 * 6e4) bySub[x.subject] = (bySub[x.subject] || 0) + Math.round(x.used / 6e4); });
+  Object.keys(bySub).forEach(s => OS.add('sessions', { date: U.today(), subject: s, minutes: bySub[s], type: 'Estudo profundo', phone: true, focus: 4, learned: 'Bloco de foco', fblock: rec.id }, { silent: true }));
+  B.phase = 'end'; B.early = !!early; B.mins = mins; save(); draw(); try { wl && wl.release(); } catch (e) { } wl = null;
+  const c = cfg(); if (c.sc) setTimeout(() => runSc(c.scOff), 600);
+}
+A.fbClose = () => { B = null; save(); draw(); OS.request(); };
+
+/* ---------- ecrã fechado ---------- */
+const mmss = ms => { const s = Math.max(0, Math.round(Math.abs(ms) / 1000)); return U.pad(Math.floor(s / 60)) + ':' + U.pad(s % 60); };
+let el = null;
+function draw() {
+  if (!el) { el = document.createElement('div'); el.id = 'fblk'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Bloco de foco'); document.body.appendChild(el); }
+  if (!B) { el.hidden = true; el.innerHTML = ''; document.documentElement.classList.remove('fb-on'); return; }
+  el.hidden = false; document.documentElement.classList.add('fb-on');
+  const it = cur(), n = B.items.length, dn = B.items.filter(x => x.st === 'done').length, up = B.items.filter((x, j) => !x.st && j !== B.i);
+  if (B.phase === 'end') { el.innerHTML = `<div class="fb-in fb-end"><div class="fb-big">${B.early ? '🔓' : '🏁'}</div><h2>${B.early ? 'Saíste do bloco' : 'Bloco terminado'}</h2><p class="fb-sub">${dn} de ${n} pendências resolvidas · ${B.mins} min de foco · ${B.leaves} saída(s) da app</p>
+    <div class="fb-sum">${B.items.map(x => `<div class="${x.st || 'todo'}"><span>${x.st === 'done' ? '✓' : x.st === 'skip' ? '↷' : '·'}</span>${esc(x.title)}<small>${Math.round(x.used / 6e4)} min</small></div>`).join('')}</div>
+    <button class="btn pri lg" data-act="fbClose">Fechar</button></div>`; return; }
+  const extra = it.extra ? ` · +${it.extra} min` : '';
+  el.innerHTML = `<div class="fb-in">
+    <div class="fb-top"><span>BLOCO DE FOCO · ${esc(B.th)}</span><span>${dn + 1 > n ? n : B.i + 1}/${n}${B.leaves ? ` · <b class="neg">${B.leaves} saída(s)</b>` : ''}</span></div>
+    <div class="fb-dots">${B.items.map((x, j) => `<i class="${x.st || (j === B.i ? 'cur' : '')}"></i>`).join('')}</div>
+    <div class="eyebrow">${esc([it.kind, it.area].filter(Boolean).join(' · ') || 'Pendência')}</div>
+    <h2 class="fb-title">${esc(it.title)}</h2>${it.why ? `<p class="fb-sub">${esc(it.why)}</p>` : ''}
+    <div class="fb-time ${B.phase !== 'run' ? 'over' : ''}" data-fbt>--:--</div><div class="fb-bar"><i data-fbb></i></div><small class="fb-sub">${it.mins} min${extra}</small>
+    ${B.phase === 'run' ? `<div class="fb-btns"><button class="btn pri lg" data-act="fbDone">${UI.ic('check')}Terminei</button><button class="btn ghost" data-act="fbSkip">Saltar</button></div>`
+    : B.phase === 'ask' ? `<div class="fb-ask"><b>⏰ Acabou o tempo. Terminaste?</b><div class="fb-btns"><button class="btn pri lg" data-act="fbDone">Sim, terminei</button><button class="btn lg" data-act="fbNo">Ainda não</button></div></div>`
+    : B.phase === 'more' ? `<div class="fb-ask"><b>Quanto tempo mais precisas?</b><div class="fb-btns">${[5, 10, 15, 30].map(m => `<button class="btn lg" data-act="fbMore" data-m="${m}">+${m} min</button>`).join('')}</div><button class="btn ghost sm" data-act="fbSkip">Deixar para outro bloco</button></div>`
+    : `<div class="fb-ask"><b>Sair do bloco antes do fim?</b><p class="fb-sub">Confirma que és tu.</p>${OS.Lock.bioId() ? `<button class="btn pri lg" data-act="fbBio">Face ID</button><div class="fb-or">ou código</div>` : ''}<form data-form="fbCode" class="fb-code" autocomplete="off"><input id="fbCode" name="c" class="field" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Código de acesso" aria-label="Código de acesso"><button class="btn">Sair</button></form><div class="fb-msg neg" id="fbMsg" role="status"></div><button class="btn ghost" data-act="fbStay">Continuar focado</button></div>`}
+    ${up.length ? `<div class="fb-next"><small>A seguir</small>${up.slice(0, 3).map(x => `<div>${esc(x.title)}<span>${x.mins} min</span></div>`).join('')}${up.length > 3 ? `<small>+${up.length - 3}</small>` : ''}</div>` : ''}
+    ${B.apps.length ? `<div class="fb-apps-on">🚫 ${B.apps.map(esc).join(' · ')}</div>` : ''}
+    ${B.phase !== 'exit' ? `<button class="fb-exit" data-act="fbExit">${UI.ic('lock')}Sair do bloco</button>` : ''}</div>`;
+  tick();
+}
+function tick() {
+  if (!B || B.phase === 'end' || !el || el.hidden) return; const it = cur(); if (!it) return;
+  const ms = B.end - Date.now(), tot = (it.mins + it.extra) * 6e4;
+  if (ms <= 0 && B.phase === 'run') { B.phase = 'ask'; save(); alarm(it); draw(); return; }
+  const t = el.querySelector('[data-fbt]'); if (t) t.textContent = (ms < 0 ? '+' : '') + mmss(ms);
+  const b = el.querySelector('[data-fbb]'); if (b) b.style.width = Math.min(100, Math.max(0, (1 - ms / tot) * 100)) + '%';
+  document.title = (ms < 0 ? '+' : '') + mmss(ms) + ' · Bloco de foco';
+}
+function alarm(it) { try { const a = new (window.AudioContext || window.webkitAudioContext)(); [0, .25, .5, .9, 1.15, 1.4].forEach(t => { const o = a.createOscillator(), g = a.createGain(); o.frequency.value = 880; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(.18, a.currentTime + t); g.gain.exponentialRampToValueAtTime(.001, a.currentTime + t + .2); o.start(a.currentTime + t); o.stop(a.currentTime + t + .21); }); } catch (e) { }
+  try { navigator.vibrate && navigator.vibrate([300, 120, 300]); } catch (e) { }
+  try { if (document.hidden && window.Notification && Notification.permission === 'granted') new Notification('Bloco de foco', { body: 'Acabou o tempo de: ' + it.title + '. Terminaste?' }); } catch (e) { } }
+setInterval(tick, 1000);
+// sair da app conta como fuga (exceto quando foi o Oceanum a abrir o Atalho)
+document.addEventListener('visibilitychange', () => { if (!B || B.phase === 'end') return;
+  if (document.hidden) { B.out = Date.now(); save(); return; }
+  if (B.out) { const s = (Date.now() - B.out) / 1000, sc = B.grace && Date.now() - B.grace < 120000; if (s > 8 && !sc) { B.leaves++; B.away += Math.round(s); UI.toast(`Saíste ${s >= 60 ? Math.round(s / 60) + ' min' : Math.round(s) + ' s'} do bloco. Volta à pendência.`, 'warn'); } B.out = 0; if (sc) B.grace = 0; save(); }
+  wake(); draw(); });
+// enquanto o bloco corre, a navegação fica atrás do ecrã fechado e o teclado não abre outros ecrãs
+document.addEventListener('keydown', e => { if (B && B.phase !== 'end' && e.key === 'Escape') { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+OS.on('ready', () => { draw(); if (B && B.phase !== 'end') wake(); });
+
+/* ---------- entradas ---------- */
+OS.on('ready', () => { const h = V.hoje; if (h && !h._fb) { V.hoje = s => h(s).replace(/(<a class="btn ghost sm" href="#next">[\s\S]*?<\/a>)/, `<div class="row gap6" style="flex-wrap:wrap;justify-content:flex-end"><a class="btn sm pri fb-hb" href="#foco">${UI.ic('lock')}Bloco de foco</a>$1</div>`); V.hoje._fb = 1; } });
+OS.FocusBlock = { cands, state: () => B, finish: e => B && finish(e), _set: v => { B = v; save(); draw(); } };
+})();
+
+</script>
+<script>
+/* OCEANUM — E-mail & LinkedIn.
+   Os e-mails vêm do Gmail através do teu script Google (o mesmo do atalho de gastos; versão 9+). Nada passa por servidores do Oceanum.
+   A IA (a tua chave Gemini) separa: urgente, responder, atenção, informativo, promoções e spam, e escreve o resumo.
+   LinkedIn: não há API pessoal; o Oceanum lê as notificações do LinkedIn que chegam ao teu Gmail (mensagens, convites, vagas, visualizações).
+   Ligações: e-mails urgentes vão para o Control Room e para o Next Action / Bloco de foco; vagas → Oportunidades; convites → Rede; e-mail → Tarefa. */
+(() => {
+'use strict';
+const U = OS.U, UI = OS.UI, V = OS.views, A = OS.act, esc = U.esc;
+const K = 'os2mail';
+OS.ONE_DEF.mail = { q: 'in:inbox newer_than:3d', n: 30, liq: 'from:linkedin.com newer_than:14d', accts: [], auto: true };
+const cfg = () => Object.assign({}, OS.ONE_DEF.mail, OS.one('mail'));
+// cache só neste aparelho (os e-mails não vão para a sincronização)
+let M = U.ls.get(K, null) || { at: 0, items: [], ai: {}, sum: '', done: {}, li: { at: 0, items: [], sum: null } };
+M.done = M.done || {}; M.ai = M.ai || {}; M.li = M.li || { at: 0, items: [], sum: null };
+const save = () => { const keep = new Set(M.items.map(x => x.id).concat(M.li.items.map(x => x.id))); Object.keys(M.ai).forEach(k => { if (!keep.has(k)) delete M.ai[k]; }); Object.keys(M.done).forEach(k => { if (!keep.has(k)) delete M.done[k]; }); U.ls.set(K, M); };
+let busy = '', err = '';
+
+const CATS = [['urgente', '🔴', 'Urgente'], ['responder', '✉️', 'Responder'], ['atencao', '👀', 'Ler com atenção'], ['info', 'ℹ️', 'Informativo'], ['promo', '🏷️', 'Promoções'], ['spam', '🚫', 'Spam / suspeito']];
+const catL = c => (CATS.find(x => x[0] === c) || CATS[3]);
+const IB = () => OS.Inbox || {};
+const ready = () => { const c = OS.one('inbox'); return !!(c.url && c.key); };
+const ver = () => +(OS.one('inbox').ver || 0);
+const sources = () => { const c = OS.one('inbox'), out = []; if (c.url) out.push(c.url.trim()); (cfg().accts || []).forEach(a => a && a.url && out.push(a.url.trim())); return out; };
+const qs = (u, extra) => u + (u.includes('?') ? '&' : '?') + 'k=' + encodeURIComponent(OS.one('inbox').key) + extra;
+const nameOf = f => { const m = String(f || '').match(/^\s*"?([^"<]+?)"?\s*</); return (m ? m[1] : String(f || '').replace(/<.*>/, '')).trim() || f; };
+const addrOf = f => { const m = String(f || '').match(/<([^>]+)>/); return (m ? m[1] : f || '').trim().toLowerCase(); };
+const gmailLink = it => 'https://mail.google.com/mail/u/' + (+it.src || 0) + '/#all/' + encodeURIComponent(String(it.id || ''));
+
+/* ---------- classificação sem IA (reserva) ---------- */
+const guess = it => { const t = (it.s + ' ' + it.sn).toLowerCase(), f = (it.f || '').toLowerCase(), robot = /no-?reply|notifica|notification|newsletter|mailer|news@|info@|marketing|bounce/.test(f);
+  if (/verif(y|ique) (your|a sua|sua) conta|confirme os seus dados|ganhou um|you won|prémio|premio|bitcoin|herança|heranca|gift card|password expir|senha expira|conta (será|sera) (suspensa|bloqueada)/.test(t)) return { c: 'spam', why: 'parece burla ou phishing' };
+  if (/unsubscribe|cancelar (a )?subscri|anular (a )?subscri|newsletter|promo|desconto|% off|oferta|saldos|cup[ãa]o|cupom|black friday|liquida/.test(t)) return { c: 'promo', why: 'publicidade ou newsletter' };
+  if (/urgente|urgent|último aviso|ultimo aviso|em atraso|overdue|prazo (termina|acaba)|deadline|alerta de segurança|security alert|ação necessária|action required/.test(t)) return { c: 'urgente', why: 'tem prazo ou alerta' };
+  if (!robot && (/^re:|^res:/i.test(it.s) || /\?/.test(it.sn.slice(0, 300)))) return { c: 'responder', why: 'uma pessoa espera resposta' };
+  if (it.imp && !robot) return { c: 'atencao', why: 'marcado como importante' };
+  return { c: 'info', why: robot ? 'notificação automática' : '' }; };
+const info = it => M.ai[it.id] || guess(it);
+
+/* ---------- buscar ---------- */
+const fetchQ = async (q, n) => { const all = []; const S = sources();
+  await Promise.all(S.map(async (u, si) => { const j = await IB().getJSON(qs(u, '&op=gm&n=' + n + '&q=' + encodeURIComponent(q) + '&_=' + Date.now()), 2);
+    if (!j || !j.ok) throw new Error(j && j.msg === 'Chave errada' ? 'Chave errada no script — cola o código outra vez.' : 'O script não devolveu os e-mails.');
+    if (!Array.isArray(j.gm)) throw new Error('O script ainda não tem a parte do e-mail. Atualiza-o (passo abaixo).');
+    j.gm.forEach(x => all.push(Object.assign(x, { src: si, sn: String(x.sn || '') }))); }));
+  return U.sortBy(all, x => x.d).reverse(); };
+const aiOn = () => OS.AI && OS.AI.key && OS.AI.key();
+const classify = async items => { const todo = items.filter(x => !M.ai[x.id]).slice(0, 30); if (!todo.length && M.sum) return;
+  const p = OS.one('profile');
+  const o = await OS.AI.json([{ text: `És o assistente de e-mail de ${p.short || 'Ryan'} (estudante no ISCA-UA em Aveiro, trabalha, brasileiro a viver em Portugal). Hoje é ${U.today()}.
+Classifica cada e-mail numa categoria: "urgente" (prazo hoje/amanhã, pagamento em atraso, segurança da conta, universidade/trabalho a pedir ação já), "responder" (uma pessoa real espera resposta dele), "atencao" (importante ler, sem resposta), "info" (notificações, recibos, confirmações), "promo" (marketing, newsletters), "spam" (suspeito: phishing, burla, pede dados ou dinheiro, remetente estranho).
+Para cada e-mail: {"id","c","porque":"máx. 12 palavras","acao":"o que fazer, máx. 8 palavras, ou vazio","prazo":"AAAA-MM-DD ou null"}.
+Escreve também "resumo": 2 a 3 frases sobre o que precisa da atenção dele (todos os e-mails, não só estes). Não inventes nada que não esteja nos e-mails.
+JSON: {"resumo":"…","itens":[…]}
+E-mails novos: ${JSON.stringify(todo.map(x => ({ id: x.id, de: x.f, assunto: x.s, data: x.d.slice(0, 16), nao_lido: x.u, importante: x.imp, inicio: x.sn.slice(0, 320) })))}
+Outros já vistos (só para o resumo): ${JSON.stringify(items.filter(x => M.ai[x.id]).slice(0, 25).map(x => ({ assunto: x.s, c: M.ai[x.id].c })))}` }], .15);
+  (o.itens || []).forEach(r => { if (r && r.id && CATS.some(c => c[0] === r.c)) M.ai[r.id] = { c: r.c, why: String(r.porque || '').slice(0, 120), a: String(r.acao || '').slice(0, 80), due: /^\d{4}-\d\d-\d\d$/.test(r.prazo || '') ? r.prazo : '' }; });
+  if (o.resumo) M.sum = String(o.resumo).slice(0, 600); };
+const refresh = async (manual) => { if (busy || !ready()) { if (manual && !ready()) UI.toast('Liga primeiro o script Google (aba Ligar contas)', 'warn'); return; }
+  busy = 'mail'; err = ''; if (manual) OS.request();
+  try { const c = cfg(); M.items = await fetchQ(c.q, c.n); M.at = Date.now(); if (aiOn()) { try { await classify(M.items); } catch (e) { err = 'IA: ' + (e.message || 'sem resposta') + ' (usei a classificação simples)'; } } save(); OS.emit && OS.emit('mail'); }
+  catch (e) { err = e.message || 'Não consegui ir buscar os e-mails.'; }
+  busy = ''; OS.request(); };
+const refreshLi = async (manual) => { if (busy || !ready()) return; busy = 'li'; err = ''; if (manual) OS.request();
+  try { const items = await fetchQ(cfg().liq, 40); M.li = { at: Date.now(), items, sum: liGuess(items) };
+    if (aiOn() && items.length) { try { const o = await OS.AI.json([{ text: `Estes são e-mails de notificação do LinkedIn do ${OS.one('profile').short || 'Ryan'}. Extrai SÓ o que está nos e-mails (não inventes):
+JSON {"resumo":"2 frases: o que vale a pena fazer no LinkedIn agora","mensagens":[{"de","texto":"máx. 20 palavras","id"}],"convites":[{"nome","cargo","id"}],"vagas":[{"titulo","empresa","local","id"}],"visualizacoes":número ou null,"publicacoes":[{"texto":"máx. 15 palavras","id"}]}
+E-mails: ${JSON.stringify(items.slice(0, 35).map(x => ({ id: x.id, assunto: x.s, data: x.d.slice(0, 10), inicio: x.sn.slice(0, 300) })))}` }], .1); M.li.sum = Object.assign(liGuess(items), o, { ai: true }); } catch (e) { err = 'IA: ' + (e.message || '') ; } }
+    save(); } catch (e) { err = e.message || 'Não consegui ir buscar o LinkedIn.'; }
+  busy = ''; OS.request(); };
+const liGuess = items => { const r = { resumo: '', mensagens: [], convites: [], vagas: [], visualizacoes: null, publicacoes: [] };
+  items.forEach(x => { const s = x.s; if (/mensagem|message|enviou-lhe|sent you/i.test(s)) r.mensagens.push({ de: s.replace(/^(.*?)( enviou| sent| te enviou).*$/i, '$1'), texto: x.sn.slice(0, 120), id: x.id });
+    else if (/convite|invitation|quer ligar|wants to connect|conectar/i.test(s)) r.convites.push({ nome: s.replace(/^(.*?)( quer| wants| enviou| convid).*$/i, '$1'), cargo: '', id: x.id });
+    else if (/vaga|job|emprego|candidat|hiring|está a contratar|contratando/i.test(s)) r.vagas.push({ titulo: s, empresa: '', local: '', id: x.id });
+    else if (/visualiz|viewed|apareceu em|appeared in/i.test(s)) { const m = s.match(/(\d+)/); r.visualizacoes = (r.visualizacoes || 0) + (m ? +m[1] : 1); }
+    else r.publicacoes.push({ texto: s, id: x.id }); });
+  return r; };
+const act = async (it, a) => { try { const u = sources()[it.src || 0]; const j = await IB().getJSON(qs(u, '&op=ga&a=' + a + '&ids=' + encodeURIComponent(it.id) + '&_=' + Date.now()), 2); return j && j.ok && j.n > 0; } catch (e) { return false; } };
+
+/* ---------- API para as outras áreas (Spyke, Control Room, Next Action, Bloco de foco) ---------- */
+const open = () => M.items.filter(x => !M.done[x.id]);
+const Mail = OS.Mail = {
+  items: () => open().map(x => Object.assign({}, x, info(x))),
+  counts: () => { const L = Mail.items(); return { urg: L.filter(x => x.c === 'urgente').length, resp: L.filter(x => x.c === 'responder').length, unread: L.filter(x => x.u).length, spam: L.filter(x => x.c === 'spam').length, at: M.at }; },
+  sum: () => M.sum, li: () => M.li, refresh, refreshLi,
+  speak: () => { if (!M.at) return ''; const c = Mail.counts(), L = Mail.items(), top = L.filter(x => x.c === 'urgente' || x.c === 'responder').slice(0, 2);
+    if (!c.urg && !c.resp) return 'Nos e-mails, nada urgente nem à espera de resposta.';
+    return `Nos e-mails: ${c.urg ? c.urg + (c.urg === 1 ? ' urgente' : ' urgentes') : ''}${c.urg && c.resp ? ' e ' : ''}${c.resp ? c.resp + ' à espera de resposta' : ''}. ${top.map(x => nameOf(x.f) + ' sobre ' + x.s.replace(/^(re|res|fw|fwd|enc):\s*/i, '')).join('; ')}.`; },
+  ctx: () => Mail.items().filter(x => ['urgente', 'responder', 'atencao'].includes(x.c)).slice(0, 8).map(x => `${catL(x.c)[2]}: ${nameOf(x.f)} — ${x.s}`).join('\n'),
+  _set: v => { M = Object.assign(M, v); save(); }
+};
+// Control Room: e-mails urgentes
+const I = OS.Intel;
+if (I && I.alerts) { const _a = I.alerts; I.alerts = () => { const out = _a(); try { Mail.items().filter(x => x.c === 'urgente').slice(0, 3).forEach(x => out.push({ lvl: 'attention', area: 'E-mail', title: x.s || '(sem assunto)', detail: nameOf(x.f) + (x.a ? ' · ' + x.a : x.why ? ' · ' + x.why : ''), href: '#email' })); } catch (e) { } return out; }; }
+// Next Action (e Bloco de foco): responder aos e-mails que esperam por ti
+if (I && I.next) { const _n = I.next; I.next = (o = {}) => { const out = _n(o); try { if (!o.ctx || o.ctx === '@Computador') Mail.items().filter(x => x.c === 'urgente' || x.c === 'responder').slice(0, 5).forEach(x => out.push({ kind: 'E-mail', title: 'Responder: ' + (x.s || nameOf(x.f)), score: x.c === 'urgente' ? 62 : 36, why: [nameOf(x.f), x.a || x.why].filter(Boolean), eff: 10, area: 'E-mail', act: `data-act="mlDone" data-id="${esc(x.id)}"`, actL: 'Feito', href: '#email' })); } catch (e) { } return out.sort((a, b) => b.score - a.score); }; }
+
+/* ---------- página ---------- */
+const TB = [['', 'Resumo'], ['caixa', 'Caixa'], ['linkedin', 'LinkedIn'], ['contas', 'Ligar contas']];
+V.email = sub => { const k = TB.some(t => t[0] === (sub || '')) ? (sub || '') : '';
+  const when = M.at ? 'atualizado ' + U.rel(U.iso(new Date(M.at))) + ' às ' + new Date(M.at).toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }) : 'ainda não atualizado';
+  return UI.head('E-mail & LinkedIn', 'O que precisa da tua atenção, separado do lixo.', `<button class="btn sm" data-act="mlRefresh" ${busy ? 'disabled' : ''}>${UI.ic('sync')}${busy ? 'A atualizar…' : 'Atualizar'}</button>`) + UI.tabs('email', TB, k) + `<div class="ml-page">${err ? `<div class="ib-st bad" style="margin-bottom:10px">${esc(err)}</div>` : ''}${!ready() || ver() < 9 ? (k === 'contas' ? '' : setupCard()) : ''}${P[k](when)}</div>`; };
+const setupCard = () => `<div class="pn ml-setup"><b>${ready() ? 'Falta atualizar o script Google para a versão 9' : 'Liga o teu Gmail ao Oceanum'}</b><p class="mut">${ready() ? 'O teu script ainda não tem a parte do e-mail.' : 'Usa o mesmo script Google do atalho de gastos e da sincronização.'} Demora 3 minutos, uma vez só.</p><a class="btn sm pri" href="#email.contas">Ver os passos</a></div>`;
+const row = (x, o = {}) => { const [c, ic, l] = catL(x.c); return `<div class="ml-it ${x.u ? 'unread' : ''} c-${c}"><div class="ml-ic" title="${l}">${ic}</div><div class="ml-t"><div class="ml-h"><b>${esc(nameOf(x.f))}</b><small>${U.fmtDS(x.d.slice(0, 10))} ${x.d.slice(11, 16) ? new Date(x.d).toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }) : ''}</small></div><div class="ml-s">${esc(x.s || '(sem assunto)')}</div><small class="ml-w">${esc([x.why, x.a ? '→ ' + x.a : '', x.due ? 'prazo ' + U.fmtDS(x.due) : ''].filter(Boolean).join(' · ') || x.sn.slice(0, 110))}</small>
+  <div class="ml-a"><a class="btn xs" href="${esc(gmailLink(x))}" target="_blank" rel="noopener">Abrir</a>${c === 'urgente' || c === 'responder' || c === 'atencao' ? `<button class="btn xs ghost" data-act="mlTask" data-id="${esc(x.id)}">${UI.ic('plus')}Tarefa</button><button class="btn xs ghost" data-act="mlDone" data-id="${esc(x.id)}">${UI.ic('check')}Feito</button>` : ''}<button class="btn xs ghost" data-act="mlDo" data-a="arquivar" data-id="${esc(x.id)}">Arquivar</button>${c === 'spam' || c === 'promo' ? `<button class="btn xs ghost" data-act="mlDo" data-a="spam" data-id="${esc(x.id)}">Spam</button>` : ''}${o.move === false ? '' : `<select class="ml-mv" data-mlmv="${esc(x.id)}" aria-label="Mudar categoria">${CATS.map(k => `<option value="${k[0]}"${k[0] === c ? ' selected' : ''}>${k[2]}</option>`).join('')}</select>`}</div></div></div>`; };
+const P = {};
+P[''] = when => { const L = Mail.items(), c = Mail.counts(), by = k => L.filter(x => x.c === k);
+  if (!M.at) return ready() && ver() >= 9 ? `<div class="pn">${UI.empty('Ainda sem e-mails. Toca em Atualizar.')}</div>` : '';
+  return `<div class="kpis">${UI.kpi('Urgentes', c.urg, '', { tone: c.urg ? 'neg' : '' })}${UI.kpi('Para responder', c.resp)}${UI.kpi('Não lidos', c.unread)}${UI.kpi('Spam suspeito', c.spam, '', { tone: c.spam ? 'warn' : '' })}</div>
+  <div class="pn ml-sum"><div class="pn-h"><h3>${aiOn() ? '✨ Resumo' : 'Resumo'}</h3><small class="mut">${esc(when)}</small></div><p>${esc(M.sum || (aiOn() ? 'Toca em Atualizar para a IA ler os e-mails.' : 'Liga a IA (Definições → IA) para teres o resumo escrito e a separação inteligente. Agora uso regras simples.'))}</p>${(OS.Spyke && OS.Spyke.say) ? `<button class="btn xs ghost" data-act="mlSay">${UI.ic('mic')}Spyke, lê-me isto</button>` : ''}</div>
+  ${['urgente', 'responder', 'atencao'].map(k => by(k).length ? `<div class="pn"><div class="pn-h"><h3>${catL(k)[1]} ${catL(k)[2]} · ${by(k).length}</h3></div><div class="ml-list">${by(k).map(x => row(x)).join('')}</div></div>` : '').join('')}
+  ${by('urgente').length + by('responder').length + by('atencao').length ? '' : `<div class="pn">${UI.empty('Nada urgente nem à espera de resposta. 👌')}</div>`}
+  ${(by('promo').length + by('spam').length) ? `<div class="pn"><div class="pn-h"><h3>Lixo e promoções · ${by('promo').length + by('spam').length}</h3><div class="row gap6">${by('promo').length ? `<button class="btn xs ghost" data-act="mlBulk" data-c="promo" data-a="arquivar">Arquivar promoções</button>` : ''}${by('spam').length ? `<button class="btn xs ghost" data-act="mlBulk" data-c="spam" data-a="spam">Mandar suspeitos para spam</button>` : ''}</div></div>${UI.toggle('Ver lista', `<div class="ml-list">${by('spam').concat(by('promo')).map(x => row(x)).join('')}</div>`, 'mlJunk')}</div>` : ''}`; };
+P.caixa = () => { const L = Mail.items(), f = OS.ui.mlF || '', V2 = f ? L.filter(x => x.c === f) : L;
+  return `<div class="ml-f"><button class="chip ${!f ? 'on' : ''}" data-ui="mlF" data-v="">Tudo · ${L.length}</button>${CATS.map(([k, ic, l]) => `<button class="chip ${f === k ? 'on' : ''}" data-ui="mlF" data-v="${k}">${ic} ${l} · ${L.filter(x => x.c === k).length}</button>`).join('')}</div>
+  <div class="pn"><div class="ml-list">${V2.map(x => row(x)).join('') || UI.empty(M.at ? 'Nada aqui.' : 'Toca em Atualizar.')}</div></div>${Object.keys(M.done).length ? `<p class="mut" style="font-size:12.5px">${Object.keys(M.done).length} marcado(s) como feito neste aparelho · <button class="btn xs ghost" data-act="mlUndo">mostrar outra vez</button></p>` : ''}`; };
+P.linkedin = () => { const li = M.li, s = li.sum;
+  if (!li.at) return `<div class="pn"><p class="mut">O LinkedIn não deixa apps pessoais lerem a tua conta. O Oceanum lê as <b>notificações do LinkedIn que chegam ao teu Gmail</b> (mensagens, convites, vagas, quem viu o perfil). Confirma no LinkedIn → Definições → Comunicações → E-mail que estas notificações estão ligadas.</p><button class="btn pri" data-act="mlLi" ${ready() && ver() >= 9 ? '' : 'disabled'}>Ler o LinkedIn agora</button></div>`;
+  const it = id => li.items.find(x => x.id === id) || {}, lk = id => id && it(id).id ? `<a class="btn xs" href="${esc(gmailLink(it(id)))}" target="_blank" rel="noopener">Abrir</a>` : '';
+  return `<div class="row gap8" style="margin-bottom:10px;align-items:center"><button class="btn sm" data-act="mlLi">${UI.ic('sync')}${busy === 'li' ? 'A ler…' : 'Atualizar LinkedIn'}</button><small class="mut">${li.items.length} notificações dos últimos 14 dias</small><span class="grow"></span><a class="btn sm ghost" href="https://www.linkedin.com/" target="_blank" rel="noopener">Abrir LinkedIn</a></div>
+  ${s.resumo ? `<div class="pn ml-sum"><p>${esc(s.resumo)}</p></div>` : ''}
+  <div class="kpis">${UI.kpi('Mensagens', (s.mensagens || []).length)}${UI.kpi('Convites', (s.convites || []).length)}${UI.kpi('Vagas', (s.vagas || []).length)}${UI.kpi('Visualizações do perfil', s.visualizacoes != null ? s.visualizacoes : '—')}</div>
+  ${(s.mensagens || []).length ? `<div class="pn"><div class="pn-h"><h3>💬 Mensagens</h3></div><div class="list">${s.mensagens.map(m => `<div class="li"><div class="li-t"><b>${esc(m.de || '')}</b><small>${esc(m.texto || '')}</small></div><div class="li-r">${lk(m.id)}</div></div>`).join('')}</div></div>` : ''}
+  ${(s.convites || []).length ? `<div class="pn"><div class="pn-h"><h3>🤝 Convites</h3></div><div class="list">${s.convites.map(m => `<div class="li"><div class="li-t"><b>${esc(m.nome || '')}</b><small>${esc(m.cargo || '')}</small></div><div class="li-r"><button class="btn xs ghost" data-act="mlContact" data-n="${esc(m.nome || '')}" data-r="${esc(m.cargo || '')}">${UI.ic('plus')}Rede</button>${lk(m.id)}</div></div>`).join('')}</div></div>` : ''}
+  ${(s.vagas || []).length ? `<div class="pn"><div class="pn-h"><h3>💼 Vagas</h3></div><div class="list">${s.vagas.map(m => `<div class="li"><div class="li-t"><b>${esc(m.titulo || '')}</b><small>${esc([m.empresa, m.local].filter(Boolean).join(' · '))}</small></div><div class="li-r"><button class="btn xs ghost" data-act="mlOpp" data-t="${esc(m.titulo || '')}" data-e="${esc(m.empresa || '')}" data-id="${esc(m.id || '')}">${UI.ic('plus')}Oportunidades</button>${lk(m.id)}</div></div>`).join('')}</div></div>` : ''}
+  ${(s.publicacoes || []).length ? UI.toggle('Outras notificações · ' + s.publicacoes.length, `<div class="list">${s.publicacoes.map(m => `<div class="li"><div class="li-t"><small>${esc(m.texto || '')}</small></div><div class="li-r">${lk(m.id)}</div></div>`).join('')}</div>`, 'mlLiO') : ''}`; };
+P.contas = () => { const c = cfg(), ib = OS.one('inbox');
+  return `<div class="pn fb-guide"><h3>1 · Gmail principal ${ready() && ver() >= 9 ? '<span class="pos">✓ ligado</span>' : ''}</h3>
+    ${!ready() ? `<p>Primeiro liga o script Google em <a class="acc" href="#definicoes">Definições → Atalho de gastos</a> (passos 1 e 2). Depois volta aqui.</p>` : ver() >= 9 ? '<p class="mut">O teu script já lê o Gmail. Podes atualizar quando quiseres.</p>' : ''}
+    ${ready() && ver() < 9 ? `<ol><li>Toca em <b>Copiar código novo</b>.</li><li>Abre <a class="acc" href="https://script.google.com/home" target="_blank" rel="noopener">script.google.com</a> → o teu projeto do Oceanum → apaga tudo → cola → <b>💾 Guardar</b>.</li><li>Na lista de funções ao lado de ▶ escolhe <b>autorizarGmail</b> → <b>▶ Executar</b> → <b>Rever permissões</b> → a tua conta → Avançadas → Aceder → <b>Permitir</b> (agora pede também o Gmail).</li><li><b>Implementar → Gerir implementações → ✏️ → Versão: Nova versão → Implementar</b>. O endereço fica igual.</li><li>Volta aqui e toca em <b>Verificar</b>.</li></ol>
+      <div class="row gap8"><button class="btn sm pri" data-act="ibCopy" data-t="code">${UI.ic('link')}Copiar código novo</button><button class="btn sm" data-act="mlCheck">Verificar</button></div>` : ''}
+    <p class="mut" style="font-size:12.5px;margin-top:8px">Privacidade: o script corre na tua conta Google e só envia ao Oceanum o assunto, o remetente e o início do texto dos e-mails recentes. Com a IA ligada, isso vai para a tua chave Gemini para ser separado e resumido. Ações (arquivar, spam) só quando tocas.</p></div>
+  <div class="pn fb-guide"><h3>2 · O que ler</h3><div class="ws-form"><label>Pesquisa do Gmail<input class="field" data-bind="mail.q" value="${esc(c.q)}"></label><label>Quantos e-mails (máx. 50)<input class="field" type="number" min="5" max="50" data-bind="mail.n" value="${c.n}"></label><label>LinkedIn<input class="field" data-bind="mail.liq" value="${esc(c.liq)}"></label></div><small class="mut">Exemplos: <code>in:inbox newer_than:3d</code> · <code>is:unread newer_than:7d</code> · <code>in:inbox -category:promotions newer_than:2d</code></small></div>
+  <div class="pn fb-guide"><h3>3 · Outras contas de e-mail</h3><ol><li><b>Outro Gmail:</b> entra nessa conta em script.google.com (janela anónima), cria um projeto, cola o <b>mesmo código</b>, executa <b>autorizarGmail</b>, implementa como Aplicação Web (Eu · Qualquer pessoa) e cola o endereço abaixo.</li><li><b>E-mail da universidade, Outlook, iCloud:</b> configura o reencaminhamento automático para o teu Gmail (no Outlook/Office 365: Definições → Correio → Reencaminhamento). Esses e-mails passam a aparecer aqui, com o endereço de destino.</li></ol>
+    ${(c.accts || []).map((a, i) => `<div class="li"><div class="li-t"><b>${esc(a.label || 'Conta ' + (i + 2))}</b><small>${esc(a.url.replace(/^https:\/\/script\.google\.com\/macros\/s\//, '').slice(0, 24))}…</small></div><div class="li-r"><button class="btn xs ghost" data-act="mlAcctDel" data-i="${i}">${UI.ic('trash')}</button></div></div>`).join('')}
+    <form class="fb-add" data-form="mlAcct" style="grid-template-columns:120px minmax(0,1fr) auto"><input class="field" name="l" placeholder="Nome (ex.: Pessoal)"><input class="field" name="u" placeholder="https://script.google.com/macros/s/…/exec" required autocapitalize="none" spellcheck="false"><button class="btn">Juntar</button></form></div>`; };
+
+/* ---------- ações ---------- */
+const byId = id => M.items.find(x => x.id === id) || M.li.items.find(x => x.id === id);
+A.mlRefresh = () => { const h = location.hash; if (/linkedin/.test(h)) refreshLi(true); else refresh(true); };
+A.mlLi = () => refreshLi(true);
+A.mlDone = b => { const it = byId(b.dataset.id); M.done[b.dataset.id] = Date.now(); save(); if (it && it.u) act(it, 'lido'); UI.toast('Feito', 'pos'); OS.request(); };
+A.mlUndo = () => { M.done = {}; save(); OS.request(); };
+A.mlDo = async b => { const it = byId(b.dataset.id); if (!it) return; const a = b.dataset.a; b.disabled = true; const ok = await act(it, a); if (ok) { M.items = M.items.filter(x => x.id !== it.id); save(); UI.toast(a === 'spam' ? 'Enviado para o spam' : 'Arquivado', 'pos'); } else UI.toast('O script não conseguiu. Atualiza-o para a versão 9.', 'neg'); OS.request(); };
+A.mlBulk = b => { const L = Mail.items().filter(x => x.c === b.dataset.c), a = b.dataset.a; if (!L.length) return;
+  UI.ask(a === 'spam' ? `Mandar ${L.length} e-mail(s) suspeito(s) para o spam?` : `Arquivar ${L.length} promoção(ões)?`, 'No Gmail. Podes desfazer lá.', a === 'spam' ? 'Mandar para spam' : 'Arquivar', async () => { let n = 0; for (const it of L) if (await act(it, a)) { n++; M.items = M.items.filter(x => x.id !== it.id); } save(); UI.toast(n + ' feito(s)', n ? 'pos' : 'neg'); OS.request(); }); };
+A.mlTask = b => { const it = byId(b.dataset.id); if (!it) return; const x = Object.assign({}, it, info(it)); OS.add('tasks', { title: 'Responder: ' + (x.s || nameOf(x.f)).replace(/^(re|res|fw|fwd|enc):\s*/i, ''), status: 'Próxima', prio: x.c === 'urgente' ? '1' : '2', due: x.due || (x.c === 'urgente' ? U.today() : ''), effort: 10, ctx: ['@Computador'], area: 'Pessoal', notes: nameOf(x.f) + ' <' + addrOf(x.f) + '>\n' + gmailLink(x), mail: it.id }); M.done[it.id] = Date.now(); save(); UI.toast('Tarefa criada', 'pos'); };
+A.mlOpp = b => { const n = b.dataset.t + (b.dataset.e ? ' · ' + b.dataset.e : ''); if (OS.all('opps').some(o => o.name === n)) return UI.toast('Já está nas Oportunidades'); const it = byId(b.dataset.id); OS.add('opps', { name: n, inst: b.dataset.e, kind: 'Emprego', area: 'Carreira', status: 'Identificada', prio: '3', next: 'Ler a vaga e decidir', link: it ? gmailLink(it) : '' }); UI.toast('Guardada em Oportunidades', 'pos'); };
+A.mlContact = b => { if (OS.all('contacts').some(c => c.name === b.dataset.n)) return UI.toast('Já está na tua rede'); OS.add('contacts', { name: b.dataset.n, role: b.dataset.r, how: 'LinkedIn', strength: 1, last: U.today(), tags: ['LinkedIn'] }); UI.toast('Adicionado à rede (Carreira)', 'pos'); };
+A.mlSay = () => OS.Spyke && OS.Spyke.say((M.sum ? M.sum + ' ' : '') + Mail.speak());
+A.mlCheck = async () => { UI.toast('A verificar…'); await OS.Inbox.check(); UI.toast(ver() >= 9 ? 'Script atualizado ✓' : 'Ainda é a versão antiga (' + ver() + '). Confirma "Nova versão" ao implementar.', ver() >= 9 ? 'pos' : 'warn'); if (ver() >= 9) refresh(true); else OS.request(); };
+A.mlAcctDel = b => { const a = (cfg().accts || []).slice(); a.splice(+b.dataset.i, 1); OS.setOne('mail', { accts: a }); };
+OS.forms.mlAcct = f => { const u = f.elements.u.value.trim(); if (!/^https:\/\/script\.google\.com\/(a\/[^/]+\/)?macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u)) return UI.toast('Endereço inválido (tem de terminar em /exec)', 'neg'); OS.setOne('mail', { accts: (cfg().accts || []).concat({ label: f.elements.l.value.trim(), url: u }) }); UI.toast('Conta juntada', 'pos'); };
+document.addEventListener('change', e => { const id = e.target.dataset && e.target.dataset.mlmv; if (!id) return; const it = byId(id); if (!it) return; M.ai[id] = Object.assign({}, info(it), { c: e.target.value, why: 'mudado por ti' }); save(); OS.request(); });
+
+// tarefa feita → e-mail tratado (e marcado como lido no Gmail)
+OS.on('upd:tasks', (t, b) => { if (!t.mail || !b || b.status === t.status || t.status !== 'Feita') return; M.done[t.mail] = Date.now(); save(); const it = byId(t.mail); if (it && it.u) act(it, 'lido'); });
+/* ---------- atualizar sozinho (só com a app aberta) ---------- */
+const tick = () => { if (document.hidden || !ready() || ver() < 9 || !cfg().auto) return; if (Date.now() - (M.at || 0) > 15 * 60e3) refresh(); else if (Date.now() - (M.li.at || 0) > 90 * 60e3 && M.li.at) refreshLi(); };
+OS.on('ready', () => setTimeout(tick, 4000)); setInterval(tick, 60e3);
+})();
+
+</script>
+<script>
+/* OCEANUM — Spyke: assistente de voz (estilo J.A.R.V.I.S.), voz masculina.
+   Com a app aberta: toca no microfone, diz "Spyke…" (palavra de ativação) ou bate duas palmas.
+   Com a app fechada (limite do iPhone: uma app web não pode ouvir em segundo plano): Atalhos da Siri + "Atalhos vocais" do iOS
+   chamam o teu script Google, que devolve o resumo do dia (o Oceanum envia-o sempre que está aberto) ou responde com a IA.
+   Voz: Gemini TTS (voz masculina, ex.: Charon) com a tua chave; sem chave, a voz do sistema (masculina se existir). */
+(() => {
+'use strict';
+const U = OS.U, UI = OS.UI, V = OS.views, A = OS.act, esc = U.esc;
+const VOICES = [['Charon', 'Charon · informativo, grave'], ['Orus', 'Orus · firme'], ['Iapetus', 'Iapetus · claro'], ['Algenib', 'Algenib · rouco'], ['Alnilam', 'Alnilam · decidido'], ['Sadaltager', 'Sadaltager · sabedor'], ['Fenrir', 'Fenrir · enérgico'], ['Puck', 'Puck · animado'], ['Umbriel', 'Umbriel · descontraído']];
+OS.ONE_DEF.spyke = { voice: 'Charon', accent: 'BR', speed: 1, ai: true, wake: false, clap: false, sens: 5, morning: true, siri: true, siriAsk: false };
+const cfg = () => Object.assign({}, OS.ONE_DEF.spyke, OS.one('spyke'));
+const S = OS.Spyke = {};
+const N = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w\s€.,:%-]/g, ' ').replace(/\s+/g, ' ').trim();
+const WAKE = /\b(e?sp[aey]i?[ck]+e?|spike|spyke|spaik|spaiki|espaique|espaike|espique|spaique)\b/;
+const name = () => OS.one('profile').short || 'Ryan';
+const eurS = v => { const n = Math.abs(U.num(v)); return (Math.abs(n - Math.round(n)) < .005 ? Math.round(n) : n.toFixed(2).replace('.', ',')) + ' euros'; };
+const listS = a => a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' e ' + a[a.length - 1];
+const dayS = d => U.parse(d).toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' });
+
+/* ================= o que o Spyke sabe (resumo e contexto) ================= */
+S.brief = (d = U.today()) => { const t = U.today(), fut = d > t, h = new Date().getHours(), out = [];
+  const g = fut || h < 12 ? 'Bom dia' : h < 19 ? 'Boa tarde' : 'Boa noite';
+  out.push(`${g}, ${name()}. ${fut ? 'Hoje' : 'Hoje'} é ${dayS(d)}.`);
+  try { const it = OS.Cal.items(d, d).filter(x => x.src !== 'task' && !x.done), timed = U.sortBy(it.filter(x => x.start), x => x.start), off = it.find(x => x.src === 'off');
+    if (off) out.push('Hoje é dia de folga no trabalho.');
+    if (timed.length) out.push(`Na agenda tens ${timed.length === 1 ? 'um compromisso' : timed.length + ' compromissos'}: ${listS(timed.slice(0, 4).map(x => x.title.replace(/^[^\wÀ-ú]+/, '') + ' às ' + x.start))}${timed.length > 4 ? ', e mais ' + (timed.length - 4) : ''}.`);
+    else out.push('A agenda está livre de compromissos com hora.'); } catch (e) { }
+  try { if (!fut) { const urg = OS.Intel.alerts().filter(a => a.lvl === 'urgent' && a.area !== 'Tarefas').slice(0, 2); if (urg.length) out.push('Atenção: ' + listS(urg.map(a => a.title)) + '.'); } } catch (e) { }
+  try { const na = fut ? U.sortBy(OS.Tasks.open().filter(x => (x.due && x.due <= d) || x.sched === d), x => +x.prio || 3).map(x => ({ title: x.title })) : OS.Intel.next().filter(n => !['Hábito', 'E-mail', 'Treino', 'Corrida'].includes(n.kind));
+    if (na.length) out.push(`A tua prioridade número um é ${na[0].title}.${na.length > 1 ? ' Depois, ' + listS(na.slice(1, 3).map(n => n.title)) + '.' : ''}`); } catch (e) { }
+  try { const hb = OS.all('habits').filter(x => x.active && OS.Hab.due(x, d) && !OS.Hab.done(x, d)); if (hb.length) out.push(`${hb.length === 1 ? 'Tens um hábito' : 'Tens ' + hb.length + ' hábitos'} para cumprir${hb.length > 1 ? ', incluindo ' + listS(hb.slice(0, 2).map(x => x.name)) : ': ' + hb[0].name}.`); } catch (e) { }
+  try { if (!fut && OS.Mail) { const m = OS.Mail.speak(); if (m) out.push(m); } } catch (e) { }
+  try { const bills = OS.Fin.upcoming(3).filter(x => x.amount < 0 && !x.tx && (x.rec || x.debt) && U.diff(x.date, d) <= 1); if (bills.length) out.push('Nas finanças: ' + listS(bills.slice(0, 2).map(x => `${x.title}, ${eurS(x.amount)}, ${x.late ? 'em atraso' : U.diff(x.date, d) <= 0 ? 'vence hoje' : 'vence amanhã'}`)) + '.'); } catch (e) { }
+  try { const ex = U.sortBy(OS.all('assessments').filter(a => a.date >= d && U.diff(a.date, d) <= 7), a => a.date)[0]; if (ex) { const n = U.diff(ex.date, d); out.push(`${ex.type || 'Avaliação'} de ${(OS.get('subjects', ex.subject) || {}).name || ex.title} ${n === 0 ? 'é hoje' : n === 1 ? 'é amanhã' : 'daqui a ' + n + ' dias'}.`); } } catch (e) { }
+  try { const sp = OS.one('fit').split[String(U.parse(d).getDay())]; if (sp && sp !== 'Descanso') out.push(`Treino de hoje: ${sp}.`); } catch (e) { }
+  try { if (OS.Quotes) out.push('E a verdade de hoje: ' + OS.Quotes.truth()); } catch (e) { }
+  out.push(fut ? 'Bom dia de trabalho.' : 'Estou aqui se precisares.');
+  return out.join(' '); };
+S.ctx = () => { const t = U.today(), L = [], add = (k, v) => { if (v) L.push(k + ': ' + v); };
+  add('Agora', new Date().toLocaleString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) + ' (Portugal)');
+  const p = OS.one('profile'); add('Utilizador', [p.name || name(), p.city].filter(Boolean).join(', '));
+  try { add('Agenda hoje e amanhã', OS.Cal.items(t, U.addDays(t, 1)).filter(x => x.src !== 'task').slice(0, 14).map(x => (x.date === t ? 'hoje' : 'amanhã') + (x.start ? ' ' + x.start : '') + ' ' + x.title).join('; ')); } catch (e) { }
+  try { add('Alertas', OS.Intel.alerts().slice(0, 10).map(a => `${a.area}: ${a.title}${a.detail ? ' (' + a.detail + ')' : ''}`).join('; ')); } catch (e) { }
+  try { add('Próximas ações por prioridade', OS.Intel.next().slice(0, 10).map(n => `${n.kind}: ${n.title}${n.why && n.why.length ? ' (' + n.why.slice(0, 2).join(', ') + ')' : ''}`).join('; ')); } catch (e) { }
+  try { add('Hábitos por fazer hoje', OS.all('habits').filter(h => h.active && OS.Hab.due(h, t) && !OS.Hab.done(h, t)).map(h => h.name).join(', ')); } catch (e) { }
+  try { const F = OS.Fin, m = F.month(U.ym(t)); add('Finanças', `disponível ${U.eur(F.liquid())}; este mês receitas ${U.eur(m.inc)}, despesas ${U.eur(m.exp)}; a pagar em 7 dias: ${F.upcoming(7).filter(x => x.amount < 0 && !x.tx).slice(0, 5).map(x => x.title + ' ' + U.eur(-x.amount) + ' ' + x.date).join(', ') || 'nada'}`); } catch (e) { }
+  try { add('Universidade', U.sortBy(OS.all('assessments').filter(a => a.date >= t && U.diff(a.date, t) <= 21), a => a.date).map(a => `${a.type} ${a.title} ${a.date}`).join('; ')); } catch (e) { }
+  try { add('Trabalho', OS.all('shifts').filter(s => s.date >= t && s.date <= U.addDays(t, 6)).map(s => s.date + ' ' + s.start + '-' + s.end).join('; ') + (OS.all('dayoffs').filter(o => o.date >= t && o.date <= U.addDays(t, 13)).length ? ' · folgas: ' + OS.all('dayoffs').filter(o => o.date >= t && o.date <= U.addDays(t, 13)).map(o => o.date).join(', ') : '')); } catch (e) { }
+  try { add('Metas ativas', OS.all('goals').filter(g => g.status === 'Ativa').slice(0, 6).map(g => g.title + ' ' + Math.round(OS.Goal.info(g).p * 100) + '%').join('; ')); } catch (e) { }
+  try { add('Treino', 'hoje ' + (OS.one('fit').split[String(new Date().getDay())] || '—')); } catch (e) { }
+  try { if (OS.Mail) add('E-mails importantes', OS.Mail.ctx().replace(/\n/g, '; ')); } catch (e) { }
+  return L.join('\n').slice(0, 7800); };
+
+/* ================= voz ================= */
+let AC = null, AN = null, srcNode = null, tok = 0;
+const ac = () => { if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (C) { AC = new C(); AN = AC.createAnalyser(); AN.fftSize = 256; AN.connect(AC.destination); } } return AC; };
+// iPhone: o som só pode começar depois de um toque; o primeiro toque desbloqueia o áudio para o resto da sessão
+document.addEventListener('pointerdown', () => { const a = ac(); if (a && a.state !== 'running') { a.resume().catch(() => { }); try { const s = a.createBufferSource(); s.buffer = a.createBuffer(1, 1, 22050); s.connect(a.destination); s.start(0); } catch (e) { } } }, { capture: true, passive: true });
+const TTS = ['gemini-2.5-flash-preview-tts', 'gemini-3.1-flash-tts-preview', 'gemini-2.5-flash-tts', 'gemini-2.5-pro-preview-tts'];
+const cache = new Map();
+const tts = async text => { const key = OS.AI && OS.AI.key(); if (!key) throw new Error('sem chave'); const c = cfg(), ck = c.voice + c.accent + text; if (cache.has(ck)) return cache.get(ck);
+  const lang = c.accent === 'PT' ? 'European Portuguese (Portugal)' : 'Brazilian Portuguese';
+  const best = U.ls.get('os2ttsm', ''), list = best ? [best].concat(TTS.filter(m => m !== best)) : TTS;
+  for (const m of list) { const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(key)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: `Read aloud in ${lang}, with a calm, deep, confident male voice, like an elegant AI butler. Read only this text: ${text}` }] }], generationConfig: { responseModalities: ['AUDIO'], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: c.voice } } } } }) });
+    if (r.status === 404) continue; const j = await r.json().catch(() => ({}));
+    if (!r.ok) { const msg = (j.error && j.error.message) || ''; if (/API key/i.test(msg) || r.status === 429) throw new Error(msg || 'limite'); continue; }
+    const parts = (((j.candidates || [])[0] || {}).content || {}).parts || [], d = parts.map(p => p.inlineData || p.inline_data).find(Boolean); if (!d || !d.data) continue;
+    if (best !== m) U.ls.set('os2ttsm', m);
+    const o = { b64: d.data, rate: +(((d.mimeType || d.mime_type || '').match(/rate=(\d+)/) || [0, 24000])[1]) }; cache.set(ck, o); if (cache.size > 30) cache.delete(cache.keys().next().value); return o; }
+  throw new Error('voz indisponível'); };
+const playPCM = ({ b64, rate }, my) => new Promise(res => { const a = ac(); if (!a || my !== tok) return res(); const bin = atob(b64), n = bin.length >> 1, buf = a.createBuffer(1, n, rate), ch = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) { let v = bin.charCodeAt(2 * i) | (bin.charCodeAt(2 * i + 1) << 8); if (v >= 32768) v -= 65536; ch[i] = v / 32768; }
+  const s = a.createBufferSource(); s.buffer = buf; s.playbackRate.value = +cfg().speed || 1; s.connect(AN); s.onended = () => { srcNode = null; res(); }; srcNode = s; s.start(); });
+const MALE = /felipe|daniel|duarte|ricardo|thiago|tiago|joaquim|ant[oó]nio|jorge|paulo|eddy|reed|rocko|grandpa|male|mascul/i;
+const sysVoice = () => { try { const vs = speechSynthesis.getVoices().filter(v => /^pt/i.test(v.lang)), pref = cfg().accent === 'PT' ? /pt[-_]PT/i : /pt[-_]BR/i; return vs.find(v => pref.test(v.lang) && MALE.test(v.name)) || vs.find(v => MALE.test(v.name)) || vs.find(v => pref.test(v.lang)) || vs[0] || null; } catch (e) { return null; } };
+const sysSay = (text, my) => new Promise(res => { try { if (!window.speechSynthesis || my !== tok) return res(); const u = new SpeechSynthesisUtterance(text), v = sysVoice(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = cfg().accent === 'PT' ? 'pt-PT' : 'pt-BR'; if (!v || !MALE.test(v.name)) u.pitch = .72; u.rate = (+cfg().speed || 1) * 1.02; u.onend = u.onerror = () => res(); speechSynthesis.speak(u); } catch (e) { res(); } });
+const chunks = t => { const s = String(t).match(/[^.!?]+[.!?]*\s*/g) || [t], out = []; let cur = ''; s.forEach(x => { if ((cur + x).length > 380 && cur) { out.push(cur.trim()); cur = ''; } cur += x; }); if (cur.trim()) out.push(cur.trim()); return out; };
+S.stop = () => { tok++; try { srcNode && srcNode.stop(); } catch (e) { } srcNode = null; try { window.speechSynthesis && speechSynthesis.cancel(); } catch (e) { } try { rec && rec.abort(); } catch (e) { } setSt('idle'); };
+S.say = async (text, o = {}) => { if (!text) return; S.stop(); const my = ++tok; open(); cap('spyke', text); setSt('speaking'); hist.push({ r: 'spyke', t: text });
+  const a = ac(); if (a && a.state !== 'running') { try { await a.resume(); } catch (e) { } }
+  if (a && a.state !== 'running' && !o.tap) { needTap = text; draw(); setSt('idle'); return; } needTap = '';
+  let ok = false;
+  if (cfg().ai && OS.AI && OS.AI.key()) { try { const P = chunks(text); let nx = tts(P[0]); for (let i = 0; i < P.length; i++) { const cur = await nx; if (i + 1 < P.length) nx = tts(P[i + 1]); if (my !== tok) return; await playPCM(cur, my); } ok = true; } catch (e) { voiceErr = e.message || ''; } }
+  if (!ok && my === tok) await sysSay(text, my);
+  if (my !== tok) return; setSt('idle'); if (o.listen) S.listen(); };
+let voiceErr = '';
+
+/* ================= ouvir ================= */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null;
+const once = () => new Promise(res => { if (!SR) return res(''); let fin = '', r; try { r = new SR(); } catch (e) { return res(''); } r.lang = cfg().accent === 'PT' ? 'pt-PT' : 'pt-BR'; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
+  r.onresult = e => { let t = ''; for (const x of e.results) t += x[0].transcript; fin = t; cap('user', t); }; r.onerror = e => { if (e.error === 'not-allowed') UI.toast('Dá acesso ao microfone ao Oceanum (Ajustes → Safari → Microfone).', 'warn'); }; r.onend = () => { rec = null; res(fin.trim()); }; rec = r; try { r.start(); } catch (e) { res(''); } });
+S.listen = async () => { if (!SR) { open(); setSt('idle'); cap('spyke', 'Este navegador não deixa ditar. Escreve abaixo.'); const i = U.$('#spyIn'); i && i.focus(); return; }
+  S.stop(); open(); pauseBg(); setSt('listening'); const t = await once(); resumeBg(); if (!t) { setSt('idle'); return; } await S.handle(t); };
+
+/* ---------- palavra de ativação e palmas (só com a app aberta e visível) ---------- */
+let wk = null, wkOn = false, clapSt = null, bgPaused = 0;
+const pauseBg = () => { bgPaused++; try { wk && wk.abort(); } catch (e) { } stopClap(); };
+const resumeBg = () => { bgPaused = Math.max(0, bgPaused - 1); setTimeout(bgSync, 400); };
+const wakeLoop = () => { if (!SR || wk || bgPaused || document.hidden || !cfg().wake || st !== 'idle') return; let r; try { r = new SR(); } catch (e) { return; } r.lang = cfg().accent === 'PT' ? 'pt-PT' : 'pt-BR'; r.continuous = true; r.interimResults = false;
+  r.onresult = e => { const x = e.results[e.results.length - 1]; if (!x.isFinal) return; const raw = x[0].transcript, n = N(raw), m = n.match(WAKE); if (!m) return; const cmd = n.slice(m.index + m[0].length).replace(/^[\s,.:]+/, '');
+    try { r.abort(); } catch (er) { } wk = null; open(); cap('user', raw);
+    if (cmd.length > 2) S.handle(cmd); else S.say(pickR(['Sim, ' + name() + '?', 'Às ordens.', 'Diz.', 'Estou a ouvir.']), { listen: true }); };
+  r.onerror = e => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { OS.setOne('spyke', { wake: false }); UI.toast('Sem acesso ao microfone: a palavra de ativação foi desligada.', 'warn'); } };
+  r.onend = () => { wk = null; setTimeout(wakeLoop, 600); }; wk = r; try { r.start(); } catch (e) { wk = null; } };
+const startClap = async () => { if (clapSt || bgPaused || document.hidden || !cfg().clap || st !== 'idle' || !navigator.mediaDevices) return; clapSt = { on: true };
+  try { const ms = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }); if (!clapSt || !clapSt.on) { ms.getTracks().forEach(t => t.stop()); return; }
+    const a = ac(); if (a.state !== 'running') await a.resume().catch(() => { }); const src = a.createMediaStreamSource(ms), an = a.createAnalyser(); an.fftSize = 512; src.connect(an); const buf = new Float32Array(an.fftSize);
+    let avg = .01, last = 0, first = 0; const thr = .62 - (+cfg().sens || 5) * .05;
+    clapSt = { on: true, ms, src, iv: setInterval(() => { an.getFloatTimeDomainData(buf); let pk = 0, sq = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i]); if (v > pk) pk = v; sq += v * v; } const rms = Math.sqrt(sq / buf.length), now = performance.now();
+      if (pk > thr && rms > avg * 5 && now - last > 130) { last = now; if (first && now - first > 180 && now - first < 800) { first = 0; stopClap(); open(); S.say(pickR(['Às ordens, ' + name() + '.', 'Sim?', 'Diz, chefe.']), { listen: true }); return; } first = now; }
+      else if (first && now - first > 800) first = 0; avg = avg * .97 + rms * .03; }, 25) }; }
+  catch (e) { clapSt = null; OS.setOne('spyke', { clap: false }); UI.toast('Sem acesso ao microfone: as palmas foram desligadas.', 'warn'); } };
+const stopClap = () => { const c = clapSt; clapSt = null; if (!c) return; c.on = false; try { clearInterval(c.iv); } catch (e) { } try { c.src && c.src.disconnect(); } catch (e) { } try { c.ms && c.ms.getTracks().forEach(t => t.stop()); } catch (e) { } };
+const bgSync = () => { const c = cfg(); if (document.hidden || bgPaused || st !== 'idle') { try { wk && wk.abort(); } catch (e) { } stopClap(); return; } if (c.clap) startClap(); else stopClap(); if (c.wake && !c.clap) wakeLoop(); else { try { wk && wk.abort(); } catch (e) { } } };
+// no iPhone o microfone só aguenta uma escuta de cada vez: com palmas ligadas, a palavra de ativação fica para depois das palmas
+document.addEventListener('visibilitychange', bgSync);
+OS.on('one:spyke', () => setTimeout(bgSync, 100));
+
+/* ================= comandos ================= */
+const hist = [];
+const pickR = a => a[Math.floor(Math.random() * a.length)];
+const routes = () => { const out = []; document.querySelectorAll('.tn-dd a[href^="#"], #side a[href^="#"]').forEach(a => { const k = a.getAttribute('href').slice(1), l = (a.querySelector('b') || a.querySelector('span') || a).textContent.trim(); if (k && l && !out.some(x => x[0] === k)) out.push([k, l]); }); return out.concat([['definicoes', 'Definições'], ['spyke', 'Spyke'], ['email', 'E-mail']]); };
+const findRoute = q => { const n = N(q).replace(/^(o|a|os|as|aba|pagina|separador)\s+/, '').replace(/^(aba|pagina)\s+(de|do|da)?\s*/, ''); if (!n) return null; const R = routes(); return R.find(([k, l]) => N(l) === n || k === n) || R.find(([k, l]) => N(l).startsWith(n) || n.startsWith(N(l))) || R.find(([k, l]) => N(l).includes(n) || n.includes(N(l).split(' ')[0])); };
+S.handle = async raw => { const t = N(raw); cap('user', raw); hist.push({ r: 'ryan', t: raw }); let m;
+  if (/^(para|parar|pare|chega|silencio|cala|obrigad|valeu|cancela)/.test(t)) { S.stop(); return S.say(pickR(['Às ordens.', 'Com certeza.', 'Fico por aqui.'])); }
+  if (/\b(bom dia|boa tarde|boa noite|resumo|briefing|como (esta|e) o meu dia|o que (eu )?tenho (pra |para )?hoje)\b/.test(t) && !/amanha/.test(t)) return S.say(S.brief());
+  if (/amanha/.test(t) && /(tenho|agenda|compromisso|resumo|planeado|fazer)/.test(t)) return S.say(S.brief(U.addDays(U.today(), 1)).replace(/^(Bom dia|Boa tarde|Boa noite), [^.]+\. Hoje é/, 'Amanhã é'));
+  if (/(agenda|compromisso|calendario)/.test(t)) { const it = U.sortBy(OS.Cal.items(U.today(), U.today()).filter(x => x.src !== 'task' && x.start), x => x.start); return S.say(it.length ? 'Hoje: ' + listS(it.slice(0, 6).map(x => x.title + ' às ' + x.start)) + '.' : 'Nada com hora marcada hoje.'); }
+  if (/(proxima (tarefa|acao)|o que (eu )?(faco|devo fazer|fazer agora)|prioridade|por onde comeco)/.test(t)) { const na = OS.Intel.next().slice(0, 3); return S.say(na.length ? `Agora: ${na[0].title}${na[0].why && na[0].why[0] ? ', porque ' + na[0].why[0] : ''}. Depois: ${listS(na.slice(1).map(n => n.title))}.` : 'Não tens nada pendente. Aproveita.'); }
+  if ((m = t.match(/^(?:adiciona|adicionar|adicione|cria|criar|crie|anota|anotar|anote|lembra[- ]?me|lembrar|me lembra|nova)\s+(?:(?:uma|a)\s+)?(?:tarefa\s*:?\s*)?(?:de\s+|que\s+)?(.{3,})/))) { const o = OS.Tasks.quickParse(raw.replace(/^\s*\S+\s+(?:(?:uma|a)\s+)?(?:tarefa\s*:?\s*)?(?:de\s+|que\s+)?/i, '')); o.title = o.title.charAt(0).toUpperCase() + o.title.slice(1); if (o.status === 'Inbox') o.status = 'Próxima'; OS.add('tasks', o); return S.say(pickR(['Anotado: ', 'Feito. Tarefa criada: ', 'Está na lista: ']) + o.title + '.'); }
+  if ((m = raw.toLowerCase().trim().match(/(?:^|\s)(?:gastei|paguei|comprei)\s\s*(?:.*?)\b(\d+(?:[.,]\d{1,2})?)\s*(?:euros?|€|eur)?\s*(?:(?:em|no|na|num|numa|de|com|pra|para)\s+)?(.*)$/))) { const v = U.num(m[1].replace(',', '.')), d = (m[2] || '').trim() || 'Gasto por voz', IB = OS.Inbox, g = IB && IB.guess ? IB.guess(d, '') : {}, acc = g.account || (IB && IB.defAcc && IB.defAcc());
+    if (!(v > 0)) return S.say('Não percebi o valor.'); if (!acc) return S.say('Primeiro cria uma conta nas Finanças, para eu saber de onde sai o dinheiro.');
+    const r = OS.add('transactions', { type: 'Despesa', amount: v, date: U.today(), desc: d.charAt(0).toUpperCase() + d.slice(1), cat: g.cat || '', account: acc, method: 'Débito', ess: 'Essencial', tags: ['voz'] }); try { OS.S.transactions.after && OS.S.transactions.after(r, true); } catch (e) { }
+    return S.say(`Registado: ${eurS(v)} em ${d}${g.cat ? ', categoria ' + g.cat : ''}.`); }
+  if (/(quanto (eu )?(ja )?gastei|gastos? (do|deste|este) mes|despesas do mes)/.test(t)) { const mo = OS.Fin.month(U.ym(U.today())); return S.say(`Este mês gastaste ${eurS(mo.exp)} e recebeste ${eurS(mo.inc)}. ${mo.net < 0 ? 'Estás no vermelho em ' + eurS(mo.net) + '.' : 'Saldo do mês positivo: ' + eurS(mo.net) + '.'}`); }
+  if (/(saldo|quanto (dinheiro )?(eu )?tenho|dinheiro disponivel)/.test(t)) return S.say(`Tens ${eurS(OS.Fin.liquid())} disponíveis nas contas.`);
+  if (/linkedin/.test(t)) { const li = OS.Mail && OS.Mail.li(); if (!li || !li.at) { location.hash = 'email.linkedin'; return S.say('Ainda não li o teu LinkedIn. Abri a página para ligares.'); } const s = li.sum || {}; return S.say(s.resumo || `No LinkedIn: ${(s.mensagens || []).length} mensagens, ${(s.convites || []).length} convites e ${(s.vagas || []).length} vagas.`); }
+  if (/(e-?mails?|emails?|correio|caixa de entrada|gmail)/.test(t)) { if (!OS.Mail || !OS.Mail.counts().at) { location.hash = 'email'; return S.say('Ainda não ligaste o e-mail. Abri a página com os passos.'); } return S.say((OS.Mail.sum() ? OS.Mail.sum() + ' ' : '') + OS.Mail.speak()); }
+  if (/(versiculo|biblia|palavra do dia)/.test(t) && OS.Faith && OS.Faith.bible && OS.Faith.bible()) { const R = OS.Faith.vod(); return S.say(OS.Faith.textOf(R) + ' — ' + OS.Faith.label(R) + '.'); }
+  if (/(frase|motiva|verdade do dia|da-me forca|me motiva)/.test(t) && OS.Quotes) return S.say(/verdade/.test(t) ? OS.Quotes.truth() : OS.Quotes.push());
+  if (/habitos?/.test(t)) { const hb = OS.all('habits').filter(x => x.active && OS.Hab.due(x, U.today()) && !OS.Hab.done(x, U.today())); return S.say(hb.length ? `Faltam ${hb.length}: ${listS(hb.slice(0, 5).map(x => x.name))}.` : 'Hábitos de hoje todos feitos. Bom trabalho.'); }
+  if (/(treino|ginasio)/.test(t) && !/(abre|abrir|mostra)/.test(t)) { const sp = OS.one('fit').split[String(new Date().getDay())]; return S.say(sp ? (sp === 'Descanso' ? 'Hoje é dia de descanso.' : 'Hoje é dia de ' + sp + '.') : 'Não tens divisão de treino definida para hoje.'); }
+  if (/(bloco de foco|modo foco|quero focar|vamos focar|concentrar)/.test(t)) { location.hash = 'foco'; return S.say('Abri o Bloco de foco. Escolhe o tema, ou deixa que eu escolho pela prioridade.'); }
+  if (/que horas/.test(t)) return S.say('São ' + new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }) + '.');
+  if (/(que dia e hoje|que dia e|data de hoje)/.test(t)) return S.say('Hoje é ' + dayS(U.today()) + '.');
+  if ((m = t.match(/^(?:abre|abrir|abra|mostra|mostrar|mostre|vai (?:para|pra)|ir (?:para|pra)|leva-me (?:a|para|pra)|me leva (?:para|pra))\s+(.+)$/))) { const r = findRoute(m[1]); if (r) { location.hash = r[0]; return S.say(pickR(['Aqui está: ', 'A abrir ', 'Abri ']) + r[1] + '.'); } }
+  return askAI(raw); };
+const askAI = async raw => { if (!OS.AI || !OS.AI.key()) return S.say('Para conversas livres preciso da IA ligada. Vai a Definições e cola a tua chave Gemini. Os comandos rápidos funcionam sem ela.');
+  setSt('thinking'); const R = routes();
+  try { const o = await OS.AI.json([{ text: `És o Spyke, o assistente pessoal de ${name()} (estilo J.A.R.V.I.S. do Homem de Ferro): direto, calmo, confiante, leal, com um toque de humor seco. Tratas o ${name()} pelo nome (às vezes "chefe").
+Responde em português do Brasil, para ser dito em voz alta: no máximo 3 frases curtas, sem listas, sem markdown, sem emojis. Usa SÓ os dados abaixo; se não souberes, diz que não tens essa informação. Não inventes números.
+DADOS DO OCEANUM:
+${S.ctx()}
+CONVERSA RECENTE:
+${hist.slice(-6).map(h => (h.r === 'ryan' ? name() : 'Spyke') + ': ' + h.t).join('\n')}
+${name()}: ${raw}
+JSON: {"fala":"o que dizes","abrir":"uma destas rotas se ele pediu para abrir/ver algo, senão vazio: ${R.map(r => r[0]).join(',')}","tarefa":"título se ele pediu para anotar/lembrar algo, senão vazio"}` }], .5);
+    // só cria tarefa se foste tu a pedir (um e-mail no contexto não pode criar tarefas sozinho)
+    if (o.tarefa && /(anot|lembr|tarefa|adicion|marca|agenda|nao me deixes esquecer)/.test(N(raw))) OS.add('tasks', Object.assign(OS.Tasks.quickParse(String(o.tarefa)), { status: 'Próxima' }));
+    if (o.abrir && R.some(r => r[0] === o.abrir)) location.hash = o.abrir;
+    return S.say(String(o.fala || 'Não percebi.').slice(0, 700)); }
+  catch (e) { return S.say('Não consegui pensar agora: ' + (e.message || 'erro') + '.'); } };
+
+/* ================= Siri: enviar o resumo e o contexto ao teu script (a Siri lê-os com a app fechada) ================= */
+const ib = () => OS.one('inbox');
+const siriReady = () => !!(ib().url && ib().key && +(ib().ver || 0) >= 9 && cfg().siri);
+S.push = async force => { if (!siriReady() || !OS.Inbox || !OS.Inbox.post) return false; const last = U.ls.get('os2spPush', 0); if (!force && Date.now() - last < 10 * 60e3) return false;
+  const t = U.today(), t2 = U.addDays(t, 1), o = { op: 'br', j: JSON.stringify({ d: t, t: S.brief(t), d2: t2, t2: S.brief(t2), at: Date.now() }), cx: S.ctx() };
+  if (cfg().siriAsk && OS.AI && OS.AI.key()) o.gk = OS.AI.key(); else o.nogk = '1';
+  try { const j = await OS.Inbox.post(o); if (j && j.ok) { U.ls.set('os2spPush', Date.now()); return true; } } catch (e) { } return false; };
+OS.on('ready', () => setTimeout(() => S.push(), 9000)); setInterval(() => { if (!document.hidden) S.push(); }, 15 * 60e3);
+document.addEventListener('visibilitychange', () => { if (document.hidden && Date.now() - U.ls.get('os2spPush', 0) > 3 * 60e3) S.push(true); });
+
+/* ================= painel ================= */
+let st = 'idle', el = null, needTap = '', capU = '', capS = '', raf = 0;
+const setSt = s => { st = s; if (el) { el.dataset.st = s; const l = el.querySelector('.spy-st'); if (l) l.textContent = { idle: cfg().wake ? 'Diz "Spyke…" ou toca no microfone' : 'Toca no microfone e fala', listening: 'A ouvir…', thinking: 'A pensar…', speaking: 'A falar…' }[s]; } if (s === 'idle') setTimeout(bgSync, 300); orb(); };
+const capR = () => { if (!el) return; const a = el.querySelector('.spy-u'), b = el.querySelector('.spy-s'); if (a) a.textContent = capU ? '“' + capU + '”' : ''; if (b) b.textContent = capS; };
+const cap = (who, t) => { if (who === 'user') capU = t; else capS = t; capR(); };
+const SUG = ['Bom dia', 'O que faço agora?', 'Agenda de amanhã', 'Os meus e-mails', 'Quanto gastei este mês?', 'Hábitos que faltam', 'Dá-me uma frase', 'Abre a Floresta'];
+function draw() { if (!el) return; el.innerHTML = `<div class="spy-bg" data-act="spyClose"></div><div class="spy-card" role="dialog" aria-modal="true" aria-label="Spyke">
+  <div class="spy-h"><b>SPYKE</b><span class="mut">${cfg().wake ? '● a ouvir "Spyke"' : ''}${cfg().clap ? (cfg().wake ? ' · ' : '● ') + 'palmas' : ''}</span><a class="icon-btn" href="#spyke" data-act="spyClose" aria-label="Definições do Spyke">${UI.ic('settings')}</a><button class="icon-btn" data-act="spyClose" aria-label="Fechar">${UI.ic('x')}</button></div>
+  <canvas class="spy-orb" width="440" height="440" aria-hidden="true"></canvas>
+  <div class="spy-st"></div><div class="spy-u"></div><div class="spy-s"></div>
+  ${needTap ? `<button class="btn pri lg" data-act="spyTap">▶ Ouvir</button>` : ''}
+  <div class="spy-ctl"><button class="spy-mic" data-act="spyListen" aria-label="Falar com o Spyke">${UI.ic('mic')}</button><button class="btn ghost sm" data-act="spyStop">${UI.ic('stop')}Parar</button></div>
+  <form class="spy-f" data-form="spyAsk" autocomplete="off"><input id="spyIn" name="q" class="field" placeholder="Ou escreve: anota comprar pão amanhã…" aria-label="Pergunta ao Spyke"><button class="btn">${UI.ic('right')}</button></form>
+  <div class="spy-sug">${SUG.map(s => `<button class="chip" data-act="spySug" data-q="${esc(s)}">${esc(s)}</button>`).join('')}</div></div>`; setSt(st); capR(); }
+const open = () => { if (!el) { el = document.createElement('div'); el.id = 'spy'; document.body.appendChild(el); } if (el.hidden !== false || !el.innerHTML) { el.hidden = false; draw(); } };
+const close = () => { if (!el) return; S.stop(); el.hidden = true; cancelAnimationFrame(raf); raf = 0; };
+S.open = open; S.close = close;
+function orb() { if (!el || el.hidden) return; const c = el.querySelector('.spy-orb'); if (!c) return; if (raf) return; const g = c.getContext('2d'), W = c.width, H = c.height, cx = W / 2, cy = H / 2, data = new Uint8Array(128); let t0 = performance.now();
+  const frame = now => { if (!el || el.hidden || !c.isConnected) { raf = 0; return; } const t = (now - t0) / 1000; let lvl = 0; if (st === 'speaking' && AN) { AN.getByteFrequencyData(data); for (let i = 0; i < 48; i++) lvl += data[i]; lvl = lvl / 48 / 255; }
+    const base = st === 'listening' ? .35 + .15 * Math.sin(t * 6) : st === 'thinking' ? .25 : st === 'speaking' ? .2 + lvl * 1.4 : .12;
+    g.clearRect(0, 0, W, H); const grd = g.createRadialGradient(cx, cy, 10, cx, cy, 190); grd.addColorStop(0, `rgba(120,230,255,${.55 + base * .4})`); grd.addColorStop(.35, `rgba(14,165,233,${.25 + base * .3})`); grd.addColorStop(1, 'rgba(14,165,233,0)'); g.fillStyle = grd; g.beginPath(); g.arc(cx, cy, 190, 0, 7); g.fill();
+    g.lineCap = 'round'; [[150, 1.6, .9, 8], [124, -1, .6, 3], [100, .7, .45, 5], [176, -.4, .3, 12]].forEach(([r, sp, al, seg], k) => { g.strokeStyle = `rgba(160,235,255,${al})`; g.lineWidth = k === 3 ? 1.5 : 3; for (let i = 0; i < seg; i++) { const a = t * sp * (st === 'thinking' ? 3 : 1) + i * Math.PI * 2 / seg; g.beginPath(); g.arc(cx, cy, r + base * 18 * (k % 2 ? -1 : 1), a, a + Math.PI * 2 / seg * .62); g.stroke(); } });
+    g.fillStyle = 'rgba(230,250,255,.95)'; g.beginPath(); g.arc(cx, cy, 34 + base * 40, 0, 7); g.fill();
+    if (st === 'idle' && t > 1.2) { raf = 0; return; } raf = requestAnimationFrame(frame); };
+  raf = requestAnimationFrame(frame); }
+A.spyOpen = () => { open(); if (st === 'idle') { capU = ''; cap('spyke', pickR([`Olá, ${name()}. Em que posso ajudar?`, 'Às ordens.', `Diz, ${name()}.`])); } };
+A.spyClose = () => close();
+A.spyListen = () => S.listen();
+A.spyStop = () => S.stop();
+A.spyTap = () => { const t = needTap; needTap = ''; draw(); S.say(t, { tap: true }); };
+A.spySug = b => S.handle(b.dataset.q);
+OS.forms.spyAsk = f => { const q = f.elements.q.value.trim(); if (q) setTimeout(() => S.handle(q), 0); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && el && !el.hidden) close(); });
+
+/* ================= página do Spyke ================= */
+V.spyke = sub => { const c = cfg(), ibc = ib(), link = op => ibc.url && ibc.key ? ibc.url.trim() + (ibc.url.includes('?') ? '&' : '?') + 'k=' + encodeURIComponent(ibc.key) + '&op=' + op : '';
+  if (sub === 'bomdia') { try { history.replaceState(null, '', '#spyke'); } catch (e) { } setTimeout(() => { open(); S.say(S.brief()); }, 300); }
+  return UI.head('Spyke', 'O teu assistente de voz: fala contigo, resume o dia e faz coisas por ti.', `<button class="btn pri" data-act="spyBrief">${UI.ic('play')}Resumo do dia</button>`) + `<div class="spy-page">
+  <div class="pn"><div class="pn-h"><h3>Voz</h3></div><div class="ws-form"><label>Voz masculina (IA)<select class="field" data-bind="spyke.voice">${VOICES.map(([v, l]) => `<option value="${v}"${c.voice === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label>
+    <label>Sotaque<select class="field" data-bind="spyke.accent"><option value="BR"${c.accent === 'BR' ? ' selected' : ''}>Brasil</option><option value="PT"${c.accent === 'PT' ? ' selected' : ''}>Portugal</option></select></label>
+    <label>Velocidade<select class="field" data-bind="spyke.speed">${[['0.9', 'Calma'], ['1', 'Normal'], ['1.1', 'Rápida']].map(([v, l]) => `<option value="${v}"${String(c.speed) === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label></div>
+    <label class="switch" style="margin-top:10px"><input type="checkbox" data-bind="spyke.ai" ${c.ai ? 'checked' : ''}><span></span>Voz da IA (Gemini). Desligado: voz do aparelho.</label>
+    <div class="row gap8" style="margin-top:10px"><button class="btn sm" data-act="spyTest">${UI.ic('play')}Ouvir a voz</button>${!(OS.AI && OS.AI.key()) ? '<small class="mut">Sem chave da IA uso a voz do aparelho (masculina se existir).</small>' : voiceErr ? `<small class="neg">${esc(voiceErr)}</small>` : ''}</div></div>
+  <div class="pn"><div class="pn-h"><h3>Chamar o Spyke com a app aberta</h3></div>
+    <label class="switch"><input type="checkbox" data-bind="spyke.wake" ${c.wake ? 'checked' : ''} ${SR ? '' : 'disabled'}><span></span>Palavra de ativação: diz <b>"Spyke"</b> (ex.: "Spyke, o que tenho hoje?")</label>
+    <label class="switch" style="margin-top:8px"><input type="checkbox" data-bind="spyke.clap" ${c.clap ? 'checked' : ''}><span></span>Duas palmas para chamar</label>
+    ${c.clap ? `<div class="ws-form" style="margin-top:8px"><label>Sensibilidade das palmas<input type="range" min="1" max="9" data-bind="spyke.sens" value="${c.sens}"></label></div>` : ''}
+    <label class="switch" style="margin-top:8px"><input type="checkbox" data-bind="spyke.morning" ${c.morning ? 'checked' : ''}><span></span>De manhã, ao abrir a app pela primeira vez, o Spyke dá o resumo do dia</label>
+    <p class="mut" style="font-size:12.5px;margin:8px 0 0">${SR ? '' : 'Este navegador não tem reconhecimento de voz: usa o Safari no iPhone ou o Chrome. '}Só funciona com o Oceanum aberto e no ecrã (regra do iPhone). Gasta mais bateria: liga quando precisares. Com palmas ligadas, a palavra de ativação só ouve depois das palmas.</p></div>
+  <div class="pn fb-guide"><h3>Com a app fechada: Siri e "Atalhos vocais"</h3>${siriReady() ? '' : `<p class="neg" style="margin:0 0 6px">Precisa do script Google na versão 9 (o mesmo do e-mail). <a class="acc" href="#email.contas">Ver passos</a></p>`}
+    <label class="switch"><input type="checkbox" data-bind="spyke.siri" ${c.siri ? 'checked' : ''}><span></span>Enviar o resumo do dia para o teu script (a Siri lê-o com a app fechada)</label>
+    <label class="switch" style="margin-top:6px"><input type="checkbox" data-bind="spyke.siriAsk" ${c.siriAsk ? 'checked' : ''}><span></span>Deixar a Siri fazer perguntas ao Spyke (guarda a tua chave Gemini no teu script Google)</label>
+    <ol><li><b>Atalho "Bom dia Spyke":</b> app Atalhos → + → <b>Obter conteúdo do URL</b> com o link 1 → <b>Falar texto</b> (Conteúdo do URL; toca ▸ → Voz: escolhe uma voz masculina em português, ex.: Felipe) → opcional: <b>Abrir URL</b> <code>https://kd25gpgdw9-lang.github.io/Oceanum/#spyke.bomdia</code>.</li>
+      <li><b>Atalho "Spyke" (perguntas):</b> <b>Ditar texto</b> → <b>Obter conteúdo do URL</b> com o link 2, toca ▸ → Método <b>POST</b> → Corpo <b>Formulário</b> → campo <code>q</code> = Texto ditado → <b>Falar texto</b>.</li>
+      <li><b>Sem dizer "E aí Siri":</b> Ajustes → Acessibilidade → <b>Atalhos vocais</b> → Configurar → escolhe o atalho "Spyke" → frase <b>"Spyke"</b> (repete 3 vezes). Funciona até com o iPhone bloqueado.</li>
+      <li><b>Em vez de palmas:</b> Ajustes → Acessibilidade → Toque → <b>Tocar atrás</b> → Toque duplo → "Spyke". Ou o botão de Ação (iPhone 15 Pro ou mais recente).</li></ol>
+    ${link('brief') ? `<div class="ib-link"><code>1 · ${esc(link('brief'))}</code><button class="btn sm" data-act="spyCopy" data-op="brief">Copiar</button></div><div class="ib-link"><code>2 · ${esc(link('ask'))}</code><button class="btn sm" data-act="spyCopy" data-op="ask">Copiar</button></div><button class="btn sm ghost" data-act="spyPush" ${siriReady() ? '' : 'disabled'}>${UI.ic('sync')}Enviar o resumo agora</button>` : ''}
+    <p class="mut" style="font-size:12.5px">Os links têm a tua chave: não os partilhes.</p></div>
+  <div class="pn"><div class="pn-h"><h3>O que podes dizer</h3></div><div class="spy-cmds">${[['"Bom dia" / "Resumo"', 'agenda, prioridades, hábitos, e-mails, contas, provas, treino e a verdade do dia'], ['"O que faço agora?"', 'a próxima ação pela prioridade da app'], ['"Agenda de amanhã"', 'o dia seguinte'], ['"Anota estudar Estatística amanhã !1"', 'cria tarefa (datas, @contexto e !prioridade)'], ['"Gastei 12 euros no almoço"', 'regista a despesa com a categoria certa'], ['"Quanto gastei este mês?" / "Saldo"', 'finanças'], ['"Os meus e-mails" / "LinkedIn"', 'resumo do que precisa de atenção'], ['"Abre a Floresta"', 'abre qualquer página'], ['"Quero focar"', 'abre o Bloco de foco'], ['"Versículo" / "Dá-me uma frase"', 'Fé e motivação'], ['Qualquer outra pergunta', 'responde com a IA, com os teus dados']].map(([a, b]) => `<div><b>${esc(a)}</b><small>${esc(b)}</small></div>`).join('')}</div></div></div>`; };
+A.spyBrief = () => { open(); S.say(S.brief(), { tap: true }); };
+A.spyTest = () => { open(); S.say(`Olá, ${name()}. Eu sou o Spyke. Quando precisares, é só chamar.`, { tap: true }); };
+A.spyPush = async () => { UI.toast('A enviar…'); UI.toast(await S.push(true) ? 'Resumo enviado: a Siri já o pode ler.' : 'Não consegui enviar. Confirma o script (versão 9).', 'pos'); };
+A.spyCopy = async b => { const c = ib(), u = c.url.trim() + (c.url.includes('?') ? '&' : '?') + 'k=' + encodeURIComponent(c.key) + '&op=' + b.dataset.op; try { await navigator.clipboard.writeText(u); UI.toast('Link copiado', 'pos'); } catch (e) { UI.modal(`<div style="padding:18px"><b>Copia o link</b><textarea readonly style="width:100%;height:110px;font:12px var(--mono);margin-top:8px" onfocus="this.select()">${esc(u)}</textarea><div style="text-align:right;margin-top:10px"><button class="btn" data-mclose>Fechar</button></div></div>`); } };
+
+/* resumo da manhã: primeira abertura do dia entre as 5h e as 12h */
+OS.on('ready', () => { setTimeout(bgSync, 1500); const h = new Date().getHours(), t = U.today();
+  if (navigator.webdriver || !cfg().morning || h < 5 || h >= 12 || U.ls.get('os2spMorning', '') === t || /^#spyke/.test(location.hash)) return; U.ls.set('os2spMorning', t);
+  setTimeout(() => { if (OS.FocusBlock && OS.FocusBlock.state()) return; S.morning(); }, 1800); });
+// aviso discreto (não tapa a app): o toque também desbloqueia o som no iPhone
+S.morning = () => { const b = document.createElement('button'); b.type = 'button'; b.className = 'spy-morn'; b.innerHTML = `<i>${UI.ic('mic')}</i><span><b>${new Date().getHours() < 12 ? 'Bom dia' : 'Olá'}, ${esc(name())}</b><small>Toca para o Spyke te dar o resumo do dia</small></span><em aria-hidden="true">×</em>`;
+  b.onclick = e => { b.remove(); if (e.target.closest('em')) return; open(); S.say(S.brief(), { tap: true }); }; document.body.appendChild(b); setTimeout(() => b.remove(), 30000); };
+})();
+
+</script>
+<script>
+/* OCEANUM — Ligações entre áreas: o que mudas num sítio muda nos outros.
+   A maior parte da app já lê das mesmas coleções (calendário, contas a pagar, progresso de projetos e metas, hábitos automáticos…).
+   Aqui ficam as ligações que dependiam de cópias ou que deixavam registos órfãos ao apagar/editar. */
+(() => {
+'use strict';
+const U = OS.U, UI = OS.UI, esc = U.esc;
+const open = t => t.status !== 'Feita';
+const upd = (c, id, p) => OS.upd(c, id, p, { silent: true });
+let quiet = 0; const batch = fn => { quiet++; try { fn(); } finally { quiet--; } };
+const note = (m, k = '') => { if (!quiet) UI.toast(m, k); };
+
+/* ---------- Projetos, metas e tarefas ---------- */
+OS.on('del:projects', p => { const T = OS.all('tasks').filter(t => t.project === p.id); T.forEach(t => upd('tasks', t.id, { project: '' })); if (T.length) note(`${T.length} tarefa(s) ficaram sem projeto (não foram apagadas)`); });
+OS.on('del:goals', g => { let n = 0; OS.all('tasks').filter(t => t.goal === g.id).forEach(t => { upd('tasks', t.id, { goal: '' }); n++; }); OS.all('projects').filter(p => p.goal === g.id).forEach(p => { upd('projects', p.id, { goal: '' }); n++; }); if (n) note(`${n} tarefa(s)/projeto(s) desligados da meta apagada`); });
+// subtarefas não ficam escondidas quando a tarefa-mãe é apagada
+OS.on('del:tasks', t => OS.all('tasks').filter(s => s.parent === t.id).forEach(s => upd('tasks', s.id, { parent: '' })));
+
+/* ---------- Universidade: avaliação ↔ plano de estudo nas tarefas, tópico ↔ revisões ---------- */
+OS.on('upd:assessments', (a, b) => { if (!b) return; const T = OS.all('tasks').filter(t => t.examPlan === a.id && open(t));
+  if (a.date && b.date && a.date !== b.date && T.length) { const d = U.diff(a.date, b.date), t0 = U.today(); T.forEach(t => { const nd = U.addDays(t.sched || t0, d); upd('tasks', t.id, { sched: nd < t0 ? t0 : nd > a.date ? a.date : nd, prio: U.diff(a.date, nd) <= 3 ? '1' : t.prio }); }); note(`Plano de estudo mudou ${d > 0 ? '+' : ''}${d} dia(s) com a nova data`, 'pos'); }
+  if (a.subject !== b.subject) T.forEach(t => upd('tasks', t.id, { subject: a.subject })); });
+OS.on('del:assessments', a => { const T = OS.all('tasks').filter(t => t.examPlan === a.id && open(t)); T.forEach(t => OS.del('tasks', t.id)); if (T.length) note(`${T.length} tarefa(s) do plano de estudo apagadas`); });
+OS.on('upd:topics', (t, b) => { if (!b || (t.title === b.title && t.subject === b.subject)) return; OS.all('reviews').filter(r => r.topicId === t.id).forEach(r => upd('reviews', r.id, { topic: t.title, subject: t.subject })); });
+OS.on('del:topics', t => OS.all('reviews').filter(r => r.topicId === t.id).forEach(r => OS.del('reviews', r.id)));
+OS.on('del:subjects', s => { OS.all('classes').filter(c => c.subject === s.id).forEach(c => OS.del('classes', c.id)); OS.all('tasks').filter(t => t.subject === s.id && t.examPlan && open(t)).forEach(t => OS.del('tasks', t.id)); });
+
+/* ---------- Floresta / Bloco de foco ↔ sessões de estudo ---------- */
+OS.on('del:trees', t => { const s = t.sess ? OS.get('sessions', t.sess) : OS.all('sessions').find(x => x.tree === t.id); if (s) { OS.del('sessions', s.id); note('A sessão de estudo desta árvore também foi apagada'); } });
+OS.on('upd:trees', (t, b) => { if (!b) return; const s = OS.all('sessions').find(x => x.tree === t.id); if (!s) return; const p = {}; if (t.subject !== b.subject) p.subject = t.subject; if (t.skill !== b.skill) p.skill = t.skill; if (t.mins !== b.mins) p.minutes = t.mins; if (t.date !== b.date) p.date = t.date; if (Object.keys(p).length) upd('sessions', s.id, p); });
+OS.on('del:focusblocks', f => OS.all('sessions').filter(s => s.fblock === f.id).forEach(s => OS.del('sessions', s.id)));
+// árvores antigas: liga às sessões criadas no mesmo dia pela Floresta (uma vez)
+OS.on('ready', () => { try { if (U.ls.get('os2lnkTree', 0)) return; const S = OS.all('sessions').filter(s => !s.tree && /^🌳 Floresta/.test(s.learned || ''));
+  OS.all('trees').filter(t => t.alive && !OS.all('sessions').some(s => s.tree === t.id)).forEach(t => { const s = S.find(x => !x.tree && x.date === t.date && +x.minutes === +t.mins && (x.subject || '') === (t.subject || '')); if (s) upd('sessions', s.id, { tree: t.id }); }); U.ls.set('os2lnkTree', 1); } catch (e) { } });
+
+/* ---------- Trabalho: turno ↔ folga no mesmo dia ---------- */
+const offK = ['Folga', 'Férias', 'Feriado', 'Baixa'];
+OS.on('add:shifts', s => { const o = OS.all('dayoffs').filter(x => x.date === s.date); if (o.length) { o.forEach(x => OS.del('dayoffs', x.id)); note('Tinhas folga nesse dia: passou a dia de trabalho'); } });
+const offDay = o => { if (!offK.includes(o.kind || 'Folga')) return; const sh = OS.all('shifts').filter(s => s.date === o.date); if (sh.length) { sh.forEach(s => OS.del('shifts', s.id)); note(`Turno de ${U.fmtD(o.date)} removido (${(o.kind || 'folga').toLowerCase()})`); } };
+OS.on('add:dayoffs', offDay); OS.on('upd:dayoffs', (o, b) => { if (b && (b.date !== o.date || b.kind !== o.kind)) offDay(o); });
+OS.on('upd:shifts', (s, b) => { if (b && b.date !== s.date) { const o = OS.all('dayoffs').filter(x => x.date === s.date); o.forEach(x => OS.del('dayoffs', x.id)); } });
+
+/* ---------- Finanças: compra em prestações ---------- */
+// mudar descrição/categoria/conta numa parcela muda as outras parcelas da mesma compra
+OS.on('upd:transactions', (t, b) => { if (!b || !t.instG || quiet) return; const K = ['desc', 'cat', 'sub', 'account', 'method', 'ess'], p = {}; K.forEach(k => { if (t[k] !== b[k]) p[k] = t[k]; }); if (!Object.keys(p).length) return;
+  batch(() => OS.all('transactions').filter(x => x.instG === t.instG && x.id !== t.id).forEach(x => upd('transactions', x.id, p))); });
+OS.on('del:transactions', t => { if (!t.instG || quiet) return; const R = OS.all('transactions').filter(x => x.instG === t.instG); if (!R.length) return;
+  setTimeout(() => UI.ask(`Apagar também as outras ${R.length} parcela(s)?`, esc(t.desc || '') + ' — apagaste uma parcela desta compra.', 'Apagar todas', () => batch(() => R.forEach(x => OS.del('transactions', x.id)))), 300); });
+OS.on('del:accounts', a => { const n = OS.all('transactions').filter(t => t.account === a.id || t.toAccount === a.id).length; if (n) note(`${n} movimento(s) ficaram sem conta: escolhe outra conta neles`, 'warn'); });
+
+/* ---------- Carreira: oportunidade ↔ candidatura, entrevistas no calendário ---------- */
+const JOB = ['Emprego', 'Estágio', 'Programa universitário', 'Bolsa'];
+OS.on('upd:opps', (o, b) => { if (!b || o.status === b.status) return;
+  if (o.status === 'Submetida' && JOB.includes(o.kind) && !OS.all('applications').some(a => a.opp === o.id)) { OS.add('applications', { company: o.inst || o.name, role: o.inst ? o.name : '', status: 'Enviada', date: U.today(), link: o.link || '', opp: o.id }, { silent: true }); note('Candidatura criada em Carreira', 'pos'); }
+  OS.all('applications').filter(a => a.opp === o.id).forEach(a => { const st = { Aceite: 'Aceite', Recusada: 'Recusada', 'Em avaliação': 'Enviada' }[o.status]; if (st && a.status !== st) upd('applications', a.id, { status: st }); }); });
+OS.on('upd:applications', (a, b) => { if (!b || !a.opp || a.status === b.status) return; const o = OS.get('opps', a.opp); if (!o) return; const st = { Aceite: 'Aceite', Recusada: 'Recusada', Entrevista: 'Em avaliação', Proposta: 'Em avaliação' }[a.status]; if (st && o.status !== st) upd('opps', o.id, { status: st }); });
+if (OS.Cal && OS.Cal.items) { const _it = OS.Cal.items; OS.Cal.items = (from, to) => { const out = _it(from, to); OS.all('applications').forEach(a => { if (a.interview && a.interview >= from && a.interview <= to && ['Entrevista', 'Proposta'].includes(a.status)) out.push({ date: a.interview, title: 'Entrevista: ' + a.company, src: 'opp', imp: true, edit: 'applications:' + a.id }); }); return out.sort((x, y) => (x.date + (x.start || '99')).localeCompare(y.date + (y.start || '99'))); }; }
+
+/* ---------- Desporto ↔ plano nas tarefas; treino conta para hábitos e alertas ---------- */
+OS.on('del:sports', s => { const T = OS.all('tasks').filter(t => t.sportPlan === s.id && open(t)); T.forEach(t => OS.del('tasks', t.id)); if (T.length) note(`${T.length} treino(s) planeado(s) apagados das tarefas`); });
+OS.on('upd:sports', (s, b) => { if (!b || !b.name || s.name === b.name) return; OS.all('tasks').filter(t => t.sportPlan === s.id).forEach(t => upd('tasks', t.id, { title: t.title.replace(b.name + ':', s.name + ':') })); });
+const Hab = OS.Hab; if (Hab && Hab.autoDone) { const _a = Hab.autoDone; Hab.autoDone = (h, d) => _a(h, d) || (h.auto === 'workout' && OS.all('sportlog').some(x => x.date === d)); }
+
+/* ---------- avisos antes de apagar (o que acontece nas outras áreas) ---------- */
+const W = {
+  projects: r => { const n = OS.all('tasks').filter(t => t.project === r.id).length; return n ? `As ${n} tarefas deste projeto ficam sem projeto (não são apagadas).` : ''; },
+  goals: r => { const n = OS.all('tasks').filter(t => t.goal === r.id).length + OS.all('projects').filter(p => p.goal === r.id).length; return n ? `${n} tarefa(s)/projeto(s) deixam de estar ligados a esta meta.` : ''; },
+  assessments: r => { const n = OS.all('tasks').filter(t => t.examPlan === r.id && open(t)).length; return n ? `As ${n} tarefas do plano de estudo desta avaliação também são apagadas.` : ''; },
+  subjects: r => { const c = OS.all('classes').filter(x => x.subject === r.id).length, s = OS.all('sessions').filter(x => x.subject === r.id).length; return `${c ? c + ' aula(s) do horário são apagadas. ' : ''}${s ? s + ' sessão(ões) de estudo ficam no histórico sem disciplina.' : ''}`; },
+  accounts: r => { const n = OS.all('transactions').filter(t => t.account === r.id || t.toAccount === r.id).length; return n ? `Atenção: ${n} movimento(s) usam esta conta e os saldos vão mudar.` : ''; },
+  trees: r => r.alive ? 'A sessão de estudo registada por esta árvore também é apagada.' : '',
+  sports: r => { const n = OS.all('tasks').filter(t => t.sportPlan === r.id && open(t)).length; return n ? `${n} treino(s) planeado(s) nas tarefas também são apagados.` : ''; },
+  topics: r => { const n = OS.all('reviews').filter(x => x.topicId === r.id).length; return n ? `${n} revisão(ões) espaçada(s) deste tópico também são apagadas.` : ''; }
+};
+Object.keys(W).forEach(c => { if (OS.S[c]) OS.S[c].delWarn = W[c]; });
+OS.Links = { W };
 })();
 
 </script>
@@ -11318,7 +12059,7 @@ const KEY = '${key}';
 function doGet(e) {
   const p = e.parameter || {};
   if (p.k !== KEY) return out({ ok: false, msg: 'Chave errada' });
-  if (p.op === 'ping') return out({ ok: true, v: 8 });
+  if (p.op === 'ping') return out({ ok: true, v: 9 });
   // ---- cotações em tempo real (Yahoo Finance) para os Investimentos ----
   if (p.op === 'q') return out({ ok: true, q: cotacoes_(String(p.s || '')) });
   if (p.op === 'h') return out({ ok: true, h: historico_(String(p.s || ''), String(p.r || '1y'), String(p.i || '1d')) });
@@ -11328,6 +12069,13 @@ function doGet(e) {
   if (p.op === 'nw') { let fs = []; try { fs = JSON.parse(p.f || '[]'); } catch (e) { } return out({ ok: true, nw: noticias_(fs.slice(0, 10)) }); }
   if (p.op === 'al') { PropertiesService.getScriptProperties().setProperty('AL', String(p.j || '[]').slice(0, 8500)); const on = ScriptApp.getProjectTriggers().some(function (t) { return t.getHandlerFunction() === 'verificarAlertas'; }); return out({ ok: true, ativo: on }); }
   if (p.op === 'c') return out({ ok: true, c: agenda_(String(p.s || '')) });
+  // ---- e-mail (Gmail) e LinkedIn (pelas notificações no Gmail), para o resumo do Oceanum ----
+  if (p.op === 'gm') return out({ ok: true, gm: correio_(String(p.q || ''), Number(p.n || 30)) });
+  if (p.op === 'ga') return out({ ok: true, n: acaoCorreio_(String(p.a || ''), String(p.ids || '')) });
+  // ---- Spyke: resumo do dia e perguntas pela Siri (funciona com a app fechada) ----
+  if (p.op === 'br') { const P = PropertiesService.getScriptProperties(); P.setProperty('BR', String(p.j || '{}').slice(0, 8500)); P.setProperty('CX', String(p.cx || '').slice(0, 8500)); if (p.gk) P.setProperty('GK', String(p.gk).slice(0, 120)); else if (p.nogk) P.deleteProperty('GK'); return out({ ok: true }); }
+  if (p.op === 'brief') return ContentService.createTextOutput(resumo_());
+  if (p.op === 'ask') return ContentService.createTextOutput(pergunta_(String(p.q || '')));
   // ---- sincronização: os dados do Oceanum num ficheiro do teu Google Drive ----
   if (p.op === 'list') { const all = dados_(); const m = {}; Object.keys(all).forEach(function (id) { m[id] = all[id].t || 0; }); return out({ ok: true, docs: m }); }
   if (p.op === 'get') { const all = dados_(), ids = String(p.ids || '').split(',').filter(String); const o = {}; (ids.length ? ids : Object.keys(all)).forEach(function (id) { if (all[id]) o[id] = all[id]; }); return out({ ok: true, docs: o }); }
@@ -11369,6 +12117,27 @@ function guardar_(all) { const f = ficheiro_();
     lista.sort(function (a, b) { return b.getName() < a.getName() ? -1 : 1; }).slice(14).forEach(function (x) { x.setTrashed(true); }); }
   f.setContent(JSON.stringify(all)); }
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+// ---- e-mail: só lê o que pedires (assunto, remetente, início do texto); ações: lido, arquivar, spam, lixo, estrela ----
+function autorizarGmail() { GmailApp.getInboxUnreadCount(); }
+function correio_(q, n) { const th = GmailApp.search(q || 'in:inbox newer_than:3d', 0, Math.max(1, Math.min(50, n || 30))), r = [];
+  th.forEach(function (t) { const ms = t.getMessages(), m = ms[ms.length - 1]; let sn = ''; try { sn = String(m.getPlainBody() || '').replace(/\\s+/g, ' ').slice(0, 500); } catch (e) { }
+    r.push({ id: t.getId(), s: t.getFirstMessageSubject() || '', f: m.getFrom() || '', to: m.getTo() || '', d: m.getDate().toISOString(), u: t.isUnread(), n: ms.length, imp: t.isImportant(), st: t.hasStarredMessages(), l: t.getLabels().map(function (x) { return x.getName(); }), sn: sn }); });
+  return r; }
+function acaoCorreio_(a, ids) { let n = 0; ids.split(',').filter(String).slice(0, 50).forEach(function (id) { try { const t = GmailApp.getThreadById(id); if (!t) return;
+    if (a === 'lido') t.markRead(); else if (a === 'arquivar') t.moveToArchive(); else if (a === 'spam') t.moveToSpam(); else if (a === 'lixo') t.moveToTrash(); else if (a === 'estrela') t.getMessages().slice(-1)[0].star(); else return; n++; } catch (e) { } }); return n; }
+// ---- Spyke pela Siri: o Oceanum envia o resumo do dia; o atalho lê-o em voz alta ----
+function resumo_() { let b = {}; try { b = JSON.parse(PropertiesService.getScriptProperties().getProperty('BR') || '{}'); } catch (e) { }
+  const hoje = Utilities.formatDate(new Date(), 'Europe/Lisbon', 'yyyy-MM-dd');
+  if (b.d === hoje && b.t) return b.t; if (b.d2 === hoje && b.t2) return b.t2;
+  return 'Ainda não tenho o resumo de hoje. Abre o Oceanum uma vez e eu fico atualizado.'; }
+function pergunta_(q) { const P = PropertiesService.getScriptProperties(), gk = P.getProperty('GK'), cx = P.getProperty('CX') || '';
+  if (!q) return resumo_(); if (!gk) return 'Para te responder pela Siri, liga a IA no Oceanum e ativa as perguntas pela Siri nas definições do Spyke.';
+  const agora = Utilities.formatDate(new Date(), 'Europe/Lisbon', 'yyyy-MM-dd HH:mm');
+  const prompt = 'És o Spyke, o assistente pessoal do Ryan (estilo J.A.R.V.I.S.): direto, calmo, confiante, com um toque de humor. Agora em Portugal: ' + agora + '.\\nDados do Oceanum do Ryan (podem ter algumas horas):\\n' + cx + '\\n\\nO Ryan pergunta: ' + q + '\\nResponde em português do Brasil, no máximo 3 frases curtas, para serem ditas em voz alta: sem listas, sem markdown, sem emojis. Usa só os dados acima; se não souberes, diz que não sabes.';
+  const ms = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
+  for (let i = 0; i < ms.length; i++) { try { const r = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1beta/models/' + ms[i] + ':generateContent?key=' + encodeURIComponent(gk), { method: 'post', contentType: 'application/json', muteHttpExceptions: true, payload: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.4 } }) });
+    if (r.getResponseCode() !== 200) continue; const j = JSON.parse(r.getContentText()), t = (((j.candidates || [])[0] || {}).content || {}).parts; if (t && t.length) return t.map(function (x) { return x.text || ''; }).join('').trim(); } catch (e) { } }
+  return 'Não consegui falar com a IA agora. Tenta daqui a pouco.'; }
 // ---- mercado: Yahoo Finance (o teu script vai buscar; a app só recebe os números) ----
 const YH_ = ['https://query1.finance.yahoo.com', 'https://query2.finance.yahoo.com'], UA_ = { 'User-Agent': 'Mozilla/5.0 (Oceanum)' };
 function yget_(path) { for (let i = 0; i < YH_.length; i++) { try { const r = UrlFetchApp.fetch(YH_[i] + path, { muteHttpExceptions: true, headers: UA_ }); if (r.getResponseCode() === 200) return JSON.parse(r.getContentText()); } catch (e) { } } return null; }
@@ -11499,6 +12268,8 @@ IB.pull = async (manual) => { const c = cfg(); if (!c.url || !c.key || busy) { i
 const base = () => { const c = cfg(); return c.url ? c.url.trim() : ''; };
 const q = (extra) => base() + (base().includes('?') ? '&' : '?') + 'k=' + encodeURIComponent(cfg().key) + (extra || '');
 IB.st = IB.st || {};
+IB.base = base; IB.q = q; IB.getJSON = getJSON; IB.guess = (d, c) => guess(d, c); IB.defAcc = () => defAcc();
+IB.post = async o => { const r = await fetch(base(), { method: 'POST', body: new URLSearchParams(Object.assign({ k: cfg().key }, o)), credentials: 'omit', cache: 'no-store' }); const t = await r.text(); try { return JSON.parse(t); } catch (e) { return { ok: false, msg: t.slice(0, 200) }; } };
 const urlOk = u => /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u) || /^https:\/\/script\.google\.com\/a\/[^/]+\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u) || /^http:\/\/127\.0\.0\.1/.test(u);
 IB.check = async () => { const u = base(), c = cfg();
   if (!c.key) return IB.st = { ok: false, m: 'Falta o passo 1: carrega em "Copiar código".' };
@@ -11724,6 +12495,10 @@ const bioUnlock = async () => {
   try { await navigator.credentials.get({ publicKey: { challenge: rand(32), allowCredentials: [{ type: 'public-key', id: unb64u(b.id) }], userVerification: 'preferred', timeout: 45000 } }); return true; }
   catch (e) { msg(bioErr(e)); return false; }
 };
+// verificação para sair do Bloco de foco (e outros ecrãs protegidos): Face ID no iPhone ou o código, com o mesmo limite de tentativas
+L.verifyBio = async () => { const b = L.bioId(); if (!b) return false; try { await navigator.credentials.get({ publicKey: { challenge: rand(32), allowCredentials: [{ type: 'public-key', id: unb64u(b.id) }], userVerification: 'required', timeout: 45000 } }); return true; } catch (e) { OS.UI.toast(bioErr(e), 'warn'); return false; } };
+L.verifyCode = async v => { const w = wait(); if (w) return `Muitas tentativas. Espera ${w} s.`; if ((await sha(SALT + (v || ''))) === hash()) { U.ls.del('os2lkfails'); return null; }
+  const f = U.ls.get('os2lkfails', 0) + 1; U.ls.set('os2lkfails', f); if (f >= 5) { U.ls.set('os2lkwait', Date.now() + 30000); U.ls.set('os2lkfails', 0); return 'Código errado 5 vezes. Espera 30 s.'; } return 'Código incorreto.'; };
 L.setCode = async (cur, nw) => { if (await sha(SALT + cur) !== hash()) return 'O código atual não está certo.'; if (nw.length < 6) return 'O novo código precisa de pelo menos 6 caracteres.'; OS.setOne('security', { hash: await sha(SALT + nw), changed: U.today() }); return null; };
 
 /* ---------- ecrã ---------- */
@@ -11823,8 +12598,8 @@ if (Cloud.enabled) init().then(u => { Cloud.state = u ? 'ligado' : 'por entrar';
 'use strict';
 const U = OS.U, UI = OS.UI, C = OS.C, V = OS.views, A = OS.act, esc = U.esc;
 const NAV = [
-  ['Visão geral', [['visao', 'Visão Geral', 'grid'], ['hoje', 'Hoje', 'sun'], ['jornal', 'Jornal', 'news', () => { const n = OS.News && OS.News.unread(); return n ? [n, ''] : null; }], ['painel', 'Painel', 'grid'], ['control', 'Control Room', 'radar', () => { const n = OS.Intel.alerts().filter(a => a.lvl === 'urgent').length; return n ? [n, 'neg'] : null; }], ['next', 'Next Action', 'zap'], ['calendario', 'Calendário', 'cal']]],
-  ['Execução', [['tarefas', 'Tarefas', 'checksq', () => { const n = OS.Tasks.open().filter(OS.Tasks.late).length; return n ? [n, 'neg'] : [OS.Tasks.open().length, '']; }], ['habitos', 'Hábitos & Rotina', 'repeat'], ['projetos', 'Projetos', 'folder'], ['metas', 'Metas', 'target']]],
+  ['Visão geral', [['visao', 'Visão Geral', 'grid'], ['hoje', 'Hoje', 'sun'], ['jornal', 'Jornal', 'news', () => { const n = OS.News && OS.News.unread(); return n ? [n, ''] : null; }], ['spyke', 'Spyke (assistente)', 'mic'], ['email', 'E-mail & LinkedIn', 'mail', () => { const c = OS.Mail && OS.Mail.counts(); return c && c.urg ? [c.urg, 'neg'] : null; }], ['painel', 'Painel', 'grid'], ['control', 'Control Room', 'radar', () => { const n = OS.Intel.alerts().filter(a => a.lvl === 'urgent').length; return n ? [n, 'neg'] : null; }], ['next', 'Next Action', 'zap'], ['calendario', 'Calendário', 'cal']]],
+  ['Execução', [['tarefas', 'Tarefas', 'checksq', () => { const n = OS.Tasks.open().filter(OS.Tasks.late).length; return n ? [n, 'neg'] : [OS.Tasks.open().length, '']; }], ['habitos', 'Hábitos & Rotina', 'repeat'], ['foco', 'Bloco de foco', 'focus', () => { const b = OS.FocusBlock && OS.FocusBlock.state(); return b && b.phase !== 'end' ? ['●', 'pos'] : null; }], ['projetos', 'Projetos', 'folder'], ['metas', 'Metas', 'target']]],
   ['Eu', [['eu', 'Quem sou eu', 'user']]],
   ['Fé', [['fe', 'Fé & Devoção', 'cross']]],
   ['Dinheiro', [['gasto', 'Gasto rápido', 'bolt'], ['financas', 'Finanças', 'wallet'], ['investimentos', 'Investimentos', 'trend'], ['compras', 'Compras', 'cart', () => { const n = OS.all('wishlist').filter(w => w.status === 'Em espera').length; return n ? [n, ''] : null; }], ['simuladores', 'Simuladores', 'calc']]],
@@ -11837,7 +12612,7 @@ NAV.forEach(([g, items]) => items.forEach(([k, l]) => TITLES[k] = [l, g]));
 TITLES.mova = [OS.one ? 'Mova' : 'Mova', 'Empresa'];
 
 const CORE = ['visao', 'eu', 'fe', 'jornal', 'gasto', 'hoje', 'tarefas', 'habitos', 'financas', 'treino', 'dieta', 'universidade', 'metas'];
-const DESC = { desporto: 'Os teus desportos, práticas, estatísticas e treinos para melhorar.', floresta: 'Foca-te e faz crescer a tua floresta.', cursos: 'Os cursos que estás a fazer, com progresso.', certificacoes: 'Todas as tuas certificações.', leituras: 'Estante virtual: livros, resenhas e desafios.', eu: 'A tua história, família, amigos e quem és.', jornal: 'As notícias do mundo e de cada país, em tempo real.', fe: 'Versículo do dia, Bíblia, devocional e oração.', visao: 'Painel com tudo: dinheiro, agenda, corpo e estudos.', gasto: 'Registar uma compra em segundos.', hoje: 'O teu dia numa página.', painel: 'Os números da tua vida de relance.', control: 'Alertas e o que precisa de atenção.', next: 'A próxima ação certa, agora.', calendario: 'Aulas, turnos, compromissos e Google Calendar.', tarefas: 'Tudo o que tens para fazer.', habitos: 'Inegociáveis, rotina e sequências.', projetos: 'Projetos com fases e progresso.', metas: 'Metas grandes e o caminho até elas.', financas: 'Contas, gastos, orçamento e dívidas.', investimentos: 'Carteira, movimentos e cotações.', compras: 'Pensar antes de comprar.', simuladores: 'Empréstimos, compras, metas e juros.', universidade: 'Disciplinas, avaliações, revisões.', aprendizagem: 'Competências a dominar, etapa a etapa.', conhecimento: 'Notas e conhecimento guardado.', corpo: 'Treino, dieta e corrida ligados.', treino: 'Rotinas, treino em curso, exercícios com imagens.', dieta: 'Refeições, calorias, proteína e água.', dieta: 'Refeições, calorias, proteína e água.', corrida: 'Corridas, plano e ritmo.', trabalho: 'Turnos e horas de trabalho.', carreira: 'Rede de contactos e experiências.', capital: 'O teu valor profissional a crescer.', oportunidades: 'Vagas, candidaturas e oportunidades.', mova: 'A tua empresa: vendas, clientes, custos.', northstar: 'A direção que guia tudo.', roadmap: 'O plano no tempo.', longterm: 'Visão a 1, 5 e 10 anos.', decisoes: 'Decidir bem, com critérios.', revisao: 'Revisões semanais e mensais.', evolucao: 'Como estás a evoluir.' };
+const DESC = { spyke: 'O teu assistente de voz: resumo do dia, perguntas e comandos.', email: 'E-mails e LinkedIn resumidos: urgente, responder, spam.', foco: 'Resolver pendências por prioridade, sem fugir, com saída por Face ID.', desporto: 'Os teus desportos, práticas, estatísticas e treinos para melhorar.', floresta: 'Foca-te e faz crescer a tua floresta.', cursos: 'Os cursos que estás a fazer, com progresso.', certificacoes: 'Todas as tuas certificações.', leituras: 'Estante virtual: livros, resenhas e desafios.', eu: 'A tua história, família, amigos e quem és.', jornal: 'As notícias do mundo e de cada país, em tempo real.', fe: 'Versículo do dia, Bíblia, devocional e oração.', visao: 'Painel com tudo: dinheiro, agenda, corpo e estudos.', gasto: 'Registar uma compra em segundos.', hoje: 'O teu dia numa página.', painel: 'Os números da tua vida de relance.', control: 'Alertas e o que precisa de atenção.', next: 'A próxima ação certa, agora.', calendario: 'Aulas, turnos, compromissos e Google Calendar.', tarefas: 'Tudo o que tens para fazer.', habitos: 'Inegociáveis, rotina e sequências.', projetos: 'Projetos com fases e progresso.', metas: 'Metas grandes e o caminho até elas.', financas: 'Contas, gastos, orçamento e dívidas.', investimentos: 'Carteira, movimentos e cotações.', compras: 'Pensar antes de comprar.', simuladores: 'Empréstimos, compras, metas e juros.', universidade: 'Disciplinas, avaliações, revisões.', aprendizagem: 'Competências a dominar, etapa a etapa.', conhecimento: 'Notas e conhecimento guardado.', corpo: 'Treino, dieta e corrida ligados.', treino: 'Rotinas, treino em curso, exercícios com imagens.', dieta: 'Refeições, calorias, proteína e água.', dieta: 'Refeições, calorias, proteína e água.', corrida: 'Corridas, plano e ritmo.', trabalho: 'Turnos e horas de trabalho.', carreira: 'Rede de contactos e experiências.', capital: 'O teu valor profissional a crescer.', oportunidades: 'Vagas, candidaturas e oportunidades.', mova: 'A tua empresa: vendas, clientes, custos.', northstar: 'A direção que guia tudo.', roadmap: 'O plano no tempo.', longterm: 'Visão a 1, 5 e 10 anos.', decisoes: 'Decidir bem, com critérios.', revisao: 'Revisões semanais e mensais.', evolucao: 'Como estás a evoluir.' };
 const unlocked = () => new Set(CORE.concat(Object.keys((OS.ui.nav) || {})));
 const unlock = k => { if (!k || CORE.includes(k) || !DESC[k]) return; const n = Object.assign({}, OS.ui.nav || {}); if (!n[k]) { n[k] = 1; OS.ui.nav = n; try { OS.setUI('nav', n); } catch (e) { } } };
 function renderSide(cur) {
@@ -11858,6 +12633,7 @@ function renderTop(cur) {
   <nav class="tn" aria-label="Secções">${NAV.map(([g, items]) => `<div class="tn-g ${grp === g ? 'cur' : ''}"><button class="tn-b" data-act="tnToggle" aria-haspopup="true">${g === 'Visão geral' ? 'Visão Geral' : g}<svg viewBox="0 0 24 24" class="ic tn-car"><path d="M6 9l6 6 6-6"/></svg></button>
     <div class="tn-dd">${items.map(([k, l, ic]) => `<a href="#${k}" class="${cur === k ? 'on' : ''}">${UI.ic(ic)}<span><b>${k === 'mova' ? esc(OS.one('mova').name || 'Mova') : l}</b><small>${esc(DESC[k] || '')}</small></span></a>`).join('')}</div></div>`).join('')}</nav>
   <div class="tn-r"><i class="sync-dot ${OS.sync.status}" id="syncDot2" title="${esc(OS.sync.msg)}"></i>
+  <button class="icon-btn spy-tb" data-act="spyOpen" aria-label="Spyke" title="Spyke (assistente de voz)">${UI.ic('mic')}</button>
   <button class="icon-btn" data-act="cmdOpen" aria-label="Procurar (Ctrl K)" title="Procurar (Ctrl K)">${UI.ic('search')}</button>
   <button class="icon-btn tn-hide-s" data-act="focusStart" aria-label="Modo foco" title="Modo foco">${UI.ic('focus')}</button>
   <a class="icon-btn" href="#definicoes" aria-label="Definições" title="Definições">${UI.ic('settings')}</a>
