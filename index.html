@@ -2140,7 +2140,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.84", "date": "08/10/2026", "notes": ["Universidade: Banco de questões por disciplina e tema (gerado pela IA ou teu) e Desempenho — acerto por tema, notas, simulados e erros, onde tens de melhorar, aulas e exercícios recomendados"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.85", "date": "08/10/2026", "notes": ["Desporto: a Corrida preenche-se sozinha com as corridas da aba Corrida (km, tempo, ritmo, desnível)"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -7592,7 +7592,11 @@ OS.S.sportlog = { label: 'Prática', title: r => (OS.get('sports', r.sport) ? ca
   { k: 'mins', l: 'Minutos', t: 'num' }, { k: 'rpe', l: 'Esforço (RPE 1–10)', t: 'num' }, { k: 'res', l: 'Resultado', t: 'sel', o: ['', 'Vitória', 'Empate', 'Derrota'] }, { k: 'score', l: 'Marcador', t: 'text' }, { k: 'notes', l: 'Notas', t: 'area', rows: 2 }], defaults: () => ({ date: today(), kind: 'Treino', mins: 60, rpe: 6 }) };
 
 const weightKg = () => { const r = U.sortBy(OS.all('body').filter(b => +b.weight), b => b.date).pop(); return r ? +r.weight : 75; };
-const logs = id => U.sortBy(OS.all('sportlog').filter(l => l.sport === id), l => l.date + (l._c || 0), -1);
+// Corrida: as práticas vêm automaticamente da aba Corrida (coleção runs)
+const runLogs = sid => OS.all('runs').map(r => { const sec = U.parseDur(r.time) || 0, km = U.num(r.km), pace = km && sec ? sec / km / 60 : 0; return { id: 'run_' + r.id, virtual: 1, edit: 'runs:' + r.id, sport: sid, date: r.date, kind: r.type || 'Corrida', mins: Math.round(sec / 60), rpe: r.feel ? Math.min(10, +r.feel * 2) : '', st: Object.assign({ km: U.r2(km) }, pace ? { ritmo: Math.round(pace * 100) / 100 } : {}, U.num(r.elev) ? { desnivel: U.num(r.elev) } : {}), notes: r.notes || '', _c: r._c }; });
+const isRun = s => s && s.key === 'corrida';
+const allLogs = () => OS.all('sportlog').concat(...OS.all('sports').filter(isRun).map(s => runLogs(s.id)));
+const logs = id => { const s = OS.get('sports', id); return U.sortBy(OS.all('sportlog').filter(l => l.sport === id).concat(isRun(s) ? runLogs(id) : []), l => l.date + (l._c || 0), -1); };
 const kcal = (s, mins) => Math.round(cat(s).met * weightKg() * (+mins || 0) / 60);
 const weekOf = d => U.monday(d);
 
@@ -7614,9 +7618,9 @@ const homeView = () => { const S = OS.all('sports'), wk = weekOf(today());
     return `<div class="sp-card" style="--sc:${c.c}" data-act="spOpen" data-id="${s.id}" role="button" tabindex="0"><div class="sp-ch"><span class="sp-pi">${ico(c.ic)}</span><div><b>${esc(s.name || c.n)}</b><small>${esc([s.level, s.pos, s.club].filter(Boolean).join(' · '))}</small></div></div>
       <div class="sp-cw"><span>Esta semana</span><b>${w}${f ? ' / ' + f : ''}</b></div>${f ? UI.bar(Math.min(1, w / f), w >= f ? 'pos' : '') : ''}<div class="sp-cs"><span><b>${L.length}</b> práticas</span><span><b>${U.nf(h, h < 10 ? 1 : 0)}</b> h</span><span>${last ? 'última ' + U.rel(last.date) : 'sem registos'}</span></div></div>`; }).join('')}
     <a class="sp-card sp-add" href="#desporto.novo">${UI.ic('plus')}<b>Adicionar desporto</b></a></div>
-  <div class="pn"><div class="pn-h"><h3>Últimas práticas</h3>${UI.addBtn('sportlog', 'Registar prática', { sport: S[0].id }, 'sm')}</div>${(() => { const L = U.sortBy(OS.all('sportlog'), l => l.date + (l._c || 0), -1).slice(0, 8); return L.length ? `<div class="list">${L.map(logRow).join('')}</div>` : UI.empty('Ainda sem práticas registadas.'); })()}</div>`; };
+  <div class="pn"><div class="pn-h"><h3>Últimas práticas</h3>${UI.addBtn('sportlog', 'Registar prática', { sport: S[0].id }, 'sm')}</div>${(() => { const L = U.sortBy(allLogs(), l => l.date + (l._c || 0), -1).slice(0, 8); return L.length ? `<div class="list">${L.map(logRow).join('')}</div>` : UI.empty('Ainda sem práticas registadas.'); })()}</div>`; };
 const logRow = l => { const s = OS.get('sports', l.sport), c = cat(s), st = Object.entries(l.st || {}).filter(([, v]) => v !== '' && v != null).map(([k, v]) => `${(c.st.find(x => x[0] === k) || [, k])[1]} ${v}`).slice(0, 3).join(' · ');
-  return `<div class="li click" data-edit="sportlog:${l.id}"><span class="sp-dot" style="--sc:${c.c}">${ico(c.ic)}</span><div class="li-t"><b>${esc((s && (s.name || c.n)) || 'Desporto')} · ${esc(l.kind || 'Treino')}${l.res ? ` · <span class="${l.res === 'Vitória' ? 'pos' : l.res === 'Derrota' ? 'neg' : ''}">${l.res}${l.score ? ' ' + esc(l.score) : ''}</span>` : ''}</b><small>${U.fmtD(l.date)} · ${l.mins || 0} min${l.rpe ? ' · RPE ' + l.rpe : ''}${st ? ' · ' + esc(st) : ''}</small></div><span class="mono mut">${kcal(s, l.mins)} kcal</span></div>`; };
+  return `<div class="li click" data-edit="${l.edit || 'sportlog:' + l.id}"><span class="sp-dot" style="--sc:${c.c}">${ico(c.ic)}</span><div class="li-t"><b>${esc((s && (s.name || c.n)) || 'Desporto')} · ${esc(l.kind || 'Treino')}${l.res ? ` · <span class="${l.res === 'Vitória' ? 'pos' : l.res === 'Derrota' ? 'neg' : ''}">${l.res}${l.score ? ' ' + esc(l.score) : ''}</span>` : ''}</b><small>${U.fmtD(l.date)} · ${l.mins || 0} min${l.rpe ? ' · RPE ' + l.rpe : ''}${st ? ' · ' + esc(st) : ''}</small></div><span class="mono mut">${kcal(s, l.mins)} kcal</span></div>`; };
 
 const STABS = [['', 'Resumo'], ['registar', 'Registar prática'], ['treinos', 'Treinos para melhorar'], ['sobre', 'Sobre o desporto'], ['ajuda', 'Auxílios'], ['coach', 'Treinador IA']];
 const sportView = s => { const c = cat(s), t = OS.ui.spTab || '';
@@ -7629,12 +7633,12 @@ SV[''] = (s, c) => { const L = logs(s.id), t = today(), m30 = U.addDays(t, -29),
   const tot = {}; L.forEach(l => Object.entries(l.st || {}).forEach(([k, v]) => { if (v === '' || v == null || isNaN(+v)) return; (tot[k] = tot[k] || []).push(+v); }));
   const sk = OS.ui.spStat && tot[OS.ui.spStat] ? OS.ui.spStat : Object.keys(tot)[0], series = sk ? L.filter(l => l.st && l.st[sk] !== '' && l.st[sk] != null && !isNaN(+l.st[sk])).slice(0, 20).reverse() : [];
   return `<div class="kpis">${UI.kpi('Práticas (30 dias)', L30.length, U.hours(U.sum(L30, l => +l.mins || 0)))}${UI.kpi('Total', L.length, U.nf(U.sum(L, l => +l.mins || 0) / 60, 1) + ' h')}${games.length ? UI.kpi('Vitórias', U.pct(wins / games.length), `${wins}V ${games.filter(l => l.res === 'Empate').length}E ${games.filter(l => l.res === 'Derrota').length}D`, { tone: wins / games.length >= .5 ? 'pos' : '' }) : UI.kpi('Esforço médio', L.length ? U.nf(U.avg(L.filter(l => l.rpe), l => +l.rpe), 1) : '—', 'RPE 1–10')}${UI.kpi('Calorias (30 dias)', U.nf(U.sum(L30, l => kcal(s, l.mins))), 'estimativa · ' + weightKg() + ' kg')}</div>
-  ${Object.keys(tot).length ? `<div class="sp-tot">${c.st.filter(([k]) => tot[k]).map(([k, l]) => { const a = tot[k], sum = U.sum(a, x => x), avg = sum / a.length, isMax = /máx|melhor|grau|ritmo|vel|%|peso/i.test(l); return `<button class="sp-tv ${k === sk ? 'on' : ''}" data-act="spStat" data-k="${k}"><small>${esc(l)}</small><b>${isMax ? U.nf(Math.max(...a), 1) : U.nf(sum)}</b><em>${isMax ? 'melhor' : 'total · ' + U.nf(avg, 1) + '/prática'}</em></button>`; }).join('')}</div>` : ''}
+  ${Object.keys(tot).length ? `<div class="sp-tot">${c.st.filter(([k]) => tot[k]).map(([k, l]) => { const a = tot[k], sum = U.sum(a, x => x), avg = sum / a.length, isMax = /máx|melhor|grau|ritmo|vel|%|peso/i.test(l); const best = /ritmo/i.test(l) ? Math.min(...a) : Math.max(...a); return `<button class="sp-tv ${k === sk ? 'on' : ''}" data-act="spStat" data-k="${k}"><small>${esc(l)}</small><b>${isMax ? U.nf(best, /ritmo/i.test(l) ? 2 : 1) : U.nf(sum, k === 'km' ? 1 : 0)}</b><em>${isMax ? 'melhor' : 'total · ' + U.nf(avg, 1) + '/prática'}</em></button>`; }).join('')}</div>` : ''}
   <div class="g g2"><div class="pn"><div class="pn-h"><h3>Minutos por semana</h3></div>${C.mount({ type: 'bar', labels: wks.map(w => U.fmtDS(w)), series: [{ name: 'Minutos', data: wks.map(w => U.sum(L.filter(l => l.date >= w && l.date <= U.addDays(w, 6)), l => +l.mins || 0)), color: c.c }], target: (+s.freq || 0) * 60 || null, empty: 'Regista práticas para ver a evolução.' }, 190)}</div>
     <div class="pn"><div class="pn-h"><h3>${sk ? esc((c.st.find(x => x[0] === sk) || [, sk])[1]) + ' por prática' : 'Estatística'}</h3></div>${series.length ? C.mount({ type: 'line', labels: series.map(l => U.fmtDS(l.date)), series: [{ name: (c.st.find(x => x[0] === sk) || [, sk])[1], data: series.map(l => +l.st[sk]), color: c.c }] }, 190) : UI.empty('Regista as tuas estatísticas em "Registar prática".')}</div></div>
   <div class="pn"><div class="pn-h"><h3>Histórico</h3><button class="btn sm" data-act="spTab" data-v="registar">${UI.ic('plus')}Registar</button></div>${L.length ? `<div class="list">${L.slice(0, 30).map(logRow).join('')}</div>` : UI.empty('Ainda sem práticas.')}</div>`; };
 A.spStat = b => OS.setUI('spStat', b.dataset.k);
-SV.registar = (s, c) => `<form class="pn sp-form" data-form="spLog" data-id="${s.id}"><div class="sp-fg">
+SV.registar = (s, c) => isRun(s) ? `<div class="pn"><p class="sp-p">As tuas corridas entram aqui <b>automaticamente</b> a partir da aba <a href="#corrida">Corrida</a> — km, tempo, ritmo e desnível. Regista lá (ou aqui) e fica tudo junto.</p><div class="row gap8">${UI.addBtn('runs', 'Registar corrida')}<a class="btn ghost" href="#corrida">Abrir Corrida</a></div></div>` : `<form class="pn sp-form" data-form="spLog" data-id="${s.id}"><div class="sp-fg">
     <label>Data<input class="field" type="date" name="date" value="${today()}"></label><label>Tipo<select class="field" name="kind">${['Treino', 'Jogo', 'Competição', 'Aula', 'Treino específico', 'Lazer'].map(k => `<option>${k}</option>`).join('')}</select></label>
     <label>Minutos<input class="field" type="number" name="mins" value="60" min="1"></label><label>Esforço (RPE 1–10)<input class="field" type="number" name="rpe" value="6" min="1" max="10"></label>
     ${c.comp ? `<label>Resultado<select class="field" name="res"><option value="">—</option><option>Vitória</option><option>Empate</option><option>Derrota</option></select></label><label>Marcador<input class="field" name="score" placeholder="ex.: 3-1, 6-4 6-3"></label>` : ''}
@@ -7672,7 +7676,7 @@ OS.forms.spCoach = async (f, v) => { if (CO.busy) return; const s = OS.get('spor
 Pedido: "${q}". Cria um plano prático de 4 semanas em português de Portugal, específico deste desporto, com sessões concretas (exercícios, séries/tempo), progressão e uma análise curta do que os dados mostram. Não inventes dados. JSON: {"titulo":"…","analise":"…","semanas":[{"semana":"Semana 1","foco":"…","sessoes":["…"]}],"dicas":["…"]}` }], .5);
     U.ls.set(k, { q, o, at: Date.now() }); } catch (e) { U.ls.set(k, { q, err: e.message || 'Erro da IA', at: Date.now() }); } CO.busy = false; OS.request(); };
 
-const statsView = () => { const S = OS.all('sports'), L = OS.all('sportlog'), t = today(), wks = Array.from({ length: 12 }, (_, i) => U.addDays(weekOf(t), -7 * (11 - i)));
+const statsView = () => { const S = OS.all('sports'), L = allLogs(), t = today(), wks = Array.from({ length: 12 }, (_, i) => U.addDays(weekOf(t), -7 * (11 - i)));
   if (!L.length) return UI.empty('As estatísticas aparecem quando registares práticas.');
   return `<div class="kpis">${UI.kpi('Práticas', L.length)}${UI.kpi('Horas', U.nf(U.sum(L, l => +l.mins || 0) / 60, 1))}${UI.kpi('Este mês', L.filter(l => l.date.slice(0, 7) === t.slice(0, 7)).length)}${UI.kpi('Calorias (estim.)', U.nf(U.sum(L, l => kcal(OS.get('sports', l.sport), l.mins))))}</div>
   <div class="g g2"><div class="pn"><div class="pn-h"><h3>Horas por desporto</h3></div>${C.mount({ type: 'donut', data: S.map(s => ({ l: s.name || cat(s).n, v: U.sum(L.filter(l => l.sport === s.id), l => +l.mins || 0) / 60, c: cat(s).c })).filter(x => x.v), fmt: v => U.nf(v, 1) + ' h', centerSub: 'horas' }, 210)}</div>
@@ -7680,7 +7684,8 @@ const statsView = () => { const S = OS.all('sports'), L = OS.all('sportlog'), t 
 
 /* práticas no calendário */
 if (OS.Cal && OS.Cal.items) { const _it = OS.Cal.items; OS.Cal.items = (from, to) => { const out = _it(from, to); OS.all('sportlog').forEach(l => { if (l.date >= from && l.date <= to) { const s = OS.get('sports', l.sport); out.push({ date: l.date, title: (s ? s.name || cat(s).n : 'Desporto') + ' · ' + (l.kind || 'Treino'), src: 'workout', done: true, edit: 'sportlog:' + l.id, sub: (l.mins || 0) + ' min' }); } }); return out.sort((a, b) => (a.date + (a.start || '99')).localeCompare(b.date + (b.start || '99'))); }; }
-OS.Sport = { SPORTS, weekPlan, kcal };
+OS.on('ready', () => { if (OS.all('runs').length && !OS.all('sports').some(isRun)) OS.add('sports', { key: 'corrida', level: 'Intermédio', freq: +(OS.one('profile').runKmTarget ? 3 : 2), since: U.sortBy(OS.all('runs'), r => r.date)[0].date, auto: 1 }, { silent: true }); });
+OS.Sport = { SPORTS, weekPlan, kcal, logs };
 })();
 
 </script>
