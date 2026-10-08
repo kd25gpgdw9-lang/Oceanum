@@ -1909,6 +1909,32 @@ html.lite .fo-ov{backdrop-filter:none;-webkit-backdrop-filter:none;background:rg
 .dp-w{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}.dp-w:first-of-type{border-top:0}.dp-w small{display:block;color:var(--tx2,var(--mut));font-size:12.5px;margin:2px 0 6px}.dp-r{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);font-weight:700;flex:0 0 auto}.dp-a{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:240px}
 .dp-f{padding:10px 0;border-top:1px solid var(--line)}.dp-f p{margin:4px 0 8px;font-size:14px;line-height:1.55}
 @media (max-width:860px){.dp-w{flex-wrap:wrap}.dp-a{max-width:none;justify-content:flex-start}}
+.fo-float{position:fixed;left:16px;bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:63;width:200px;border-radius:18px;overflow:hidden;background:#0b1c2c;border:1px solid rgba(111,209,127,.6);box-shadow:0 16px 40px rgba(0,0,0,.5);touch-action:none;user-select:none;cursor:grab}
+.fo-float.off{left:-9999px!important;right:auto;top:0}.fo-float canvas{display:block;width:100%;height:auto}
+.fo-fh{display:flex;align-items:center;gap:4px;padding:6px 8px;font:600 13px/1 var(--sans,inherit);color:#d8ffe0;font-variant-numeric:tabular-nums}.fo-fh span{flex:1}.fo-fh button,.fo-ft button{background:rgba(255,255,255,.08);border:0;color:#fff;border-radius:8px;padding:4px 8px;font:inherit;cursor:pointer}
+.fo-ft{display:flex;gap:6px;padding:6px 8px}.fo-ft button{flex:1}
+.fo-float.mini{width:auto;border-radius:99px;background:#0d2a1d;border-color:#6fd17f}.fo-float.mini .fo-fc,.fo-float.mini .fo-ft{display:none}.fo-float.mini .fo-fh{padding:8px 8px 8px 16px;font-size:15px;gap:6px}.fo-float.mini .fo-fh button{padding:4px 7px;font-size:12px}
+.fo-vid{position:fixed;left:0;bottom:0;width:2px;height:2px;opacity:.01;pointer-events:none;z-index:-1}
+.fo-rw{gap:6px}.fo-scn{width:100%;aspect-ratio:2/1;border-radius:10px}
+@media (max-width:860px){.fo-float{width:160px;bottom:calc(90px + env(safe-area-inset-bottom,0px))}}
+/* Hábitos: grelha alinhada */
+.hab-wrap{overflow-x:auto}.hab-tbl{table-layout:fixed;border-collapse:separate;border-spacing:0;width:100%;min-width:780px}.hab-tbl col.c{width:40px}
+.hab-tbl th,.hab-tbl td{vertical-align:middle}.hab-tbl .hab-n{width:auto;min-width:160px;text-align:left;padding-right:10px}.hab-tbl .hab-c{width:40px;text-align:center;padding:8px 0}.hab-tbl .hab-s{width:58px;text-align:right}
+.hab-tbl th.hab-c{font-size:11px;line-height:1.25;color:var(--mut);font-weight:600}.hab-tbl th.hab-c span{display:block;font-size:12.5px;color:var(--tx2,var(--tx))}.hab-tbl .hab-c.is-today{background:color-mix(in srgb,var(--accent) 10%,transparent)}.hab-tbl th.hab-c.is-today span{color:var(--accent)}
+.hab-b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line3,rgba(255,255,255,.18));background:transparent;color:#04131b;padding:0;vertical-align:middle;box-sizing:border-box}
+.hab-b .ic{width:16px;height:16px;stroke-width:3}.hab-b.done{background:var(--accent);border-color:var(--accent)}.hab-b.off{border-style:dashed;opacity:.25}.hab-b.miss{border-color:color-mix(in srgb,var(--neg,#f87171) 55%,transparent);background:color-mix(in srgb,var(--neg,#f87171) 10%,transparent)}
+button.hab-b{cursor:pointer;width:30px;height:30px;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}button.hab-b:hover{background:color-mix(in srgb,var(--accent) 22%,transparent)}button.hab-b.done{background:var(--accent)}.hab-b.ro{cursor:default}
+.q-push{margin:6px 0 0;font-size:15.5px;line-height:1.45;font-weight:600;color:var(--tx);max-width:760px}.q-more{background:none;border:0;color:var(--mut);cursor:pointer;font-size:14px;padding:0 4px}
+.q-truth{border-left:4px solid #e11d48;background:linear-gradient(90deg,color-mix(in srgb,#e11d48 12%,var(--pn,#0e1d31)),var(--pn,#0e1d31) 70%)}.q-truth p{margin:0;font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.5;font-weight:600}
+/* Trabalho+ */
+.ws-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:0 0 14px}.ws-d{display:flex;flex-direction:column;gap:2px;padding:8px;border-radius:12px;border:1px solid var(--line2,var(--line));color:inherit;text-decoration:none;min-width:0}.ws-d small{color:var(--mut);font-size:11px}.ws-d b{font-size:12.5px;line-height:1.3;overflow:hidden;text-overflow:ellipsis}
+.ws-d.work{border-color:color-mix(in srgb,var(--c4,#e0896a) 55%,transparent);background:color-mix(in srgb,var(--c4,#e0896a) 10%,transparent)}.ws-d.off{border-color:color-mix(in srgb,#22c55e 55%,transparent);background:color-mix(in srgb,#22c55e 10%,transparent)}.ws-d.today{box-shadow:0 0 0 2px var(--accent) inset}
+.ws-cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.ws-c{border:1px solid var(--line2,var(--line));border-radius:14px;padding:8px;min-height:120px;display:flex;flex-direction:column;gap:6px;min-width:0}.ws-c.today{box-shadow:0 0 0 2px var(--accent) inset}.ws-c.past{opacity:.55}
+.ws-h{display:flex;justify-content:space-between;align-items:center;font-size:13px}.ws-sh{padding:6px 8px;border-radius:10px;background:color-mix(in srgb,var(--c4,#e0896a) 16%,transparent);cursor:pointer}.ws-sh b{display:block;font-size:13px}.ws-sh small,.ws-off small{display:block;font-size:11px;color:var(--tx2,var(--mut))}
+.ws-off{padding:6px 8px;border-radius:10px;background:color-mix(in srgb,#22c55e 16%,transparent);font-weight:600;font-size:13px;cursor:pointer}.ws-a{margin-top:auto;display:flex;gap:4px;flex-wrap:wrap}
+.ws-form{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.ws-form label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--tx2,var(--mut))}.ws-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.ws-thumbs img{height:120px;border-radius:10px;border:1px solid var(--line)}
+.wp-t{display:block;font-size:16px;margin:2px 0}.wp .pbar{margin:8px 0 4px}
+@media (max-width:860px){.ws-cal{grid-template-columns:repeat(2,minmax(0,1fr))}.ws-strip{grid-template-columns:repeat(7,minmax(64px,1fr));overflow-x:auto}}
 
 </style>
 <style>
@@ -2140,7 +2166,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.85", "date": "08/10/2026", "notes": ["Desporto: a Corrida preenche-se sozinha com as corridas da aba Corrida (km, tempo, ritmo, desnível)"]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.86", "date": "08/10/2026", "notes": ["Floresta: a árvore nasce de semente e cresce aos poucos até ao fim do tempo; pílula no canto ao mudar de aba; janela flutuante (Picture-in-Picture) para quando sais da app; moedas para prémios teus e cenários da ilha", "Hábitos: grelha alinhada e só se marca o dia de hoje", "Visão Geral e Hoje: frase forte do dia e \"Verdade do dia\"", "Trabalho: horário e folgas, importar a escala por foto (a IA atualiza só os dias futuros do período) e projetos de trabalho"]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -3110,7 +3136,7 @@ Hab.autoDone = (h, d) => {
   }
 };
 Hab.done = (h, d) => !!(h.log && h.log[d]) || Hab.autoDone(h, d);
-Hab.toggle = (id, d) => { const h = OS.get('habits', id); if (!h) return; const log = Object.assign({}, h.log || {}); if (log[d]) delete log[d]; else log[d] = 1; OS.upd('habits', id, { log }); };
+Hab.toggle = (id, d) => { const h = OS.get('habits', id); if (!h || (d && d !== U.today())) return; const log = Object.assign({}, h.log || {}); if (log[d]) delete log[d]; else log[d] = 1; OS.upd('habits', id, { log }); };
 Hab.streak = h => { let d = U.today(), s = 0; if (!Hab.done(h, d)) d = U.addDays(d, -1); for (let i = 0; i < 800; i++) { if (!Hab.due(h, d)) { d = U.addDays(d, -1); continue; } if (!Hab.done(h, d)) break; s++; d = U.addDays(d, -1); } return s; };
 Hab.rate = (h, days) => { const ds = U.lastN(days).filter(d => Hab.due(h, d) && (!h._c || d >= U.iso(new Date(h._c)))); if (h.freq === 'X por semana') { const wks = Math.max(1, days / 7); const done = U.lastN(days).filter(d => Hab.done(h, d)).length; return Math.min(1, done / (wks * (U.num(h.perWeek) || 1))); } return ds.length ? ds.filter(d => Hab.done(h, d)).length / ds.length : 0; };
 Hab.dayScore = d => { const hs = OS.all('habits').filter(h => h.active && Hab.due(h, d) && h.freq !== 'X por semana'); return hs.length ? hs.filter(h => Hab.done(h, d)).length / hs.length : null; };
@@ -4012,11 +4038,14 @@ V.habitos = sub => {
   const H = OS.all('habits'), days = U.lastN(14), score90 = U.lastN(91);
   return UI.head('Hábitos & Rotina', 'Hábitos marcados como inegociáveis formam a sequência de dias perfeitos. Alguns marcam-se sozinhos a partir dos teus registos reais.', UI.addBtn('habits', 'Novo hábito'), 'Execução') + UI.tabs('habitos', [['', 'Hábitos'], ['rotina', 'Rotina'], ['plano', 'Planeamento']], sub) +
   `<div class="kpis">${UI.kpi('Dias perfeitos seguidos', Hab.perfectStreak(), 'todos os inegociáveis cumpridos')}${UI.kpi('Consistência (30 dias)', (() => { const v = U.lastN(30).map(Hab.dayScore).filter(x => x != null); return v.length ? U.pct(U.avg(v)) : '—'; })())}${UI.kpi('Consistência (7 dias)', (() => { const v = U.lastN(7).map(Hab.dayScore).filter(x => x != null); return v.length ? U.pct(U.avg(v)) : '—'; })())}${UI.kpi('Hoje', (() => { const v = Hab.dayScore(t); return v == null ? '—' : U.pct(v); })())}</div>
-  <div class="tblw"><table class="tbl"><thead><tr><th>Hábito</th>${days.map(d => `<th class="r" style="padding-inline:4px">${U.WDS[U.parse(d).getDay()].slice(0, 1)}<br><span class="mono">${+d.slice(8)}</span></th>`).join('')}<th class="r">Sequência</th><th class="r">30 dias</th></tr></thead><tbody>
-  ${H.map(h => `<tr class="${h.active ? '' : 'muted'}"><td><a href="javascript:void 0" data-edit="habits:${h.id}"><b style="font-weight:520">${esc(h.name)}</b></a> ${h.core ? UI.badge('inegociável', 'acc') : ''}${h.auto ? ' ' + UI.badge('auto', 'out') : ''}</td>${days.map(d => { const due = Hab.due(h, d), dn = Hab.done(h, d), au = h.auto && Hab.autoDone(h, d); return `<td class="r" style="padding-inline:4px">${due || dn ? `<input type="checkbox" class="cbx" ${au ? 'disabled' : `data-act="habit" data-id="${h.id}" data-d="${d}"`} aria-label="${esc(h.name)} ${U.fmtD(d)}"${dn ? ' checked' : ''}>` : '<span class="mut">·</span>'}</td>`; }).join('')}<td class="r mono">${Hab.streak(h)}d</td><td class="r mono">${U.pct(Hab.rate(h, 30))}</td></tr>`).join('')}</tbody></table></div>
+  <div class="tblw hab-wrap"><table class="tbl hab-tbl"><colgroup><col>${days.map(() => '<col class="c">').join('')}<col style="width:58px"><col style="width:58px"></colgroup><thead><tr><th class="hab-n">Hábito</th>${days.map(d => `<th class="hab-c ${d === t ? 'is-today' : ''}">${U.WDS[U.parse(d).getDay()].slice(0, 1)}<span class="mono">${+d.slice(8)}</span></th>`).join('')}<th class="hab-s">Seq.</th><th class="hab-s">30 d</th></tr></thead><tbody>
+  ${H.map(h => `<tr class="${h.active ? '' : 'muted'}"><td class="hab-n"><a href="javascript:void 0" data-edit="habits:${h.id}"><b style="font-weight:520">${esc(h.name)}</b></a> ${h.core ? UI.badge('inegociável', 'acc') : ''}${h.auto ? ' ' + UI.badge('auto', 'out') : ''}</td>${days.map(d => { const due = Hab.due(h, d), dn = Hab.done(h, d), au = h.auto && Hab.autoDone(h, d), isT = d === t;
+    const born = h._c ? U.iso(new Date(h._c)) : '', st = dn ? 'done' : !due || (born && d < born) ? 'off' : d < t ? 'miss' : 'todo'; return `<td class="hab-c ${isT ? 'is-today' : ''}">${isT && due && !au ? `<button type="button" class="hab-b ${st}" data-act="habit" data-id="${h.id}" data-d="${d}" aria-pressed="${dn}" aria-label="${esc(h.name)} hoje">${dn ? UI.ic('check') : ''}</button>` : `<span class="hab-b ${st} ro" title="${U.fmtD(d)}${st === 'miss' ? ' · falhou' : st === 'off' ? ' · não era dia' : ''}" aria-label="${esc(h.name)} ${U.fmtD(d)} ${st === 'done' ? 'feito' : st === 'miss' ? 'falhou' : ''}">${dn ? UI.ic('check') : ''}</span>`}</td>`; }).join('')}<td class="hab-s mono">${Hab.streak(h)}d</td><td class="hab-s mono">${U.pct(Hab.rate(h, 30))}</td></tr>`).join('')}</tbody></table></div>
+  <p class="mut" style="font-size:12px;margin:6px 2px 14px">Só podes marcar o dia de hoje. Os dias anteriores ficam como estão (✓ feito · ✕ falhou · traço = não era dia).</p>
   <div class="pn"><div class="pn-h"><h3>Consistência diária · 13 semanas</h3></div>${UI.heat(score90, d => { const v = Hab.dayScore(d); return v == null ? 0 : Math.round(v * 100); }, 100)}</div>`;
 };
-A.habit = b => { Hab.toggle(b.dataset.id, b.dataset.d); };
+OS.on('render', () => queueMicrotask(() => document.querySelectorAll('#view .hab-wrap').forEach(w => { w.scrollLeft = w.scrollWidth; })));
+A.habit = b => { if (b.dataset.d && b.dataset.d !== U.today()) return UI.toast('Só podes marcar os hábitos de hoje', 'neg'); Hab.toggle(b.dataset.id, b.dataset.d || U.today()); };
 
 /* ================= PROJETOS ================= */
 V.projetos = () => {
@@ -6735,7 +6764,15 @@ function crown(b, cx, cy, cz, rx, ry, rz, n, cols, size, o = {}) { const r = b.r
     b.blob(size * (.62 + r() * .55), cx + x, cy + y, cz + z, pick(r, cols), { ao, rough: o.rough, cen: [cx, cy, cz, Math.max(rx, ry, rz) * 1.05], tint: o.tint || '#e8f59a', tintAmt: o.tintAmt == null ? .28 : o.tintAmt }); } }
 function flowersOn(b, cx, cy, cz, rx, ry, rz, n, cols, s = .06) { const r = b.r; for (let i = 0; i < n; i++) { const u = r() * Math.PI * 2, v = Math.acos(2 * r() - 1) * .8; b.blob(s * (.7 + r() * .6), cx + Math.sin(v) * Math.cos(u) * rx, cy + Math.cos(v) * ry * .9, cz + Math.sin(v) * Math.sin(u) * rz, pick(r, cols), { det: 0, rough: .1, vary: .1 }); } }
 function fallen(b, n, R, cols) { const r = b.r; for (let i = 0; i < n; i++) { const a = r() * 6.283, d = .25 + r() * R; b.add(new T.BoxGeometry(.07, .015, .05), M4(Math.cos(a) * d, .01, Math.sin(a) * d, 0, r() * 3, 0), pick(r, cols), { vary: .15 }); } }
-function sprout(b, g, col = '#7cc95a') { const h = .12 + g * 3.5; b.limb([0, 0, 0], [0, h, 0], .025, .018, '#6c8f3a', 5); b.blob(.09 + g, -.07, h, 0, col, { sx: 1, sy: .35, sz: .6, rough: .1 }); b.blob(.09 + g, .07, h * .92, 0, '#8fd468', { sx: 1, sy: .35, sz: .6, rough: .1 }); b.blob(.14, 0, -.02, 0, '#6b4a2e', { sy: .35, det: 0, rough: .2 }); }
+function sprout(b, g) { // g 0..0.2: semente → rebento → plantinha
+  b.blob(.42, 0, -.05, 0, '#5b3a22', { sy: .32, rough: .25, vary: .12, top: .05 }); for (let i = 0; i < 5; i++) b.blob(.06, Math.cos(i * 1.3) * .32, .01, Math.sin(i * 1.3) * .32, '#6b4a2e', { det: 0, sy: .5, rough: .2 });
+  if (g < .06) { const f = g / .06; b.blob(.13, 0, .1, 0, '#8a5a2b', { sx: .8, sy: 1.15, sz: .8, rough: .04, top: .3 }); b.add(new T.TorusGeometry(.11, .012, 4, 16, Math.PI), M4(0, .1, 0, 0, 0, Math.PI / 2), '#4a2f18', { vary: .05 });
+    if (f > .45) { const h = .05 + (f - .45) * .35; b.limb([0, .18, 0], [.02, .18 + h, 0], .018, .014, '#7fbf4a', 5); b.blob(.035 + .03 * f, .03, .2 + h, 0, '#8fd468', { sx: 1, sy: .4, sz: .6, rough: .05 }); } return; }
+  const f = (g - .06) / .14, h = .25 + f * .75, lf = .12 + f * .16; b.blob(.1, 0, .06, 0, '#8a5a2b', { sx: .9, sy: .6, sz: .9, rough: .1 });
+  b.limb([0, .05, 0], [.03, h * .55, .01], .03 + .015 * f, .026, '#6c9a3a', 6); b.limb([.03, h * .55, .01], [0, h, 0], .026, .02, '#76a640', 6);
+  b.blob(lf, -lf * .8, h * .62, 0, '#7cc95a', { sx: 1.1, sy: .28, sz: .6, rough: .08, top: .3 }); b.blob(lf, lf * .8, h * .6, 0, '#8fd468', { sx: 1.1, sy: .28, sz: .6, rough: .08, top: .3 });
+  if (f > .35) { const l2 = lf * (f - .35) * 1.4; b.blob(l2, 0, h + l2 * .3, -l2 * .6, '#6dbb4c', { sx: .6, sy: .3, sz: 1.1, rough: .08, top: .3 }); b.blob(l2, 0, h + l2 * .3, l2 * .6, '#7cc95a', { sx: .6, sy: .3, sz: 1.1, rough: .08, top: .3 }); }
+  if (f > .7) b.blob(.08 + .1 * (f - .7), .02, h + .12, 0, '#9be07a', { sy: .7, rough: .1, top: .4 }); }
 function trunkBranches(b, H, tr, bark, nb, spread, lean, dead) { const r = b.r, top = [lean, H, lean * .3]; b.limb([0, 0, 0], top, tr, tr * .62, bark, 7);
   const tips = []; for (let i = 0; i < nb; i++) { const a = i / nb * 6.283 + r() * .8, h0 = H * (.55 + r() * .4), base = [lean * h0 / H, h0, lean * .3 * h0 / H], len = spread * (.6 + r() * .5), tip = [base[0] + Math.cos(a) * len, h0 + len * (dead ? .45 : .75) + r() * .3, base[2] + Math.sin(a) * len];
     b.limb(base, tip, tr * .42, tr * .16, bark, 5); tips.push(tip); if (dead && r() < .7) { const t2 = [tip[0] + Math.cos(a + 1) * .3, tip[1] + .25, tip[2] + Math.sin(a + 1) * .3]; b.limb(tip, t2, tr * .14, tr * .06, DEAD.twig, 4); } }
@@ -6869,17 +6906,28 @@ const XTRA = {
 };
 Object.assign(BUILD, XTRA);
 const SPARAM = { girassol: .75, roseira: .7, lavanda: .7, cacto: .85, cogumelo: .9, arbusto: .6, carvalho: 1, pinheiro: 1, cipreste: 1, betula: 1, acer: 1, cerejeira: 1, oliveira: 1, ipe: 1, iperoxo: 1, laranjeira: 1, palmeira: 1, salgueiro: 1, embondeiro: 1, sequoia: 1 };
-function tree(b, sp, g, dead) { const fn = BUILD[sp] || BUILD.carvalho; if (!dead && g < .1) return sprout(b, g); fn(b, Math.max(0, Math.min(1, (g - .1) / .9)), !!dead); }
+function tree(b, sp, g, dead) { const fn = BUILD[sp] || BUILD.carvalho; if (dead || g >= 1) return fn(b, dead ? Math.max(.3, g) : 1, !!dead); if (g < .2) { const o0 = b.pre; b.pre = (o0 ? o0.clone() : new T.Matrix4()).multiply(M4(0, 0, 0, 0, 0, 0, 2.3)); sprout(b, g); b.pre = o0; return; }
+  const gg = (g - .2) / .8, sc = .3 + .7 * Math.pow(gg, .85), old = b.pre; b.pre = (old ? old.clone() : new T.Matrix4()).multiply(M4(0, 0, 0, 0, 0, 0, sc)); fn(b, gg, false); b.pre = old; }
 
 // chão: ilha redonda (plantar) e talhão quadrado (floresta)
-function decor(b, x, z, s = 1) { const r = b.r, k = r(); if (k < .35) { for (let i = 0; i < 4; i++) b.add(new T.ConeGeometry(.035 * s, (.12 + r() * .12) * s, 4), M4(x + (r() - .5) * .25 * s, .05 * s, z + (r() - .5) * .25 * s, (r() - .5) * .4, 0, (r() - .5) * .4), pick(r, ['#5da63c', '#4f9632', '#6cb34a']), { vary: .1 }); }
-  else if (k < .55) { const c = pick(r, ['#ffffff', '#ffd54f', '#f48fb1', '#ce93d8', '#ff8a65']); for (let i = 0; i < 3; i++) { const fx = x + (r() - .5) * .3 * s, fz = z + (r() - .5) * .3 * s; b.limb([fx, 0, fz], [fx, .12 * s, fz], .008, .008, '#4e8a30', 3); b.blob(.035 * s, fx, .13 * s, fz, c, { det: 0, rough: .1 }); } }
+const SCN = {
+  verde: { n: 'Prado verde', c: 0, g: '#6cbd46', s: '#5aa83e', t1: '#6dbd48', t2: '#66b543', tuft: ['#5da63c', '#4f9632', '#6cb34a'], fl: ['#ffffff', '#ffd54f', '#f48fb1', '#ce93d8', '#ff8a65'], d: 'O clássico.' },
+  outono: { n: 'Outono dourado', c: 150, g: '#c9a24a', s: '#a9822f', t1: '#c99f45', t2: '#bf943d', tuft: ['#b07a2a', '#c48a30', '#9a6a24'], fl: ['#e2582c', '#f2a13a', '#c43b1f'], extra: ['#d9541e', '#f0a12c', '#b8321c'], d: 'Folhas laranja pelo chão.' },
+  sakura: { n: 'Jardim sakura', c: 250, g: '#8fcf72', s: '#76b85c', t1: '#92d275', t2: '#88c86c', tuft: ['#7cc05e', '#6fb352'], fl: ['#ffd1e1', '#ffb7cf', '#ffffff'], extra: ['#ffc2d6', '#ffd6e4', '#f7a8c4'], d: 'Pétalas cor-de-rosa por todo o lado.' },
+  praia: { n: 'Ilha de praia', c: 350, g: '#ecd9a0', s: '#d9c184', t1: '#eedba2', t2: '#e6d196', tuft: ['#9bc46a', '#86b35a'], fl: ['#ffffff', '#ffb4a2', '#f4d35e'], extra: ['#ffffff', '#f6e7c8', '#ffcfb3'], d: 'Areia, conchas e sol.' },
+  neve: { n: 'Inverno nevado', c: 450, g: '#eef4fb', s: '#d6e2ef', t1: '#f2f7fc', t2: '#e7eff8', tuft: ['#cfe0ee', '#b9cfe2'], fl: ['#ffffff', '#d8ecff'], extra: ['#ffffff', '#e9f3ff'], d: 'Tudo coberto de neve.' },
+  magica: { n: 'Floresta mágica', c: 700, g: '#5fd1a8', s: '#43b48d', t1: '#62d4ab', t2: '#57c79f', tuft: ['#4fc4a0', '#7ae0c0'], fl: ['#b388ff', '#7df9ff', '#ff8ad8'], extra: ['#c7a6ff', '#a0f0ff', '#ffb3ea'], d: 'Relva turquesa e flores a brilhar.' }
+};
+const SC = () => SCN[cfg().scene] || SCN.verde;
+function decor(b, x, z, s = 1) { const P = SC(); const r = b.r, k = r(); if (k < .35) { for (let i = 0; i < 4; i++) b.add(new T.ConeGeometry(.035 * s, (.12 + r() * .12) * s, 4), M4(x + (r() - .5) * .25 * s, .05 * s, z + (r() - .5) * .25 * s, (r() - .5) * .4, 0, (r() - .5) * .4), pick(r, P.tuft), { vary: .1 }); }
+  else if (P.extra && k < .45) { for (let i = 0; i < 4; i++) b.add(new T.BoxGeometry(.07 * s, .012, .05 * s), M4(x + (r() - .5) * .4 * s, .01, z + (r() - .5) * .4 * s, 0, r() * 3, 0), pick(r, P.extra), { vary: .1, smooth: false }); }
+  else if (k < .55) { const c = pick(r, P.fl); for (let i = 0; i < 3; i++) { const fx = x + (r() - .5) * .3 * s, fz = z + (r() - .5) * .3 * s; b.limb([fx, 0, fz], [fx, .12 * s, fz], .008, .008, '#4e8a30', 3); b.blob(.035 * s, fx, .13 * s, fz, c, { det: 0, rough: .1 }); } }
   else if (k < .68) b.blob((.07 + r() * .08) * s, x, .03 * s, z, pick(r, ['#9e9e9e', '#8d8d8d', '#a8a29e']), { det: 0, sy: .6, rough: .2 }); }
-function island(b, R) { const r = b.r; b.add(new T.RingGeometry(0, R, 48, 10), M4(0, 0, 0, -Math.PI / 2), '#6cbd46', { vary: .16, freq: 1.6, smooth: true }); b.add(new T.CylinderGeometry(R, R * .985, .3, 48, 1, true), M4(0, -.15, 0), '#5aa83e', { vary: .1 }); b.add(new T.CylinderGeometry(R * .985, R * .78, .6, 40, 2), M4(0, -.6, 0), '#8a5a36', { vary: .14, freq: 5 });
+function island(b, R) { const r = b.r, P = SC(); b.add(new T.RingGeometry(0, R, 48, 10), M4(0, 0, 0, -Math.PI / 2), P.g, { vary: .16, freq: 1.6, smooth: true }); b.add(new T.CylinderGeometry(R, R * .985, .3, 48, 1, true), M4(0, -.15, 0), P.s, { vary: .1 }); b.add(new T.CylinderGeometry(R * .985, R * .78, .6, 40, 2), M4(0, -.6, 0), '#8a5a36', { vary: .14, freq: 5 });
   b.add(new T.CylinderGeometry(R * .78, R * .45, .5, 32, 2), M4(0, -1.15, 0), '#6d452a', { vary: .14, freq: 5 }); b.add(new T.ConeGeometry(R * .45, .7, 24, 2), M4(0, -1.75, 0, Math.PI), '#57361f', { vary: .14, freq: 5 });
   for (let i = 0; i < 4; i++) { const a = r() * 6.28; b.blob(.13 + r() * .1, Math.cos(a) * R * .97, -.5 - r() * .35, Math.sin(a) * R * .97, '#8a8178', { det: 0, rough: .2 }); }
   for (let i = 0; i < 22; i++) { const a = r() * 6.283, d = .75 + r() * (R - .9); decor(b, Math.cos(a) * d, Math.sin(a) * d, 1.2); } }
-function plot(b, N) { const off = -(N - 1) / 2; for (let x = 0; x < N; x++) for (let z = 0; z < N; z++) b.add(new T.BoxGeometry(.98, .26, .98, 2, 1, 2), M4(off + x, -.13, off + z), (x + z) % 2 ? '#6dbd48' : '#66b543', { vary: .1, freq: 1.4 });
+function plot(b, N) { const off = -(N - 1) / 2, P = SC(); for (let x = 0; x < N; x++) for (let z = 0; z < N; z++) b.add(new T.BoxGeometry(.98, .26, .98, 2, 1, 2), M4(off + x, -.13, off + z), (x + z) % 2 ? P.t1 : P.t2, { vary: .1, freq: 1.4 });
   b.add(new T.BoxGeometry(N - .02, .55, N - .02), M4(0, -.52, 0), '#8a5a36', { vary: .12, freq: 4 }); b.add(new T.BoxGeometry(N * .97, .45, N * .97), M4(0, -1.02, 0), '#6d452a', { vary: .12, freq: 4 }); b.add(new T.BoxGeometry(N * .9, .35, N * .9), M4(0, -1.4, 0), '#57361f', { vary: .12, freq: 4 }); }
 
 /* ================= cena (um renderer reaproveitado entre páginas) ================= */
@@ -6966,7 +7014,7 @@ const PHRASES = ['Larga o telemóvel. A tua árvore está a crescer 🌱', 'Uma 
 function tagInfo(v) { if (!v) return { tag: '', subject: '', skill: '' }; if (v.startsWith('s:')) { const s = OS.get('subjects', v.slice(2)); return { tag: s ? s.name : '', subject: v.slice(2), skill: '' }; } if (v.startsWith('k:')) { const s = OS.get('skills', v.slice(2)); return { tag: s ? s.name : '', subject: '', skill: v.slice(2) }; } return { tag: v, subject: '', skill: '' }; }
 function plant() { const c = cfg(), sp = SP[c.sp] ? c.sp : 'carvalho', ti = tagInfo(c.tag);
   RUN = { phase: 'grow', t0: Date.now(), mins: Math.max(1, +c.mins || 25), sp, tagv: c.tag || '', tag: ti.tag, subject: ti.subject, skill: ti.skill, seed: (Math.random() * 1e9) | 0, hid: null, ph: Math.floor(Math.random() * PHRASES.length) };
-  LAST = null; save(); sndPlay(c.sound); try { navigator.wakeLock && navigator.wakeLock.request('screen').then(w => wake = w).catch(() => { }); } catch (e) { } loop(); OS.request(); }
+  LAST = null; save(); sndPlay(c.sound); try { navigator.wakeLock && navigator.wakeLock.request('screen').then(w => wake = w).catch(() => { }); } catch (e) { } loop(); try { vid(); } catch (e) { } OS.request(); }
 function finish(ok, why) { if (!RUN || RUN.phase !== 'grow') return; const mins = ok ? RUN.mins : Math.max(0, Math.floor((Date.now() - RUN.t0) / 6e4)), coins = ok ? coinsFor(RUN.mins) : 0;
   const t = OS.add('trees', { date: today(), t0: RUN.t0, mins, plan: RUN.mins, sp: RUN.sp, alive: !!ok, tag: RUN.tag, subject: RUN.subject, skill: RUN.skill, coins, why: why || '', seed: RUN.seed });
   if (ok) { cfg().coins = (+cfg().coins || 0) + coins; OS.touch('forest'); if ((RUN.subject || RUN.skill) && mins >= 5) OS.add('sessions', { date: today(), subject: RUN.subject, skill: RUN.skill, minutes: mins, type: 'Estudo profundo', phone: true, focus: 5, learned: '🌳 Floresta: ' + SP[RUN.sp].n }); chime(); }
@@ -6975,11 +7023,41 @@ function startBreak() { RUN = { phase: 'break', t0: Date.now(), mins: Math.max(1
 function loop() { clearInterval(tick); if (!RUN) return; tick = setInterval(step, 1000); step(); }
 function step() { if (!RUN) { clearInterval(tick); pill(); return; } if (left() <= 0) { if (RUN.phase === 'grow') return finish(true); RUN = null; save(); chime(); UI.toast('A pausa acabou. Bora plantar outra? 🌱', 'pos'); clearInterval(tick); pill(); OS.request(); return; } paint(); }
 function paint() { const L = left(), el = document.getElementById('foTime'); if (el) el.textContent = mmss(L); const ring = document.getElementById('foRing'); if (ring) ring.style.strokeDashoffset = String(100 - prog() * 100);
-  if (RUN && RUN.phase === 'grow') { const k = `pot|${RUN.sp}|${stageOf(prog())}|0|${RUN.seed}`, h = document.getElementById('fo3d'); if (h && h.dataset.k !== k) { h.dataset.k = k; mount(); } document.title = '🌱 ' + mmss(L) + ' · Oceanum'; } pill(); }
-function pill() { let p = document.getElementById('foPill'); const show = RUN && !/^#floresta/.test(location.hash); if (!show) { if (p) p.remove(); return; } if (!p) { p = document.createElement('button'); p.id = 'foPill'; p.className = 'fo-pill'; p.onclick = () => { location.hash = 'floresta'; }; document.body.appendChild(p); } p.textContent = (RUN.phase === 'grow' ? '🌱 ' : '☕ ') + mmss(left()); }
-document.addEventListener('visibilitychange', () => { if (!RUN || RUN.phase !== 'grow') return; if (document.hidden) { RUN.hid = Date.now(); save(); return; } back(); });
+  if (RUN && RUN.phase === 'grow') { const k = `pot|${RUN.sp}|${stageOf(prog())}|0|${RUN.seed}|${cfg().scene || ''}`, h = document.getElementById('fo3d'); if (h && h.dataset.k !== k) { h.dataset.k = k; mount(); } document.title = '🌱 ' + mmss(L) + ' · Oceanum'; } pill(); }
+/* ---- janela flutuante (dentro do app) + Picture-in-Picture (fora do app) ---- */
+const GI = {}, MSPH = {}; let FL = null, FC = null, VID = null, giBusy = '';
+function growImg(sp, st) { const k = sp + '|' + st; if (GI[k] || giBusy === k) return GI[k]; if (!T || FAIL) { if (!FAIL) load3(); return null; }
+  try { giBusy = k; if (!TR) { TR = new T.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true }); TR.setSize(160, 160); TR.toneMapping = T.ACESFilmicToneMapping; }
+    if (!MSPH[sp]) { const mb = new Bld(rngOf(42), 0); tree(mb, sp, 1, false); const g0 = mb.geo(); g0.computeBoundingSphere(); MSPH[sp] = g0.boundingSphere.clone(); g0.dispose(); }
+    const sc = new T.Scene(); sc.add(new T.HemisphereLight('#e6f2ff', '#5a7a44', 1.25)); const d = new T.DirectionalLight('#fff4e0', 2.1); d.position.set(3, 6, 4); sc.add(d); const b = new Bld(rngOf(42), 1); tree(b, sp, st, false); const m = new T.Mesh(b.geo(), MAT()); sc.add(m);
+    const bs = MSPH[sp], c = bs.center.clone(), dd = bs.radius / Math.sin(15 * Math.PI / 180) * .95, cam = new T.PerspectiveCamera(30, 1, .1, 200); c.y = Math.max(c.y, bs.radius * .8); cam.position.copy(c).addScaledVector(new T.Vector3(.42, .3, 1).normalize(), dd); cam.lookAt(c);
+    TR.render(sc, cam); const img = new Image(); img.src = TR.domElement.toDataURL('image/png'); GI[k] = img; m.geometry.dispose(); m.material.dispose(); } catch (e) { console.warn(e); } giBusy = ''; return GI[k]; }
+function drawFC() { if (!FC) { FC = document.createElement('canvas'); FC.width = 320; FC.height = 400; } const x = FC.getContext('2d'), W = 320, H = 400, sky = SKY(), p = RUN ? (RUN.phase === 'grow' ? prog() : 1) : 0;
+  const gr = x.createLinearGradient(0, 0, 0, H); ({ day: [['#7cc7ef', 0], ['#e3f4ea', 1]], dawn: [['#f3a98c', 0], ['#eef0d8', 1]], dusk: [['#4b3f8f', 0], ['#f6b98a', 1]], night: [['#0a1630', 0], ['#2e4b5f', 1]] }[sky]).forEach(([c, o]) => gr.addColorStop(o, c)); x.fillStyle = gr; x.fillRect(0, 0, W, H);
+  const cx = W / 2, cy = 150, R = 118; x.lineWidth = 7; x.strokeStyle = 'rgba(255,255,255,.3)'; x.beginPath(); x.arc(cx, cy, R, 0, Math.PI * 2); x.stroke(); x.strokeStyle = RUN && RUN.phase === 'break' ? '#ffd166' : '#8ef0a0'; x.lineCap = 'round'; x.beginPath(); x.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * p); x.stroke();
+  x.fillStyle = 'rgba(70,140,60,.55)'; x.beginPath(); x.ellipse(cx, cy + 82, 70, 14, 0, 0, Math.PI * 2); x.fill();
+  if (RUN && RUN.phase === 'grow') { const img = growImg(RUN.sp, Math.max(.1, Math.ceil(p * 10) / 10)) || growImg(RUN.sp, 1); if (img && img.complete && img.naturalWidth) x.drawImage(img, cx - 95, cy - 105, 190, 190); else { x.fillStyle = '#6fd17f'; x.beginPath(); x.arc(cx, cy, 30 + 40 * p, 0, Math.PI * 2); x.fill(); } }
+  else { x.font = '64px system-ui'; x.textAlign = 'center'; x.fillText('☕', cx, cy + 22); }
+  x.fillStyle = '#fff'; x.textAlign = 'center'; x.font = '600 64px system-ui,-apple-system,sans-serif'; x.shadowColor = 'rgba(0,0,0,.35)'; x.shadowBlur = 8; x.fillText(mmss(left()), cx, 330); x.shadowBlur = 0; x.font = '500 18px system-ui,-apple-system,sans-serif'; x.fillStyle = 'rgba(255,255,255,.9)';
+  x.fillText(RUN ? (RUN.phase === 'grow' ? (SP[RUN.sp] || {}).n + (RUN.tag ? ' · ' + RUN.tag : '') : 'Pausa') : '', cx, 365, W - 30); return FC; }
+const pipOn = () => !!(document.pictureInPictureElement || (VID && VID.webkitPresentationMode === 'picture-in-picture'));
+function vid() { if (VID) return VID; drawFC(); VID = document.createElement('video'); VID.muted = true; VID.playsInline = true; VID.setAttribute('playsinline', ''); VID.setAttribute('muted', ''); VID.autoplay = true; VID.setAttribute('autopictureinpicture', ''); try { VID.autoPictureInPicture = true; } catch (e) { }
+  VID.className = 'fo-vid'; try { VID.srcObject = FC.captureStream ? FC.captureStream(2) : null; } catch (e) { } document.body.appendChild(VID); VID.play().catch(() => { }); return VID; }
+async function openPip() { try { const v = vid(); await v.play().catch(() => { }); if (v.requestPictureInPicture && document.pictureInPictureEnabled !== false) await v.requestPictureInPicture(); else if (v.webkitSetPresentationMode) v.webkitSetPresentationMode('picture-in-picture'); else UI.toast('Este navegador não tem janela flutuante fora da app', 'neg'); } catch (e) { UI.toast('Não consegui abrir a janela flutuante: ' + (e.message || ''), 'neg'); } }
+function closePip() { try { if (document.pictureInPictureElement) document.exitPictureInPicture(); else if (VID && VID.webkitPresentationMode === 'picture-in-picture') VID.webkitSetPresentationMode('inline'); } catch (e) { } }
+function pill() { const fl = !/^#floresta/.test(location.hash) && RUN; if (RUN) drawFC();
+  if (!RUN) { if (FL) { FL.remove(); FL = null; } closePip(); if (VID) { try { VID.pause(); (VID.srcObject && VID.srcObject.getTracks ? VID.srcObject.getTracks() : []).forEach(t => t.stop()); } catch (e) { } VID.remove(); VID = null; } return; }
+  if (!FL) { FL = document.createElement('div'); FL.id = 'foFloat'; FL.className = 'fo-float mini'; FL.innerHTML = `<div class="fo-fh"><span>🌱 Floresta</span><button data-f="pip" title="Janela flutuante fora da app" aria-label="Janela flutuante fora da app">⧉</button><button data-f="min" aria-label="Aumentar ou reduzir">⤢</button></div><div class="fo-fc"></div><div class="fo-ft"><button data-f="open">Abrir</button><button data-f="give">Desistir</button></div>`;
+    FL.querySelector('.fo-fc').appendChild(FC); document.body.appendChild(FL); let sx = 0, sy = 0, ox = 0, oy = 0, mv = false;
+    FL.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; mv = false; sx = e.clientX; sy = e.clientY; const r = FL.getBoundingClientRect(); ox = r.left; oy = r.top; FL.setPointerCapture(e.pointerId); FL._drag = true; });
+    FL.addEventListener('pointermove', e => { if (!FL._drag) return; const dx = e.clientX - sx, dy = e.clientY - sy; if (Math.abs(dx) + Math.abs(dy) > 4) mv = true; FL.style.left = Math.max(4, Math.min(innerWidth - FL.offsetWidth - 4, ox + dx)) + 'px'; FL.style.top = Math.max(4, Math.min(innerHeight - FL.offsetHeight - 4, oy + dy)) + 'px'; FL.style.right = 'auto'; FL.style.bottom = 'auto'; });
+    FL.addEventListener('pointerup', () => { FL._drag = false; if (!mv) location.hash = 'floresta'; });
+    FL.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; e.stopPropagation(); const f = b.dataset.f; if (f === 'pip') openPip(); if (f === 'min') FL.classList.toggle('mini'); if (f === 'open') location.hash = 'floresta'; if (f === 'give') A.foGiveUp(); }); }
+  FL.classList.toggle('off', !fl); const t = FL.querySelector('.fo-fh span'); if (t) t.textContent = (RUN.phase === 'grow' ? '🌱 ' : '☕ ') + mmss(left()); }
+A.foPip = () => openPip();
+document.addEventListener('visibilitychange', () => { if (!RUN || RUN.phase !== 'grow') return; if (document.hidden) { RUN.hid = Date.now(); RUN.pip = pipOn(); save(); return; } back(); });
 addEventListener('pagehide', () => { if (RUN && RUN.phase === 'grow' && !RUN.hid) { RUN.hid = Date.now(); save(); } });
-function back() { if (!RUN || !RUN.hid) return; const away = Date.now() - RUN.hid, lim = +cfg().strict; RUN.hid = null; save();
+function back() { if (!RUN || !RUN.hid) return; const away = Date.now() - RUN.hid, lim = RUN.pip ? 0 : +cfg().strict; RUN.hid = null; RUN.pip = false; save();
   if (lim && away > lim * 1000 && left() > 0) return finish(false, `Saíste do Oceanum durante ${Math.round(away / 1000)} s`); if (away > 4000 && left() > 0) UI.toast('Voltaste a tempo — a árvore continua a crescer 🌱', 'pos'); step(); }
 OS.on('ready', () => { if (RUN) { if (RUN.phase === 'grow' && RUN.hid) back(); if (RUN) loop(); } });
 addEventListener('hashchange', pill);
@@ -6996,7 +7074,7 @@ document.addEventListener('input', e => { if (e.target.id === 'foDur') { cfg().m
 document.addEventListener('change', e => { if (e.target.id === 'foDur') OS.touch('forest'); if (e.target.id === 'foTag') { cfg().tag = e.target.value; OS.touch('forest'); } if (e.target.id === 'foStrict') { cfg().strict = e.target.value; OS.touch('forest'); } });
 
 /* ================= vistas ================= */
-const TABS = [['', 'Plantar'], ['floresta', 'A minha floresta'], ['loja', 'Todas as árvores'], ['stats', 'Estatísticas']];
+const TABS = [['', 'Plantar'], ['floresta', 'A minha floresta'], ['loja', 'Todas as árvores'], ['moedas', 'Moedas & prémios'], ['stats', 'Estatísticas']];
 V.floresta = sub => { const k = TABS.some(t => t[0] === (sub || '')) ? (sub || '') : '';
   return UI.head('Floresta', 'Planta uma árvore e concentra-te: ela cresce enquanto estudas. Se saíres do Oceanum ou desistires, morre. Cada sessão fica na tua floresta.', `<span class="fo-coins" title="Moedas">🪙 ${U.nf(+cfg().coins || 0)}</span>`, 'Estudos') + UI.tabs('floresta', TABS, k) + `<div class="fo">${VW[k]()}</div>`; };
 const VW = {};
@@ -7004,16 +7082,16 @@ const sky = () => `fo-sky fo-${SKY()}`;
 const tagSel = v => `<select class="field" id="foTag" aria-label="Etiqueta"><option value="">Sem etiqueta</option><optgroup label="Disciplinas">${OS.all('subjects').filter(s => s.status === 'Em curso').map(s => `<option value="s:${s.id}"${v === 's:' + s.id ? ' selected' : ''}>${esc(s.name)}</option>`).join('')}</optgroup><optgroup label="Competências">${OS.all('skills').map(s => `<option value="k:${s.id}"${v === 'k:' + s.id ? ' selected' : ''}>${esc(s.name)}</option>`).join('')}</optgroup><optgroup label="Outras">${['Leitura', 'Trabalho', 'Mova', 'Devocional', 'Projeto pessoal', 'Outro'].map(x => `<option${v === x ? ' selected' : ''}>${x}</option>`).join('')}</optgroup></select>`;
 VW[''] = () => { const c = cfg(), sp = SP[c.sp] ? c.sp : 'carvalho', t = today(), Td = OS.all('trees').filter(x => x.date === t), cat = OS.ui.foCat || '', se = SEASON(), list = Object.keys(SP).filter(k => !cat || SP[k].k === cat);
   let k, title, body; const ring = (p, cls = '') => `<svg class="fo-ring ${cls}" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" pathLength="100" class="bg"/><circle id="foRing" cx="60" cy="60" r="54" pathLength="100" class="fg" style="stroke-dashoffset:${100 - p * 100}"/></svg>`;
-  if (RUN && RUN.phase === 'grow') { k = `pot|${RUN.sp}|${stageOf(prog())}|0|${RUN.seed}`;
+  if (RUN && RUN.phase === 'grow') { k = `pot|${RUN.sp}|${stageOf(prog())}|0|${RUN.seed}|${cfg().scene || ''}`;
     body = `<div class="fo-ph">${esc(PHRASES[RUN.ph % PHRASES.length])}</div><div class="fo-time" id="foTime">${mmss(left())}</div><div class="fo-sub">${esc(SP[RUN.sp].n)}${RUN.tag ? ' · ' + esc(RUN.tag) : ''} · ${RUN.mins} min</div>
       <div class="row gap8" style="justify-content:center;flex-wrap:wrap"><div class="seg fo-snd">${SOUNDS.map(([v, l]) => `<button class="${(c.sound || '') === v ? 'on' : ''}" data-act="foSound" data-v="${v}">${l}</button>`).join('')}</div></div>
-      <button class="btn ghost fo-give" data-act="foGiveUp">Desistir</button>`; return stage(k, ring(prog()), body); }
+      <div class="row gap8" style="justify-content:center;flex-wrap:wrap"><button class="btn sm" data-act="foPip">⧉ Janela flutuante (para sair da app)</button><button class="btn ghost fo-give" data-act="foGiveUp">Desistir</button></div><small class="mut" style="max-width:360px">Abre a janela flutuante antes de saíres: ficas a ver a árvore e o tempo por cima das outras apps e a árvore não morre enquanto ela estiver aberta.</small>`; return stage(k, ring(prog()), body); }
   if (RUN && RUN.phase === 'break') { return `<div class="pn fo-break"><div class="fo-ph">☕ Pausa — estica as pernas, bebe água, olha para longe.</div><div class="fo-time" id="foTime">${mmss(left())}</div><button class="btn" data-act="foSkip">Saltar pausa</button></div>`; }
-  if (LAST) { k = `pot|${LAST.sp}|1|${LAST.ok ? 0 : 1}|${LAST.seed}`;
+  if (LAST) { k = `pot|${LAST.sp}|1|${LAST.ok ? 0 : 1}|${LAST.seed}|${cfg().scene || ''}`;
     body = LAST.ok ? `<div class="fo-done">🎉 Plantaste ${/a$/.test(SP[LAST.sp].n) ? 'uma' : 'um'} <b>${esc(SP[LAST.sp].n)}</b>!</div><div class="fo-sub">${LAST.mins} minutos de foco · +${LAST.coins} 🪙</div><div class="row gap8" style="justify-content:center;flex-wrap:wrap"><button class="btn pri" data-act="foBreak">☕ Pausa de ${c.brk || 5} min</button><button class="btn" data-act="foAgain">🌱 Plantar outra</button><a class="btn ghost" href="#floresta.floresta">Ver a floresta</a></div>`
       : `<div class="fo-done dead">🥀 A tua árvore morreu</div><div class="fo-sub">${esc(LAST.why || '')}${LAST.mins ? ' · ' + LAST.mins + ' min' : ''}. Fica seca na floresta como lembrete. Recomeça — tu consegues.</div><div class="row gap8" style="justify-content:center"><button class="btn pri" data-act="foAgain">🌱 Tentar outra vez</button></div>`;
     return stage(k, ring(1, LAST.ok ? 'ok' : 'dead'), body); }
-  k = `pot|${sp}|1|0|${U.hash(sp) % 997}`;
+  k = `pot|${sp}|1|0|${U.hash(sp) % 997}|${cfg().scene || ''}`;
   body = `<div class="fo-time" id="foTime">${mmss((+c.mins || 25) * 6e4)}</div>
     <input type="range" id="foDur" min="10" max="180" step="5" value="${+c.mins || 25}" aria-label="Duração em minutos" class="fo-range">
     <div class="row gap6 fo-chips">${[15, 25, 45, 50, 60, 90, 120].map(m => `<button class="chip ${+c.mins === m ? 'on' : ''}" data-act="foMins" data-v="${m}">${m}</button>`).join('')}</div>
@@ -7031,7 +7109,7 @@ const PER = [['d', 'Dia'], ['w', 'Semana'], ['m', 'Mês'], ['y', 'Ano'], ['a', '
 const range = (p, ref) => { if (p === 'd') return [ref, ref, U.longDate(ref)]; if (p === 'w') { const a = U.monday(ref), b = U.addDays(a, 6); return [a, b, U.fmtDS(a) + ' – ' + U.fmtDS(b)]; } if (p === 'm') { const a = ref.slice(0, 7) + '-01', d = new Date(+ref.slice(0, 4), +ref.slice(5, 7), 0).getDate(); return [a, ref.slice(0, 7) + '-' + d, (U.MESL || U.MES)[+ref.slice(5, 7) - 1] + ' ' + ref.slice(0, 4)]; } if (p === 'y') return [ref.slice(0, 4) + '-01-01', ref.slice(0, 4) + '-12-31', ref.slice(0, 4)]; return ['0000', '9999', 'Desde sempre']; };
 const shift = (p, ref, d) => p === 'd' ? U.addDays(ref, d) : p === 'w' ? U.addDays(ref, 7 * d) : p === 'm' ? (() => { const x = new Date(+ref.slice(0, 4), +ref.slice(5, 7) - 1 + d, 1); return U.iso(x); })() : p === 'y' ? (+ref.slice(0, 4) + d) + ref.slice(4) : ref;
 VW.floresta = () => { if (T && !FAIL) setTimeout(() => thumbs(), 400); const p = OS.ui.foP || 'd', ref = OS.ui.foR || today(), [a, b, lab] = range(p, ref), L = U.sortBy(OS.all('trees').filter(t => t.date >= a && t.date <= b), t => t.t0 || 0), alive = L.filter(t => t.alive !== false), dead = L.length - alive.length, shown = L.slice(-500);
-  FLIST = shown; const key = `forest|${p}|${a}|${L.length}|${L.map(t => t.id.slice(-3)).join('').slice(-60)}`;
+  FLIST = shown; const key = `forest|${cfg().scene || ''}|${p}|${a}|${L.length}|${L.map(t => t.id.slice(-3)).join('').slice(-60)}`;
   const byTag = {}; alive.forEach(t => byTag[t.tag || 'Sem etiqueta'] = (byTag[t.tag || 'Sem etiqueta'] || 0) + (+t.mins || 0));
   return `<div class="row gap8 fo-pernav" style="flex-wrap:wrap;align-items:center"><div class="seg">${PER.map(([k, l]) => `<button class="${p === k ? 'on' : ''}" data-act="foPer" data-v="${k}">${l}</button>`).join('')}</div>${p !== 'a' ? `<span class="row gap4"><button class="icon-btn" data-act="foShift" data-d="-1" aria-label="Anterior">${UI.ic('left')}</button><b>${esc(lab)}</b><button class="icon-btn" data-act="foShift" data-d="1" aria-label="Seguinte" ${b >= today() ? 'disabled' : ''}>${UI.ic('right')}</button></span>` : ''}</div>
     <div class="${sky()} fo-stage fo-big"><div id="fo3d" class="fo-3d" data-mode="forest" data-k="${esc(key)}"><div class="fo-fb"><span class="fd-spin"></span><small>${FAIL ? 'Este navegador não consegue mostrar 3D.' : 'A plantar a tua floresta…'}</small></div></div>
@@ -7046,6 +7124,15 @@ VW.loja = () => { const c = cfg(), cat = OS.ui.foCat || '', se = SEASON(), first
   return `<div class="pn fo-shop-h"><div><b>${Object.keys(SP).length} árvores, todas desbloqueadas 🌳</b><small class="mut">Escolhe a que quiseres para a próxima sessão. Moedas: ${U.nf(+c.coins || 0)} 🪙 (pontos de foco — ${coinsFor(25)} por cada 25 min).</small></div><button class="btn sm" data-act="foSp" data-k="${se[0]}">${se[1]}: ${esc(SP[se[0]].n)}</button></div>
     <div class="row gap6 fo-cats" style="margin:0 0 12px">${CATS.map(([k, l]) => `<button class="chip ${cat === k ? 'on' : ''}" data-act="foCat" data-v="${k}">${l} (${Object.values(SP).filter(x => !k || x.k === k).length})</button>`).join('')}</div>
     <div class="fo-shop">${Object.entries(SP).filter(([, s2]) => !cat || s2.k === cat).map(([k, s2]) => `<div class="fo-card ${c.sp === k ? 'sel' : ''}" data-act="foSp" data-k="${k}" role="button" tabindex="0"><div class="fo-th ${sky()}">${thumb(k)}</div><b>${esc(s2.n)}</b><small>${esc(s2.d)}</small>${c.sp === k ? '<span class="bdg pos">✓ Escolhida</span>' : `<span class="btn xs">Escolher</span>`}</div>`).join('')}</div>`; };
+OS.S.forewards = { label: 'Prémio', title: r => r.title, fields: [{ k: 'title', l: 'Prémio', t: 'text', req: 1, h: 'Ex.: 1 episódio de série, pizza ao fim de semana, jogo de FIFA 1 h' }, { k: 'cost', l: 'Preço em moedas', t: 'num', req: 1 }, { k: 'note', l: 'Nota', t: 'area', rows: 2 }], defaults: () => ({ cost: 100 }) };
+VW.moedas = () => { const c = cfg(), coins = +c.coins || 0, own = c.scenes || ['verde'], R = OS.all('forewards'), hist = (c.redeemed || []).slice(-12).reverse(), sug = [['1 episódio de série', 60], ['30 min de videojogo', 90], ['Um doce / gelado', 120], ['Pizza ao fim de semana', 300], ['Sair com amigos sem culpa', 400], ['Comprar um livro', 600]];
+  return `<div class="pn fo-shop-h"><div><b>🪙 ${U.nf(coins)} moedas</b><small class="mut">Ganhas ${coinsFor(25)} moedas por cada 25 min de foco. Usa-as para te recompensar a sério e para mudar o cenário da tua floresta.</small></div></div>
+  <section><div class="sech"><h2>🎁 Os meus prémios</h2>${UI.addBtn('forewards', 'Prémio', null, 'sm')}</div>${R.length ? `<div class="fo-shop">${U.sortBy(R, r => +r.cost || 0).map(r => `<div class="fo-card fo-rw"><b>${esc(r.title)}</b><small>${esc(r.note || '')}</small><div class="row between" style="width:100%;align-items:center"><span class="mono">🪙 ${U.nf(+r.cost || 0)}</span><button class="btn xs ${coins >= +r.cost ? 'pri' : 'ghost'}" data-act="foRedeem" data-id="${r.id}">${coins >= +r.cost ? 'Trocar' : 'Faltam ' + U.nf(+r.cost - coins)}</button></div><button class="btn xs ghost" data-edit="forewards:${r.id}">Editar</button></div>`).join('')}</div>` : `<div class="pn"><p class="mut">Define prémios reais com um preço em moedas. Sugestões:</p><div class="fe-chs">${sug.map(([t, v]) => `<button class="chip" data-act="foRwSug" data-t="${esc(t)}" data-v="${v}">${esc(t)} · ${v} 🪙</button>`).join('')}</div></div>`}
+    ${hist.length ? `<div class="pn"><div class="pn-h"><h3>Prémios trocados</h3></div><div class="list">${hist.map(h => `<div class="li"><span class="when">${U.fmtDS(h.d)}</span><div class="li-t"><b>${esc(h.t)}</b></div><span class="mono">−${h.c} 🪙</span></div>`).join('')}</div></div>` : ''}</section>
+  <section><div class="sech"><h2>🏝️ Cenários da floresta</h2></div><div class="fo-shop">${Object.entries(SCN).map(([k, x]) => { const has = own.includes(k) || !x.c, on = (c.scene || 'verde') === k; return `<div class="fo-card ${on ? 'sel' : ''}"><div class="fo-scn" style="background:linear-gradient(180deg,${x.g} 0 58%,${x.s} 58% 70%,#7d5434 70%)"></div><b>${esc(x.n)}</b><small>${esc(x.d)}</small>${on ? '<span class="bdg pos">✓ A usar</span>' : has ? `<button class="btn xs" data-act="foScene" data-k="${k}">Usar</button>` : `<button class="btn xs ${coins >= x.c ? 'pri' : 'ghost'}" data-act="foScene" data-k="${k}">🪙 ${U.nf(x.c)}</button>`}</div>`; }).join('')}</div></section>`; };
+A.foRwSug = b => { OS.add('forewards', { title: b.dataset.t, cost: +b.dataset.v }); };
+A.foRedeem = b => { const r = OS.get('forewards', b.dataset.id), c = cfg(); if (!r) return; if ((+c.coins || 0) < +r.cost) return UI.toast(`Faltam ${+r.cost - (+c.coins || 0)} moedas — planta mais árvores 🌱`, 'neg'); UI.ask('Trocar prémio?', `${esc(r.title)} por ${r.cost} moedas.`, 'Trocar', () => { c.coins -= +r.cost; c.redeemed = (c.redeemed || []).concat([{ d: today(), t: r.title, c: +r.cost }]).slice(-100); OS.touch('forest'); chime(); UI.toast('Aproveita! Mereceste 🎉', 'pos'); }, 'pri'); };
+A.foScene = b => { const k = b.dataset.k, x = SCN[k], c = cfg(), own = c.scenes || ['verde']; if (!x) return; if (!own.includes(k) && x.c) { if ((+c.coins || 0) < x.c) return UI.toast(`Faltam ${x.c - (+c.coins || 0)} moedas`, 'neg'); c.coins -= x.c; c.scenes = own.concat(k); chime(); UI.toast('Cenário desbloqueado: ' + x.n, 'pos'); } c.scene = k; OS.touch('forest'); };
 VW.stats = () => { if (T && !FAIL) setTimeout(() => thumbs(), 300); else if (!FAIL) load3().then(() => thumbs()); const Tr = OS.all('trees'), al = Tr.filter(t => t.alive !== false), t = today(), d30 = U.lastN(30), byD = U.groupBy(al, x => x.date), hrs = Array.from({ length: 24 }, (_, h) => U.sum(al.filter(x => x.t0 && new Date(x.t0).getHours() === h), x => +x.mins || 0));
   let st = 0; for (let d = t; byD[d]; d = U.addDays(d, -1)) st++; if (!st && byD[U.addDays(t, -1)]) for (let d = U.addDays(t, -1); byD[d]; d = U.addDays(d, -1)) st++;
   const best = Object.entries(byD).map(([d, a]) => [d, U.sum(a, x => +x.mins || 0)]).sort((a, b) => b[1] - a[1])[0];
@@ -7686,6 +7773,224 @@ const statsView = () => { const S = OS.all('sports'), L = allLogs(), t = today()
 if (OS.Cal && OS.Cal.items) { const _it = OS.Cal.items; OS.Cal.items = (from, to) => { const out = _it(from, to); OS.all('sportlog').forEach(l => { if (l.date >= from && l.date <= to) { const s = OS.get('sports', l.sport); out.push({ date: l.date, title: (s ? s.name || cat(s).n : 'Desporto') + ' · ' + (l.kind || 'Treino'), src: 'workout', done: true, edit: 'sportlog:' + l.id, sub: (l.mins || 0) + ' min' }); } }); return out.sort((a, b) => (a.date + (a.start || '99')).localeCompare(b.date + (b.start || '99'))); }; }
 OS.on('ready', () => { if (OS.all('runs').length && !OS.all('sports').some(isRun)) OS.add('sports', { key: 'corrida', level: 'Intermédio', freq: +(OS.one('profile').runKmTarget ? 3 : 2), since: U.sortBy(OS.all('runs'), r => r.date)[0].date, auto: 1 }, { silent: true }); });
 OS.Sport = { SPORTS, weekPlan, kcal, logs };
+})();
+
+</script>
+<script>
+/* OCEANUM — Frases do dia: verdades que doem (para acordar) e motivação forte (para ir).
+   Uma de cada por dia, iguais o dia todo; podes ver outra. Aparecem na Visão Geral (debaixo da saudação) e no Hoje. */
+(() => {
+'use strict';
+const U = OS.U, V = OS.views, A = OS.act, esc = U.esc;
+const TRUTH = [
+  'Ninguém vai sentir pena de você daqui a dez anos por ter tido preguiça hoje. Vão só ver o resultado.',
+  'Você não está cansado. Você está desacostumado a fazer o que é difícil.',
+  'O seu "amanhã eu começo" já tem anos. E você sabe disso.',
+  'As pessoas que você admira estavam a trabalhar enquanto você estava a deslizar o dedo no telemóvel.',
+  'Você não tem falta de tempo. Tem falta de prioridade. O tempo para o que importa você arranja.',
+  'A sua mãe não se sacrificou para você ser mediano.',
+  'Se continuar a fazer o que está a fazer, vai continuar a ter o que tem. Sem surpresas.',
+  'Ninguém lembra de quem quase conseguiu.',
+  'O conforto de hoje é a dívida que você paga com juros amanhã.',
+  'Você diz que quer, mas as suas ações dizem que não quer tanto assim.',
+  'Talento sem disciplina é só potencial desperdiçado. E potencial desperdiçado é a coisa mais triste que existe.',
+  'O mundo não deve nada a você. Nem o emprego, nem o sucesso, nem a atenção.',
+  'Daqui a cinco anos você vai ser exatamente o resultado das escolhas pequenas que está a fazer hoje.',
+  'Você está a trocar o que mais quer na vida pelo que quer agora.',
+  'O tempo que você perde não volta. Cada dia desperdiçado é um dia a menos — para sempre.',
+  'Ninguém veio salvar você. Se você não se levantar, ninguém levanta.',
+  'Arrependimento é o peso mais pesado que existe. E ele cresce todos os dias que você adia.',
+  'Você reclama do resultado mas ama o processo que te leva a ele: a cama, o sofá, o telemóvel.',
+  'Os seus pais estão a envelhecer. O tempo para os orgulhar e cuidar deles não é infinito.',
+  'Se a sua vida fosse um filme, você ia torcer pela personagem que está a ser hoje?',
+  'Motivação é para amadores. Profissionais aparecem mesmo sem vontade.',
+  'Você sabe exatamente o que tem de fazer. Só não está a fazer.',
+  'Cada desculpa que você dá é uma pequena traição ao seu próprio futuro.',
+  'Ninguém vai trabalhar por você. Ninguém vai estudar por você. Ninguém vai sofrer por você.',
+  'Você saiu do Brasil, atravessou um oceano. Não foi para ficar parado no mesmo lugar.',
+  'O que você faz quando ninguém está a ver define quem você realmente é.',
+  'Você não falha por falta de capacidade. Falha por falta de constância.',
+  'A sua zona de conforto é bonita. Mas nada cresce lá.',
+  'Ninguém se importa com o seu potencial. Importam-se com o que você entrega.',
+  'O "depois" é o lugar onde os sonhos vão morrer.',
+  'Você tem as mesmas 24 horas de quem você admira. A diferença é o que faz com elas.',
+  'Se você não construir o seu sonho, alguém vai contratar você para construir o dele.',
+  'Pessoas medianas esperam pela vontade. Pessoas grandes fazem com ou sem ela.',
+  'O seu corpo é o resultado de cada refeição e cada treino que você escolheu — ou não.',
+  'Dinheiro mal gasto hoje é liberdade que você não vai ter amanhã.',
+  'A dor de ficar igual vai ser maior do que a dor de mudar. Só que vem mais tarde.',
+  'O telemóvel está a roubar a sua vida e você ainda agradece.',
+  'Você não precisa de mais um vídeo motivacional. Precisa de fazer o que já sabe.',
+  'Se hoje fosse o último dia da sua vida, você teria orgulho de como o gastou?',
+  'Ninguém vai lembrar das suas desculpas. Só das suas conquistas — ou da falta delas.',
+  'A distância entre quem você é e quem você quer ser chama-se disciplina.',
+  'Você está a viver como se tivesse tempo de sobra. Não tem.',
+  'Quem não se prepara está a preparar-se para falhar.',
+  'O seu futuro "eu" está a olhar para você agora. Ele está orgulhoso ou envergonhado?',
+  'Você pede a Deus que abra portas, mas não sai do sofá para bater nelas.',
+  'Fé sem obras é morta. Oração sem esforço é preguiça com bons modos.',
+  'Inveja de quem conseguiu é só a prova de que você podia ter feito mais.',
+  'Estar ocupado não é o mesmo que ser produtivo. Você só está a fugir do que importa.',
+  'Ninguém fica rico, forte ou sábio por acidente.',
+  'Cada "só mais cinco minutos" é você a escolher perder.',
+  'Você não é vítima das circunstâncias. É resultado das decisões.',
+  'Se você não está a evoluir, está a ficar para trás. O mundo não espera.',
+  'O sacrifício de agora é pequeno comparado com o arrependimento de nunca ter tentado.',
+  'A vida não vai ficar mais fácil. Você é que tem de ficar mais forte.',
+  'Quem quer, arranja um meio. Quem não quer, arranja uma desculpa.',
+  'Você conhece o caminho. O problema é que ele é difícil e você está a escolher o fácil.',
+  'Dormir tarde para ver séries e acordar sem energia: essa é a rotina de quem não chega a lado nenhum.',
+  'Você quer resultados de campeão com esforço de amador.',
+  'Ninguém vai bater palmas para o seu esforço mínimo.',
+  'O seu salário, o seu corpo e as suas notas são o espelho dos seus hábitos.',
+  'Se você soubesse o quanto o tempo é curto, não teria desperdiçado o dia de ontem.',
+  'Promessas a si mesmo que você não cumpre destroem a sua autoconfiança, uma de cada vez.',
+  'Você vai olhar para trás e desejar ter começado hoje.',
+  'O mundo está cheio de pessoas inteligentes que nunca fizeram nada. Não seja mais uma.',
+  'Disciplina é lembrar-se do que você quer quando o que você sente é preguiça.',
+  'Você vai morrer. A pergunta é: vai ter vivido de verdade?',
+  'Quem você vai ser quando ninguém acreditar em você? É aí que se vê.',
+  'Cada dia sem treinar, sem estudar, sem poupar, é um voto contra a pessoa que você quer ser.',
+  'Seja honesto: se continuar assim, onde vai estar daqui a um ano?',
+  'Ninguém nasce pronto. Mas também ninguém fica pronto parado.',
+  'O medo de falhar está a fazer você falhar sem nem tentar.',
+  'As pessoas à sua volta estão a crescer. Você está a assistir.',
+  'A preguiça cobra caro, e cobra sempre no pior momento.',
+  'Você não precisa de um plano perfeito. Precisa de parar de se esconder atrás do planeamento.',
+  'Um dia você vai ter filhos. Que exemplo é que está a construir?',
+  'Você reza por uma vida diferente e vive igual todos os dias.',
+  'Excelência não é um ato. É um hábito. E os seus hábitos hoje são medianos.',
+  'O seu adversário não é ninguém lá fora. É você na cama às 7 da manhã.',
+  'Sonhar é de graça. Realizar custa tudo. E você ainda não pagou.',
+  'Se não for agora, quando? Se não for você, quem?',
+  'Ninguém vai entregar a vida que você quer de bandeja. Ela tem de ser arrancada.',
+  'O que te separa do sucesso é a quantidade de vezes que você se levanta depois de cair.',
+  'A sua família merece a melhor versão de você. Você está a dar-lhes a mais cansada.',
+  'Você tem medo de falhar, mas devia ter medo de nunca ter tentado.',
+  'Hoje é um dos dias que você vai lembrar — ou um dos milhares que vai esquecer. Escolha.'
+];
+const PUSH = [
+  'Hoje não é dia de negociar com a preguiça. É dia de ganhar dela.',
+  'Levanta-te. Ninguém vai fazer isto por ti — e é exatamente por isso que vai ser teu.',
+  'Um passo hoje vale mais do que cem planos para amanhã.',
+  'Trabalha em silêncio. Deixa o resultado fazer barulho.',
+  'Tu não vieste até aqui para chegar só até aqui.',
+  'Disciplina hoje, liberdade amanhã.',
+  'Faz hoje o que os outros não querem, para viveres amanhã como os outros não podem.',
+  'O cansaço passa. O orgulho de ter feito fica.',
+  'Sê o tipo de pessoa que cumpre o que promete a si mesma.',
+  'Não precisas de te sentir pronto. Precisas de começar.',
+  'Cada repetição, cada página, cada euro poupado: estás a construir o homem que vais ser.',
+  'Hoje é mais um tijolo. Não deixes de o pôr.',
+  'Tudo o que fizerem, façam de todo o coração — Colossenses 3:23. Hoje é para dar tudo.',
+  'Grandes coisas nunca vêm de zonas de conforto.',
+  'Não pares quando estiveres cansado. Para quando estiver feito.',
+  'Dor temporária, orgulho permanente.',
+  'O teu futuro está a ser decidido nas próximas 24 horas.',
+  'Sê mais forte do que a tua melhor desculpa.',
+  'Quem tu queres ser já está à tua espera do outro lado do esforço.',
+  'Foco. Fé. Força. O resto é ruído.',
+  'Hoje vence a versão de ti que não desiste.',
+  'Não compares o teu capítulo 1 com o capítulo 20 de outra pessoa. Escreve o teu.',
+  'Persistência transforma o impossível em inevitável.',
+  'Acorda com determinação. Deita-te com satisfação.',
+  'O Deus que te trouxe até aqui não te trouxe para pares agora.',
+  'Fica desconfortável. É lá que tu cresces.',
+  'Mais uma hora de foco hoje pode mudar o resto do teu ano.',
+  'Ninguém se lembra de dias normais. Faz de hoje um dia que conta.',
+  'Ganha a manhã e ganhas o dia.',
+  'Não é sobre ter tempo. É sobre fazer tempo.',
+  'Hoje vais fazer o difícil primeiro.',
+  'Sê a prova de que é possível.',
+  'O caminho é longo, mas cada passo conta. Dá o de hoje.',
+  'A tua história ainda está a ser escrita — e hoje és tu a caneta.',
+  'Faz com que o teu eu de daqui a 5 anos te agradeça.',
+  'Pequenas vitórias todos os dias constroem uma vida grande.',
+  'Não vieste ao mundo para seres mais um.',
+  'Coragem não é não ter medo. É ir com medo.',
+  'Começa onde estás, usa o que tens, faz o que podes.',
+  'Hoje: menos desculpas, mais execução.'
+];
+const pick = (arr, salt) => arr[(U.hash(U.today() + salt) + (OS.ui['q_' + salt] || 0)) % arr.length];
+A.qNext = b => { OS.setUI('q_' + b.dataset.k, (OS.ui['q_' + b.dataset.k] || 0) + 1); };
+const truthCard = () => `<div class="pn q-truth"><div class="pn-h"><h3>🩸 Verdade do dia</h3><button class="icon-btn" data-act="qNext" data-k="t" aria-label="Outra verdade" title="Outra">${OS.UI.ic('right')}</button></div><p>${esc(pick(TRUTH, 't'))}</p></div>`;
+const pushLine = () => `<p class="q-push">🔥 ${esc(pick(PUSH, 'p'))} <button class="q-more" data-act="qNext" data-k="p" aria-label="Outra frase">↻</button></p>`;
+OS.Quotes = { TRUTH, PUSH, truth: () => pick(TRUTH, 't'), push: () => pick(PUSH, 'p') };
+const wrap = (k, fn) => { const o = V[k]; if (!o || o._q) return; V[k] = sub => fn(o(sub), sub); V[k]._q = 1; };
+OS.on('ready', () => {
+  wrap('visao', h => h.replace(/(<div class="dash-top"><div><div class="eyebrow">[^<]*<\/div><h1>[^<]*<\/h1>)/, '$1' + pushLine()));
+  wrap('hoje', h => { let x = h.replace(/<p class="today-q"[^>]*>[\s\S]*?<\/p>/, pushLine()); const at = x.indexOf('</div>', x.indexOf('q-push')); return at > 0 ? x.slice(0, at + 6) + truthCard() + x.slice(at + 6) : truthCard() + x; });
+});
+// Visão Geral: cartão "Verdade do dia" logo a seguir ao topo
+OS.on('ready', () => { const o = V.visao; if (!o || o._q2) return; V.visao = sub => { const h = o(sub), k = h.indexOf('<div class="dash-top"'); if (k < 0) return h; let depth = 0, i = k; const re = /<\/?div\b/g; re.lastIndex = k; let m; while ((m = re.exec(h))) { depth += m[0] === '<div' ? 1 : -1; if (!depth) { i = h.indexOf('>', m.index) + 1; break; } } return h.slice(0, i) + truthCard() + h.slice(i); }; V.visao._q2 = 1; });
+})();
+
+</script>
+<script>
+/* OCEANUM — Trabalho+: folgas, horário semanal, horário a partir de FOTO (IA lê a escala e atualiza só os dias futuros
+   do período indicado) e projetos de trabalho (ligados aos Projetos e Tarefas do Oceanum). */
+(() => {
+'use strict';
+const U = OS.U, UI = OS.UI, V = OS.views, A = OS.act, esc = U.esc, today = () => U.today();
+const OFFK = ['Folga', 'Férias', 'Feriado', 'Baixa', 'Falta justificada'];
+OS.S.dayoffs = { label: 'Folga', title: r => (r.kind || 'Folga') + ' · ' + U.fmtD(r.date), fields: [
+  { k: 'date', l: 'Dia', t: 'date', req: 1 }, { k: 'kind', l: 'Tipo', t: 'sel', o: OFFK }, { k: 'note', l: 'Nota', t: 'text' }], defaults: () => ({ date: today(), kind: 'Folga' }) };
+// folgas no calendário
+if (OS.Cal && OS.Cal.items) { OS.Cal.src.off = ['Folgas', '#22c55e']; const _it = OS.Cal.items; OS.Cal.items = (from, to) => { const out = _it(from, to); OS.all('dayoffs').forEach(o => { if (o.date >= from && o.date <= to) out.push({ date: o.date, title: '🌴 ' + (o.kind || 'Folga'), src: 'off', edit: 'dayoffs:' + o.id }); }); return out.sort((a, b) => (a.date + (a.start || '99')).localeCompare(b.date + (b.start || '99'))); }; }
+const dayInfo = d => ({ sh: U.sortBy(OS.all('shifts').filter(s => s.date === d), s => s.start || ''), off: OS.all('dayoffs').find(o => o.date === d) });
+const hrs = s => OS.Car && OS.Car.shiftHours ? OS.Car.shiftHours(s) : 0;
+
+/* abas do Trabalho */
+const TT = [['', 'Resumo'], ['horario', 'Horário & folgas'], ['foto', 'Importar escala (foto)'], ['projetos', 'Projetos de trabalho']];
+OS.on('ready', () => { const o = V.trabalho; if (!o || o._ws) return; V.trabalho = sub => { const k = TT.some(t => t[0] === (sub || '')) ? (sub || '') : '', base = o(), i = base.indexOf('</header>') + 9, head = base.slice(0, i), tabs = UI.tabs('trabalho', TT, k);
+  return k ? head + tabs + W[k]() : head + tabs + weekStrip() + base.slice(i); }; V.trabalho._ws = 1; });
+const W = {};
+const weekStrip = () => { const t = today(), days = U.range(t, U.addDays(t, 6));
+  return `<div class="ws-strip">${days.map(d => { const { sh, off } = dayInfo(d); return `<a class="ws-d ${off ? 'off' : sh.length ? 'work' : ''} ${d === t ? 'today' : ''}" href="#trabalho.horario"><small>${d === t ? 'Hoje' : U.WDS[U.parse(d).getDay()]} ${+d.slice(8)}</small><b>${off ? esc(off.kind || 'Folga') : sh.length ? sh.map(s => s.start + '–' + s.end).join('<br>') : '—'}</b></a>`; }).join('')}</div>`; };
+W.horario = () => { const wk0 = U.addDays(U.monday(today()), 7 * (+OS.ui.wsW || 0)), days = U.range(wk0, U.addDays(wk0, 13)), t = today();
+  const offN = OS.all('dayoffs').filter(o => o.date >= t.slice(0, 4) + '-01-01' && o.date <= t.slice(0, 4) + '-12-31');
+  return `<div class="row gap8" style="flex-wrap:wrap;align-items:center;margin-bottom:10px"><button class="icon-btn" data-act="wsW" data-d="-1" aria-label="Anterior">${UI.ic('left')}</button><b>${U.fmtDS(days[0])} – ${U.fmtDS(days[13])}</b><button class="icon-btn" data-act="wsW" data-d="1" aria-label="Seguinte">${UI.ic('right')}</button><span class="grow"></span>${UI.addBtn('shifts', 'Turno', null, 'sm')}${UI.addBtn('dayoffs', 'Folga', null, 'sm')}<a class="btn sm pri" href="#trabalho.foto">📷 Importar escala</a></div>
+  <div class="kpis">${UI.kpi('Folgas este ano', offN.filter(o => (o.kind || 'Folga') === 'Folga').length)}${UI.kpi('Férias', offN.filter(o => o.kind === 'Férias').length + ' dias')}${UI.kpi('Horas nestas 2 semanas', U.nf(U.sum(OS.all('shifts').filter(s => s.date >= days[0] && s.date <= days[13]), hrs), 1) + ' h')}${UI.kpi('Próxima folga', (() => { const n = U.sortBy(OS.all('dayoffs').filter(o => o.date >= t), o => o.date)[0]; return n ? U.fmtDS(n.date) : '—'; })())}</div>
+  <div class="ws-cal">${days.map(d => { const { sh, off } = dayInfo(d), past = d < t; return `<div class="ws-c ${off ? 'off' : sh.length ? 'work' : 'free'} ${d === t ? 'today' : ''} ${past ? 'past' : ''}"><div class="ws-h"><b>${U.WDS[U.parse(d).getDay()]} ${+d.slice(8)}</b>${d === t ? '<span class="bdg acc">hoje</span>' : ''}</div>
+    ${off ? `<div class="ws-off click" data-edit="dayoffs:${off.id}">🌴 ${esc(off.kind || 'Folga')}${off.note ? `<small>${esc(off.note)}</small>` : ''}</div>` : ''}${sh.map(s => `<div class="ws-sh click" data-edit="shifts:${s.id}"><b>${s.start}–${s.end}</b><small>${esc([s.place, s.role, s.src === 'foto' ? '📷 da escala' : ''].filter(Boolean).join(' · '))}</small></div>`).join('')}
+    ${!off && !sh.length ? `<small class="mut">${past ? '—' : 'sem turno'}</small>` : ''}${past ? '' : `<div class="ws-a">${off ? '' : `<button class="btn xs ghost" data-act="wsOff" data-d="${d}">Folga</button>`}<button class="btn xs ghost" data-new="shifts" data-defs='${esc(JSON.stringify({ date: d }))}'>+ Turno</button></div>`}</div>`; }).join('')}</div>`; };
+A.wsW = b => OS.setUI('wsW', (+OS.ui.wsW || 0) + +b.dataset.d * 2);
+A.wsOff = b => { const d = b.dataset.d; OS.add('dayoffs', { date: d, kind: 'Folga' }); OS.all('shifts').filter(s => s.date === d).forEach(s => OS.del('shifts', s.id)); UI.toast('Folga marcada em ' + U.fmtD(d), 'pos'); };
+
+/* ---------- importar escala por foto ---------- */
+let IM = { files: [], busy: false, err: '', res: null };
+const shrink = f => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { const k = Math.min(1, 1800 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); res({ mime: 'image/jpeg', data: c.toDataURL('image/jpeg', .86).split(',')[1], url: c.toDataURL('image/jpeg', .5) }); }; im.onerror = rej; im.src = r.result; }; r.onerror = rej; r.readAsDataURL(f); });
+W.foto = () => { const p = OS.one('profile'), hasAI = OS.AI && OS.AI.key && OS.AI.key(), t = today(), from = OS.ui.wsFrom || t, to = OS.ui.wsTo || U.addDays(t, 13);
+  return `${hasAI ? '' : `<div class="pn">${OS.AI && OS.AI.setup ? OS.AI.setup('') : ''}</div>`}<div class="pn"><div class="pn-h"><h3>📷 Importar a escala a partir de foto</h3></div>
+    <p class="mut" style="margin:0 0 10px">Tira foto (ou print) da escala que o teu trabalho envia. A IA lê os teus turnos e folgas e atualiza a tua semana — <b>só os dias de hoje em diante</b> e só dentro do período que escolheres. O que já passou nunca é alterado.</p>
+    <div class="ws-form"><label>O teu nome na escala<input class="field" data-bind="profile.schedName" value="${esc(p.schedName || p.short || 'Ryan')}" placeholder="ex.: Ryan M."></label><label>De<input class="field" type="date" data-uiv="wsFrom" value="${from}" min="${t}"></label><label>Até<input class="field" type="date" data-uiv="wsTo" value="${to}" min="${from}"></label>
+      <label>Local (opcional)<input class="field" data-bind="profile.schedPlace" value="${esc(p.schedPlace || '')}" placeholder="ex.: Loja Aveiro"></label></div>
+    <div class="row gap8" style="flex-wrap:wrap;margin-top:10px"><label class="btn">📁 Escolher foto(s)<input type="file" accept="image/*" multiple id="wsFile" hidden></label><label class="btn ghost">📷 Tirar foto<input type="file" accept="image/*" capture="environment" id="wsCam" hidden></label>${IM.files.length ? `<button class="btn pri" data-act="wsRead" ${IM.busy || !hasAI ? 'disabled' : ''}>${IM.busy ? 'A ler a escala…' : 'Ler escala com IA'}</button><button class="btn ghost" data-act="wsClear">Limpar</button>` : ''}</div>
+    ${IM.files.length ? `<div class="ws-thumbs">${IM.files.map(f => `<img src="${f.url}" alt="escala">`).join('')}</div>` : ''}${IM.err ? `<p class="neg">${esc(IM.err)}</p>` : ''}</div>
+  ${IM.res ? (() => { const R = IM.res.filter(x => x.date >= from && x.date <= to && x.date >= t); return `<div class="pn"><div class="pn-h"><h3>Confirma o que a IA leu (${R.length} dias)</h3></div>${R.length ? `<div class="list">${R.map((x, i) => `<div class="li"><span class="when">${U.WDS[U.parse(x.date).getDay()]} ${U.fmtDS(x.date)}</span><div class="li-t"><b>${x.off ? '🌴 ' + esc(x.kind || 'Folga') : esc(x.start + '–' + x.end)}</b><small>${esc([x.place, x.note].filter(Boolean).join(' · '))}${dayInfo(x.date).sh.length || dayInfo(x.date).off ? ' · substitui o que lá está' : ''}</small></div></div>`).join('')}</div><div class="row gap8" style="margin-top:10px"><button class="btn pri" data-act="wsApply">Atualizar a minha semana</button><button class="btn ghost" data-act="wsClear">Cancelar</button></div>` : '<p class="mut">Nada dentro do período escolhido (ou só dias que já passaram).</p>'}${IM.skipped ? `<small class="mut">${IM.skipped} dia(s) fora do período ou já passados foram ignorados.</small>` : ''}</div>`; })() : ''}`; };
+document.addEventListener('change', async e => { if (e.target.id !== 'wsFile' && e.target.id !== 'wsCam') return; const fs = [...e.target.files].slice(0, 4); try { IM.files = IM.files.concat(await Promise.all(fs.map(shrink))).slice(0, 4); IM.err = ''; IM.res = null; } catch (er) { IM.err = 'Não consegui abrir a imagem.'; } OS.request(); });
+A.wsClear = () => { IM = { files: [], busy: false, err: '', res: null }; OS.request(); };
+A.wsRead = async () => { if (IM.busy || !IM.files.length) return; const p = OS.one('profile'), t = today(), from = OS.ui.wsFrom || t, to = OS.ui.wsTo || U.addDays(t, 13); IM.busy = true; IM.err = ''; OS.request();
+  try { const o = await OS.AI.json([{ text: `Isto é a escala/horário de trabalho de uma equipa (foto). Lê APENAS a linha/coluna da pessoa "${p.schedName || p.short || 'Ryan'}". Hoje é ${t} (${U.WDS[U.parse(t).getDay()]}). O período pedido é de ${from} a ${to}. Converte cada dia em data completa AAAA-MM-DD (usa o mês/ano mais provável perto de hoje; se a escala só tiver dias da semana, assume a semana que contém essas datas no período pedido).
+Para cada dia: se for folga/descanso/F/D/off → {"data","folga":true,"tipo":"Folga"|"Férias"|"Feriado"}; se trabalhar → {"data","entrada":"HH:MM","saida":"HH:MM","pausa_min":número ou 0}. Turnos que passam da meia-noite: saída depois da entrada no dia seguinte, mantém a data de início. Se não conseguires ler um dia, não o inventes.
+JSON: {"pessoa_encontrada":true,"dias":[...],"observacoes":"…"}` }].concat(IM.files.map(f => ({ inline_data: { mime_type: f.mime, data: f.data } }))), .1);
+    if (o.pessoa_encontrada === false) throw new Error(`Não encontrei "${p.schedName || p.short}" na escala. Confirma o teu nome como aparece na foto.`);
+    const all = (o.dias || []).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x.data || '')).map(x => x.folga ? { date: x.data, off: true, kind: OFFK.includes(x.tipo) ? x.tipo : 'Folga' } : { date: x.data, start: (x.entrada || '').slice(0, 5), end: (x.saida || '').slice(0, 5), breakMin: +x.pausa_min || 0, place: p.schedPlace || '' }).filter(x => x.off || (/^\d\d:\d\d$/.test(x.start) && /^\d\d:\d\d$/.test(x.end)));
+    if (!all.length) throw new Error('A IA não conseguiu ler dias da escala. Tenta uma foto mais nítida e direita.');
+    IM.res = all; IM.skipped = all.filter(x => !(x.date >= from && x.date <= to && x.date >= t)).length; } catch (er) { IM.err = er.message || 'Erro da IA'; } IM.busy = false; OS.request(); };
+A.wsApply = () => { const t = today(), from = OS.ui.wsFrom || t, to = OS.ui.wsTo || U.addDays(t, 13), R = (IM.res || []).filter(x => x.date >= from && x.date <= to && x.date >= t); if (!R.length) return;
+  const dates = new Set(R.map(x => x.date)); OS.all('shifts').filter(s => dates.has(s.date) && s.date >= t).forEach(s => OS.del('shifts', s.id)); OS.all('dayoffs').filter(o => dates.has(o.date) && o.date >= t).forEach(o => OS.del('dayoffs', o.id));
+  R.forEach(x => x.off ? OS.add('dayoffs', { date: x.date, kind: x.kind, src: 'foto' }, { silent: true }) : OS.add('shifts', { date: x.date, start: x.start, end: x.end, breakMin: x.breakMin, place: x.place, src: 'foto' }, { silent: true }));
+  UI.toast(`Semana atualizada: ${R.filter(x => !x.off).length} turnos e ${R.filter(x => x.off).length} folgas`, 'pos'); IM = { files: [], busy: false, err: '', res: null }; OS.setUI('wsW', 0); location.hash = 'trabalho.horario'; };
+
+/* ---------- projetos de trabalho (são Projetos do Oceanum do tipo Profissional) ---------- */
+const isWork = p => ['Profissional', 'Empresarial'].includes(p.type) || p.area === 'Trabalho';
+W.projetos = () => { const P = OS.all('projects').filter(isWork), act = P.filter(p => !['Concluído', 'Cancelado'].includes(p.status)), Proj = OS.Proj;
+  return `<div class="row gap8" style="flex-wrap:wrap;margin-bottom:10px">${UI.addBtn('projects', 'Projeto de trabalho', { type: 'Profissional', status: 'Em andamento', area: 'Trabalho' })}<a class="btn ghost" href="#projetos">Todos os projetos</a><span class="mut" style="font-size:12.5px;align-self:center">São os mesmos projetos da aba Projetos e Tarefas — mudar aqui muda lá.</span></div>
+  <div class="kpis">${UI.kpi('Em andamento', act.filter(p => p.status === 'Em andamento').length)}${UI.kpi('Tarefas abertas', U.sum(act, p => Proj.info(p).open.length))}${UI.kpi('Atrasados', act.filter(p => Proj.info(p).late).length, '', { tone: act.some(p => Proj.info(p).late) ? 'neg' : '' })}${UI.kpi('Concluídos', P.filter(p => p.status === 'Concluído').length)}</div>
+  ${act.length ? `<div class="g g2">${U.sortBy(act, p => (p.due || '9') + (p.prio || '3')).map(p => { const i = Proj.info(p); return `<div class="pn wp"><div class="row between gap8"><div class="click grow" data-edit="projects:${p.id}" style="min-width:0"><span class="eyebrow">${esc(p.status)}${p.due ? ' · prazo ' + U.fmtDS(p.due) : ''}</span><b class="wp-t">${esc(p.name)}</b>${p.objective ? `<small class="mut">${esc(p.objective)}</small>` : ''}</div><span class="mono">${U.pct(i.prog)}</span></div>${UI.bar(i.prog, i.late ? 'neg' : i.prog >= 1 ? 'pos' : '')}
+    <div class="list" style="margin-top:6px">${i.open.slice(0, 5).map(x => OS.taskRow ? OS.taskRow(x) : esc(x.title)).join('')}</div><form class="row gap6" data-form="quickTask" data-project="${p.id}" style="margin-top:6px"><input class="field grow" name="t" placeholder="+ tarefa neste projeto" aria-label="Nova tarefa"><button class="btn sm">${UI.ic('plus')}</button></form>${i.late ? '<small class="neg">Prazo ultrapassado</small>' : i.stalled ? `<small class="warn">Parado há ${i.idle} dias</small>` : ''}</div>`; }).join('')}</div>` : UI.empty('Sem projetos de trabalho. Cria um para separar as tarefas de cada projeto.', UI.addBtn('projects', 'Criar projeto de trabalho', { type: 'Profissional', status: 'Em andamento', area: 'Trabalho' }, ''))}`; };
+OS.WorkSched = { dayInfo };
 })();
 
 </script>
