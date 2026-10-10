@@ -2083,6 +2083,10 @@ html.jv-open,html.jv-open body{overflow:hidden}
 .mv-o.rec{border-color:rgba(92,200,230,.45);background:rgba(14,165,233,.08)}.mv-o small{color:var(--mut);font-size:12.5px;line-height:1.45}
 .mv-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;width:100%;margin:0 0 12px;padding:11px 14px;border-radius:12px;border:1px solid rgba(245,158,11,.45);background:rgba(245,158,11,.1);color:var(--tx);text-align:left;cursor:pointer}
 .mv-bar span{color:#fbbf24;font-weight:600;font-size:13px}
+.mv-rec{display:flex;flex-direction:column;gap:6px;width:100%;margin-top:4px}.mv-o code{font-size:11.5px;background:rgba(255,255,255,.06);padding:1px 4px;border-radius:4px}
+/* janelas altas: deslizam em vez de sair do ecrã */
+.modal{max-height:calc(82% - 16px - env(safe-area-inset-bottom,0px));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.modal.tall{top:calc(12px + env(safe-area-inset-top,0px));max-height:calc(100% - 24px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
 
 </style>
 <style>
@@ -2314,7 +2318,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.91", "date": "09/10/2026", "notes": ["O Oceanum tem um endereço novo: oceanum-ryan.vercel.app. No endereço antigo aparece o aviso para mudar e levar os dados (pela sincronização ou por ficheiro).", "Exportar os dados no iPhone abre \"Guardar em Ficheiros\"; no endereço novo, as boas-vindas deixam importar o ficheiro."]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.92", "date": "10/10/2026", "notes": ["Endereço novo: oceanum-ryan.vercel.app. As boas-vindas deixam trazer os dados pelo ficheiro exportado ou recuperar pela sincronização do Google Drive (endereço e chave do script).", "Ligar um aparelho com o código de ligação traz sempre os dados da conta, sem os substituir.", "As janelas altas deixam deslizar no telemóvel (o botão do fim já não fica fora do ecrã)."]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -8487,7 +8491,7 @@ const replyModal = () => { if (!RP) return; const it = RP.it; UI.modal(`<div cla
   <div class="ml-rai"><input class="field" id="mlRi" placeholder="O que queres dizer? ex.: aceito, envio amanhã até às 18h" value="${esc(RP.instr || '')}"><button class="btn sm" data-act="mlRai" ${OS.AI && OS.AI.key() ? '' : 'disabled'}>${RP.busy ? 'A escrever…' : 'Escrever com IA'}</button></div>
   <textarea id="mlRb" class="field" rows="7" placeholder="A tua resposta…">${esc(RP.body || '')}</textarea>
   <div class="row gap8" style="margin-top:10px;flex-wrap:wrap"><button class="btn sm" data-act="mlRdict">${UI.ic('mic')}Ditar</button><span class="grow"></span><button class="btn pri" data-act="mlRsave">Guardar rascunho no Gmail</button></div>
-  ${RP.msg ? `<div class="ib-st ${RP.ok ? 'ok' : 'bad'}" style="margin-top:8px">${esc(RP.msg)}</div>` : ''}<small class="mut" style="display:block;margin-top:8px">Fica nos Rascunhos do Gmail: revês e envias de lá. O Oceanum nunca envia e-mails sozinho.</small></div>`); };
+  ${RP.msg ? `<div class="ib-st ${RP.ok ? 'ok' : 'bad'}" style="margin-top:8px">${esc(RP.msg)}</div>` : ''}<small class="mut" style="display:block;margin-top:8px">Fica nos Rascunhos do Gmail: revês e envias de lá. O Oceanum nunca envia e-mails sozinho.</small></div>`, 'tall'); };
 const keepRP = () => { const b = document.getElementById('mlRb'), i = document.getElementById('mlRi'); if (RP) { if (b) RP.body = b.value; if (i) RP.instr = i.value; } };
 A.mlReply = b => { const it = byId(b.dataset.id); if (!it) return; RP = { it, body: '', instr: '' }; replyModal(); };
 A.mlRai = async () => { keepRP(); if (!RP || RP.busy) return; RP.busy = true; replyModal(); try { RP.body = await compose(RP.it, RP.instr); RP.msg = ''; } catch (e) { RP.msg = 'IA: ' + (e.message || 'erro'); RP.ok = false; } RP.busy = false; replyModal(); };
@@ -9147,8 +9151,8 @@ OS.Links = { W };
 (() => {
 'use strict';
 const U = OS.U, UI = OS.UI, V = OS.views, A = OS.act, esc = U.esc;
-const NEW = 'https://oceanum-ryan.vercel.app', OLD = 'https://kd25gpgdw9-lang.github.io';
-const isOld = location.origin === OLD, SY = () => window.OceanumSync || {};
+const NEW = 'https://oceanum-ryan.vercel.app', OLDS = ['https://kd25gpgdw9-lang.github.io', 'https://movaainfo.github.io'], OLD = OLDS[0];
+const isOld = OLDS.includes(location.origin), SY = () => window.OceanumSync || {};
 const host = NEW.replace(/^https:\/\//, '');
 
 /* ---------- endereço antigo: aviso de mudança ---------- */
@@ -9159,7 +9163,7 @@ const movePanel = () => { const on = !!SY().on;
     <div class="mv-o ${on ? '' : 'rec'}"><b>${on ? 'Ou com um ficheiro' : 'Com um ficheiro'}</b><small>1. Guarda os dados num ficheiro (Guardar em Ficheiros).<br>2. Abre o novo endereço e toca em <b>Importar</b>.</small>
       <div class="row gap8" style="flex-wrap:wrap"><button class="btn ${on ? '' : 'pri'}" data-act="exportData">${UI.ic('arrowDown')}1 · Guardar os meus dados</button><a class="btn" href="${NEW}/#mudanca" target="_blank" rel="noopener">2 · Abrir o novo endereço</a></div>
       <small class="mut">O ficheiro tem as tuas chaves e dados pessoais: apaga-o depois de importares.</small></div>
-    <p class="mut" style="font-size:12.5px;margin:10px 0 0">No novo endereço: Partilhar → <b>Adicionar ao ecrã principal</b>, e apaga o ícone antigo. O Face ID ativa-se outra vez lá.</p></div>`); };
+    <p class="mut" style="font-size:12.5px;margin:10px 0 0">No novo endereço: Partilhar → <b>Adicionar ao ecrã principal</b>, e apaga o ícone antigo. O Face ID ativa-se outra vez lá.</p></div>`, 'tall'); };
 A.mvOpen = () => movePanel();
 A.mvSync = () => { const s = SY(); if (!s.on || !s.linkCode) return movePanel(); try { OS.pushAll(); } catch (e) { } UI.toast('A enviar as últimas alterações…');
   setTimeout(() => { location.href = NEW + '/#ligar=' + encodeURIComponent(s.linkCode()); }, 2500); };
@@ -9174,14 +9178,22 @@ const welcome = () => UI.modal(`<div class="mv-p"><div class="pn-h"><h3>Bem-vind
     <p>Traz os teus dados do endereço antigo:</p>
     <div class="mv-o rec"><b>Tenho o ficheiro</b><small>O ficheiro .json que guardaste no endereço antigo.</small><label class="btn pri">${UI.ic('arrowUp')}Importar o ficheiro<input type="file" id="impData" accept="application/json,.json" hidden></label></div>
     <div class="mv-o"><b>Uso a sincronização</b><small>No endereço antigo toca em <b>Mudar agora</b>, ou cola aqui o código de ligação em Definições → Sincronizar aparelhos.</small><a class="btn" href="#definicoes" data-mclose>Abrir Definições</a></div>
-    <div class="mv-o"><b>Ainda não fiz nada</b><small>Abre o endereço antigo (${OLD.replace('https://', '')}/Oceanum) e segue o aviso de mudança.</small><a class="btn ghost" href="${OLD}/Oceanum/" target="_blank" rel="noopener">Abrir o endereço antigo</a></div>
-    <button class="btn ghost sm" data-act="mvDone" style="margin-top:6px">Começar do zero</button></div>`);
+    <div class="mv-o"><b>Recuperar pela sincronização (Google Drive)</b><small>Se a sincronização estava ligada, os teus dados estão no Drive. Precisas do endereço e da chave do teu script Google:<br>• <b>Endereço</b>: script.google.com → o teu projeto do Oceanum → Implementar → Gerir implementações → <i>URL da aplicação Web</i> (termina em /exec).<br>• <b>Chave</b>: no código do script, a linha <code>const KEY = '…'</code> — copia só o que está entre as aspas.</small>
+      <form class="mv-rec" data-form="mvRec" autocomplete="off"><input class="field" name="u" placeholder="https://script.google.com/macros/s/…/exec" required autocapitalize="none" spellcheck="false"><input class="field" name="k" placeholder="Chave (ex.: a8k2…)" required autocapitalize="none" spellcheck="false"><button class="btn pri">Recuperar os meus dados</button></form></div>
+    <button class="btn ghost sm" data-act="mvDone" style="margin-top:6px">Começar do zero</button></div>`, 'tall');
+OS.forms.mvRec = f => { const u = f.elements.u.value.trim(), k = f.elements.k.value.trim().replace(/^['"]|['"]$/g, '');
+  if (!/^https:\/\/script\.google\.com\/(a\/[^/]+\/)?macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u)) return UI.toast('O endereço tem de começar por https://script.google.com/macros/s/ e terminar em /exec', 'neg');
+  if (k.length < 8) return UI.toast('A chave parece incompleta', 'neg'); const SYc = window.OceanumSync;
+  if (!SYc || !SYc.applyLink || !SYc.applyLink(btoa(unescape(encodeURIComponent(JSON.stringify({ u, k })))))) return UI.toast('Não consegui guardar a ligação', 'neg');
+  U.ls.set('os2mvDone', 1); UI.toast('Ligado. A trazer os teus dados do Google Drive…', 'pos'); setTimeout(() => location.reload(), 900); };
 A.mvDone = () => { U.ls.set('os2mvDone', 1); UI.closeModal(); };
 if (!isOld) {
   OS.on('ready', () => { if (navigator.webdriver && !window.__mvTest) return; const want = /mudanca/.test(location.hash); if (want) history.replaceState(null, '', location.pathname + '#visao'); if (want || fresh()) setTimeout(welcome, 900); });
   // a importação (Definições ou boas-vindas) fecha a mudança
   document.addEventListener('change', e => { if (e.target.id === 'impData' && e.target.files[0]) { U.ls.set('os2mvDone', 1); setTimeout(() => { try { UI.closeModal(); } catch (er) { } }, 600); } });
 }
+OS.on('ready', () => { const o = V.definicoes; if (!o || o._mv) return; V.definicoes = sub => o(sub) + `<div class="pn"><div class="pn-h"><h3>Mudança de endereço</h3></div><p class="mut" style="margin:0 0 8px">Trazer os dados de outro endereço do Oceanum: ficheiro exportado ou sincronização do Google Drive.</p><button class="btn" data-act="mvWelcome">Trazer os meus dados</button></div>`; V.definicoes._mv = 1; });
+A.mvWelcome = () => welcome();
 OS.Move = { NEW, OLD, isOld, welcome, panel: movePanel };
 })();
 
@@ -12827,7 +12839,7 @@ const decodeCode = code => { let c = String(code || '').trim(); const m = c.matc
   return JSON.parse(decodeURIComponent(escape(atob(c)))); };
 const applyLink = code => { try { const o = decodeCode(code); if (!o.u || !o.k) return false;
   const cur = LS.get('os2:one~inbox', { data: {} }); cur.data = Object.assign({}, cur.data, { url: o.u, key: o.k }); LS.set('os2:one~inbox', cur);
-  LS.set('os2sync', 1); LS.set('os2syncJoined', 0); return true; } catch (e) { return false; } };
+  LS.set('os2sync', 1); LS.set('os2syncJoined', 0); LS.set('os2syncPull', 1); return true; } catch (e) { return false; } };
 const hm = location.hash.match(/ligar=([^&#\s]+)/);
 if (hm) { const ok = applyLink(hm[1]); history.replaceState(null, '', location.pathname + '#visao'); if (ok) LS.set('os2syncMsg', 'Aparelho ligado. A sincronizar…'); }
 
@@ -12877,7 +12889,9 @@ const start = async (cb, errCb) => {
     LS.set('os2syncJoined', 1); cb(snap([])); setTimeout(() => { if (localN) OS.pushAll(); }, 300); SY.state = 'a enviar os dados deste aparelho…';
   } else if (!joined) { // aparelho novo na conta: fica a versão com mais dados
     LS.set('os2syncJoined', 1);
-    if (localN > remoteN) { LS.set('os2preSyncRemoteCount', remoteN); cb(snap([])); setTimeout(() => OS.pushAll(), 300); SY.state = 'este aparelho tinha mais dados: enviados'; }
+    // ligado por código/recuperação: este aparelho é o novo → recebe sempre os dados da conta (nunca os substitui)
+    const pull = LS.get('os2syncPull', 0); LS.set('os2syncPull', 0);
+    if (localN > remoteN && !pull) { LS.set('os2preSyncRemoteCount', remoteN); cb(snap([])); setTimeout(() => OS.pushAll(), 300); SY.state = 'este aparelho tinha mais dados: enviados'; }
     else { try { localStorage.setItem('os2preSyncBackup', JSON.stringify(OS.exportAll())); } catch (e) { } cb(snap(Object.entries(all))); SY.state = 'dados da conta recebidos'; }
   } else { // normal: recebe tudo, menos o que ainda não tinha chegado ao Google (esse volta a ser enviado)
     cb(snap(Object.entries(all).filter(([id]) => !pend.has(id)))); if (pend.size) repushPending(); SY.state = 'sincronizada';
