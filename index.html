@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Oceanum</title>
+<title>OCEANUM</title>
 <meta name="description" content="Oceanum — o sistema operativo da tua vida: finanças, estudos, treino, dieta, metas e o jogo Dominus.">
 <meta name="theme-color" content="#04101F">
 <meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Oceanum">
+<meta name="apple-mobile-web-app-title" content="OCEANUM">
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -2318,7 +2318,7 @@ html.lite .ceremony,html.lite .upd{background:#04101F!important}
 
 </style>
 <style>[hidden]{display:none!important}</style>
-<script>window.OCEANUM_VERSION={"v": "1.93", "date": "10/10/2026", "notes": ["O Oceanum passa a ser publicado pela Vercel diretamente a partir do GitHub: https://oceanum-movaa.vercel.app.", "Nos endereços antigos aparece o aviso de mudança para levares os teus dados (sincronização ou ficheiro)."]};</script>
+<script>window.OCEANUM_VERSION={"v": "1.94", "date": "10/10/2026", "notes": ["O nome da app passa a OCEANUM (título, ícone no ecrã principal e Face ID)."]};</script>
 <script>(function(){try{var n=navigator,ua=n.userAgent||"",low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||/Android/i.test(ua)||matchMedia("(prefers-reduced-motion: reduce)").matches;var f=localStorage.getItem("os2lite");if(f==="1"||(f!=="0"&&low))document.documentElement.classList.add("lite")}catch(e){}})();</script>
 <script src="config.js"></script>
 <script>
@@ -4274,9 +4274,9 @@ function tickFocus() {
   const t = U.$('[data-ftime]'); if (t) t.textContent = tx; const b = U.$('[data-fbar]'); if (b) b.style.width = Math.min(100, (1 - ms / tot) * 100) + '%';
   const dock = U.$('#dock'); if (FS.min) dock.innerHTML = `<div><b>${tx}</b><small>${FS.phase === 'focus' ? esc(FS.label) : 'Pausa'}</small></div><button class="icon-btn" data-act="focusMax" aria-label="Abrir foco">${UI.ic('focus')}</button>`;
   document.title = tx + ' · ' + (FS.phase === 'focus' ? 'Foco' : 'Pausa');
-  if (ms <= 0) { if (FS.phase === 'focus') { A.focusEnd(null); } else { beep(); FS = null; U.ls.del(FK); renderFocus(); UI.toast('Pausa acabou. Volta ao trabalho.'); document.title = 'Oceanum'; } }
+  if (ms <= 0) { if (FS.phase === 'focus') { A.focusEnd(null); } else { beep(); FS = null; U.ls.del(FK); renderFocus(); UI.toast('Pausa acabou. Volta ao trabalho.'); document.title = 'OCEANUM'; } }
 }
-setInterval(() => { if (FS) tickFocus(); else if (document.title !== 'Oceanum' && !/Oceanum/.test(document.title)) document.title = 'Oceanum'; document.querySelectorAll('[data-clock]').forEach(e => e.textContent = U.hm()); }, 1000);
+setInterval(() => { if (FS) tickFocus(); else if (document.title !== 'OCEANUM' && !/OCEANUM/i.test(document.title)) document.title = 'OCEANUM'; document.querySelectorAll('[data-clock]').forEach(e => e.textContent = U.hm()); }, 1000);
 document.addEventListener('click', e => { if (e.target.closest('#dock') && !e.target.closest('[data-act]')) A.focusMax(); });
 OS.on('ready', renderFocus);
 })();
@@ -7178,7 +7178,7 @@ function startBreak() { RUN = { phase: 'break', t0: Date.now(), mins: Math.max(1
 function loop() { clearInterval(tick); if (!RUN) return; tick = setInterval(step, 1000); step(); }
 function step() { if (!RUN) { clearInterval(tick); pill(); return; } if (left() <= 0) { if (RUN.phase === 'grow') return finish(true); RUN = null; save(); chime(); UI.toast('A pausa acabou. Bora plantar outra?', 'pos'); clearInterval(tick); pill(); OS.request(); return; } paint(); }
 function paint() { const L = left(), el = document.getElementById('foTime'); if (el) el.textContent = mmss(L); const ring = document.getElementById('foRing'); if (ring) ring.style.strokeDashoffset = String(100 - prog() * 100);
-  if (RUN && RUN.phase === 'grow') { const k = `pot|${RUN.sp}|${stageOf(prog())}|0|${RUN.seed}|${cfg().scene || ''}`, h = document.getElementById('fo3d'); if (h && h.dataset.k !== k) { h.dataset.k = k; mount(); } document.title = 'Floresta · ' + mmss(L) + ' · Oceanum'; } pill(); }
+  if (RUN && RUN.phase === 'grow') { const k = `pot|${RUN.sp}|${stageOf(prog())}|0|${RUN.seed}|${cfg().scene || ''}`, h = document.getElementById('fo3d'); if (h && h.dataset.k !== k) { h.dataset.k = k; mount(); } document.title = 'Floresta · ' + mmss(L) + ' · OCEANUM'; } pill(); }
 /* ---- janela flutuante (dentro do app) + Picture-in-Picture (fora do app) ---- */
 const GI = {}, MSPH = {}; let FL = null, FC = null, VID = null, giBusy = '';
 function growImg(sp, st) { const k = sp + '|' + st; if (GI[k] || giBusy === k) return GI[k]; if (!T || FAIL) { if (!FAIL) load3(); return null; }
@@ -8212,7 +8212,7 @@ P[''] = () => { if (B) return `<div class="pn"><b>Tens um bloco em curso.</b><p 
   <div class="fb-go"><div><b>${sel.length} pendência(s) · ${U.hours(tot)}</b><small>Para sair antes do fim: Face ID ou código.</small></div><button class="btn pri lg" data-act="fbGo" ${sel.length ? '' : 'disabled'}>${UI.ic('focus')}Começar bloco</button></div>`; };
 P.apps = () => { const c = cfg(), ap = c.apps.length ? c.apps.join(', ') : '(escolhe as apps na aba Começar)';
   return `<div class="pn"><p style="margin:0 0 8px"><b>A verdade:</b> o iPhone não deixa nenhuma app web (nem o Safari) fechar ou bloquear outras apps. O que o Oceanum faz sozinho: ecrã fechado até acabares, saída só com Face ID ou código, e conta cada vez que sais da app. Para bloquear as outras apps de verdade usa o <b>modo Foco</b> + <b>Atalhos</b> (5 minutos, uma vez só):</p></div>
-  <div class="pn fb-guide"><h3>1 · Criar o modo Foco "Oceanum"</h3><ol><li>Ajustes → Foco → <b>+</b> → Personalizado → nome <b>Oceanum</b>.</li><li>Notificações → Pessoas: só favoritos. Apps: permite só as essenciais (Telefone, Oceanum).</li><li>Ecrãs → Ecrã principal → escolhe uma página só com o Oceanum. Com o Foco ligado as outras apps desaparecem do ecrã.</li></ol></div>
+  <div class="pn fb-guide"><h3>1 · Criar o modo Foco "OCEANUM"</h3><ol><li>Ajustes → Foco → <b>+</b> → Personalizado → nome <b>OCEANUM</b>.</li><li>Notificações → Pessoas: só favoritos. Apps: permite só as essenciais (Telefone, Oceanum).</li><li>Ecrãs → Ecrã principal → escolhe uma página só com o Oceanum. Com o Foco ligado as outras apps desaparecem do ecrã.</li></ol></div>
   <div class="pn fb-guide"><h3>2 · Atalho "${esc(c.scOn)}" (o Oceanum chama-o ao começar)</h3><ol><li>App Atalhos → <b>+</b> → nome <b>${esc(c.scOn)}</b>.</li><li>Ação <b>Adicionar à data</b>: Data atual + <i>Entrada do atalho</i> minutos.</li><li>Ação <b>Guardar ficheiro</b>: guarda essa data em <code>Atalhos/oceanum-foco.txt</code> (substituir: sim, perguntar: não).</li><li>Ação <b>Definir Foco</b>: Oceanum → Ligado → até essa data.</li></ol></div>
   <div class="pn fb-guide"><h3>3 · Atalho "${esc(c.scOff)}" (chamado quando o bloco acaba)</h3><ol><li>Ação <b>Guardar ficheiro</b>: texto <code>2000-01-01</code> em <code>Atalhos/oceanum-foco.txt</code>.</li><li>Ação <b>Definir Foco</b>: Oceanum → Desligado.</li></ol></div>
   <div class="pn fb-guide"><h3>4 · Bloquear as apps (automação)</h3><ol><li>Atalhos → Automação → <b>+</b> → <b>App</b> → escolhe: <b>${esc(ap)}</b> → "É aberta" → <b>Executar imediatamente</b>.</li><li>Ações: <b>Obter ficheiro</b> <code>Atalhos/oceanum-foco.txt</code> → <b>Se</b> Data atual <i>é antes de</i> o conteúdo do ficheiro → <b>Mostrar notificação</b> "Estás num bloco de foco. Volta ao Oceanum." → <b>Ir para o ecrã principal</b>.</li><li>Pronto: durante o bloco essas apps fecham-se sozinhas mal as abres.</li></ol>
@@ -12958,7 +12958,7 @@ const bioErr = e => { const n = e && e.name;
   return 'Face ID indisponível: ' + ((e && (e.message || e.name)) || 'erro desconhecido'); };
 L.register = async () => { if (ANDROID) { OS.UI.toast('No Android a biometria está desligada. Usa "Entrar direto" em Definições.', 'warn'); return false; }
   try {
-    const cred = await navigator.credentials.create({ publicKey: { challenge: rand(32), rp: { name: 'Oceanum' }, user: { id: rand(16), name: 'ryan', displayName: OS.one('profile').short || 'Ryan' }, pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' }, timeout: 60000 } });
+    const cred = await navigator.credentials.create({ publicKey: { challenge: rand(32), rp: { name: 'OCEANUM' }, user: { id: rand(16), name: 'ryan', displayName: OS.one('profile').short || 'Ryan' }, pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' }, timeout: 60000 } });
     U.ls.set('os2bio', { id: b64u(cred.rawId), at: U.today() }); U.ls.set('os2bioAsk', true); try { OS.UI.closeModal(); } catch (e) { } OS.UI.toast('Face ID ativado. Da próxima vez entras com a cara.', 'pos'); OS.request(); return true;
   } catch (e) { OS.UI.toast(bioErr(e), 'warn'); return false; }
 };
@@ -13097,7 +13097,7 @@ function renderSide(cur) {
 V.explorar = () => { const un = unlocked(); return `<div class="exp"><div class="exp-h"><h1>Explorar</h1><p>Tudo o que o Oceanum faz. Abre um lugar e ele passa a aparecer no teu menu.</p></div>
   ${NAV.map(([g, items]) => `<section class="exp-g"><h6>${g}</h6><div class="exp-grid">${items.map(([k, l, ic]) => `<a class="exp-t ${un.has(k) ? 'in' : ''}" href="#${k}">${UI.ic(ic)}<b>${k === 'mova' ? esc(OS.one('mova').name || 'Mova') : l}</b><small>${DESC[k] || ''}</small>${un.has(k) ? '<em>no menu</em>' : '<em class="new">novo</em>'}</a>`).join('')}</div></section>`).join('')}
   <section class="exp-g"><h6>Jogo</h6><div class="exp-grid"><a class="exp-t in" href="#dominus">${UI.ic('crown')}<b>Dominus</b><small>O teu personagem: nível, classe e título, só com conquistas reais.</small><em>no menu</em></a></div></section></div>`; };
-TITLES.explorar = ['Explorar', 'Oceanum'];
+TITLES.explorar = ['Explorar', 'OCEANUM'];
 TITLES.visao = ['Visão Geral', 'Visão geral'];
 function renderTop(cur) {
   const grp = (NAV.find(([, items]) => items.some(([k]) => k === cur)) || [''])[0];
@@ -13153,7 +13153,7 @@ function render() {
   try { progressive(cur, r.raw); } catch (e) { console.error(e); }
   if (fsel) { const el = U.$('#view').querySelector(fsel); if (el) { el.focus({ preventScroll: true }); try { if (caret != null && el.setSelectionRange) el.setSelectionRange(caret, caret); } catch (e) { } } }
   if (r.raw !== lastRoute) { window.scrollTo(0, 0); lastRoute = r.raw; }
-  document.title = OS.focusState && OS.focusState() ? document.title : 'Oceanum';
+  document.title = OS.focusState && OS.focusState() ? document.title : 'OCEANUM';
 }
 OS.on('render', render);
 OS.on('sync', s => { const d = U.$('#syncDot'), d2 = U.$('#syncDot2'), m = U.$('#syncMsg'); if (d) d.className = 'sync-dot ' + s.status; if (d2) { d2.className = 'sync-dot ' + s.status; d2.title = s.msg; } if (m) m.textContent = s.msg; });
