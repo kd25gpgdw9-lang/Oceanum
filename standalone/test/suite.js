@@ -1,0 +1,814 @@
+/* Oceanum — bateria de testes rigorosa.
+   Serve dist-gh/ em /Oceanum/ (igual ao GitHub Pages) e testa em 5 aparelhos simulados.
+   Uso: NODE_PATH=$(npm root -g) node standalone/test/suite.js            (todos)
+        ... suite.js --quick                                              (sem stress nem crawl completo) */
+const { chromium } = require('playwright');
+const http = require('http'), fs = require('fs'), path = require('path'), crypto = require('crypto'), url = require('url');
+const ROOT = path.resolve(__dirname, '../../dist-gh');
+const QUICK = process.argv.includes('--quick');
+const PORT = 8781, BASE = `http://localhost:${PORT}/Oceanum/`;
+const CODE = 'teste1234', HASH = crypto.createHash('sha256').update('oceanum-v1|' + CODE).digest('hex');
+let OVERRIDE = {}; // ficheiros substituídos (teste de atualização)
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.json': 'application/json', '.md': 'text/plain', '.glb': 'model/gltf-binary' };
+let OFFLINE = false, GSFAIL = 0;
+// servidor estático + caixa de entrada simulada (Apps Script)
+const INBOX = [], STORE = {};
+const srv = http.createServer((req, res) => {
+  const u = url.parse(req.url, true);
+  if (u.pathname === '/gs') { // simula o Apps Script
+    let body = ''; req.on('data', c => body += c); req.on('end', () => {
+      const q = Object.assign({}, u.query, Object.fromEntries(new URLSearchParams(body)));
+      const out = (o, t) => { res.writeHead(200, { 'Content-Type': t ? 'text/plain' : 'application/json', 'Access-Control-Allow-Origin': '*' }); res.end(t ? o : JSON.stringify(o)); };
+      if (GSFAIL > 0 && q.op === 'pull') { GSFAIL--; res.writeHead(200, { 'Content-Type': 'text/html', 'Access-Control-Allow-Origin': '*' }); return res.end('<html>Sorry, unable to open the file at this time.</html>'); }
+      if (q.k !== 'KEY_T') return out({ ok: false, msg: 'Chave errada' });
+      if (q.op === 'ping') return out({ ok: true, v: 3 });
+      if (q.op === 'list') { const m = {}; Object.keys(STORE).forEach(id => m[id] = STORE[id].t || 0); return out({ ok: true, docs: m }); }
+      if (q.op === 'get') { const ids = String(q.ids || '').split(',').filter(String), o = {}; (ids.length ? ids : Object.keys(STORE)).forEach(id => { if (STORE[id]) o[id] = STORE[id]; }); return out({ ok: true, docs: o }); }
+      if (q.op === 'put') { Object.assign(STORE, JSON.parse(q.j)); return out({ ok: true }); }
+      if (q.op === 'pull') { const now = Date.now(), it = INBOX.filter(r => !r.done && !(r.res && now - r.res < 600000)); it.forEach(r => r.res = now); return out({ ok: true, items: it }); }
+      if (q.op === 'ack') { const ids = String(q.ids || '').split(','); INBOX.forEach(r => { if (ids.includes(r.id)) r.done = 1; }); return out({ ok: true }); }
+      const v = Number(String(q.v || '').replace(/[^0-9,.-]/g, '').replace(',', '.')); if (!(v > 0)) return out({ ok: false, msg: 'Valor inválido' });
+      INBOX.push({ id: crypto.randomUUID(), t: new Date().toISOString(), v, d: q.d || '', c: q.c || '' }); out('✓ registado', 1); });
+    return; }
+  if (OFFLINE) { req.socket.destroy(); return; }
+  let p = decodeURIComponent(u.pathname);
+  if (!p.startsWith('/Oceanum/')) { res.writeHead(404); return res.end(); }
+  p = p.slice('/Oceanum/'.length) || 'index.html';
+  const file = OVERRIDE[p] || path.join(ROOT, p);
+  fs.readFile(file, (e, d) => { if (e) { res.writeHead(404); return res.end('404'); } res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-cache' }); res.end(d); });
+});
+
+const PROFILES = [
+  { id: 'iPhone', o: { viewport: { width: 393, height: 852 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1' } },
+  { id: 'Android tel', o: { viewport: { width: 412, height: 915 }, deviceScaleFactor: 2.6, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Mobile Safari/537.36' } },
+  { id: 'Tablet horiz', o: { viewport: { width: 1280, height: 800 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; SM-X210) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36' }, slow: 6 },
+  { id: 'Tablet vert', o: { viewport: { width: 800, height: 1280 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; SM-X210) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36' } },
+  { id: 'Computador', o: { viewport: { width: 1440, height: 900 } } }];
+
+const R = []; let cur = '';
+const ok = (name, pass, info = '') => { R.push({ p: cur, name, pass, info }); console.log(`${pass ? '  ✓' : '  ✗'} [${cur}] ${name}${info ? ' — ' + info : ''}`); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+async function newPage(b, prof, init = {}) {
+  const ctx = await b.newContext(prof.o); const p = await ctx.newPage(); const errs = [];
+  p.on('pageerror', e => errs.push('JS: ' + e.message));
+  p.on('console', m => { if (m.type() === 'error' && !/fonts\.g|net::ERR|Failed to load resource|ERR_INTERNET|ERR_CONNECTION/.test(m.text())) errs.push('consola: ' + m.text().slice(0, 160)); });
+  p.on('dialog', d => d.dismiss());
+  await p.addInitScript(([HASH, init]) => {
+    if (!localStorage.getItem('__seeded')) { localStorage.setItem('os2:one~security', JSON.stringify({ data: { hash: HASH } })); Object.entries(init).forEach(([k, v]) => localStorage.setItem(k, v)); localStorage.setItem('__seeded', '1'); }
+    window.__cred = 0; try { Object.defineProperty(navigator, 'credentials', { value: { get: () => { window.__cred++; return new Promise(() => { }); }, create: () => new Promise(() => { }) } }); } catch (e) { }
+    window.PublicKeyCredential = window.PublicKeyCredential || { isUserVerifyingPlatformAuthenticatorAvailable: async () => true };
+  }, [HASH, init]);
+  if (prof.slow) { const cdp = await ctx.newCDPSession(p); await cdp.send('Emulation.setCPUThrottlingRate', { rate: prof.slow }); }
+  return { ctx, p, errs };
+}
+const unlock = async p => { await p.waitForFunction(() => document.getElementById('lkCode') || (document.querySelector('#view') && document.querySelector('#view').innerText.trim().length > 30), null, { timeout: 8000 }); if (!(await p.$('#lkCode')) || !(await p.isVisible('#lkCode'))) return; await p.fill('#lkCode', CODE); await p.click('.lk-go'); await p.waitForFunction(() => document.querySelector('#view') && document.querySelector('#view').innerText.trim().length > 30, null, { timeout: 8000 }); };
+const E = (p, f, a) => p.evaluate(f, a);
+
+async function profileTests(b, prof) {
+  cur = prof.id; console.log(`\n=== ${prof.id} ===`);
+  const { ctx, p, errs } = await newPage(b, prof, { os2bio: JSON.stringify({ id: 'AAAA', at: '2026-10-01' }) });
+  // A · arranque e ecrã do código
+  const t0 = Date.now(); await p.goto(BASE); await p.waitForSelector('#lkCode'); const tl = Date.now() - t0;
+  ok('abre o ecrã do código', true, tl + ' ms');
+  ok('versão visível no ecrã do código', await E(p, () => /v\d+\.\d+/.test(document.querySelector('.sp-foot').textContent)), await E(p, () => document.querySelector('.sp-foot').textContent));
+  await sleep(1500); ok('não abre o pedido biométrico sozinho', (await E(p, () => window.__cred)) === 0);
+  const inp = await E(p, () => { const i = document.getElementById('lkCode'), cs = getComputedStyle(i); return { t: i.type, sec: cs.webkitTextSecurity, bg: cs.backgroundColor, ac: i.autocomplete }; });
+  ok('campo do código sem gestor de palavras-passe', inp.t === 'text' && inp.sec === 'disc' && inp.ac === 'off', JSON.stringify(inp));
+  const android = /Android/.test(prof.o.userAgent || '');
+  ok('modo leve ' + (android ? 'ligado (Android)' : 'conforme o aparelho'), android ? await E(p, () => document.documentElement.classList.contains('lite')) : true);
+  await p.fill('#lkCode', 'errado'); await p.click('.lk-go'); await sleep(400); ok('código errado é recusado', /incorreto/i.test(await E(p, () => document.getElementById('lkMsg').textContent)));
+  await unlock(p); ok('código certo abre a Visão Geral', await E(p, () => !!document.querySelector('.dash')));
+  // P · leveza
+  const heavy = await E(p, () => { let inf = 0, bf = 0; document.querySelectorAll('*').forEach(el => { const cs = getComputedStyle(el); if (cs.animationName !== 'none' && cs.animationIterationCount === 'infinite') inf++; if (cs.backdropFilter && cs.backdropFilter !== 'none') bf++; }); return { inf, bf, fixedBg: getComputedStyle(document.body).backgroundAttachment }; });
+  ok('sem animações infinitas nem desfoque de fundo', heavy.inf === 0 && heavy.bf === 0 && heavy.fixedBg !== 'fixed', JSON.stringify(heavy));
+  // C · não se redesenha sozinho
+  await E(p, () => { window.__r = 0; OS.on('render', () => window.__r++); }); await sleep(4000); const idle = await E(p, () => window.__r);
+  ok('parado não se redesenha (Visão Geral)', idle === 0, idle + ' renders em 4 s');
+  // B · todas as páginas e separadores
+  const base = await E(p, () => Object.keys(OS.views)); let routes = [];
+  for (const r of base) { await E(p, r => location.hash = r, r); await sleep(150); routes.push(r, ...(await E(p, () => [...document.querySelectorAll('#view nav.tabs a, #view .dtabs a[href^="#"]')].map(a => a.getAttribute('href').slice(1))))); }
+  routes = [...new Set(routes)];
+  const bad = [], ovf = [], slow = []; let maxT = 0;
+  for (const r of routes) { const t = await E(p, async r => { const t0 = performance.now(); location.hash = r; await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res))); return performance.now() - t0; }, r); maxT = Math.max(maxT, t); if (t > (prof.slow ? 900 : 250)) slow.push(r + ' ' + Math.round(t) + 'ms');
+    const s = await E(p, () => { const v = document.querySelector('#view'), tx = v.innerText.trim(); document.querySelectorAll('.ceremony').forEach(e => e.remove()); return { len: tx.length, err: tx.includes('Não foi possível'), ov: document.documentElement.scrollWidth > innerWidth + 1 }; });
+    if (s.len < 30 || s.err) bad.push(r); if (s.ov) ovf.push(r); }
+  ok(`${routes.length} páginas abrem com conteúdo`, !bad.length, bad.join(', '));
+  ok('nada sai para o lado', !ovf.length, ovf.join(', '));
+  ok('páginas rápidas' + (prof.slow ? ' (processador 6× mais lento)' : ''), !slow.length, slow.length ? slow.join(', ') : 'máx ' + Math.round(maxT) + ' ms');
+  // D · carregar nos botões
+  const SKIP = 'wipe|lockNow|[Dd]el|remove|[Rr]eset|[Aa]bort|navOpen|cmdOpen|focusStart|focusEnd|exportData|bioRegister|bioForget|cloud|qgStart|dStart|liteSet|ibSave|ibRound|ibCopy|gcal';
+  let clicks = 0; const cErr0 = errs.length;
+  for (const r of (QUICK ? routes.slice(0, 12) : routes)) { await E(p, r => location.hash = r, r); await sleep(120);
+    const n = await E(p, SK => [...document.querySelectorAll('#view [data-act]')].filter(x => !new RegExp(SK).test(x.dataset.act) && x.offsetParent).length, SKIP);
+    for (let i = 0; i < Math.min(n, 12); i++) { const a = await E(p, ([i, SK]) => { const els = [...document.querySelectorAll('#view [data-act]')].filter(x => !new RegExp(SK).test(x.dataset.act) && x.offsetParent); const el = els[i]; if (!el) return null; el.click(); return el.dataset.act; }, [i, SKIP]); if (!a) break; clicks++; await sleep(60);
+      await E(p, () => { document.querySelectorAll('.ceremony').forEach(e => e.remove()); if (!document.getElementById('drawer').hidden) OS.UI.closeDrawer(); const m = document.getElementById('modal'); if (!m.hidden) { m.hidden = true; m.innerHTML = ''; } document.body.classList.remove('nav-open', 'noscroll'); });
+      if ((await E(p, () => location.hash.slice(1))) !== r) { await E(p, r => location.hash = r, r); await sleep(100); } } }
+  ok(`${clicks} botões carregados sem erro`, errs.length === cErr0, errs.slice(cErr0, cErr0 + 3).join(' | '));
+  // F · scroll preso com painéis
+  await E(p, () => { location.hash = 'financas'; }); await sleep(300); await E(p, () => scrollTo(0, 300));
+  await E(p, () => document.body.classList.add('nav-open')); await sleep(100);
+  const lock1 = await E(p, () => document.body.style.position === 'fixed');
+  await E(p, () => document.body.classList.remove('nav-open')); await sleep(100);
+  const lock2 = await E(p, () => document.body.style.position === '' && Math.abs(scrollY - 300) < 40 || document.documentElement.scrollHeight <= innerHeight + 300);
+  ok('com o menu aberto só o menu rola', lock1 && lock2);
+  await E(p, () => OS.UI.openForm('transactions')); await sleep(150); const lock3 = await E(p, () => document.body.style.position === 'fixed'); await E(p, () => OS.UI.closeDrawer()); await sleep(100);
+  ok('com um formulário aberto a página de trás não rola', lock3 && await E(p, () => document.body.style.position === ''));
+  // G · rodar o ecrã
+  if (prof.o.isMobile) { const vp = prof.o.viewport; const e0 = errs.length; let ov = 0;
+    for (let i = 0; i < 8; i++) { await p.setViewportSize(i % 2 ? vp : { width: vp.height, height: vp.width }); await sleep(150); for (const r of ['visao', 'treino.mapa', 'dominus', 'dieta']) { await E(p, r => location.hash = r, r); await sleep(80); if (await E(p, () => document.documentElement.scrollWidth > innerWidth + 1)) ov++; } }
+    await p.setViewportSize(vp); ok('rodar o ecrã 8 vezes', errs.length === e0 && !ov, ov ? ov + ' páginas a sair para o lado' : ''); }
+  // H · fugas de memória
+  const h0 = await E(p, () => (performance.memory || {}).usedJSHeapSize || 0);
+  for (let i = 0; i < (QUICK ? 60 : 200); i++) await E(p, r => location.hash = r, routes[i % routes.length]);
+  await sleep(500); const mem = await E(p, () => ({ h: (performance.memory || {}).usedJSHeapSize || 0, dom: document.getElementsByTagName('*').length, ch: document.querySelectorAll('.ceremony,.upd').length }));
+  ok('sem fugas de memória (200 mudanças de página)', (mem.h - h0) < 40e6 && mem.dom < 6000, `heap +${Math.round((mem.h - h0) / 1e6)} MB · ${mem.dom} elementos`);
+  ok('sem erros de JavaScript nesta sessão', !errs.length, errs.slice(0, 3).join(' | '));
+  await ctx.close();
+}
+
+async function sharedTests(b) {
+  cur = 'Geral'; console.log('\n=== Testes gerais (iPhone) ===');
+  const prof = PROFILES[0];
+  // E · formulários
+  { const { ctx, p, errs } = await newPage(b, prof); await p.goto(BASE); await unlock(p);
+    const colls = await E(p, () => Object.keys(OS.S)), fail = [];
+    for (const c of colls) { const before = await E(p, c => OS.all(c).length, c); await E(p, c => OS.UI.openForm(c), c); await sleep(120);
+      await E(p, () => { const f = document.querySelector('#drawer form'); if (!f) return; f.querySelectorAll('[required]').forEach(el => { if (el.value) return; if (el.tagName === 'SELECT') { const o = [...el.options].find(o => o.value); if (o) el.value = o.value; } else if (el.type === 'date') el.value = OS.U.today(); else if (el.type === 'number') el.value = '10'; else if (el.type === 'time') el.value = '10:00'; else el.value = el.name === 'time' ? '25:00' : 'Teste'; }); f.requestSubmit(); });
+      await sleep(200); if ((await E(p, c => OS.all(c).length, c)) <= before) fail.push(c); await E(p, () => { if (!document.getElementById('drawer').hidden) OS.UI.closeDrawer(); }); }
+    ok(`os ${colls.length} formulários gravam`, !fail.length, fail.join(', '));
+    // I · guardar e recarregar, exportar e importar
+    await E(p, () => location.hash = 'gasto'); await sleep(300); await p.fill('.qg-amt input', '12,34'.replace(',', '.')); await p.fill('.qg-desc', 'Teste persistência'); await p.click('.qg-go'); await sleep(900);
+    await p.reload(); await unlock(p); ok('gasto rápido fica guardado depois de recarregar', await E(p, () => OS.all('transactions').some(t => t.desc === 'Teste persistência' && t.amount === 12.34)));
+    const exp = await E(p, () => JSON.stringify(OS.exportAll())); const n0 = await E(p, () => OS.all('transactions').length);
+    await E(p, () => { Object.keys(OS.D).forEach(c => OS.D[c] = []); });
+    await E(p, j => OS.importAll(JSON.parse(j)), exp); await sleep(800); ok('exportar e importar devolve tudo', (await E(p, () => OS.all('transactions').length)) === n0, n0 + ' movimentos');
+    // M · atalho de gastos (Apps Script simulado, envio por formulário como o iPhone)
+    await E(p, base => { const c = OS.one('inbox'); c.url = base; c.key = 'KEY_T'; OS.touch('inbox'); }, `http://127.0.0.1:${PORT}/gs`);
+    await E(p, () => location.hash = 'definicoes'); await sleep(400);
+    await p.evaluate(() => document.querySelector('[data-act=ibSave]').click()); await sleep(800);
+    ok('atalho: verificação da ligação', /Ligado/.test(await E(p, () => document.querySelector('.ib-st').innerText)));
+    await new Promise(res => { const rq = http.request({ host: 'localhost', port: PORT, path: '/gs?k=KEY_T', method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }, r => { r.resume(); r.on('end', res); }); rq.end('v=8%2C50&d=Uber+para+a+faculdade'); });
+    await new Promise(res => { const rq = http.request({ host: 'localhost', port: PORT, path: '/gs?k=KEY_T', method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }, r => { r.resume(); r.on('end', res); }); rq.end('v=' + encodeURIComponent('99 pizza 2 pessoas') + '&d=' + encodeURIComponent('99 pizza 2 pessoas')); });
+    await new Promise(res => { const rq = http.request({ host: 'localhost', port: PORT, path: '/gs?k=KEY_T', method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }, r => { r.resume(); r.on('end', res); }); rq.end('v=' + encodeURIComponent('18, uber ') + '&d=' + encodeURIComponent('18, uber ')); });
+    GSFAIL = 1; await E(p, () => OS.Inbox.pull(true)); await sleep(2500);
+    const u18 = await E(p, () => OS.all('transactions').filter(t => t.desc === 'Uber' && t.amount === 18).length);
+    ok('atalho: o Google falha à 1.ª e a app tenta de novo · "18, uber" → 18 € · Uber', u18 === 1, u18 + ' encontrados');
+    const one = await E(p, () => OS.all('transactions').filter(t => t.desc === 'Pizza 2 pessoas').map(t => t.amount));
+    ok('atalho de uma pergunta: "99 pizza 2 pessoas" → 99 € · Pizza 2 pessoas', one.length === 1 && one[0] === 99, JSON.stringify(one));
+    const ib = await E(p, () => OS.all('transactions').filter(t => (t.tags || []).includes('atalho')).map(t => [t.amount, t.desc, t.cat]));
+    ok('atalho: gasto enviado entra nas Finanças com categoria', ib.length === 3 && ib[0][0] === 8.5 && ib[0][2] === 'Transporte', JSON.stringify(ib));
+    await E(p, () => OS.Inbox.pull(true)); await sleep(600); ok('atalho: não duplica', (await E(p, () => OS.all('transactions').filter(t => (t.tags || []).includes('atalho')).length)) === 3);
+    // N · jogo
+    await E(p, () => location.hash = 'dominus'); await sleep(300); if (await p.$('[data-act=dStart]')) { await p.click('[data-act=dStart]'); await sleep(500); await E(p, () => document.querySelectorAll('.ceremony').forEach(e => e.remove())); }
+    await E(p, () => { const d = OS.one('dominus'); d.xp.cor = (d.xp.cor || 0) + 400; OS.touch('dominus'); }); await sleep(900);
+    let choice = 0; for (let i = 0; i < 12 && !choice; i++) { await sleep(300); choice = await E(p, () => document.querySelectorAll('.ch-cel .ch-optb').length); if (!choice) { const c = await p.$('.ch-cel [data-close]'); if (c) await c.click(); } }
+    ok('jogo: subir de nível mostra parabéns com 2 recompensas à escolha', choice === 2, choice + ' opções');
+    await p.click('.ch-cel .ch-optb'); await sleep(400); ok('jogo: escolher recompensa guarda-a', (await E(p, () => (OS.one('dominus').rwv2.got || []).length)) >= 1);
+    for (let i = 0; i < 8 && await p.$('.ch-cel'); i++) { const c = await p.$('.ch-cel .ch-optb') || await p.$('.ch-cel [data-close]'); if (c) await c.click(); await sleep(350); }
+    await E(p, () => location.hash = 'dominus.colmeia'); await sleep(300); ok('jogo: colmeia com 61 favos', (await E(p, () => document.querySelectorAll('.hx2').length)) === 61);
+    ok('sem erros de JavaScript', !errs.length, errs.slice(0, 3).join(' | ')); await ctx.close(); }
+  // J · funciona sem internet
+  { const { ctx, p, errs } = await newPage(b, prof); await p.goto(BASE); await unlock(p);
+    await p.waitForFunction(() => navigator.serviceWorker && navigator.serviceWorker.controller, null, { timeout: 10000 }).catch(() => { });
+    await p.reload(); await unlock(p); await sleep(800);
+    OFFLINE = true; await ctx.setOffline(true); await p.reload().catch(() => { }); let off = false; try { await unlock(p); off = await E(p, () => !!document.querySelector('.dash')); } catch (e) { }
+    OFFLINE = false; await ctx.setOffline(false); ok('abre sem internet', off); await ctx.close(); }
+  // K · atualização: ecrã "A atualizar" e "Atualizado"
+  { const { ctx, p } = await newPage(b, prof); await p.goto(BASE); await unlock(p);
+    await p.waitForFunction(() => navigator.serviceWorker && navigator.serviceWorker.controller, null, { timeout: 10000 }).catch(() => { });
+    await p.reload(); await unlock(p); await sleep(800); // segunda visita: já há uma versão instalada
+    const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').replace(/OCEANUM_VERSION=\{"v": "[^"]+"/, 'OCEANUM_VERSION={"v": "9.9"'), sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8').replace(/oceanum-[a-z0-9]+/, 'oceanum-teste99');
+    fs.writeFileSync('/tmp/oc_idx.html', html); fs.writeFileSync('/tmp/oc_sw.js', sw); OVERRIDE = { 'index.html': '/tmp/oc_idx.html', '': '/tmp/oc_idx.html', 'sw.js': '/tmp/oc_sw.js' };
+    let sawUpdating = false; p.on('framenavigated', () => { });
+    await E(p, () => navigator.serviceWorker.getRegistration().then(r => r && r.update()));
+    for (let i = 0; i < 30 && !sawUpdating; i++) { await sleep(200); sawUpdating = await E(p, () => !!document.querySelector('.upd')).catch(() => false); }
+    let saw = ''; for (let i = 0; i < 40 && !/Atualizado/.test(saw); i++) { await sleep(150); saw = await E(p, () => (document.querySelector('.upd') || {}).innerText || '').catch(() => ''); }
+    const ver = await E(p, () => (window.OceanumVersion || {}).v || '').catch(() => '');
+    ok('atualização: aparece "A atualizar o Oceanum…"', sawUpdating);
+    ok('atualização: depois mostra "Atualizado" e a versão nova', /Atualizado/.test(saw) && /9\.9/.test(saw + ver), (saw || '').replace(/\n/g, ' · ').slice(0, 80));
+    OVERRIDE = {}; await ctx.close(); }
+  // L · modo de segurança
+  { const { ctx, p } = await newPage(b, prof); await p.goto(BASE + '?seguro'); await sleep(1500);
+    ok('modo de segurança (?seguro) limpa a cache e liga o modo leve', await E(p, () => !location.search && localStorage.getItem('os2lite') === '1' && document.documentElement.classList.contains('lite'))); await ctx.close(); }
+  // Definições acessíveis no telemóvel
+  { const { ctx, p, errs } = await newPage(b, PROFILES[0]); await p.goto(BASE); await unlock(p); await E(p, () => document.querySelectorAll('#modal').forEach(m => { m.hidden = true; m.innerHTML = ''; }));
+    ok('iPhone: engrenagem das Definições visível no topo', await p.isVisible('#top a[href="#definicoes"]'));
+    await p.tap('#top a[href="#definicoes"]'); await sleep(400); ok('iPhone: tocar na engrenagem abre as Definições', (await E(p, () => location.hash)) === '#definicoes');
+    await E(p, () => location.hash = 'visao'); await sleep(300); await p.tap('.tn-menu'); await sleep(400);
+    const vis = await E(p, () => { const a = document.querySelector('#side .side-set'); const r = a.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; });
+    ok('iPhone: "Definições" no topo do menu ☰, visível sem rolar', vis); await p.tap('#side .side-set'); await sleep(400);
+    ok('iPhone: tocar no menu abre as Definições', (await E(p, () => location.hash)) === '#definicoes');
+    ok('sem erros de JavaScript', !errs.length, errs.slice(0, 3).join(' | ')); await ctx.close(); }
+  // Face ID no iPhone (simulado: o iPhone aceita o rosto)
+  { const ctx = await b.newContext(PROFILES[0].o); const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
+    await p.addInitScript(HASH => { if (!localStorage.getItem('__s')) { localStorage.setItem('os2:one~security', JSON.stringify({ data: { hash: HASH } })); localStorage.setItem('__s', '1'); }
+      window.__c = 0; window.__g = 0; Object.defineProperty(navigator, 'credentials', { value: { create: async () => { window.__c++; return { rawId: new Uint8Array([1, 2, 3, 4]).buffer }; }, get: async () => { window.__g++; return {}; } } });
+      window.PublicKeyCredential = { isUserVerifyingPlatformAuthenticatorAvailable: async () => true }; }, HASH);
+    await p.goto(BASE); await unlock(p); await sleep(1200);
+    ok('iPhone: depois do código aparece "Ativar o Face ID?"', /Ativar o Face ID/.test(await E(p, () => document.getElementById('modal').innerText)));
+    await p.tap('#modal [data-act=bioRegister]'); await sleep(500);
+    ok('iPhone: "Ativar Face ID" regista o rosto', (await E(p, () => window.__c)) === 1 && !!(await E(p, () => localStorage.getItem('os2bio'))));
+    await E(p, () => OS.act.lockNow()); await sleep(500); ok('iPhone: ao bloquear aparece "Desbloquear com Face ID"', await p.isVisible('#lkBio'));
+    ok('iPhone: não pede o Face ID sozinho', (await E(p, () => window.__g)) === 0);
+    await p.tap('#lkBio'); await sleep(900); ok('iPhone: entrar com o Face ID abre a app', (await E(p, () => window.__g)) === 1 && !(await p.isVisible('#lkCode').catch(() => false)));
+    ok('sem erros de JavaScript', !errs.length, errs.slice(0, 3).join(' | ')); await ctx.close(); }
+  // tablet e computador: sem Face ID
+  for (const pi of [2, 4]) { const { ctx, p, errs } = await newPage(b, PROFILES[pi], { os2bio: JSON.stringify({ id: 'AAAA', at: '2026-10-01' }) }); await p.goto(BASE); await unlock(p); await sleep(1200);
+    ok(PROFILES[pi].id + ': sem convite nem botão de Face ID', !/Face ID/.test(await E(p, () => document.getElementById('modal').innerText)) && (await E(p, () => localStorage.getItem('os2bio'))) === null);
+    await E(p, () => location.hash = 'definicoes'); await sleep(300); ok(PROFILES[pi].id + ': Definições dizem "só no iPhone"', /Só disponível no iPhone/.test(await E(p, () => document.querySelector('#view').innerText)));
+    await ctx.close(); }
+  // SINCRONIZAÇÃO: tablet e iPhone na mesma conta
+  { for (const k of Object.keys(STORE)) delete STORE[k];
+    const T = await newPage(b, PROFILES[3]), I = await newPage(b, PROFILES[0]);
+    const GS = `http://127.0.0.1:${PORT}/gs`;
+    // tablet: tem dados, atalho configurado, liga a sincronização
+    await T.p.goto(BASE); await unlock(T.p);
+    await E(T.p, GS => { const U = OS.U, a = OS.all('accounts')[0] || OS.add('accounts', { name: 'Conta', type: 'Conta à ordem' }); OS.add('transactions', { type: 'Despesa', amount: 33, date: U.today(), desc: 'Jantar tablet', cat: 'Alimentação', account: a.id }); OS.add('transactions', { type: 'Despesa', amount: 18, date: U.today(), desc: '18, uber', cat: 'Transporte', account: a.id, tags: ['atalho'] }); const c = OS.one('inbox'); c.url = GS; c.key = 'KEY_T'; c.ver = 3; OS.touch('inbox'); }, GS);
+    await sleep(1200); await E(T.p, () => { localStorage.setItem('os2sync', '1'); localStorage.setItem('os2syncJoined', '0'); }); await T.p.reload(); await unlock(T.p); await sleep(4000);
+    ok('sync: o tablet envia os seus dados para o Google', Object.keys(STORE).some(id => id.startsWith('transactions~')) && JSON.stringify(STORE).includes('Jantar tablet'));
+    ok('limpeza: "18, uber" passa a "Uber"', await E(T.p, () => OS.all('transactions').some(t => t.desc === 'Uber' && t.amount === 18)));
+    // iPhone: tinha outra coisa; liga-se com o código do tablet
+    await I.p.goto(BASE); await unlock(I.p); await E(I.p, () => OS.add('transactions', { type: 'Despesa', amount: 1, date: OS.U.today(), desc: 'só no iPhone' })); await sleep(1000);
+    const code = await E(T.p, () => window.OceanumSync.linkCode());
+    await I.p.goto(BASE + '?r=1#ligar=' + encodeURIComponent(code)); await sleep(500); await unlock(I.p).catch(() => { }); await sleep(4500);
+    ok('sync: o iPhone liga-se com o código e recebe os dados do tablet', await E(I.p, () => OS.all('transactions').some(t => t.desc === 'Jantar tablet')));
+    ok('código de ligação aceite em qualquer formato (link, código, codificado, com espaços)', await E(I.p, c => { const f = [c, encodeURIComponent(c), 'https://x.github.io/Oceanum/#ligar=' + encodeURIComponent(c), 'Abre isto: https://x.github.io/Oceanum/#ligar=' + c + ' ok', c.slice(0, 10) + '\n ' + c.slice(10)]; const r = f.map(x => window.OceanumSync.applyLink(x)); localStorage.setItem('os2syncJoined', '1'); return r.every(Boolean) && !window.OceanumSync.applyLink('lixo'); }, code));
+    ok('sync: a configuração do atalho também passa para o iPhone', await E(I.p, () => !!OS.one('inbox').url && OS.one('inbox').key === 'KEY_T'));
+    // alteração no iPhone aparece no tablet
+    await E(I.p, () => OS.add('transactions', { type: 'Despesa', amount: 7, date: OS.U.today(), desc: 'Café iPhone', cat: 'Alimentação', account: (OS.all('accounts')[0] || {}).id })); await sleep(3000);
+    await E(T.p, () => document.dispatchEvent(new Event('visibilitychange'))); await sleep(3000);
+    ok('sync: o que registas no iPhone aparece no tablet', await E(T.p, () => OS.all('transactions').some(t => t.desc === 'Café iPhone')));
+    // apagar no tablet apaga no iPhone
+    await E(T.p, () => { const t = OS.all('transactions').find(x => x.desc === 'Café iPhone'); OS.del('transactions', t.id); }); await sleep(3000);
+    await E(I.p, () => document.dispatchEvent(new Event('visibilitychange'))); await sleep(3000);
+    ok('sync: apagar num aparelho apaga no outro', await E(I.p, () => !OS.all('transactions').some(t => t.desc === 'Café iPhone')));
+    // gasto do atalho com os dois aparelhos abertos: entra uma só vez
+    INBOX.length = 0; INBOX.push({ id: 'g1', t: new Date().toISOString(), v: 12.5, d: '12,50 mercado', c: '' });
+    await Promise.all([E(T.p, () => OS.Inbox.pull(false)), E(I.p, () => OS.Inbox.pull(false))]); await sleep(3500);
+    await E(T.p, () => document.dispatchEvent(new Event('visibilitychange'))); await E(I.p, () => document.dispatchEvent(new Event('visibilitychange'))); await sleep(3500);
+    const nT = await E(T.p, () => OS.all('transactions').filter(t => t.desc === 'Mercado').length), nI = await E(I.p, () => OS.all('transactions').filter(t => t.desc === 'Mercado').length);
+    ok('sync: gasto do atalho entra uma só vez e aparece nos dois aparelhos', nT === 1 && nI === 1, `tablet ${nT} · iPhone ${nI}`);
+    ok('sem erros de JavaScript (2 aparelhos)', !T.errs.length && !I.errs.length, T.errs.concat(I.errs).slice(0, 3).join(' | '));
+    await T.ctx.close(); await I.ctx.close(); }
+  // segurança Android: sem biometria, registo antigo apagado, opção "entrar direto"
+  { const prof = PROFILES[2]; const { ctx, p, errs } = await newPage(b, prof, { os2bio: JSON.stringify({ id: 'AAAA', at: '2026-10-01' }) }); await p.goto(BASE); await sleep(1200);
+    ok('Android: sem botão de biometria e registo antigo apagado', !(await p.$('#lkBio')) && (await E(p, () => localStorage.getItem('os2bio'))) === null);
+    ok('Android: nenhum pedido biométrico ao abrir', (await E(p, () => window.__cred)) === 0);
+    await unlock(p); await E(p, () => location.hash = 'definicoes'); await sleep(400); await p.click('[data-act=trustSet][data-v="1"]'); await sleep(200);
+    await E(p, () => sessionStorage.clear()); await p.reload(); await sleep(1500);
+    ok('"Entrar direto": abre sem pedir código', !(await p.isVisible('#lkCode').catch(() => false)) && await E(p, () => !!document.querySelector('#view .pn, #view .dash')));
+    await E(p, () => OS.act.lockNow()); await sleep(400); ok('cadeado volta a pedir o código', await p.isVisible('#lkCode'));
+    ok('sem erros de JavaScript', !errs.length, errs.slice(0, 3).join(' | ')); await ctx.close(); }
+  // CORPO: treino estilo Hevy, rotinas, bioimpedância, dieta com base de alimentos, foto (IA simulada), alongamentos, tudo ligado
+  { const { ctx, p, errs } = await newPage(b, PROFILES[0]); await p.goto(BASE); await unlock(p); await E(p, () => document.querySelectorAll('#modal').forEach(m => { m.hidden = true; m.innerHTML = ''; }));
+    ok('biblioteca: mais de 500 exercícios com imagens e 60 alongamentos', await E(p, () => OS.Ex.LIST.length > 500 && OS.ExLib.ST.length >= 60 && OS.Ex.LIST.every(x => x.id && x.name && x.muscle)));
+    ok('base de alimentos: mais de 700 alimentos', await E(p, () => OS.Diet.DB.length > 700 && OS.Diet.DB.every(x => x.name && x.kcal >= 0)));
+    ok('exercícios antigos ligados às imagens', await E(p, () => { const r = OS.all('exercises').find(x => x.name === 'Supino reto com barra'); return !r || !!r.lib; }));
+    // treino vazio → escolher 2 exercícios → registar séries → terminar
+    await E(p, () => location.hash = 'treino'); await sleep(500);
+    await p.click('#view [data-act=wkStart]'); await sleep(700);
+    ok('treino: abre a lista para escolher exercícios', await p.isVisible('#wkPick .wk-pick'));
+    await p.fill('#wkPick [data-pq]', 'supino reto'); await sleep(400);
+    await p.locator('#wkPick [data-p=sel]').nth(0).click(); await sleep(150);
+    await p.fill('#wkPick [data-pq]', 'curl martelo'); await sleep(400); await p.locator('#wkPick [data-p=sel]').nth(0).click(); await sleep(150);
+    await p.click('#wkPick [data-p=ok]'); await sleep(500);
+    ok('treino: 2 exercícios no treino em curso', await E(p, () => document.querySelectorAll('#wkLive .wk-ex').length === 2));
+    const fillSet = async (i, kg, reps) => { await p.locator('#wkLive .wk-tr').nth(i).locator('[data-f=kg]').fill(String(kg)); await p.locator('#wkLive .wk-tr').nth(i).locator('[data-f=reps]').fill(String(reps)); await p.locator('#wkLive .wk-tr').nth(i).locator('[data-w=done]').click(); await sleep(250); };
+    await fillSet(0, 60, 10); await fillSet(1, 62.5, 8);
+    ok('treino: série feita fica verde e o descanso começa', await E(p, () => document.querySelectorAll('#wkLive .wk-tr.done').length === 2 && !!document.querySelector('#wkLive .wk-rest')));
+    ok('treino: volume calculado ao vivo', await E(p, () => /1\.?100 kg/.test(document.querySelector('#wkLive .wk-stats').innerText)));
+    // continua depois de fechar a app
+    await p.reload(); await unlock(p); await sleep(800);
+    ok('treino em curso sobrevive a fechar a app (botão flutuante)', await p.isVisible('#wkPill'));
+    await p.click('#wkPill'); await sleep(500);
+    ok('treino em curso retomado com as séries', await E(p, () => document.querySelectorAll('#wkLive .wk-tr.done').length === 2));
+    await p.locator('#wkLive [data-w=type]').nth(2).click(); await sleep(200);
+    ok('tipo de série: aquecimento', await E(p, () => document.querySelectorAll('#wkLive .wk-sn.tW').length === 1));
+    await p.click('#wkLive [data-w=finish]'); await sleep(800);
+    const W1 = await E(p, () => { const w = OS.all('workouts').slice(-1)[0]; return { n: (w.items || []).length, sets: (w.items[0] || {}).sets, title: w.title, dur: w.dur }; });
+    ok('terminar: treino guardado com as séries feitas', W1.n === 1 && W1.sets.length === 2 && W1.sets[1].kg === 62.5, JSON.stringify(W1).slice(0, 120));
+    ok('terminar: resumo com volume e dicas de dieta e alongamento', await E(p, () => /Treino concluído/.test(document.querySelector('#modal').innerText) && !!document.querySelector('#modal [data-act=stPlay]')));
+    await E(p, () => OS.UI.closeModal());
+    // rotina a partir do treino e recorde no treino seguinte
+    await E(p, () => { const w = OS.all('workouts').slice(-1)[0]; OS.act.wkToRoutine({ dataset: { id: w.id } }); }); await sleep(400);
+    ok('rotina criada a partir do treino', await E(p, () => OS.all('routines').length === 1));
+    await E(p, () => location.hash = 'treino'); await sleep(400); await p.click('#view .wk-rt [data-act=wkStart]'); await sleep(600);
+    ok('rotina: abre com as cargas da última vez', await E(p, () => document.querySelectorAll('#wkLive [data-f=kg]')[1].value === '62.5' && /62,5 kg × 8/.test(document.querySelector('#wkLive .wk-pv').parentNode.parentNode.innerText)));
+    await p.locator('#wkLive .wk-tr').nth(0).locator('[data-f=kg]').fill('70'); await p.locator('#wkLive .wk-tr').nth(0).locator('[data-w=done]').click(); await sleep(200);
+    await p.click('#wkLive [data-w=finish]'); await sleep(800);
+    ok('recorde detetado no treino seguinte', await E(p, () => /Supino reto com barra: 70 kg/.test(document.querySelector('#modal').innerText)));
+    await E(p, () => OS.UI.closeModal());
+    // editor de rotina
+    await E(p, () => OS.Ex.editRoutine('')); await sleep(300); await p.fill('#wkLive .wk-title', 'Pernas A'); await p.click('#wkLive [data-w=pick]'); await sleep(300); await p.fill('#wkPick [data-pq]', 'leg press'); await sleep(300); await p.locator('#wkPick [data-p=sel]').nth(0).click(); await p.click('#wkPick [data-p=ok]'); await sleep(300); await p.click('#wkLive [data-w=rsave]'); await sleep(400);
+    ok('nova rotina guardada com exercícios', await E(p, () => OS.all('routines').some(r => r.name === 'Pernas A' && r.items.length === 1 && r.items[0].sets.length === 3)));
+    // ficha do exercício
+    await E(p, () => location.hash = 'treino.exercicios'); await sleep(500); await p.click('#view .wk-gi'); await sleep(400);
+    ok('ficha do exercício com animação 3D e como fazer', await E(p, () => !document.getElementById('wkInfo').hidden && !!document.querySelector('#wkInfo .a3d') && /Como fazer/.test(document.querySelector('#wkInfo').innerText)));
+    await p.click('#wkInfo [data-x]'); await sleep(200);
+    ok('histórico em cartões', await E(p, () => { location.hash = 'treino.historico'; return true; }) && (await sleep(400), await E(p, () => document.querySelectorAll('#view .wk-card').length >= 2)));
+    // peso, altura e bioimpedância
+    ok('treino já não tem mapa nem peso (passaram para o Corpo)', await E(p, () => { location.hash = 'treino'; return true; }) && (await sleep(300), await E(p, () => !/Mapa corporal|Peso e medidas/.test(document.querySelector('#view .tabs').textContent))));
+    await E(p, () => location.hash = 'corpo.peso'); await sleep(500);
+    ok('corpo: separadores visão, desafios, mapa e peso', await E(p, () => [...document.querySelectorAll('#view .tabs a')].map(a => a.textContent).join('|') === 'Visão|Desafios e metas|Mapa corporal|Peso e medidas'));
+    await p.fill('#bx_h', '178'); await p.dispatchEvent('#bx_h', 'change'); await sleep(200);
+    ok('altura guardada', await E(p, () => OS.one('diet').h === 178));
+    await p.click('#view [data-new=body][data-defs]'); await sleep(400);
+    ok('formulário de bioimpedância com análise segmentar', await E(p, () => !!document.querySelector('#osform [name=lArmL]') && !!document.querySelector('#osform [name=visceral]')));
+    await p.fill('#osform [name=weight]', '80'); await p.fill('#osform [name=bf]', '18'); await p.fill('#osform [name=muscleKg]', '37.5'); await p.fill('#osform [name=visceral]', '7'); await p.fill('#osform [name=bmr]', '1800'); await p.fill('#osform [name=lArmL]', '3.6'); await p.fill('#osform [name=lArmR]', '4.0'); await p.click('#osform [type=submit]'); await sleep(600);
+    ok('bioimpedância: faixas de referência e IMC', await E(p, () => { const t = document.querySelector('#view').textContent; return /Faixas de referência/.test(t) && /IMC/.test(t) && /25,2/.test(t) && document.querySelectorAll('#view .gz').length >= 4; }));
+    ok('bioimpedância: aviso de diferença entre braços', await E(p, () => /Diferença entre braços/.test(document.querySelector('#view').textContent)));
+    ok('metabolismo medido usado nas metas', await E(p, () => OS.BodyX.bmr() === 1800 && OS.BodyX.lean() > 65));
+    // dieta: procurar, gramas, porções
+    await E(p, () => location.hash = 'dieta'); await sleep(500);
+    await p.click('#view .dt-acts [data-act=dietAdd]'); await sleep(300); await p.fill('#fdAdd [data-fq]', 'peito frango grelhado'); await sleep(500);
+    ok('dieta: procurar encontra o alimento certo primeiro', await E(p, () => /Peito de frango/.test(document.querySelector('#fdAdd .fd-r').innerText)));
+    await p.click('#fdAdd .fd-r'); await sleep(250); await p.fill('#fdAdd [data-famt]', '200'); await p.dispatchEvent('#fdAdd [data-famt]', 'change'); await sleep(250);
+    await p.click('#fdAdd [data-fa=add]'); await sleep(300);
+    ok('dieta: 200 g de frango = macros certas', await E(p, () => { const m = OS.all('meals').slice(-1)[0]; return m.g === 200 && m.kcal === 318 && m.p === 64; }), await E(p, () => JSON.stringify(OS.all('meals').slice(-1)[0])));
+    await p.fill('#fdAdd [data-fq]', 'banana'); await sleep(400); await p.click('#fdAdd .fd-r'); await sleep(250);
+    ok('dieta: porção típica (unidade)', await E(p, () => document.querySelector('#fdAdd [data-funit]').value === 'u'));
+    await p.click('#fdAdd [data-fa=add]'); await sleep(200); await p.click('#fdAdd [data-fa=x]'); await sleep(400);
+    ok('dieta: refeições com fotos dos alimentos', await E(p, () => document.querySelectorAll('#view .dt-it .fdi').length >= 2));
+    // refeição fixa
+    await E(p, () => OS.act.tplEdit({ dataset: {} })); await sleep(300); await p.fill('#fdAdd [data-ftn]', 'Pequeno-almoço de sempre'); await p.dispatchEvent('#fdAdd [data-ftn]', 'input');
+    for (const q of ['aveia', 'whey']) { await p.fill('#fdAdd [data-fq]', q); await sleep(350); await p.click('#fdAdd .fd-r'); await sleep(200); await p.click('#fdAdd [data-fa=add]'); await sleep(200); }
+    await p.click('#fdAdd [data-fa=tplsave]'); await sleep(400);
+    ok('refeição fixa criada com 2 alimentos', await E(p, () => OS.all('mealtpl').length === 1 && OS.all('mealtpl')[0].items.length === 2));
+    const n0 = await E(p, () => OS.all('meals').length); await E(p, () => location.hash = 'dieta.fixas'); await sleep(400); await p.click('#view .tp-c [data-act=tplApply]'); await sleep(300);
+    ok('refeição fixa adicionada com um toque', (await E(p, () => OS.all('meals').length)) === n0 + 2);
+    // foto com IA (resposta simulada)
+    const GEM = (txt) => ({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify(txt) }] } }] }) });
+    await ctx.route(/generativelanguage\.googleapis\.com/, rt => { const b = rt.request().postData() || '';
+      if (/Analisa este exame/.test(b)) return rt.fulfill(GEM({ resumo: 'Estás com gordura média e boa base muscular.', nota: 72, fortes: ['Boa massa muscular'], melhorar: [{ area: 'Gordura abdominal', prioridade: 'alta', porque: 'Cintura de 86 cm.', como: 'Défice de 400 kcal e 3 corridas por semana.' }], metas: [{ medida: 'Gordura', atual: '18%', alvo: '15%', prazo: '8 semanas' }], treino: ['Mais séries de pernas'], dieta: ['Proteína 170 g'], corrida: ['2 rodagens leves'], evolucao: null }));
+      if (/fotos do corpo/.test(b)) return rt.fulfill(GEM({ bf: 17, confianca: 'media', musculo: 'bom', fortes: ['peito'], fracas: ['pernas'], gordura_local: 'abdómen', postura: null, foto_valida: true }));
+      return rt.fulfill(GEM({ itens: [{ nome: 'Arroz branco cozido', gramas: 150, kcal: 195, proteina: 4, hidratos: 42, gordura: .5, fibra: 1 }, { nome: 'Bife grelhado', gramas: 120, kcal: 260, proteina: 34, hidratos: 0, gordura: 13 }], nota: 'Prato de almoço' })); });
+    await E(p, () => location.hash = 'dieta'); await sleep(300); await E(p, () => OS.act.dietAdd({ dataset: { tab: 'foto' } })); await sleep(300);
+    ok('foto: explica como ligar a IA (grátis)', await E(p, () => /aistudio\.google\.com/.test(document.querySelector('#fdAdd').innerHTML)));
+    await p.fill('#fdAdd [data-phkey]', 'AIzaTESTE_chave_de_teste_1234567890'); await p.click('#fdAdd [data-fa=phkey]'); await sleep(300);
+    const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+    await p.setInputFiles('#fdCam', { name: 'prato.png', mimeType: 'image/png', buffer: png }); await sleep(1500);
+    ok('foto: a IA identifica os alimentos', await E(p, () => document.querySelectorAll('#fdAdd .fd-phl>div').length === 2));
+    await p.fill('#fdAdd [data-phg="0"]', '300'); await p.dispatchEvent('#fdAdd [data-phg="0"]', 'change'); await sleep(300);
+    const n1 = await E(p, () => OS.all('meals').length); await p.click('#fdAdd [data-fa=phadd]'); await sleep(400);
+    ok('foto: corrigir gramas reescala as calorias e regista', await E(p, n1 => OS.all('meals').length === n1 + 2 && OS.all('meals').some(m => m.food === 'Arroz branco cozido' && m.kcal === 390 && m.src === 'foto'), n1));
+    // marcas reais com foto da embalagem
+    await E(p, () => OS.act.dietAdd({ dataset: {} })); await sleep(300); await p.fill('#fdAdd [data-fq]', 'coca cola zero'); await sleep(500);
+    ok('marcas: produtos reais com marca e foto', await E(p, () => !!document.querySelector('#fdAdd .fd-r .fd-br') && !!document.querySelector('#fdAdd .fd-r .fdi.brand')));
+    await E(p, () => [...document.querySelectorAll('#fdAdd .fd-r')].find(r => r.querySelector('.fdi.brand')).click()); await sleep(250); await p.click('#fdAdd [data-fa=add]'); await sleep(250); await p.click('#fdAdd [data-fa=x]'); await sleep(300);
+    ok('marcas: refeição guarda a foto do produto', await E(p, () => { const m = OS.all('meals').slice(-1)[0]; return /\(/.test(m.food) && /openfoodfacts/.test(m.pic); }));
+    await ctx.route(/pt\.wikipedia\.org\/w\/api\.php/, rt => { const q = new URL(rt.request().url()).searchParams.get('gsrsearch'); rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ query: { pages: { 1: { index: 1, title: q, thumbnail: { source: 'https://upload.wikimedia.org/x/' + encodeURIComponent(q) + '.jpg' } } } } }) }); });
+    await ctx.route(/upload\.wikimedia\.org\/x\//, rt => rt.fulfill({ status: 200, contentType: 'image/png', body: png }));
+    // país e marcas por país (Open Food Facts simulado)
+    await ctx.route(/openfoodfacts\.org\/cgi\/search\.pl/, rt => { const u = new URL(rt.request().url()), c = u.searchParams.get('tag_0'), br = c === 'brazil' ? 'Renata' : 'Milaneza';
+      rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ products: [{ code: '56' + br.length, product_name: 'Esparguete ' + br, brands: br, image_front_small_url: 'https://images.openfoodfacts.org/x/' + br + '.jpg', nutriments: { 'energy-kcal_100g': 359, proteins_100g: 12, carbohydrates_100g: 71, fat_100g: 1.5, fiber_100g: 3 } }] }) }); });
+    await E(p, () => location.hash = 'visao'); await sleep(400);
+    ok('país: botão na página inicial', await E(p, () => /Portugal/.test((document.querySelector('#view .ctry-bar .ctry') || {}).textContent || '')));
+    await E(p, () => OS.act.dietAdd({ dataset: {} })); await sleep(300); await p.fill('#fdAdd [data-fq]', 'esparguete cozida'); await sleep(500);
+    await E(p, () => [...document.querySelectorAll('#fdAdd .fd-r')].find(r => /Massa esparguete/.test(r.textContent)).click()); await sleep(800);
+    ok('marcas: ao tocar no alimento escolhe-se a marca', await E(p, () => { const t = document.querySelector('#fdAdd .fd-brands').textContent, c = [...document.querySelectorAll('#fdAdd .fd-bc')].map(b => b.textContent).join('|'); return /Sem marca/.test(t) && /Milaneza/.test(c) && !/Renata/.test(t); }));
+    await E(p, () => [...document.querySelectorAll('#fdAdd .fd-bc')].find(b => /Milaneza/.test(b.textContent)).click()); await sleep(250);
+    await p.click('#fdAdd [data-fa=add]'); await sleep(250); await p.click('#fdAdd [data-fa=x]'); await sleep(300);
+    ok('marcas: regista o alimento com a marca escolhida', await E(p, () => /Milaneza/.test(OS.all('meals').slice(-1)[0].food)));
+    await E(p, () => location.hash = 'visao'); await sleep(300); await p.click('#view .ctry-bar .ctry'); await sleep(250); await p.click('#modal [data-act=countrySet][data-v=BR]'); await sleep(300);
+    ok('país: muda para Brasil', await E(p, () => OS.Country.code() === 'BR' && /Brasil/.test(document.querySelector('#view .ctry-bar').textContent)));
+    await E(p, () => OS.act.dietAdd({ dataset: {} })); await sleep(300); await p.fill('#fdAdd [data-fq]', 'esparguete cozida'); await sleep(500);
+    await E(p, () => [...document.querySelectorAll('#fdAdd .fd-r')].find(r => /Massa esparguete/.test(r.textContent)).click()); await sleep(800);
+    ok('marcas: mudam conforme o país', await E(p, () => { const t = document.querySelector('#fdAdd .fd-brands').textContent; return /Renata/.test(t) && !/Milaneza/.test(t); }));
+    await E(p, () => OS.setOne('profile', { country: 'PT' })); await E(p, () => OS.act.dietAdd({ dataset: {} })); await sleep(300); await p.fill('#fdAdd [data-fq]', 'ovos'); await sleep(500);
+    await E(p, () => [...document.querySelectorAll('#fdAdd .fd-r')].find(r => /^Ovos$/.test(r.querySelector('b').textContent.trim())).click()); await sleep(1200);
+    ok('marcas certas: nos ovos só aparecem ovos (nada de massa ou salsichas)', await E(p, () => { const c = [...document.querySelectorAll('#fdAdd .fd-bc small')].map(x => x.textContent); return c.length >= 5 && c.every(t => /ovo|egg|oeuf|huevo/i.test(t)) && !c.some(t => /massa|pasta|tagliat|salsich|atum|wrap/i.test(t)); }));
+    await p.click('#fdAdd [data-fa=back]'); await sleep(200); await p.fill('#fdAdd [data-fq]', 'batata frita fast'); await sleep(500);
+    await E(p, () => [...document.querySelectorAll('#fdAdd .fd-r')].find(r => /Batata frita \(fast food\)/.test(r.textContent)).click()); await sleep(1200);
+    ok('marcas certas: na batata frita não aparece batata palha nem chips', await E(p, () => { const c = [...document.querySelectorAll('#fdAdd .fd-bc')].map(x => x.textContent); return c.some(t => /McDonald/.test(t)) && c.some(t => /Burger King/.test(t)) && !c.some(t => /palha|chips|onduladas|crisps/i.test(t)); }));
+    await E(p, () => OS.setOne('profile', { country: 'BR' }));
+    ok('fast food conforme o país', await E(p, () => OS.Diet.search('coxinha padaria', 20).some(x => /Padaria/.test(x.brand || '')) ));
+    await p.click('#fdAdd [data-fa=x]'); await sleep(200);
+    ok('refeições já guardadas com marca de outro país ficam iguais', await E(p, () => OS.all('meals').some(m => /Milaneza/.test(m.food))));
+    await E(p, () => OS.setOne('profile', { country: 'PT' })); await sleep(100);
+    ok('fast food de outro país não aparece', await E(p, () => !OS.Diet.search('coxinha padaria', 20).some(x => /Padaria/.test(x.brand || ''))));
+    { const bad = await E(p, () => OS.Diet.DB.filter(x => !OS.Diet.pic(x.name, x.cat).u).map(x => x.name)); ok('alimentos sem emojis: todos com foto real', !bad.length, bad.slice(0, 4).join(', ')); }
+    ok('alimentos agrupados: cada alimento uma vez, com as variantes lá dentro', await E(p, () => { const G = OS.Diet.GR, a = G.find(g => g.name === 'Arroz integral'); return G.length > 350 && a && a.vars.map(v => v.l).join() === 'Cozido,Cru' && OS.Diet.DB.filter(x => !x.g).length === 0; }));
+    ok('cada alimento tem a sua foto (sem repetir)', await E(p, () => { const G = OS.Diet.GR, u = G.map(g => g.pic).filter(Boolean); return u.length === G.length && new Set(u).size >= G.length * .97; }), await E(p, () => OS.Diet.GR.filter(g => !g.pic).map(g => g.name).slice(0, 5).join(', ')));
+    ok('cada alimento tem descrição', await E(p, () => OS.Diet.GR.every(g => g.desc && g.desc.length > 15)));
+    await E(p, () => OS.act.dietAdd({ dataset: {} })); await sleep(300); await p.fill('#fdAdd [data-fq]', 'arroz tipo 1'); await sleep(500);
+    await E(p, () => [...document.querySelectorAll('#fdAdd .fd-r')].find(r => /Arroz branco tipo 1/.test(r.textContent)).click()); await sleep(400);
+    ok('ao tocar no arroz aparecem as opções (cozido / cru) e as marcas', await E(p, () => [...document.querySelectorAll('#fdAdd [data-fa=var]')].map(b => b.textContent).join() === 'Cozido,Cru' && /Cigala/.test(document.querySelector('#fdAdd .fd-brands').textContent)));
+    await E(p, () => document.querySelector('#fdAdd [data-fa=var][data-k="1"]').click()); await sleep(200); await E(p, () => [...document.querySelectorAll('#fdAdd .fd-brands [data-fa=bname], #fdAdd .fd-brands [data-fa=brand]')].find(b => /Cigala/.test(b.textContent)).click()); await sleep(200);
+    await p.click('#fdAdd [data-fa=add]'); await sleep(250); await p.click('#fdAdd [data-fa=x]'); await sleep(300);
+    ok('regista com a opção e a marca escolhidas', await E(p, () => { const m = OS.all('meals').slice(-1)[0]; return /Cigala/.test(m.food) && /arroz|cru/i.test(m.food) && m.kcal > 300 && m.kcal < 400 && !!m.pic; }), await E(p, () => JSON.stringify(OS.all('meals').slice(-1)[0])));
+    await E(p, () => location.hash = 'dieta.alimentos'); await sleep(600);
+    ok('biblioteca de alimentos com fotos e descrições', await E(p, () => document.querySelectorAll('#view .fd-gi .fd-gd').length >= 40 && document.querySelectorAll('#view .fd-gi img').length >= 40));
+    // exame de composição corporal feito pela IA
+    await E(p, () => location.hash = 'corpo.peso'); await sleep(400); await p.click('#view [data-act=bioExam]'); await sleep(300);
+    await p.fill('#ex_weight', '81'); await p.fill('#ex_age', '24'); await p.fill('#ex_waist', '86'); await p.fill('#ex_neck', '38'); await p.click('#modal [data-act=exNext]'); await sleep(300);
+    ok('exame IA: passo das fotos', await E(p, () => document.querySelectorAll('#modal .ex-pc').length === 3));
+    await p.setInputFiles('#exph_front', { name: 'f.png', mimeType: 'image/png', buffer: png }); await sleep(600);
+    await p.click('#modal [data-act=exRun]'); await sleep(2500);
+    const bx = await E(p, () => { const b = OS.all('body').filter(x => x.src === 'ia').pop(); return b ? { bf: b.bf, lean: b.leanKg, bmr: b.bmr, vis: b.visceral, look: !!b.look, ai: !!b.ai } : null; });
+    ok('exame IA: resultado completo (gordura, magra, metabolismo, visceral)', bx && bx.bf > 10 && bx.bf < 25 && bx.lean > 55 && bx.bmr > 1500 && bx.vis >= 1 && bx.look, JSON.stringify(bx));
+    ok('exame IA: análise com onde melhorar', await E(p, () => { const t = document.querySelector('#view').textContent; return /Gordura abdominal/.test(t) && /Défice de 400 kcal/.test(t) && /Metas para o próximo exame/.test(t); }));
+    ok('exame IA: estimativa sem fotos também funciona', await E(p, () => { const e = OS.BioAI.estimate({ weight: 81, h: 178, age: 24, sex: 'M', waist: 86, neck: 38 }); return e.bf > 12 && e.bf < 22 && e.muscleKg > 30; }));
+    // vídeo da execução no treino
+    await E(p, () => OS.Ex.start({})); await sleep(400); await E(p, () => { const h = document.getElementById('wkPick'); h.hidden = true; }); await E(p, () => { const id = OS.Ex.ensure('Barbell_Squat'); OS.Ex.live().items.push({ ex: id, rest: 90, sets: [{ t: 'N', kg: '', reps: '' }] }); OS.Ex.live(); }); await E(p, () => OS.act.wkResume()); await sleep(300);
+    await ctx.route(/youtube-nocookie\.com/, rt => rt.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>v</title>' }));
+    ok('vídeos escolhidos para os exercícios', await E(p, () => Object.keys(OS.ExLib.VID || {}).length > 400));
+    await p.click('#wkLive .wk-vb'); await sleep(400);
+    ok('treino: vídeo da execução toca dentro da app', await E(p, () => /youtube-nocookie\.com\/embed\/[\w-]{11}/.test((document.querySelector('#wkInfo .wk-player iframe') || {}).src || '')));
+    if (await p.$('#wkInfo .wk-vsel [data-k="1"]')) { await p.click('#wkInfo .wk-vsel [data-k="1"]'); await sleep(200); }
+    ok('ficha: vários vídeos bons para escolher', await E(p, () => document.querySelectorAll('#wkInfo .wk-vsel [data-k]').length >= 2 && document.querySelector('#wkInfo .wk-vsel [data-k="1"]').classList.contains('on')));
+    await p.click('#wkInfo [data-xmode="3d"]'); await sleep(300);
+    ok('ficha: alterna entre vídeo e animação 3D', await E(p, () => !document.querySelector('#wkInfo iframe') && !!document.querySelector('#wkInfo .a3d') && !!document.querySelector('#wkInfo [data-xmode="vid"]')));
+    await p.waitForFunction(() => { const a = document.querySelector('#wkInfo .a3d'); return a && (a.querySelector('canvas') || a.classList.contains('fail') || a.querySelector('svg')); }, null, { timeout: 20000 }).catch(() => { });
+    ok('ficha: animação 3D (ou recurso) aparece', await E(p, () => { const a = document.querySelector('#wkInfo .a3d'); return !!a && !!(a.querySelector('canvas') || a.querySelector('svg')); }));
+    await p.click('#wkInfo [data-xmode="img"]'); await sleep(200);
+    ok('ficha: modo fotos', await E(p, () => !document.querySelector('#wkInfo .a3d') && !!document.querySelector('#wkInfo .wk-media img')));
+    await p.click('#wkInfo [data-x]'); await sleep(200);
+    ok('fechar a ficha para o vídeo', await E(p, () => !document.querySelector('#wkInfo iframe')));
+    await p.click('#wkLive .wk-th-b'); await sleep(300);
+    ok('ficha: abre na animação 3D com botão do vídeo', await E(p, () => !!document.querySelector('#wkInfo .a3d') && !!document.querySelector('#wkInfo [data-xmode="vid"]')));
+    await p.click('#wkInfo [data-x]'); await E(p, () => { document.querySelector('#wkLive [data-w=discard]').click(); }); await sleep(200); await E(p, () => document.querySelector('#modal [data-mok]').click()); await sleep(200);
+    ok('animação certa: extensão de pernas na cadeira extensora (não agachamento)', await E(p, () => OS.Anim.pattern({ name: 'Extensão de pernas', muscle: 'Quadríceps' }) === 'legext' && OS.Anim.pattern({ name: 'Agachamento búlgaro com halteres', muscle: 'Quadríceps' }) === 'lunge' && OS.Anim.pattern({ name: 'Abdominal no banco declinado', muscle: 'Abdómen' }) === 'situp' && OS.Anim3D.setup('kneelcrunch', 'Abdominal no cabo (ajoelhado)', 'Cabo').att === 'rope'));
+    // simuladores seguem o país
+    // taxas ao vivo: fontes oficiais simuladas (Eurostat, BCE, Banco Central do Brasil); EUA sem ligação
+    const BCBV = { 13522: '4.22', 4389: '13.65', 432: '13.75', 195: '0.6624', 20742: '110.22', 20746: '24.12' };
+    await ctx.route(/ec\.europa\.eu\/eurostat/, rt => rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ dimension: { time: { category: { index: { '2026-09': 0 } } } }, value: { 0: 3.6 } }) }));
+    await ctx.route(/data-api\.ecb\.europa\.eu/, rt => { const u = rt.request().url(), cc = (u.match(/MIR\/M\.(\w\w)\./) || [])[1];
+      rt.fulfill({ status: 200, contentType: 'text/csv', headers: { 'Access-Control-Allow-Origin': '*' }, body: /\/FM\//.test(u) ? 'KEY,TITLE,TIME_PERIOD,OBS_VALUE\nFM.D.U2.EUR.4F.KR.DFR.LEV,"Deposit facility, rate",2026-10-01,2.5\n' : `KEY,TIME_PERIOD,OBS_VALUE\nMIR.M.${cc}.B.L22.F.R.A.2250.EUR.N,2026-08,1.62\nMIR.M.${cc}.B.A2B.A.R.A.2250.EUR.N,2026-08,8.98\n` }); });
+    await ctx.route(/api\.bcb\.gov\.br/, rt => { const n = rt.request().url().match(/sgs\.(\d+)/)[1]; rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify([{ data: '01/08/2026', valor: BCBV[n] }]) }); });
+    await ctx.route(/api\.bls\.gov|fiscaldata\.treasury|sdmx\.oecd/, rt => rt.abort());
+    await E(p, () => { OS.setOne('profile', { country: 'PT' }); location.hash = 'simuladores'; }); await sleep(400);
+    ok('simuladores: em Portugal usa € e 28% de imposto', await E(p, () => { const t = document.querySelector('#view').textContent; return /€ /.test(document.querySelector('#view .sim-out .kpis').textContent) && /28%/.test(t) && /Portugal/.test(document.querySelector('#view .sim-cty').textContent) && /Líquido de impostos/.test(t); }));
+    await sleep(900);
+    ok('ao vivo: inflação de Portugal vem do Eurostat e entra no simulador', await E(p, () => { const b = document.querySelector('#view .lv-bar').textContent, i = document.querySelector('#view [data-sim="juros.inf"]'); return /Ao vivo/.test(b) && /Inflação 3,6%/.test(b) && /Eurostat/.test(b) && i.value == '3.6' && /ao vivo/.test(i.closest('.fld').querySelector('label').textContent); }));
+    await E(p, () => location.hash = 'simuladores.emprestimo'); await sleep(300);
+    const ptLoan = await E(p, () => document.querySelector('#view .sim-out').textContent);
+    ok('ao vivo: crédito ao consumo do BCE como taxa do empréstimo', await E(p, () => document.querySelector('#view [data-sim="emprestimo.r"]').value == '8.98'));
+    ok('simuladores: empréstimo em Portugal mostra TAN e TAEG com Imposto do Selo', /TAEG/.test(ptLoan) && /Imposto do Selo/.test(ptLoan) && await E(p, () => /TAN/.test(document.querySelector('#view .sim-in').textContent)));
+    await E(p, () => OS.setOne('profile', { country: 'BR' })); await sleep(400);
+    ok('simuladores: no Brasil usa R$, juros ao mês e CET com IOF', await E(p, () => { const o = document.querySelector('#view .sim-out').textContent, i = document.querySelector('#view .sim-in').textContent; return /R\$/.test(o) && !/€/.test(o) && /CET/.test(o) && /IOF/.test(o) && /ao mês/.test(i) && /Tabela Price/.test(i) && /SAC/.test(i); }));
+    ok('simuladores: custo efetivo de um crédito sem juros é 0%', await E(p, () => { const r = OS.SimCalc.effRate(10000, Array(12).fill(10000 / 12)); return Math.abs(r) < 1e-6; }));
+    await sleep(700);
+    ok('ao vivo: no Brasil a taxa do crédito pessoal vem do BCB, ao mês', await E(p, () => { const v = +document.querySelector('#view [data-sim="emprestimo_BR.r"]').value; return Math.abs(v - 6.39) < .02 && /Banco Central do Brasil/.test(document.querySelector('#view .lv-bar').textContent) && /Selic 13,75%/.test(document.querySelector('#view .lv-bar').textContent); }));
+    await E(p, () => location.hash = 'simuladores.taxas'); await sleep(300);
+    ok('simuladores: comparar taxas com produtos do Brasil (poupança isenta, CDI)', await E(p, () => { const t = document.querySelector('#view .sim-out').textContent; return /Poupança/.test(t) && /CDI/.test(t) && /isento/.test(t); }));
+    ok('ao vivo: CDI e LCI/LCA (90% do CDI) atualizados', await E(p, () => { const g = k => +document.querySelector(`#view [data-sim="taxas_BR.${k}"]`).value; return g('r2') === 13.65 && Math.abs(g('r3') - 12.29) < .02 && Math.abs(g('r1') - 8.24) < .02; }));
+    await E(p, () => { document.querySelector('#view [data-sim="taxas_BR.r1"]').value = '7'; document.querySelector('#view [data-sim="taxas_BR.r1"]').dispatchEvent(new Event('change', { bubbles: true })); }); await sleep(300);
+    await E(p, () => OS.setOne('profile', { country: 'PT' })); await sleep(400);
+    ok('simuladores: cada país guarda os seus valores', await E(p, () => (OS.ui.sim_taxas_BR || {}).r1 == 7 && !/Poupança/.test(document.querySelector('#view .sim-out').textContent) && /Depósito a prazo/.test(document.querySelector('#view .sim-out').textContent)));
+    // assistente de decisão com IA (Gemini simulado)
+    let simPrompt = '';
+    await ctx.route(/generativelanguage/, rt => { const b = rt.request().postData() || ''; if (!/SIMULADOR/.test(b)) return rt.fallback(); simPrompt = JSON.parse(b).contents[0].parts[0].text;
+      rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify({ nivel: 'atencao', veredicto: 'Completa primeiro a reserva de emergência.', resposta: 'Vais pagar muitos juros.', porque: ['TAEG alta'], riscos: ['Sem reserva'], cenarios: [{ titulo: 'Prazo mais curto', valores: { n: 36, hack: 1 }, efeito: 'Menos juros' }], passos: ['Comparar 3 bancos'], falta: ['Para que é o crédito?'] }) }] } }] }) }); });
+    const oldKey = await E(p, () => OS.one('diet').aiKey || '');
+    await E(p, () => { OS.setOne('diet', { aiKey: '' }); location.hash = 'simuladores.emprestimo'; }); await sleep(400);
+    ok('IA nos simuladores: painel do assistente com sugestões', await E(p, () => /Assistente de decisão/.test(document.querySelector('#view .sim-ai').textContent) && document.querySelectorAll('#view .sai-chips .chip').length >= 2));
+    await p.click('#view .sai-chips .chip'); await sleep(300);
+    ok('IA nos simuladores: sem chave pede para ligar a IA', await E(p, () => /Ligar a IA/.test(document.querySelector('#view .sim-ai').textContent)));
+    await E(p, () => OS.setOne('diet', { aiKey: 'AIzaTESTE_TESTE_TESTE_TESTE' })); await sleep(200);
+    await p.click('#view .sai-chips .chip'); await sleep(900);
+    ok('IA nos simuladores: responde com veredicto, riscos e passos', await E(p, () => { const t = document.querySelector('#view .sim-ai').textContent; return /Completa primeiro a reserva/.test(t) && /Riscos/.test(t) && /Comparar 3 bancos/.test(t) && /Prazo \(meses\): 36/.test(t); }));
+    ok('IA nos simuladores: a IA recebe a simulação, as regras do país e as finanças', /"campo":"n"/.test(simPrompt) && /TAEG/.test(simPrompt) && /SITUAÇÃO FINANCEIRA REAL/.test(simPrompt) && /Portugal/.test(simPrompt) && /Ao vivo/.test(simPrompt));
+    await p.click('#view [data-act=simAIApply][data-i="0"]'); await sleep(400);
+    ok('IA nos simuladores: "Testar" aplica o cenário (e ignora campos inventados)', await E(p, () => document.querySelector('#view [data-sim="emprestimo.n"]').value == '36' && !('hack' in (OS.ui.sim_emprestimo || {}))));
+    await E(p, k => OS.setOne('diet', { aiKey: k }), oldKey);
+    await E(p, () => { OS.setOne('profile', { country: 'US' }); location.hash = 'simuladores'; }); await sleep(1200);
+    ok('ao vivo: sem ligação usa os valores de referência e avisa', await E(p, () => /Sem ligação/.test(document.querySelector('#view .lv-bar').textContent) && document.querySelector('#view [data-sim="juros_US.inf"]').value == '2.8'));
+    await E(p, () => OS.setOne('profile', { country: 'PT' }));
+    // INVESTIMENTOS: cotações ao vivo (script Google simulado), renda fixa, rentabilidade, risco, mercado, importação, impostos e IA
+    const T0 = Math.floor(Date.now() / 1000), hist = (b, drift) => { const t = [], c = []; for (let i = 420; i >= 0; i--) { t.push(T0 - i * 86400); c.push(Math.round(b * Math.pow(1 + drift, 420 - i) * (1 + .02 * Math.sin(i / 6)) * 100) / 100); } return { cur: 'EUR', t, c, div: [[T0 - 40 * 86400, 0.5]], spl: [] }; };
+    const QT = { 'VWCE.DE': { p: 171.14, pc: 169.38, cur: 'EUR', nm: 'Vanguard FTSE All-World', ex: 'XETRA', open: true, d: [169, 170, 171.14], h52: 172, l52: 138 }, 'TST.LS': { p: 10, pc: 10.5, cur: 'EUR', nm: 'Teste SA', ex: 'Lisbon', open: true, d: [10.5, 10] } };
+    await ctx.route(/script\.google\.com/, rt => { const u = new URL(rt.request().url()), op = u.searchParams.get('op'); let body;
+      if (op === 'q') { const o = {}; String(u.searchParams.get('s') || '').split(',').forEach(s => { if (QT[s]) o[s] = QT[s]; }); body = { ok: true, q: o }; }
+      else if (op === 'h') { const s = u.searchParams.get('s'); body = { ok: true, h: s === 'TST.LS' ? hist(12, -.0004) : hist(140, .0005) }; }
+      else if (op === 's') body = { ok: true, q: [{ s: 'TST.LS', n: 'Teste SA', t: 'EQUITY', ty: 'Ação', ex: 'Lisboa' }], news: [{ ti: 'Notícia de teste', l: 'https://example.com', pub: 'Teste', t: T0 }] };
+      else if (op === 'f') body = { ok: true, f: { sum: { assetProfile: { longBusinessSummary: 'Test company that makes tests.', sector: 'Tecnologia', industry: 'Software', country: 'Portugal', companyOfficers: [{ name: 'Ana Teste', title: 'CEO', age: 45 }] }, price: { longName: 'Teste SA', currency: 'EUR', regularMarketPrice: { raw: 10 }, marketCap: { raw: 1e9 } }, summaryDetail: { trailingPE: { raw: 12 }, dividendYield: { raw: .07 }, dividendRate: { raw: .7 }, payoutRatio: { raw: .5 } }, financialData: { returnOnEquity: { raw: .2 }, profitMargins: { raw: .15 }, currentRatio: { raw: 2 }, targetMeanPrice: { raw: 12 }, numberOfAnalystOpinions: { raw: 5 } }, defaultKeyStatistics: { priceToBook: { raw: 1.2 }, trailingEps: { raw: .8 }, bookValue: { raw: 8 } }, majorHoldersBreakdown: { insidersPercentHeld: { raw: .3 }, institutionsPercentHeld: { raw: .4 }, institutionsCount: { raw: 12 } }, institutionOwnership: { ownershipList: [{ organization: 'Fundo X', pctHeld: { raw: .05 }, value: { raw: 5e7 } }] }, recommendationTrend: { trend: [{ strongBuy: 1, buy: 2, hold: 2, sell: 0, strongSell: 0 }] } },
+        ts: { annualTotalRevenue: [['2023-12-31', 1e9, 'EUR'], ['2024-12-31', 1.1e9, 'EUR']], annualNetIncome: [['2023-12-31', 1e8, 'EUR'], ['2024-12-31', 1.2e8, 'EUR']], annualTotalAssets: [['2023-12-31', 2e9, 'EUR'], ['2024-12-31', 2.1e9, 'EUR']], annualOperatingCashFlow: [['2023-12-31', 1.3e8, 'EUR'], ['2024-12-31', 1.5e8, 'EUR']] } } };
+      else if (op === 'ping') body = { ok: true, v: 5 }; else return rt.fallback();
+      rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify(body) }); });
+    await ctx.route(/frankfurter/, rt => rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ date: '2026-10-02', rates: { USD: 1.12, BRL: 5.86, GBP: .85 } }) }));
+    await ctx.route(/coingecko/, rt => rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: '{}' }));
+    await E(p, () => { const c = OS.one('inbox'); c.__old = { url: c.url, key: c.key, ver: c.ver }; c.url = 'https://script.google.com/macros/s/TESTE/exec'; c.key = 'k'; c.ver = 4; OS.touch('inbox');
+      const d = n => OS.U.addDays(OS.U.today(), -n);
+      const a = OS.add('assets', { name: 'Vanguard FTSE All-World', ticker: 'VWCE', sym: 'VWCE.DE', cls: 'ETF', currency: 'EUR' }); OS.add('invtx', { asset: a.id, type: 'Compra', date: d(400), qty: 10, price: 120 });
+      const b = OS.add('assets', { name: 'Teste SA', ticker: 'TST', sym: 'TST.LS', cls: 'Ação', currency: 'EUR' }); OS.add('invtx', { asset: b.id, type: 'Compra', date: d(300), qty: 100, price: 12 }); OS.add('invtx', { asset: b.id, type: 'Venda', date: d(10), qty: 20, price: 10.2 });
+      const r = OS.add('assets', { name: 'Depósito teste', cls: 'Depósito a prazo', idx: 'Pré-fixado', rate: 3, currency: 'EUR' }); OS.add('invtx', { asset: r.id, type: 'Compra', date: d(365), qty: 1, price: 1000 });
+      OS.InvX.tick(true); location.hash = 'investimentos.carteira'; }); await sleep(1500);
+    ok('investimentos: cotação ao vivo do script (Yahoo) na carteira', await E(p, () => { const t = document.querySelector('#view').textContent; return /171,14/.test(t) && /Ao vivo/.test(t) && OS.InvX.st.script === 'ok'; }));
+    ok('investimentos: variação do dia calculada ao vivo', await E(p, () => { const pp = OS.Inv.pos(OS.all('assets').find(a => a.sym === 'VWCE.DE')); return Math.abs(pp.dayPct - (171.14 / 169.38 - 1)) < 1e-6 && Math.abs(pp.value - 1711.4) < .01; }));
+    ok('investimentos: renda fixa rende sozinha (3% ao ano)', await E(p, () => { const pp = OS.Inv.pos(OS.all('assets').find(a => a.name === 'Depósito teste')); return Math.abs(pp.value - 1030) < 1 && pp.rf && pp.tax > 0; }));
+    await E(p, () => location.hash = 'investimentos.rentabilidade'); for (let i = 0; i < 20 && !(await E(p, () => !!OS.InvX.hcache)); i++) await sleep(300); await sleep(500);
+    ok('investimentos: rentabilidade com histórico (TWR, TIR, volatilidade, Sharpe)', await E(p, () => { const t = document.querySelector('#view').textContent, m = OS.InvX.metrics(OS.InvX.hcache); return /Volatilidade/.test(t) && /Sharpe/.test(t) && /mês a mês/.test(t) && m && isFinite(m.tot) && m.vol > 0 && m.xirr != null; }));
+    await E(p, () => location.hash = 'investimentos.risco'); await sleep(900);
+    ok('investimentos: risco (nota 1–7, VaR, CVaR, stress, correlação)', await E(p, () => { const t = document.querySelector('#view').textContent, r = OS.InvX.risk(OS.InvX.hcache); return /Nota de risco/.test(t) && /VaR 95%/.test(t) && /CVaR/.test(t) && /Testes de stress/.test(t) && /Correlação/.test(t) && r.sri >= 1 && r.sri <= 7 && r.var1 > 0 && r.cvar1 >= r.var1 - 1e-9; }));
+    await E(p, () => location.hash = 'investimentos.mercado'); await sleep(400); await p.fill('#invQ', 'teste'); await p.click('#view [data-form=invSearch] button'); await sleep(800);
+    ok('investimentos: pesquisar ativo no mercado', await E(p, () => /TST\.LS/.test(document.querySelector('#view').textContent) && !!document.querySelector('#view [data-act=invAddAsset][data-s="TST.LS"]')));
+    await E(p, () => { OS.setUI('invSym', 'VWCE.DE'); location.hash = 'investimentos.ativo'; }); await sleep(1200);
+    ok('investimentos: página do ativo com gráfico, estatísticas e notícias', await E(p, () => { const t = document.querySelector('#view').textContent; return /Estatísticas/.test(t) && /A tua posição/.test(t) && /Notícia de teste/.test(t) && !!document.querySelector('#view .chart svg'); }));
+    await E(p, () => location.hash = 'investimentos.movimentos'); await sleep(300); await p.click('#view [data-act=invImp]'); await sleep(300);
+    await p.fill('#invImpTxt', 'Data;Ticker;Tipo;Quantidade;Preço;Taxas\n10/03/2025;NOVO.LS;Compra;5;20,50;1\n12/04/2025;NOVO.LS;Dividendo;;;\n'); await p.click('#view [data-act=invImpParse]'); await sleep(300);
+    const nTx = await E(p, () => OS.all('invtx').length); await p.click('#view [data-act=invImpGo]'); await sleep(400);
+    ok('investimentos: importar CSV da corretora', await E(p, n => OS.all('invtx').length === n + 1 && OS.all('assets').some(a => a.sym === 'NOVO.LS') && OS.all('invtx').some(t => t.price === 20.5 && t.qty === 5), nTx));
+    // todos os tipos: venda a descoberto, opção, CFD alavancado, caixa em USD, Tesouro (marcação a mercado), bonificação, transferência, desdobramento, amortização, JCP com imposto retido
+    const pos = await E(p, () => { const d = n => OS.U.addDays(OS.U.today(), -n), mk = (a, txs) => { const r = OS.add('assets', a); txs.forEach(t => OS.add('invtx', Object.assign({ asset: r.id }, t))); return OS.Inv.pos(r); };
+      return { short: mk({ name: 'Curto', cls: 'Ação', currency: 'EUR', price: 12, priceDate: OS.U.today() }, [{ type: 'Venda', date: d(30), qty: 10, price: 10 }]),
+        cover: mk({ name: 'Curto fechado', cls: 'Ação', currency: 'EUR', price: 7, priceDate: OS.U.today() }, [{ type: 'Venda', date: d(30), qty: 10, price: 10 }, { type: 'Compra', date: d(5), qty: 10, price: 8 }]),
+        opt: mk({ name: 'Call', cls: 'Opção', mult: 100, currency: 'EUR', price: 4, priceDate: OS.U.today() }, [{ type: 'Compra', date: d(10), qty: 2, price: 3 }]),
+        cfd: mk({ name: 'CFD', cls: 'CFD', alav: 10, currency: 'EUR', price: 110, priceDate: OS.U.today() }, [{ type: 'Compra', date: d(10), qty: 10, price: 100 }]),
+        cash: mk({ name: 'Dólares', cls: 'Caixa em moeda estrangeira', currency: 'USD' }, [{ type: 'Compra', date: d(10), qty: 112, price: 1 }]),
+        evts: mk({ name: 'Eventos', cls: 'Ação', currency: 'EUR', price: 5, priceDate: OS.U.today() }, [{ type: 'Compra', date: d(400), qty: 100, price: 10 }, { type: 'Desdobramento/Grupamento', date: d(300), ratio: 2 }, { type: 'Bonificação', date: d(200), qty: 10, price: 0 }, { type: 'Transferência (entrada)', date: d(100), qty: 40, price: 6 }, { type: 'Transferência (saída)', date: d(50), qty: 50 }, { type: 'JCP', date: d(20), amount: 100, tax: 15 }, { type: 'Amortização', date: d(10), amount: 40 }]) }; });
+    ok('todos os tipos: venda a descoberto (ganha quando o preço cai, perde quando sobe)', Math.abs(pos.short.qty + 10) < 1e-9 && pos.short.short && Math.abs(pos.short.pl + 20) < 1e-6 && Math.abs(pos.cover.realized - 20) < 1e-6 && pos.cover.qty === 0, JSON.stringify(pos.short));
+    ok('todos os tipos: opções com multiplicador e CFD alavancado (margem + resultado)', Math.abs(pos.opt.value - 800) < 1e-6 && Math.abs(pos.opt.pl - 200) < 1e-6 && Math.abs(pos.cfd.cost - 100) < 1e-6 && Math.abs(pos.cfd.value - 200) < 1e-6 && Math.abs(pos.cfd.lev - 11) < 1e-6, JSON.stringify([pos.opt, pos.cfd]));
+    ok('todos os tipos: caixa em dólares convertida ao câmbio', Math.abs(pos.cash.value - 100) < .5, String(pos.cash.value));
+    ok('todos os tipos: desdobramento, bonificação, transferências, amortização e JCP líquido', Math.abs(pos.evts.qty - 200) < 1e-9 && Math.abs(pos.evts.cost - 952) < 1e-6 && Math.abs(pos.evts.divs - 85) < 1e-6, JSON.stringify(pos.evts));
+    ok('todos os tipos: formulário com os novos movimentos', await E(p, () => OS.S.invtx.fields.find(f => f.k === 'type').o.includes('Desdobramento/Grupamento') && OS.S.invtx.fields.some(f => f.k === 'tax') && OS.S.assets.fields.some(f => f.k === 'td') && OS.S.assets.fields.some(f => f.k === 'alav')));
+    // alertas de preço e comparação
+    await E(p, () => { OS.add('palerts', { s: 'VWCE.DE', k: 'acima', v: 150, r: 'uma', on: true, n: 'teste' }); OS.add('palerts', { s: 'VWCE.DE', k: 'abaixo', v: 100, r: 'uma', on: true }); OS.InvX.checkAlerts(); });
+    ok('alertas: dispara quando o preço passa o alvo (e só esse)', await E(p, () => { const a = OS.all('palerts'); const up = a.find(x => x.k === 'acima'), dn = a.find(x => x.k === 'abaixo'); return up.on === false && !!up.firedAt && /171,14/.test(up.last) && dn.on === true && !dn.firedAt; }));
+    await E(p, () => location.hash = 'investimentos.mercado'); await sleep(500);
+    ok('alertas: painel no Mercado com estado', await E(p, () => /Alertas de preço/.test(document.querySelector('#view').textContent) && /disparado/.test(document.querySelector('#view').textContent)));
+    await E(p, () => { OS.setUI('invCmp', ['VWCE.DE', 'TST.LS']); location.hash = 'investimentos.comparar'; }); await sleep(1500);
+    ok('comparar: gráfico e tabela de rentabilidade, volatilidade e correlação', await E(p, () => { const t = document.querySelector('#view').textContent; return /Comparar ativos/.test(t) && /Volatilidade anual/.test(t) && /Correlação com VWCE\.DE/.test(t) && !!document.querySelector('#view .chart svg'); }));
+    const dt = await E(p, () => { const a = OS.add('assets', { name: 'Day trade BR', ticker: 'DTBR', cls: 'Ação', currency: 'BRL', price: 10, priceDate: OS.U.today() }), y = OS.U.today().slice(0, 4);
+      OS.add('invtx', { asset: a.id, type: 'Compra', date: y + '-01-05', qty: 100, price: 10 }); OS.add('invtx', { asset: a.id, type: 'Venda', date: y + '-01-05', qty: 100, price: 11 });
+      OS.add('invtx', { asset: a.id, type: 'Compra', date: y + '-01-06', qty: 100, price: 10 }); OS.add('invtx', { asset: a.id, type: 'Venda', date: y + '-02-10', qty: 100, price: 9 }); return y; });
+    await E(p, y => { OS.setUI('invTaxY', y); location.hash = 'investimentos.impostos'; }, dt); await sleep(500);
+    ok('impostos BR: day trade detetado (20%) e prejuízo acumulado', await E(p, () => { const t = document.querySelector('#view').textContent; return /Day trade/.test(t) && /Prejuízo acumulado a compensar/.test(t) && /R\$ 100,00/.test(t); }));
+    await E(p, () => location.hash = 'investimentos.impostos'); await sleep(400);
+    ok('investimentos: impostos (mais-valias PT a 28%)', await E(p, () => { const t = document.querySelector('#view').textContent; return /Mais-valias realizadas/.test(t) && /28%/.test(t) && /DARF/.test(t); }));
+    // IA de investimentos (Gemini simulado): perfil, mestres e verificação
+    let invP = [];
+    await ctx.route(/generativelanguage/, rt => { const b = rt.request().postData() || ''; if (/Explica em português de Portugal/.test(b)) return rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify({ pt: 'Empresa portuguesa que faz testes.' }) }] } }] }) }); if (/Pesquisa informação RECENTE/.test(b)) return rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: '- resultados de 2024 subiram' }] }, groundingMetadata: { groundingChunks: [{ web: { uri: 'https://example.com/r', title: 'Fonte de teste' } }] } }] }) }); if (!/assistente de investimentos|VERIFICADOR de conformidade/.test(b)) return rt.fallback(); const tx = JSON.parse(b).contents[0].parts[0].text; invP.push(tx);
+      const ans = { nivel: 'atencao', veredicto: 'Mantém o ETF como núcleo.', resposta: 'Ok.', recomendacoes: [{ acao: 'aportar', alvo: 'ETF global', valor_eur: 200, porque: 'núcleo', mestres: ['Bogle'] }], riscos: ['x'], passos: ['y'], regras_aplicadas: ['R2'], mestres: [{ nome: 'John Bogle', ideia: 'Custos baixos.' }], divergencia: 'Lynch escolheria ações.', vies: null, confianca: 'alta', dados_em_falta: [] };
+      rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify(/VERIFICADOR/.test(tx) ? { aprovado: true, problemas: [], resposta_corrigida: ans } : ans) }] } }] }) }); });
+    const oldKey2 = await E(p, () => OS.one('diet').aiKey || ''); await E(p, () => { OS.setOne('diet', { aiKey: 'AIzaTESTE_TESTE_TESTE_TESTE' }); OS.setUI('iaWeb', false); location.hash = 'investimentos.ia'; }); await sleep(400);
+    await p.click('#view [data-act=iaQuiz]'); await sleep(200);
+    for (const k of ['obj', 'hor', 'queda', 'exp', 'res', 'rend', 'perda']) await p.click(`#view [data-act=iaAns][data-k=${k}][data-v="2"]`);
+    await p.click('#view [data-act=iaQuizSave]'); await sleep(300);
+    ok('IA investimentos: questionário de perfil (adequação)', await E(p, () => (OS.one('invcfg').perfil || {}).nome === 'Arrojado' && Object.keys(OS.one('invcfg').tgt || {}).length > 0));
+    await p.click('#view [data-act=iaGo][data-k=diag]'); await sleep(1500);
+    ok('IA investimentos: resposta com mestres, divergência e verificação em 2 passos', await E(p, () => { const t = document.querySelector('#view').textContent; return /Mantém o ETF como núcleo/.test(t) && /O que diriam os mestres/.test(t) && /John Bogle/.test(t) && /Onde discordam/.test(t) && /verificado em 2 passos/.test(t); }));
+    ok('IA investimentos: condicionada pelo regulamento, mestres, perfil, risco e factos', invP.length >= 2 && /REGULAMENTO DE INVESTIMENTO/.test(invP[0]) && /BIBLIOTECA DOS MESTRES/.test(invP[0]) && /Warren Buffett/.test(invP[0]) && /Arrojado/.test(invP[0]) && /nota_risco_1a7/.test(invP[0]) && /VWCE/.test(invP[0]) && /VERIFICADOR/.test(invP[1]));
+    // análise de empresas
+    await E(p, () => { OS.setUI('invCo', 'TST.LS'); location.hash = 'investimentos.empresas'; }); await sleep(1500);
+    ok('empresas: perfil, o que faz (traduzido), donos, gestão e analistas', await E(p, () => { const t = document.querySelector('#view').textContent; return /Teste SA/.test(t) && /Empresa portuguesa que faz testes/.test(t) && /Quem é dono/.test(t) && /Fundo X/.test(t) && /Ana Teste/.test(t) && /Analistas/.test(t); }));
+    ok('empresas: demonstrações financeiras e múltiplos', await E(p, () => { const t = document.querySelector('#view').textContent; return /Demonstrações financeiras/.test(t) && /Lucro líquido/.test(t) && /2024/.test(t) && /P\/L/.test(t) && /ROE/.test(t); }));
+    ok('empresas: preço justo de Graham (12,00) e preço-teto de Bazin (11,67)', await E(p, () => { const t = document.querySelector('#view .co-sc').textContent; return /12,00/.test(t) && /11,67/.test(t) && /Piotroski/.test(t); }));
+    invP = []; await p.click('#view [data-act=invCoAI]'); await sleep(1800);
+    ok('empresas: relatório da IA com pesquisa web, fontes e a carteira', await E(p, () => /Fonte de teste/.test(document.querySelector('#view .co-ai').textContent) && /Mantém o ETF como núcleo/.test(document.querySelector('#view .co-ai').textContent)) && invP.some(x => /empresa_em_analise/.test(x) && /Teste SA/.test(x) && /PESQUISA WEB RECENTE/.test(x)));
+    await E(p, k => { OS.setOne('diet', { aiKey: k }); const c = OS.one('inbox'); Object.assign(c, c.__old || {}); delete c.__old; OS.touch('inbox'); }, oldKey2);
+    // TAREFAS POR PROJETO
+    await E(p, () => { const a = OS.add('projects', { name: 'Projeto Teste Casa', type: 'Pessoal', status: 'Em andamento', progMode: 'auto' }); OS.add('projects', { name: 'Curso Teste Python', type: 'Aprendizagem', status: 'Em andamento', progMode: 'auto' }); OS.add('tasks', { title: 'Empacotar livros teste', project: a.id, status: 'Próxima', prio: '3' }); OS.ui.tf = {}; location.hash = 'tarefas'; }); await sleep(400);
+    await p.click('#view .tp-c:has-text("Projeto Teste Casa")'); await sleep(300);
+    ok('tarefas: barra de projetos filtra pelo projeto', await E(p, () => /Empacotar livros teste/.test(document.querySelector('#view').textContent) && !!document.querySelector('#view .tp-head') && /Projeto Teste Casa/.test(document.querySelector('#view .tp-head').textContent)));
+    await p.fill('#view form[data-form=quickTask] input', 'Contratar mudanças teste !1'); await p.press('#view form[data-form=quickTask] input', 'Enter'); await sleep(300);
+    await E(p, () => { OS.setUI('tf', {}); }); await sleep(200); await p.fill('#view form[data-form=quickTask] input', 'Ver aula teste #cursoteste'); await p.press('#view form[data-form=quickTask] input', 'Enter'); await sleep(300);
+    ok('tarefas: captura rápida dentro do projeto e com #projeto', await E(p, () => { const n = t => (OS.get('projects', (OS.all('tasks').find(x => x.title === t) || {}).project) || {}).name; return n('Contratar mudanças teste') === 'Projeto Teste Casa' && n('Ver aula teste') === 'Curso Teste Python'; }));
+    await E(p, () => { location.hash = 'tarefas.projetos'; }); await sleep(400);
+    ok('tarefas: vista por projeto', await E(p, () => [...document.querySelectorAll('#view .tp-sec h2')].some(h => /Curso Teste Python/.test(h.textContent)) && document.documentElement.scrollWidth <= innerWidth + 1));
+    await E(p, () => { OS.setUI('tf', {}); }); await sleep(100);
+    // QUEM SOU EU
+    let meP = [];
+    await ctx.route(/generativelanguage/, rt => { const b = rt.request().postData() || ''; if (!/biógrafo/.test(b)) return rt.fallback(); const tx = JSON.parse(b).contents[0].parts[0].text; meP.push(tx); const upd = /MODO ATUALIZAR/.test(tx), cur = upd ? JSON.parse(tx.match(/BIOGRAFIA ATUAL: (\[.*?\])\n/)[1]) : [];
+      const ans = { titulo: 'Ryan — a história', subtitulo: 'x', resumo: 'Estudante em Aveiro.', capitulos: upd ? cur.map(c => ({ id: c.id, titulo: c.titulo, texto: c.editado_por_ele ? 'IA MUDOU' : c.texto + ' Atualizado.' })) : [{ titulo: 'Origens', texto: 'Nasceu em Teste Cidade.' }, { titulo: 'Fé', texto: 'Fé.' }], faltam: ['Pergunta da IA de teste?'] };
+      rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify(ans) }] } }] }) }); });
+    await E(p, () => { OS.setOne('me', { birthplace: 'Teste Cidade', birth: '2005-03-10' }); OS.add('people', { name: 'Pessoa Teste Mãe', rel: 'Mãe', close: 5, birthday: '1978' + OS.U.addDays(OS.U.today(), 2).slice(4) }); OS.add('lifeev', { title: 'Momento teste', date: '2024-09-01', cat: 'Mudança', imp: 5 }); location.hash = 'eu'; }); await sleep(400);
+    ok('eu: retrato com idade, origem e aniversário próximo', await E(p, () => { const v = document.querySelector('#view').textContent; return !!document.querySelector('a[href="#eu"]') && /Teste Cidade/.test(v) && /Pessoa Teste Mãe/.test(v) && /daqui a 2 dias/.test(v); }));
+    await E(p, () => { location.hash = 'eu.historia'; }); await sleep(300);
+    ok('eu: linha do tempo por anos', await E(p, () => /Momento teste/.test(document.querySelector('#view .me-tl').textContent) && /Nasci em Teste Cidade/.test(document.querySelector('#view .me-tl').textContent)));
+    await E(p, () => { location.hash = 'eu.bio'; }); await sleep(300); await p.click('#view [data-act=meBioAI][data-mode=new]'); await sleep(900);
+    ok('eu: biografia escrita pela IA só com factos registados', await E(p, () => OS.one('me').bio && OS.one('me').bio.ch.length === 2 && /Teste Cidade/.test(document.querySelector('#view .me-book').textContent)) && /NUNCA inventes/.test(meP[0]) && /Pessoa Teste Mãe/.test(meP[0]) && /Momento teste/.test(meP[0]));
+    await p.click('#view .me-ch >> nth=0 >> .me-tx'); await sleep(250); await p.fill('#view .me-ta', 'Texto escrito por mim.'); await p.click('#view [data-act=meChDone]'); await sleep(300); await p.click('#view [data-act=meBioAI][data-mode=upd]'); await sleep(900);
+    ok('eu: editar a biografia e a IA respeita o que escrevi', await E(p, () => { const b = OS.one('me').bio; return b.ch[0].txt === 'Texto escrito por mim.' && b.ch[0].lock && /Atualizado/.test(b.ch[1].txt) && OS.one('mever').v.length >= 1; }));
+    // ESTUDOS: CURSOS, CERTIFICAÇÕES, LEITURAS
+    await ctx.route(/googleapis\.com\/books/, rt => rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ items: [{ id: 'g1', volumeInfo: { title: 'O Pequeno Príncipe', authors: ['Antoine de Saint-Exupéry'], publishedDate: '2015', pageCount: 96, categories: ['Juvenile Fiction'], description: 'Um piloto.' } }] }) }));
+    await ctx.route(/openlibrary\.org\/search/, rt => rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ docs: [{ key: '/w/2', title: 'Dom Casmurro', author_name: ['Machado de Assis'], number_of_pages_median: 256 }] }) }));
+    await E(p, () => { location.hash = 'leituras.buscar'; }); await sleep(300); await p.fill('#view [data-form=bkSearch] input', 'pequeno principe'); await p.press('#view [data-form=bkSearch] input', 'Enter'); await sleep(700);
+    await p.click('#view .bk-r >> nth=0 >> [data-act=bkAdd][data-s=Lido]'); await sleep(200); await p.click('#view .bk-r >> nth=1 >> [data-act=bkAdd][data-own="1"]'); await sleep(200);
+    ok('leituras: pesquisar livro e marcar já li / tenho na estante', await E(p, () => { const a = OS.all('books').find(x => x.title === 'O Pequeno Príncipe'), b = OS.all('books').find(x => x.title === 'Dom Casmurro'); return a && a.status === 'Lido' && a.pages === 96 && a.cats.includes('Infantojuvenil') && b && b.own === 'Tenho'; }));
+    await E(p, () => { OS.ui.bk = OS.all('books').find(x => x.title === 'O Pequeno Príncipe').id; location.hash = 'leituras.livro'; }); await sleep(300); await p.fill('#bkRev', 'Resenha de teste.'); await p.press('#bkRev', 'Tab'); await sleep(200);
+    await E(p, () => { location.hash = 'leituras.desafios'; }); await sleep(300); await p.click('#view [data-act=chNew][data-i="3"]'); await sleep(300);
+    ok('leituras: resenha e desafio literário que conta o livro lido', await E(p, () => OS.all('books').find(x => x.title === 'O Pequeno Príncipe').review === 'Resenha de teste.' && /1 de 12 cumpridos/.test(document.querySelector('#view').textContent)));
+    await E(p, () => { OS.add('learn', { title: 'Curso Teste', kind: 'Curso', status: 'Em curso', total: 1, done: 0, unit: 'aulas' }); OS.add('certs', { name: 'Cert Teste', issuer: 'Org', status: 'Obtida', date: '2025-01-01', cat: 'Outro' }); location.hash = 'cursos'; }); await sleep(300); await p.click('#view [data-act=cuStep]'); await sleep(200);
+    ok('cursos e certificações', await E(p, () => OS.all('learn').find(x => x.title === 'Curso Teste').status === 'Concluído') && (await E(p, () => { location.hash = 'certificacoes'; }), await sleep(300), await E(p, () => /Cert Teste/.test(document.querySelector('#view').textContent))));
+    // FLORESTA (foco ao estilo Forest)
+    await E(p, () => { location.hash = 'floresta'; }); await sleep(800);
+    ok('floresta: página abre com temporizador e 34 espécies', await E(p, () => /25:00|\d\d:00/.test(document.getElementById('foTime').textContent) && Object.keys(OS.Forest.SP).length >= 34 && !!document.querySelector('#view [data-act=foPlant]')));
+    await E(p, () => { OS.one('forest').sp = 'natal'; OS.one('forest').mins = 25; OS.one('forest').tag = 's:' + (OS.all('subjects').find(s => s.status === 'Em curso') || OS.add('subjects', { name: 'Disciplina Floresta', status: 'Em curso' })).id; OS.touch('forest'); }); await sleep(300); await p.click('#view [data-act=foPlant]'); await sleep(500);
+    await E(p, () => { OS.Forest.run().t0 = Date.now() - 25 * 60000 + 800; }); await sleep(2500);
+    ok('floresta: árvore cresce até ao fim, dá moedas e regista estudo', await E(p, () => { const t = OS.all('trees').slice(-1)[0]; return t && t.alive && t.sp === 'natal' && t.mins === 25 && OS.one('forest').coins >= 30 && OS.all('sessions').some(x => /Floresta/.test(x.learned || '')) && /Plantaste/.test(document.querySelector('#view').textContent); }));
+    await p.click('#view [data-act=foAgain]'); await sleep(300); await p.click('#view [data-act=foPlant]'); await sleep(400);
+    await E(p, () => { Object.defineProperty(document, 'hidden', { get: () => true, configurable: true }); document.dispatchEvent(new Event('visibilitychange')); OS.Forest.run().hid = Date.now() - 90000; Object.defineProperty(document, 'hidden', { get: () => false, configurable: true }); document.dispatchEvent(new Event('visibilitychange')); }); await sleep(500);
+    ok('floresta: sair do Oceanum mata a árvore', await E(p, () => OS.all('trees').slice(-1)[0].alive === false && /morreu/.test(document.querySelector('#view').textContent)));
+    await E(p, () => { delete document.hidden; location.hash = 'floresta.floresta'; }); await sleep(600);
+    ok('floresta: a minha floresta e catálogo', await E(p, () => /árvore/.test(document.querySelector('#view .fo-ov').textContent)) && (await E(p, () => { location.hash = 'floresta.loja'; }), await sleep(400), await E(p, () => document.querySelectorAll('#view .fo-card').length >= 34)));
+    // UNIVERSIDADE+
+    let uP = [];
+    await ctx.route(/generativelanguage/, rt => { const b = rt.request().postData() || ''; if (!/simulado de|flashcards excelentes|tutor universitário/.test(b)) return rt.fallback(); const tx = JSON.parse(b).contents[0].parts[0].text; uP.push(tx);
+      const o = /flashcards excelentes/.test(tx) ? { cartoes: [{ frente: 'Taxa normal do IVA?', verso: '23%' }, { frente: 'Quem suporta o IVA?', verso: 'O consumidor final' }] } : /simulado de/.test(tx) ? { titulo: 'Simulado teste', perguntas: [{ pergunta: 'Taxa normal?', opcoes: ['6%', '13%', '23%', '21%'], certa: 2, explicacao: 'É 23%.' }] } : { titulo: 'Resposta', resposta: '**Ideia** principal' };
+      rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify(o) }] } }] }) }); });
+    const uS = await E(p, () => { const s = OS.add('subjects', { name: 'Disciplina Calc Teste', status: 'Em curso', target: 15, ects: 6 }); OS.add('assessments', { title: 'T1 calc', subject: s.id, date: OS.U.addDays(OS.U.today(), -5), weight: 40, grade: 12 }); OS.add('assessments', { title: 'Exame calc', subject: s.id, date: OS.U.addDays(OS.U.today(), 5), weight: 60, type: 'Exame', prep: 'Não comecei' }); OS.add('topics', { subject: s.id, title: 'Tema calc', status: 'Por estudar' }); OS.setOne('diet', { aiKey: 'AIzaTESTE_TESTE_TESTE_TESTE' }); location.hash = 'universidade.notas'; return s.id; }); await sleep(500);
+    ok('universidade: calculadora diz quanto precisas no exame', await E(p, () => [...document.querySelectorAll('#view .pn')].some(x => /Disciplina Calc Teste/.test(x.textContent) && /7,8/.test(x.textContent))));
+    await E(p, s => { OS.ui.uePick = OS.all('assessments').find(a => a.title === 'Exame calc').id; location.hash = 'universidade.exames'; }, uS); await sleep(400); await p.click('#view [data-act=uePlanTasks]'); await sleep(400);
+    ok('universidade: plano até ao exame vai para as tarefas', await E(p, () => OS.all('tasks').filter(t => t.examPlan).length >= 5 && /Tema calc/.test(document.querySelector('#view .un-plan').textContent)));
+    await E(p, s => { OS.ui.fcS = s; location.hash = 'universidade.flashcards'; }, uS); await sleep(400); await p.fill('#view form[data-form=fcAI] input[name=deck]', 'IVA'); await p.click('#view form[data-form=fcAI] button'); await sleep(900); await p.click('#view [data-act=fcAIAdd]'); await sleep(300);
+    await p.click('#view [data-act=fcStart]'); await sleep(300); await p.click('#view .fc-card'); await sleep(200); await p.click('#view .fc-r.good'); await sleep(300);
+    ok('universidade: flashcards da IA e repetição espaçada', await E(p, s => OS.all('cards').filter(c => c.subject === s).length === 2 && OS.all('cards').some(c => c.subject === s && c.iv === 1), uS) && uP.some(x => /flashcards excelentes/.test(x)));
+    await E(p, () => OS.act.fcStop()); await E(p, s => { OS.ui.qzS = s; location.hash = 'universidade.simulados'; }, uS); await sleep(400); await p.click('#view form[data-form=qzAI] button'); await sleep(900); await p.click('#view .qz-o >> nth=2'); await p.click('#view [data-act=qzDone]'); await sleep(400);
+    ok('universidade: simulado da IA corrigido (20/20)', await E(p, () => /20,0/.test(document.querySelector('#view .un-score').textContent) && OS.all('quizzes').length >= 1));
+    await E(p, () => OS.act.qzX()); await E(p, () => { location.hash = 'universidade'; }); await sleep(400);
+    ok('universidade: visão com contagem decrescente e mapa de estudo', await E(p, () => /Contagem decrescente/.test(document.querySelector('#view').textContent) && document.querySelectorAll('#view .un-heat i').length > 150 && !!document.querySelector('#view a[href="#universidade.tutor"]')));
+    await ctx.route(/generativelanguage/, rt => { const b = rt.request().postData() || ''; if (!/questões de escolha|orientador de estudo/.test(b)) return rt.fallback(); const o = /questões de escolha/.test(b) ? { questoes: [{ pergunta: 'Q banco 1?', opcoes: ['certa', 'b', 'c', 'd'], certa: 0, explicacao: 'x' }] } : { diagnostico: 'Diagnóstico de teste', focos: [{ tema: 'Tema calc', porque: 'p', exercicios: ['Exercício teste'], aulas: ['aula teste'] }], dicas: [], plano: '' };
+      rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify(o) }] } }] }) }); });
+    await E(p, s => { OS.ui.qbS = s; OS.ui.dpS = s; location.hash = 'universidade.questoes'; }, uS); await sleep(400); await p.click('#view form[data-form=qbAI] button'); await sleep(900); await p.click('#view [data-act=qbPlay][data-m=all]'); await sleep(300); await p.click('#view .qz-o >> nth=0'); await p.click('#view [data-act=qzDone]'); await sleep(300); await E(p, () => OS.act.qzX());
+    await E(p, () => { location.hash = 'universidade.desempenho'; }); await sleep(400); await p.click('#view [data-act=dpAI]'); await sleep(900);
+    ok('universidade: banco de questões, desempenho e recomendações', await E(p, s => OS.all('qbank').some(q => q.subject === s && q.n === 1) && OS.all('qlog').length >= 1 && /Onde tens de melhorar/.test(document.querySelector('#view').textContent) && /Diagnóstico de teste/.test(document.querySelector('#view').textContent), uS));
+    // DESPORTO
+    await E(p, () => { location.hash = 'desporto.novo'; }); await sleep(400); await p.click('#view .sp-pc[data-k=padel]'); await sleep(400);
+    await p.click('#view [data-act=spTab][data-v=registar]'); await sleep(300); await p.selectOption('#view form[data-form=spLog] select[name=res]', 'Vitória'); await p.fill('#view input[name=st_setsG]', '2'); await p.click('#view form[data-form=spLog] button.pri'); await sleep(400);
+    ok('desporto: adicionar padel e registar jogo com estatísticas', await E(p, () => { const s = OS.all('sports').find(x => x.key === 'padel'), l = OS.all('sportlog').find(x => x.sport === s.id); return l && l.res === 'Vitória' && l.st.setsG === 2 && /100%/.test(document.querySelector('#view').textContent); }));
+    await p.click('#view [data-act=spTab][data-v=treinos]'); await sleep(300);
+    ok('desporto: treinos específicos e auxílios', await E(p, () => /Saída de parede/.test(document.querySelector('#view').textContent)) && (await p.click('#view [data-act=spTab][data-v=ajuda]'), await sleep(300), await E(p, () => /Aquecimento/.test(document.querySelector('#view').textContent))));
+    await E(p, () => { OS.add('runs', { date: OS.U.today(), type: 'Rodagem', km: 7, time: '35:00' }); const c = OS.all('sports').find(s => s.key === 'corrida') || OS.add('sports', { key: 'corrida' }); OS.ui.spId = c.id; OS.ui.spTab = ''; location.hash = 'desporto.sp'; }); await sleep(500);
+    ok('desporto: corrida preenche-se sozinha com a aba Corrida', await E(p, () => /Rodagem/.test(document.querySelector('#view').textContent) && OS.Sport.logs(OS.ui.spId).some(l => l.virtual && l.st.km === 7 && l.st.ritmo === 5)));
+    // FRASES, HÁBITOS, TRABALHO+
+    await E(p, () => { location.hash = 'visao'; }); await sleep(400);
+    ok('visão geral: frase forte e verdade do dia', await E(p, () => !!document.querySelector('#view .q-push') && !!document.querySelector('#view .q-truth')));
+    await E(p, () => { OS.add('habits', { name: 'Hábito teste hoje', active: true, freq: 'Diário', days: ['0', '1', '2', '3', '4', '5', '6'] }); location.hash = 'habitos'; }); await sleep(400);
+    await E(p, () => { const h = OS.all('habits').find(x => x.name === 'Hábito teste hoje'); OS.act.habit({ dataset: { id: h.id, d: OS.U.addDays(OS.U.today(), -1) } }); OS.act.habit({ dataset: { id: h.id, d: OS.U.today() } }); }); await sleep(300);
+    ok('hábitos: só se marca o dia de hoje', await E(p, () => { const h = OS.all('habits').find(x => x.name === 'Hábito teste hoje'), k = Object.keys(h.log || {}); return k.length === 1 && k[0] === OS.U.today(); }));
+    await E(p, () => { location.hash = 'trabalho.horario'; }); await sleep(400); await p.click('#view [data-act=wsOff] >> nth=0'); await sleep(300);
+    ok('trabalho: horário e folgas', await E(p, () => OS.all('dayoffs').length >= 1 && /Folga/.test(document.querySelector('#view .ws-cal').textContent)));
+    // BLOCO DE FOCO
+    await E(p, () => { OS.add('tasks', { title: 'Pendência bloco teste', status: 'Próxima', prio: '1', due: OS.U.addDays(OS.U.today(), -2), effort: 15 }); location.hash = 'foco'; }); await sleep(400);
+    ok('bloco de foco: pendências por prioridade', await E(p, () => [...document.querySelectorAll('#view .fb-it .fb-t b')].some(x => x.textContent === 'Pendência bloco teste')));
+    await p.click('#view [data-act=fbGo]'); await sleep(400);
+    await E(p, () => { const B = OS.FocusBlock.state(); B.end = Date.now() - 500; OS.FocusBlock._set(B); }); await sleep(1300);
+    ok('bloco de foco: no fim do tempo pergunta se terminaste', await E(p, () => /Terminaste\?/.test(document.getElementById('fblk').textContent)));
+    await p.click('#fblk [data-act=fbNo]'); await sleep(200); await p.click('#fblk [data-act=fbMore][data-m="5"]'); await sleep(200);
+    ok('bloco de foco: "ainda não" acrescenta tempo', await E(p, () => { const B = OS.FocusBlock.state(); return B.phase === 'run' && B.items[B.i].extra === 5; }));
+    await p.click('#fblk [data-act=fbExit]'); await sleep(200); await p.fill('#fbCode', 'errado'); await p.click('#fblk .fb-code button'); await sleep(400);
+    ok('bloco de foco: sair sem código certo não deixa', await E(p, () => OS.FocusBlock.state().phase === 'exit'));
+    await p.fill('#fbCode', 'teste1234'); await p.click('#fblk .fb-code button'); await sleep(500); await p.click('#fblk [data-act=fbClose]'); await sleep(300);
+    ok('bloco de foco: código certo sai e grava o histórico', await E(p, () => !OS.FocusBlock.state() && OS.all('focusblocks').length >= 1 && document.getElementById('fblk').hidden));
+    // SPYKE + E-MAIL
+    await E(p, () => { OS.Spyke.handle('anota ligar à avó amanhã'); }); await sleep(400);
+    ok('spyke: "anota…" cria tarefa', await E(p, () => OS.all('tasks').some(t => /ligar à avó/i.test(t.title))));
+    await E(p, () => { OS.Spyke.handle('abre a floresta'); }); await sleep(400);
+    ok('spyke: abre páginas por voz', await E(p, () => location.hash === '#floresta'));
+    ok('spyke: resumo do dia', await E(p, () => /prioridade|agenda/i.test(OS.Spyke.brief())));
+    await E(p, () => OS.Spyke.close());
+    await E(p, () => { const d = new Date().toISOString(); OS.Mail._set({ at: Date.now(), items: [{ id: 'z1', s: 'Último aviso: pagamento em atraso', f: 'Banco <b@b.pt>', d, u: true, sn: 'regularize' }, { id: 'z2', s: '50% desconto', f: 'Loja <news@l.pt>', d, u: false, sn: 'unsubscribe' }], ai: {}, sum: '' }); location.hash = 'email'; }); await sleep(400);
+    ok('e-mail: separa urgente e promoções (sem IA)', await E(p, () => OS.Mail.counts().urg === 1 && OS.Mail.items().some(x => x.c === 'promo') && !!document.querySelector('#view .ml-it.c-urgente')));
+    ok('e-mail: urgente aparece no Control Room', await E(p, () => OS.Intel.alerts().some(a => a.area === 'E-mail')));
+    ok('google script v9 é JavaScript válido', await E(p, () => { try { new Function(OS.Inbox.script('abc')); return true; } catch (e) { return false; } }));
+    // SPYKE+: memória, rotinas, balanço da noite, modo Jarvis, eventos do e-mail
+    await E(p, () => OS.Spyke.handle('lembra-te que gosto de estudar de manhã')); await sleep(300);
+    ok('spyke: memória guarda o que lhe dizes', await E(p, () => OS.all('spymem').some(m => /estudar de manhã/.test(m.text))));
+    await E(p, () => { OS.add('spyroutines', { phrase: 'rotina teste', steps: 'abre a floresta', reply: 'Feito.' }); OS.Spyke.handle('rotina teste'); }); await sleep(500);
+    ok('spyke: rotina de voz corre os passos', await E(p, () => location.hash === '#floresta'));
+    ok('spyke: balanço da noite', await E(p, () => /balanço de hoje/.test(OS.Spyke.evening())));
+    await E(p, () => { OS.Spyke.close(); OS.Jarvis.open(); }); await sleep(700);
+    ok('modo Jarvis abre com os painéis', await E(p, () => !document.getElementById('jv').hidden && document.querySelectorAll('#jv .jv-c').length >= 7));
+    await p.click('#jv [data-act=jvClose]'); await sleep(200);
+    ok('modo Jarvis: o X fecha e o botão fica no canto', await E(p, () => document.getElementById('jv').hidden && !document.getElementById('jvFab').hidden));
+    ok('e-mail: eventos dos e-mails no calendário', await E(p, () => { const d = OS.U.addDays(OS.U.today(), 3); OS.add('mailevents', { mid: 'x1', title: 'Reunião do e-mail', date: d, start: '15:00' }); return OS.Cal.items(d, d).some(x => x.src === 'mail'); }));
+    // LIGAÇÕES ENTRE ÁREAS
+    ok('ligações: apagar projeto deixa as tarefas sem projeto', await E(p, () => { const pr = OS.add('projects', { name: 'PL', status: 'Em andamento' }); const t = OS.add('tasks', { title: 'TL', status: 'Próxima', project: pr.id }); OS.del('projects', pr.id); return OS.get('tasks', t.id).project === ''; }));
+    ok('ligações: data da avaliação move o plano de estudo', await E(p, () => { const U = OS.U, t = U.today(), a = OS.add('assessments', { title: 'TL', type: 'Teste', date: U.addDays(t, 10) }); const k = OS.add('tasks', { title: 'plano', status: 'Próxima', sched: U.addDays(t, 5), examPlan: a.id }); OS.upd('assessments', a.id, { date: U.addDays(t, 12) }); const r = OS.get('tasks', k.id).sched === U.addDays(t, 7); OS.del('assessments', a.id); return r && !OS.get('tasks', k.id); }));
+    ok('ligações: turno e folga no mesmo dia não coexistem', await E(p, () => { const d = OS.U.addDays(OS.U.today(), 5); const o = OS.add('dayoffs', { date: d, kind: 'Folga' }); OS.add('shifts', { date: d, start: '10:00', end: '18:00' }); return !OS.get('dayoffs', o.id); }));
+    ok('ligações: oportunidade submetida cria candidatura', await E(p, () => { const o = OS.add('opps', { name: 'Estágio L', inst: 'X', kind: 'Estágio', status: 'A preparar' }); OS.upd('opps', o.id, { status: 'Submetida' }); return OS.all('applications').some(a => a.opp === o.id); }));
+    // FÉ & DEVOÇÃO
+    let feP = [];
+    await ctx.route(/generativelanguage/, rt => { const b = rt.request().postData() || ''; if (/Explica o versículo do dia/.test(b)) return rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify({ contexto: 'Contexto de teste.', significado: 'Significado de teste.', hoje: 'Vive isto hoje.' }) }] } }] }) }); if (!/conselheiro devocional|mestre da Palavra/.test(b)) return rt.fallback(); const tx = JSON.parse(b).contents[0].parts[0].text; feP.push(tx);
+      const ans = /mestre da Palavra/.test(tx) ? { contexto: 'Carta de Paulo.', mensagem: 'Nada nos separa do amor de Deus.', licoes: ['Identidade em Cristo'], perguntas: ['O que te pesa?'], oracao: 'Obrigado, Senhor.', ligacoes: ['Salmos 23'] } : { frase: 'Um passo de cada vez, com Deus.', ref: { livro: 'MAT', cap: 11, v1: 28, v2: 28 }, porque: 'Tens um exame em breve.', reflexao: 'Jesus convida os cansados.', oracao: 'Dá-me descanso.', passo: 'Ora antes de estudar.', alerta: null };
+      rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify(ans) }] } }] }) }); });
+    await E(p, () => location.hash = 'fe'); for (let i = 0; i < 20 && !(await E(p, () => !!OS.Faith.bible())); i++) await sleep(300); await sleep(400);
+    ok('fé: aba no menu, versículo do dia com o texto da Bíblia', await E(p, () => { const v = document.querySelector('#view .fe-v'); const R = OS.Faith.vod(); return !!document.querySelector('a[href="#fe"]') && !!v && v.textContent.includes(OS.Faith.textOf(R).slice(0, 30)) && /Versículo do dia/.test(v.textContent); }));
+    await sleep(700);
+    ok('fé: versículo do dia com explicação e aplicação para hoje', await E(p, () => /Significado de teste/.test(document.querySelector('#view .fe-v').textContent) && /Para hoje/.test(document.querySelector('#view .fe-v').textContent)));
+    ok('fé: Bíblia completa (66 livros, 31 102 versículos)', await E(p, () => { const B = OS.Faith.bible(); return B.b.length === 66 && B.b.reduce((s, b) => s + b[3].reduce((a, c) => a + c.length, 0), 0) === 31102 && /amou ao mundo/.test(OS.Faith.textOf(OS.Faith.parseRef('JHN 3:16'))); }));
+    const oldK = await E(p, () => OS.one('diet').aiKey || ''); await E(p, () => OS.setOne('diet', { aiKey: '' })); await sleep(200);
+    await p.click('#view [data-act=feMood][data-m=ansioso]'); await sleep(200); await p.click('#view [data-act=feWord]'); await sleep(400);
+    ok('fé: palavra para hoje sem IA, escolhida pelo estado de alma', await E(p, () => { const w = OS.one('faith').word; return w && w.date === OS.U.today() && OS.FaithData.mood.ansioso.includes(w.ref) && /Entrega a Deus/.test(document.querySelector('#view .fe-word').textContent); }));
+    await E(p, () => { OS.setOne('diet', { aiKey: 'AIzaTESTE_TESTE_TESTE_TESTE' }); OS.add('assessments', { title: 'Exame de Teste da Fé', date: OS.U.addDays(OS.U.today(), 2) }); }); await sleep(200); await p.click('#view [data-act=feWord]'); await sleep(900);
+    ok('fé: palavra da IA usa o dia real (avaliações, alertas) e o texto vem da Bíblia instalada', await E(p, () => { const w = OS.one('faith').word, t = document.querySelector('#view .fe-word').textContent; return w.ai && w.ref === 'MAT 11:28' && /Vinde a mim/.test(t) && /Um passo de cada vez/.test(t); }) && feP.some(x => /Exame de Teste da Fé/.test(x) && /ansioso/.test(x)));
+    await E(p, () => { location.hash = 'fe.biblia'; }); await sleep(300); await p.fill('#view [data-form=feSearch] input', 'Romanos 8:28'); await p.click('#view [data-form=feSearch] button'); await sleep(400);
+    ok('fé: ir para uma passagem escrita por extenso (Romanos 8:28)', await E(p, () => OS.ui.bRef === 'ROM.8' && (OS.ui.bSel || []).includes(28) && /Romanos 8/.test(document.querySelector('#view .fe-read h2').textContent)));
+    await p.click('#view [data-act=feHl][data-c=g]'); await sleep(300);
+    ok('fé: destacar versículo', await E(p, () => OS.all('bmarks').some(m => m.ref === 'ROM.8.28' && m.color === 'g') && !!document.querySelector('#view .fe-vs.hl-g')));
+    await E(p, () => { OS.U.ls.set('oc_fefs', 18); OS.request(); }); await sleep(200); for (let i = 0; i < 3; i++) { await p.click('#view [data-act=feFs][data-d="-1"]'); await sleep(150); }
+    ok('fé: leitor diminui a letra (A−) até 12px, barra sempre visível', await E(p, () => getComputedStyle(document.querySelector('#view .fe-read')).fontSize === '12px' && document.querySelector('#view [data-act=feFs][data-d="-1"]').disabled && getComputedStyle(document.querySelector('#view .fe-rbar')).position === 'sticky'));
+    await p.click('#view .fe-pct'); await sleep(200); await p.click('#view [data-act=feMode]'); await sleep(200); await p.click('#view [data-act=feCol][data-c=p]'); await sleep(150); await p.click('#view .fe-vs[data-v="1"]'); await sleep(250);
+    await E(p, () => { const t = document.querySelector('#view .fe-t[data-v="2"]').firstChild, r = document.createRange(); r.setStart(t, 2); r.setEnd(t, 9); getSelection().removeAllRanges(); getSelection().addRange(r); }); await sleep(350); await p.click('#feSelHl'); await sleep(300);
+    ok('fé: modo grifar (versículo inteiro e só palavras selecionadas)', await E(p, () => OS.all('bmarks').some(m => m.ref === 'ROM.8.1' && m.color === 'p' && !m.w) && OS.all('bmarks').some(m => m.ref === 'ROM.8.2' && m.w) && !!document.querySelector('#view .fe-t[data-v="2"] mark.hl-p')));
+    await p.click('#view [data-act=feMode]'); await sleep(200); await p.click('#view .fe-vs[data-v="3"]'); await sleep(200); await p.click('#view [data-act=feNoteV]'); await sleep(250); await p.fill('#feNoteIn', 'Nota de teste dentro do texto'); await p.click('#view [data-act=feNoteDone]'); await sleep(300);
+    ok('fé: nota escrita dentro do texto e guardada', await E(p, () => OS.all('bmarks').some(m => m.ref === 'ROM.8.3' && m.note === 'Nota de teste dentro do texto') && /Nota de teste/.test(document.querySelector('#view .fe-read .fe-ni').textContent)));
+    await p.fill('#view [data-form=feSearch] input', 'ansiosos'); await p.click('#view [data-form=feSearch] button'); await sleep(500);
+    ok('fé: pesquisa de palavras em toda a Bíblia', await E(p, () => document.querySelectorAll('#view .fe-sr .li').length >= 1 && /ansiosos/i.test(document.querySelector('#view .fe-sr').textContent)));
+    await E(p, () => OS.act.feRead({ dataset: { r: 'ROM.8' } })); await E(p, () => { location.hash = 'fe.devocional'; }); await sleep(300);
+    await p.fill('#view [data-dv=ref]', 'Salmos 23'); await p.press('#view [data-dv=ref]', 'Tab'); await p.fill('#view [data-dv=app]', 'Descansar em Deus hoje'); await p.press('#view [data-dv=app]', 'Tab'); await sleep(300);
+    ok('fé: devocional guarda sozinho e mostra a passagem', await E(p, () => { const d = OS.all('devos').find(x => x.date === OS.U.today()); return d && d.ref === 'Salmos 23' && d.app === 'Descansar em Deus hoje' && /meu pastor/.test(document.querySelector('#view .fe-pass').textContent); }));
+    await p.click('#view [data-act=feReflect]'); await sleep(800);
+    ok('fé: reflexão da IA sobre a leitura', await E(p, () => /Nada nos separa/.test(document.querySelector('#view .fe-refl').textContent)) && feP.some(x => /mestre da Palavra/.test(x) && /Salmos 23/.test(x)));
+    await E(p, () => { const r = OS.add('prayers', { title: 'Pela família', who: 'Família', date: OS.U.today(), status: 'A orar' }); OS.upd('prayers', r.id, { status: 'Respondida', answer: 'Deus cuidou' }); OS.S.prayers.after(OS.get('prayers', r.id)); location.hash = 'fe.oracoes'; }); await sleep(300);
+    ok('fé: pedidos de oração e respondidas', await E(p, () => /Respondidas/.test(document.querySelector('#view').textContent) && /Pela família/.test(document.querySelector('#view').textContent) && !!OS.all('prayers').find(x => x.title === 'Pela família').answeredAt));
+    await E(p, () => { location.hash = 'fe.planos'; }); await sleep(300); await p.click('#view [data-act=fePlan][data-k=evang]'); await sleep(300);
+    ok('fé: plano de leitura com o dia de hoje e progresso', await E(p, () => /Evangelhos em 30 dias/.test(document.querySelector('#view').textContent) && document.querySelectorAll('#view .fe-days button').length === 30 && /1 de 1189|1 de 1 189/.test(document.querySelector('#view').textContent)));
+    await E(p, () => { location.hash = 'fe'; }); await sleep(300); await p.fill('#view [data-dv=note]', 'às vezes não quero mais viver'); await p.press('#view [data-dv=note]', 'Tab'); await sleep(300);
+    ok('fé: sinais de crise mostram contactos de ajuda', await E(p, () => /SOS Voz Amiga/.test(document.querySelector('#view').textContent)));
+    await E(p, k => { OS.setOne('diet', { aiKey: k }); const d = OS.all('devos').find(x => x.date === OS.U.today()); OS.upd('devos', d.id, { note: '' }); location.hash = 'hoje'; }, oldK); await sleep(400);
+    ok('fé: versículo do dia na página Hoje', await E(p, () => !!document.querySelector('#view .fe-mini')));
+    // JORNAL
+    const NOW = Date.now(), mkN = (p, n) => Array.from({ length: n }, (_, i) => ({ t: `${p} notícia ${i + 1}`, s: 'Jornal ' + (i % 3), su: 'https://exemplo.pt', l: 'https://exemplo.pt/' + p + i, d: NOW - i * 36e5, rel: i ? [] : [{ t: 'Outra fonte', s: 'Outro', l: 'https://o.pt' }] }));
+    let nwCall = 0;
+    await ctx.route(/script\.google\.com/, rt => { const u = new URL(rt.request().url()); if (u.searchParams.get('op') !== 'nw') return rt.fallback(); nwCall++; const f = JSON.parse(u.searchParams.get('f') || '[]'), o = {};
+      f.forEach(x => { o[x.id] = x.q ? mkN('Tema ' + x.q, 5) : /JP:ja/.test(x.ed || '') ? mkN('日本', 6) : mkN(x.id + (nwCall > 3 && x.id === 'PT:WORLD' ? ' NOVA' : ''), 12); });
+      rt.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ ok: true, nw: o }) }); });
+    let nwP = [];
+    await ctx.route(/generativelanguage/, rt => { const b = rt.request().postData() || ''; if (!/editor de um jornal|Traduz para português de Portugal estes títulos/.test(b)) return rt.fallback(); const tx = JSON.parse(b).contents[0].parts[0].text; nwP.push(tx);
+      const ans = /editor de um jornal/.test(tx) ? { titulo: 'Um dia cheio no mundo', pontos: [{ titulo: 'Assunto principal', resumo: 'Resumo.', porque: 'Importa.', idx: [0, 1] }], para_ti: 'Fica atento.' } : { t: JSON.parse(tx.slice(tx.indexOf('Títulos: ') + 9)).map((x, i) => 'Título traduzido ' + (i + 1)) };
+      rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text: JSON.stringify(ans) }] } }] }) }); });
+    const oldK3 = await E(p, () => OS.one('diet').aiKey || ''), oldIb = await E(p, () => { const c = OS.one('inbox'), o = { url: c.url, key: c.key }; c.url = 'https://script.google.com/macros/s/TESTE/exec'; c.key = 'k'; OS.touch('inbox'); OS.setOne('diet', { aiKey: 'AIzaTESTE_TESTE_TESTE_TESTE' }); return o; });
+    await E(p, () => location.hash = 'jornal'); await sleep(1500);
+    ok('jornal: notícias do mundo com fontes e hora', await E(p, () => { const t = document.querySelector('#view').textContent; return !!document.querySelector('a[href="#jornal"]') && document.querySelectorAll('#view .nw-c').length >= 20 && /PT:WORLD notícia 1/.test(t) && /BR:WORLD notícia 1/.test(t) && /há 1 h|agora/.test(t) && /\+1 fonte/.test(t); }));
+    ok('jornal: "O essencial agora" feito pela IA só com as manchetes', await E(p, () => /Um dia cheio no mundo/.test(document.querySelector('#view .nw-brief').textContent)) && nwP.some(x => /editor de um jornal/.test(x) && /PT:WORLD notícia 1/.test(x)));
+    await E(p, () => { OS.act.nwTopic({ dataset: { v: 'BUSINESS' } }); }); await sleep(900);
+    ok('jornal: temas (economia)', await E(p, () => /PT:BUSINESS notícia 1/.test(document.querySelector('#view').textContent)));
+    await E(p, () => OS.forms.nwTheme(null, k => k === 'q' ? 'Aveiro' : '')); await sleep(900);
+    ok('jornal: tema próprio por pesquisa', await E(p, () => /Tema Aveiro notícia 1/.test(document.querySelector('#view').textContent) && OS.one('news').themes.includes('Aveiro')));
+    await p.click('#view [data-act=nwAddTab]'); await sleep(300); await p.click('#modal [data-act=nwPick][data-v=JP]'); await sleep(1800);
+    ok('jornal: "+ País" cria um separador com as notícias desse país, traduzidas', await E(p, () => OS.one('news').tabs.includes('JP') && /Japão/.test(document.querySelector('#view .nw-tabs').textContent) && /Título traduzido 1/.test(document.querySelector('#view').textContent) && /日本 notícia 1/.test(document.querySelector('#view').textContent)));
+    await E(p, () => { OS.setUI('nwTab', 'W'); OS.setUI('nwTopic', 'TOP'); }); await sleep(300); await E(p, () => OS.act.nwRefresh()); await sleep(1200);
+    ok('jornal: notícias novas aparecem marcadas ao atualizar', await E(p, () => /NOVA/.test(document.querySelector('#view').textContent) && document.querySelectorAll('#view .nw-c .bdg.pos').length >= 1));
+    await E(p, ([k, ib]) => { OS.setOne('diet', { aiKey: k }); const c = OS.one('inbox'); Object.assign(c, ib); OS.touch('inbox'); }, [oldK3, oldIb]);
+    // corrida do relógio (Aurea Fit → Saúde → atalho)
+    await E(p, () => { location.hash = 'corrida-add?km=5,2&seg=1860&bpm=152&kcal=410&data=10/01/2025'; }); await sleep(900);
+    ok('relógio: o atalho abre a corrida já preenchida', await E(p, () => { const f = document.querySelector('#osform'); return !!f && f.querySelector('[name=km]').value.replace(',', '.') == '5.2' && /31:00/.test(f.querySelector('[name=time]').value) && f.querySelector('[name=hr]').value == '152'; }));
+    await E(p, () => document.querySelector('#osform').requestSubmit()); await sleep(400);
+    ok('relógio: corrida guardada com ritmo 5:58 /km', await E(p, () => { const r = OS.all('runs').find(x => x.date === '2025-01-10' && x.km == 5.2); return r && r.time === 1860 && OS.RunLink.pace(r) === '5:58 /km'; }));
+    await E(p, () => { location.hash = 'corrida-add?km=5,2&seg=1860&data=2025-01-10'; }); await sleep(900);
+    ok('relógio: não regista a mesma corrida duas vezes', await E(p, () => OS.all('runs').filter(x => x.date === '2025-01-10').length === 1 && !document.querySelector('#osform')));
+    ok('relógio: instruções na Corrida', await E(p, () => /Ligar o relógio/.test(document.querySelector('#view').textContent)));
+    // alongamentos
+    await E(p, () => location.hash = 'corrida.alongamentos'); await sleep(400);
+    ok('alongamentos com fotos', await E(p, () => document.querySelectorAll('#view .st-c .exi img').length >= 10));
+    await p.click('#view [data-act=stPlay][data-kind=post]'); await sleep(400);
+    for (let i = 0; i < 12; i++) { if (await p.$('#stPlay [data-pl=done]')) break; await p.click('#stPlay [data-pl=next]'); await sleep(120); }
+    await p.click('#stPlay [data-pl=done]'); await sleep(300);
+    ok('rotina guiada de alongamentos registada', await E(p, () => OS.all('stretches').length === 1 && OS.all('stretches')[0].kind === 'Depois da corrida'));
+    // tudo ligado
+    ok('meta de calorias sobe nos dias de treino', await E(p, () => OS.BodyX.burn(OS.U.today()) > 0 && OS.BodyX.target(OS.U.today()).adj > 0));
+    await E(p, () => location.hash = 'corpo'); await sleep(600);
+    ok('corpo: calendário de disciplina na visão', await E(p, () => document.querySelectorAll('#view .dc-cal .dc-d').length > 100 && !!document.querySelector('#view .dc-score')));
+    { const had = await E(p, () => !!OS.BodyGoals.days()[OS.U.today()]); if (!had) { await p.click('#view [data-act=bgWent]'); await sleep(300); }
+      ok('corpo: "Fui hoje" marca o dia', await E(p, () => !!OS.BodyGoals.days()[OS.U.today()] && document.querySelectorAll('#view .dc-d.today.w, #view .dc-d.today.r, #view .dc-d.today.c, #view .dc-d.today.wr').length === 1)); }
+    await E(p, () => location.hash = 'corpo.desafios'); await sleep(400); await E(p, () => OS.act.bgChalNew()); await sleep(200); await p.click('#modal input[value=acucar]'); await p.click('#modal form button.btn.pri'); await sleep(300);
+    await E(p, () => document.querySelector('#view [data-act=bgChalTick]').click()); await sleep(300);
+    ok('desafio: começa e marca o dia', await E(p, () => { const c = OS.all('bchal')[0]; return c && c.name === 'Sem açúcar 21 dias' && OS.BodyGoals.chal(c).prog === 1; }));
+    await E(p, () => OS.act.bgChalNew()); await sleep(200); await p.click('#modal form button.btn.pri'); await sleep(300);
+    ok('desafio automático conta os dias em que foste', await E(p, () => { const c = OS.all('bchal').find(x => x.tpl === 'presenca'); return c && OS.BodyGoals.chal(c).prog === 1; }));
+    await E(p, () => OS.act.bgGoalNew()); await sleep(200); await p.fill('#gl_t', '76'); await p.click('#modal form button.btn.pri'); await sleep(300);
+    ok('meta do corpo com progresso e ritmo semanal', await E(p, () => { const g = OS.all('bgoals')[0]; const x = g && OS.BodyGoals.goal(g); return x && x.cur > 0 && x.perW != null; }));
+    await E(p, () => location.hash = 'corpo'); await sleep(500);
+    ok('visão do corpo: treino, dieta, corrida e recomendações', await E(p, () => { const t = document.querySelector('#view').textContent; return /Esta semana/.test(t) && /Energia/.test(t) && document.querySelectorAll('#view .bxs').length === 6; }));
+    ok('sem erros de JavaScript (corpo)', !errs.length, errs.slice(0, 3).join(' | '));
+    await ctx.close(); }
+  // manifesto
+  { const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'manifest.webmanifest'), 'utf8')); ok('manifesto sem orientação forçada', !('orientation' in m));
+    const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8'), list = JSON.parse(sw.match(/SHELL = (\[.*?\]);/)[1]); const miss = list.filter(f => f !== './' && !fs.existsSync(path.join(ROOT, f)));
+    ok('todos os ficheiros da cache offline existem', !miss.length, miss.join(', ')); }
+}
+
+async function stress(b) {
+  cur = 'Stress'; console.log('\n=== Stress: 3 anos de dados num tablet fraco (CPU 6× mais lenta) ===');
+  const prof = PROFILES[2]; const { ctx, p, errs } = await newPage(b, prof); await p.goto(BASE); await unlock(p);
+  const n = await E(p, () => { const U = OS.U, acc = (OS.all('accounts')[0] || OS.add('accounts', { name: 'Conta', type: 'Conta à ordem', initial: 1000 }, { silent: true })).id, cats = Object.keys(OS.one('fin').cats.Despesa || { Outros: 1 }), ex = OS.all('exercises');
+    for (let i = 0; i < 1095; i++) { const d = U.addDays(U.today(), -i);
+      for (let k = 0; k < 3; k++) OS.add('transactions', { type: k ? 'Despesa' : (i % 30 ? 'Despesa' : 'Receita'), amount: 5 + (i * 7 + k * 13) % 90, date: d, cat: cats[(i + k) % cats.length], account: acc, desc: 'Item ' + (i % 40) }, { silent: true });
+      if (i % 2 === 0 && ex.length) OS.add('workouts', { date: d, title: 'Treino', items: ex.slice(i % 5, i % 5 + 4).map(e => ({ ex: e.id, sets: [{ reps: 10, kg: 40 }, { reps: 8, kg: 45 }, { reps: 8, kg: 45 }] })) }, { silent: true });
+      if (i % 3 === 0) OS.add('runs', { date: d, type: 'Rodagem', km: 5, time: 1800 }, { silent: true });
+      OS.add('sessions', { date: d, minutes: 60 + i % 60 }, { silent: true });
+      for (let k = 0; k < 3; k++) OS.add('meals', { date: d, meal: ['Almoço', 'Jantar', 'Lanche'][k], food: 'Comida ' + (i % 20), qty: 1, kcal: 600, p: 40, c: 60, f: 20 }, { silent: true }); }
+    OS.request(); return OS.all('transactions').length + OS.all('meals').length + OS.all('workouts').length + OS.all('sessions').length; });
+  ok('dados de teste criados', n > 7000, n + ' registos');
+  const routes = ['visao', 'hoje', 'painel', 'financas', 'financas.transacoes', 'treino', 'treino.mapa', 'dieta', 'dieta.semana', 'universidade', 'dominus', 'dominus.desafios', 'dominus.colmeia', 'evolucao', 'control', 'gasto'];
+  const slow = []; let max = 0;
+  for (const r of routes) { const t = await E(p, async r => { const t0 = performance.now(); location.hash = r; await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res))); return performance.now() - t0; }, r); max = Math.max(max, t); if (t > 2500) slow.push(r + ' ' + Math.round(t) + 'ms'); await E(p, () => document.querySelectorAll('.ceremony').forEach(e => e.remove())); }
+  ok('com 3 anos de dados nenhuma página bloqueia (> 2,5 s)', !slow.length, slow.join(', ') || 'máx ' + Math.round(max) + ' ms');
+  const save = await E(p, async () => { const t0 = performance.now(); OS.pushAll(); return performance.now() - t0; }); ok('guardar tudo é rápido', save < 3000, Math.round(save) + ' ms');
+  ok('sem erros de JavaScript', !errs.length, errs.slice(0, 3).join(' | ')); await ctx.close();
+}
+
+(async () => {
+  await new Promise(r => srv.listen(PORT, r));
+  const b = await chromium.launch(); const t0 = Date.now();
+  try { for (const prof of PROFILES) await profileTests(b, prof); await sharedTests(b); if (!QUICK) await stress(b); }
+  catch (e) { R.push({ p: cur, name: 'execução da bateria', pass: false, info: e.message.split('\n')[0] }); console.log('ERRO NA BATERIA:', e.message); }
+  await b.close(); srv.close();
+  const f = R.filter(x => !x.pass);
+  console.log(`\n────────\n${R.length - f.length}/${R.length} testes passaram em ${Math.round((Date.now() - t0) / 1000)} s`);
+  if (f.length) { console.log('FALHAS:'); f.forEach(x => console.log(`  ✗ [${x.p}] ${x.name} — ${x.info}`)); }
+  fs.writeFileSync(path.resolve(__dirname, 'last-report.json'), JSON.stringify(R, null, 1));
+  process.exit(f.length ? 1 : 0);
+})();

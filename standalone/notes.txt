@@ -1,0 +1,3 @@
+Endereço novo: oceanum-ryan.vercel.app. As boas-vindas deixam trazer os dados pelo ficheiro exportado ou recuperar pela sincronização do Google Drive (endereço e chave do script).
+Ligar um aparelho com o código de ligação traz sempre os dados da conta, sem os substituir.
+As janelas altas deixam deslizar no telemóvel (o botão do fim já não fica fora do ecrã).

@@ -1,0 +1,3 @@
+# Só é preciso se o login Google falhar no iPhone (ver LANCAR.md, "Se o login falhar").
+# Tira o # da linha abaixo e troca O-TEU-PROJETO pelo ID do teu projeto Firebase.
+# /__/auth/*  https://O-TEU-PROJETO.firebaseapp.com/__/auth/:splat  200
