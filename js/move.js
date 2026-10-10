@@ -5,7 +5,7 @@
 (() => {
 'use strict';
 const U = OS.U, UI = OS.UI, V = OS.views, A = OS.act, esc = U.esc;
-const NEW = 'https://oceanum-ryan.vercel.app', OLDS = ['https://kd25gpgdw9-lang.github.io', 'https://movaainfo.github.io'], OLD = OLDS[0];
+const NEW = 'https://oceanum-movaa.vercel.app', OLDS = ['https://kd25gpgdw9-lang.github.io', 'https://movaainfo.github.io', 'https://oceanum-ryan.vercel.app'], OLD = OLDS[0];
 const isOld = OLDS.includes(location.origin), SY = () => window.OceanumSync || {};
 const host = NEW.replace(/^https:\/\//, '');
 

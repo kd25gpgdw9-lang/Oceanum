@@ -3,13 +3,13 @@
   "p": "iPhone",
   "name": "abre o ecrã do código",
   "pass": true,
-  "info": "242 ms"
+  "info": "252 ms"
  },
  {
   "p": "iPhone",
   "name": "versão visível no ecrã do código",
   "pass": true,
-  "info": "MIND CONTROL · v1.92"
+  "info": "MIND CONTROL · v1.93"
  },
  {
   "p": "iPhone",
@@ -69,7 +69,7 @@
   "p": "iPhone",
   "name": "páginas rápidas",
   "pass": true,
-  "info": "máx 108 ms"
+  "info": "máx 102 ms"
  },
  {
   "p": "iPhone",
@@ -111,13 +111,13 @@
   "p": "Android tel",
   "name": "abre o ecrã do código",
   "pass": true,
-  "info": "253 ms"
+  "info": "229 ms"
  },
  {
   "p": "Android tel",
   "name": "versão visível no ecrã do código",
   "pass": true,
-  "info": "MIND CONTROL · v1.92"
+  "info": "MIND CONTROL · v1.93"
  },
  {
   "p": "Android tel",
@@ -177,7 +177,7 @@
   "p": "Android tel",
   "name": "páginas rápidas",
   "pass": true,
-  "info": "máx 115 ms"
+  "info": "máx 119 ms"
  },
  {
   "p": "Android tel",
@@ -219,13 +219,13 @@
   "p": "Tablet horiz",
   "name": "abre o ecrã do código",
   "pass": true,
-  "info": "1374 ms"
+  "info": "1445 ms"
  },
  {
   "p": "Tablet horiz",
   "name": "versão visível no ecrã do código",
   "pass": true,
-  "info": "MIND CONTROL · v1.92"
+  "info": "MIND CONTROL · v1.93"
  },
  {
   "p": "Tablet horiz",
@@ -285,7 +285,7 @@
   "p": "Tablet horiz",
   "name": "páginas rápidas (processador 6× mais lento)",
   "pass": true,
-  "info": "máx 289 ms"
+  "info": "máx 417 ms"
  },
  {
   "p": "Tablet horiz",
@@ -327,13 +327,13 @@
   "p": "Tablet vert",
   "name": "abre o ecrã do código",
   "pass": true,
-  "info": "224 ms"
+  "info": "219 ms"
  },
  {
   "p": "Tablet vert",
   "name": "versão visível no ecrã do código",
   "pass": true,
-  "info": "MIND CONTROL · v1.92"
+  "info": "MIND CONTROL · v1.93"
  },
  {
   "p": "Tablet vert",
@@ -393,7 +393,7 @@
   "p": "Tablet vert",
   "name": "páginas rápidas",
   "pass": true,
-  "info": "máx 129 ms"
+  "info": "máx 133 ms"
  },
  {
   "p": "Tablet vert",
@@ -435,13 +435,13 @@
   "p": "Computador",
   "name": "abre o ecrã do código",
   "pass": true,
-  "info": "216 ms"
+  "info": "252 ms"
  },
  {
   "p": "Computador",
   "name": "versão visível no ecrã do código",
   "pass": true,
-  "info": "MIND CONTROL · v1.92"
+  "info": "MIND CONTROL · v1.93"
  },
  {
   "p": "Computador",
@@ -501,7 +501,7 @@
   "p": "Computador",
   "name": "páginas rápidas",
   "pass": true,
-  "info": "máx 115 ms"
+  "info": "máx 105 ms"
  },
  {
   "p": "Computador",
@@ -621,7 +621,7 @@
   "p": "Geral",
   "name": "atualização: depois mostra \"Atualizado\" e a versão nova",
   "pass": true,
-  "info": "Atualizado · versão 9.9 · 10/10/2026 · Endereço novo: oceanum-ryan.vercel.app. A"
+  "info": "Atualizado · versão 9.9 · 10/10/2026 · O Oceanum passa a ser publicado pela Verc"
  },
  {
   "p": "Geral",
@@ -963,7 +963,7 @@
   "p": "Geral",
   "name": "dieta: 200 g de frango = macros certas",
   "pass": true,
-  "info": "{\"date\":\"2026-10-10\",\"meal\":\"Pequeno-almoço\",\"food\":\"Peito de frango · grelhado\",\"pic\":\"https://i.pinimg.com/474x/bc/e8/8d/bce88dae8a51618b59780eb5391fe3a9.jpg\",\"g\":200,\"qty\":1,\"kcal\":318,\"p\":64,\"c\":0,\"f\":5,\"fib\":0,\"id\":\"kyqrgfp2nlw\",\"_c\":1791594443012,\"_u\":1791594443012,\"_s\":0}"
+  "info": "{\"date\":\"2026-10-10\",\"meal\":\"Pequeno-almoço\",\"food\":\"Peito de frango · grelhado\",\"pic\":\"https://i.pinimg.com/474x/bc/e8/8d/bce88dae8a51618b59780eb5391fe3a9.jpg\",\"g\":200,\"qty\":1,\"kcal\":318,\"p\":64,\"c\":0,\"f\":5,\"fib\":0,\"id\":\"71nostq9nv8\",\"_c\":1791596449556,\"_u\":1791596449556,\"_s\":0}"
  },
  {
   "p": "Geral",
@@ -1113,7 +1113,7 @@
   "p": "Geral",
   "name": "regista com a opção e a marca escolhidas",
   "pass": true,
-  "info": "{\"date\":\"2026-10-10\",\"meal\":\"Pequeno-almoço\",\"food\":\"Arroz branco tipo 1 (agulha) — Agulha cigala (Cigala)\",\"pic\":\"https://images.openfoodfacts.org/images/products/560/126/003/7109/front_pt.4.200.jpg\",\"g\":100,\"qty\":1,\"kcal\":355,\"p\":7.5,\"c\":78,\"f\":1,\"fib\":2.4,\"id\":\"ufhrvyp346j\",\"_c\":1791594464491,\"_u\":1791594464491,\"_s\":0}"
+  "info": "{\"date\":\"2026-10-10\",\"meal\":\"Pequeno-almoço\",\"food\":\"Arroz branco tipo 1 (agulha) — Agulha cigala (Cigala)\",\"pic\":\"https://images.openfoodfacts.org/images/products/560/126/003/7109/front_pt.4.200.jpg\",\"g\":100,\"qty\":1,\"kcal\":355,\"p\":7.5,\"c\":78,\"f\":1,\"fib\":2.4,\"id\":\"nrzbesqa4dl\",\"_c\":1791596470953,\"_u\":1791596470953,\"_s\":0}"
  },
  {
   "p": "Geral",
@@ -1971,13 +1971,13 @@
   "p": "Stress",
   "name": "com 3 anos de dados nenhuma página bloqueia (> 2,5 s)",
   "pass": true,
-  "info": "máx 647 ms"
+  "info": "máx 632 ms"
  },
  {
   "p": "Stress",
   "name": "guardar tudo é rápido",
   "pass": true,
-  "info": "73 ms"
+  "info": "85 ms"
  },
  {
   "p": "Stress",

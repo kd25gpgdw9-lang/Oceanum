@@ -15,4 +15,4 @@ NODE_PATH=$(npm root -g) node standalone/test/suite.js   # ~13 min, Playwright
 
 ## Publicar
 Copiar o conteúdo de `dist-gh/` para a raiz do ramo `main` (manter o `vercel.json`) e enviar.
-A Vercel (projeto `oceanum`, endereço https://oceanum-ryan.vercel.app) publica a partir do GitHub.
+A Vercel (projeto `oceanum`, endereço https://oceanum-movaa.vercel.app) publica a partir do GitHub.
